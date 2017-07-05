@@ -1,0 +1,236 @@
+<li id="subMenuSolicitudePedidos0"> 
+    <a href="#" class="dropdown-toggle">
+            <i class="icon-book"></i>
+            <span class="menu-text"> Solicitudes </span>
+
+            <b class="arrow icon-angle-down"></b>
+    </a>
+
+    <ul class="submenu" id="submenuGruSolPed0">                            
+        
+
+    </ul>
+</li>
+<script type="text/javascript">        
+
+jQuery(function($) {
+
+    $("#subMenuSolicitudePedidos0").hide();
+
+    $("#preloaderPrincipal").show();
+           //alert(localStorage.nc);
+
+        var vHMTL="";
+
+    var nc = "u="+localStorage.nc;
+    $.post(obj.getValue(0)+"data/", { o:1, t:508, p:10,c:nc,from:0,cantidad:0, s:" " },
+        function(json){
+
+            if (json.length <= 0 ){
+                $("#preloaderPrincipal").hide();
+                return false;
+            } 
+
+            vHMTL="";
+            $.each(json, function(i, item) {
+                //$("#lstAlumnos").append('<option value="'+item.data+'" > '+item.label+'</option>');
+                if (i==0){
+                    vHMTL = '<li><a href="#" class="mnuGruSolMat0" id="mnuGruSolMat0-'+item.idsolicita+'" ><i class="icon-edit"></i><span class="menu-text mnuTxT" id="mnuTxT-'+item.idsolicita+'">Material</span></a></li>';
+                }
+            });
+
+            $("#subMenuSolicitudePedidos0").show();
+            
+            $("#submenuGruSolPed0").append(vHMTL);
+
+             if ($(".mnuGruSolMat0").length) {
+                   $(".mnuGruSolMat0").on("click", function(event) {
+                       event.preventDefault();
+                       
+                        var arr = event.currentTarget.id.split('-');
+                        var lblGrupoSel0=$("#mnuTxT-"+arr[1]).html();
+                        cfgBase0();
+                        var nc = localStorage.nc;
+                        $.post(obj.getValue(0) + "solicitud_de_material/", {
+                                user: nc
+                            },
+                            function(html) {
+                                $("#contentMain").html(html);
+                                $('#breadcrumb').html(getBar('Inicio, Solicitud de Material: <span class="smaller lighter red">'+lblGrupoSel0+'</span>'  ));
+                            }, "html");
+                        return false;
+                   });
+
+                    $("#menuPrincipal li").on("click", function(event) {
+                        event.preventDefault();
+                        $(".nav-list li").removeClass("active");
+                        if ($('.open').length === null) {
+                            $(this).addClass("active open");
+                        }
+                    });
+
+            }
+
+        $("#preloaderPrincipal").hide();
+        }, "json"
+    );  
+
+    
+    $("#preloaderPrincipal").show();
+    var nc = "u="+localStorage.nc;
+    $.post(obj.getValue(0)+"data/", { o:1, t:509, p:10,c:nc,from:0,cantidad:0, s:" " },
+        function(json){
+
+            if (json.length <= 0 ){
+                $("#preloaderPrincipal").hide();
+                return false;
+            } 
+
+            vHMTL="";
+            $.each(json, function(i, item) {
+                //$("#lstAlumnos").append('<option value="'+item.data+'" > '+item.label+'</option>');
+                if (i==0){
+                    vHMTL = '<li><a href="#" class="mnuGruSolMat1" id="mnuGruSolMat1-'+item.idusersupervisorsolmat+'" ><i class="icon-edit"></i><span class="menu-text mnuTxT1" id="mnuTxT1-'+item.idusersupervisorsolmat+'">Autorizar</span></a></li>';
+                }
+            });
+
+            $("#subMenuSolicitudePedidos0").show();
+            
+            $("#submenuGruSolPed0").append(vHMTL);
+
+            if ($(".mnuGruSolMat1").length) {
+                   $(".mnuGruSolMat1").on("click", function(event) {
+                       event.preventDefault();
+                       
+                        var arr = event.currentTarget.id.split('-');
+                        var lblGrupoSel0=$("#mnuTxT1-"+arr[1]).html();
+                        cfgBase0();
+                        var nc = localStorage.nc;
+                        $.post(obj.getValue(0) + "valida_solicitud_de_material_1/", {
+                                user: nc 
+                            },
+                            function(html) {
+                                $("#contentMain").html(html);
+                                $('#breadcrumb').html(getBar('Inicio, Valida Solicitud de Material: <span class="smaller lighter red">'+lblGrupoSel0+'</span>'  ));
+                            }, "html");
+                        return false;
+                   });
+                    $("#menuPrincipal li").on("click", function(event) {
+                        event.preventDefault();
+                        $(".nav-list li").removeClass("active");
+                        if ($('.open').length === null) {
+                            $(this).addClass("active open");
+                        }
+                    });
+            }
+
+
+        $("#preloaderPrincipal").hide();
+        }, "json"
+    );  
+
+    $("#preloaderPrincipal").show();
+    var nc = "u="+localStorage.nc;
+    $.post(obj.getValue(0)+"data/", { o:1, t:510, p:10,c:nc,from:0,cantidad:0, s:" " },
+        function(json){
+            
+            if (json.length <= 0 ){
+                $("#preloaderPrincipal").hide();
+                return false;
+            } 
+
+            vHMTL="";
+            $.each(json, function(i, item) {
+                //$("#lstAlumnos").append('<option value="'+item.data+'" > '+item.label+'</option>');
+                if (i==0){
+                    vHMTL = '<li><a href="#" class="mnuEntregaMaterial2" id="mnuEntregaMaterial2-'+item.idusersupervisorsolentrega+'" ><i class="icon-edit"></i><span class="menu-text mnuTxtEntMat2" id="mnuTxtEntMat2-'+item.idusersupervisorsolentrega+'">Entrega</span></a></li>';
+                }
+            });
+
+            $("#subMenuSolicitudePedidos0").show();
+            
+            $("#submenuGruSolPed0").append(vHMTL);
+
+             if ($(".mnuEntregaMaterial2").length) {
+                   $(".mnuEntregaMaterial2").on("click", function(event) {
+                       event.preventDefault();
+                       
+                        var arr = event.currentTarget.id.split('-');
+                        var lblGrupoSel0=$("#mnuTxtEntMat2-"+arr[1]).html();
+                        cfgBase0();
+                        var nc = localStorage.nc;
+                        $.post(obj.getValue(0) + "entrega_solicitud_de_material_1/", {
+                                user: nc 
+                            },
+                            function(html) {
+                                $("#contentMain").html(html);
+                                $('#breadcrumb').html(getBar('Inicio, Solicitud de Material: <span class="smaller lighter red">'+lblGrupoSel0+'</span>'  ));
+                            }, "html");
+                        return false;
+                   });
+            }
+
+            vHMTL="";
+           $.each(json, function(i, item) {
+                //$("#lstAlumnos").append('<option value="'+item.data+'" > '+item.label+'</option>');
+                if (i==0){
+                    vHMTL = '<li><a href="#" class="mnuEntregaMaterial3" id="mnuEntregaMaterial3-'+item.idusersupervisorsolentrega+'" ><i class="icon-edit"></i><span class="menu-text mnuTxtEntMat3" id="mnuTxtEntMat3-'+item.idusersupervisorsolentrega+'">Reportes de Entrega</span></a></li>';
+                }
+            });
+
+            $("#subMenuSolicitudePedidos0").show();
+            
+            $("#submenuGruSolPed0").append(vHMTL);
+
+             if ($(".mnuEntregaMaterial3").length) {
+                   $(".mnuEntregaMaterial3").on("click", function(event) {
+                       event.preventDefault();
+                       
+                        var arr = event.currentTarget.id.split('-');
+                        var lblGrupoSel0=$("#mnuTxtEntMat2-"+arr[1]).html();
+                        cfgBase0();
+                        var nc = localStorage.nc;
+                        $.post(obj.getValue(0) + "print-entrega-solicitud-de-material-2/", {
+                                user: nc 
+                            },
+                            function(html) {
+                                $("#contentMain").html(html);
+                                $('#breadcrumb').html(getBar('Inicio, Solicitud de Material: <span class="smaller lighter red">'+lblGrupoSel0+'</span>'  ));
+                            }, "html");
+                        return false;
+                   });
+                    $("#menuPrincipal li").on("click", function(event) {
+                        event.preventDefault();
+                        $(".nav-list li").removeClass("active");
+                        if ($('.open').length === null) {
+                            $(this).addClass("active open");
+                        }
+                    });
+            }
+
+
+            $("#preloaderPrincipal").hide();
+
+        
+        }, "json"
+    );  
+
+
+    function cfgBase0(){
+        resizeScreen();
+        $("#contentLevel5").empty();
+        $("#contentLevel5").hide();
+        $("#contentLevel4").empty();
+        $("#contentLevel4").hide();
+        $("#contentLevel3").empty();
+        $("#contentLevel3").hide();
+        $("#contentProfile").empty();
+        $("#contentProfile").hide();
+        $("#contentMain").show();
+        $("#contentMain").empty();
+        $("#preloaderPrincipal").show();
+        obj.setIsTimeLine(false);
+    }
+
+});
+</script>

@@ -1,0 +1,129 @@
+                    <li id="subMenuCatGruposProfTareas"> 
+                        <a href="#" class="dropdown-toggle">
+                                <i class="icon-book"></i>
+                                <span class="menu-text">Tareas</span>
+
+                                <b class="arrow icon-angle-down"></b>
+                        </a>
+
+                        <ul class="submenu" id="submenuGruProfTareas">                            
+                            
+
+                        </ul>
+                    </li>
+
+                    <li id="subMenuInboxMensaje0"> 
+
+                        <a href="#" class="dropdown-toggle">
+                                <i class="icon-book"></i>
+                                <span class="menu-text">Inbox</span>
+
+                                <b class="arrow icon-angle-down"></b>
+                        </a>
+
+                        <ul class="submenu" id="submenuInBoxMsj0">                            
+                            <li>
+                                <a href="#" class="dropdown-toggle inbxmsj0" id="inbxmsj0">
+                                    <i class="icon-edit"></i>
+                                    Circulares
+                                </a>
+                            </li>    
+                        </ul>
+                    </li>
+
+
+
+<script type="text/javascript">        
+
+jQuery(function($) {
+
+    $("#preloaderPrincipal").show();
+           //alert(localStorage.nc);
+
+    var nc = "u="+localStorage.nc;
+    $.post(obj.getValue(0)+"data/", { o:1, t:16, p:0,c:nc,from:0,cantidad:0, s:" order by idgrupo asc " },
+        function(json){
+            var vHMTL="";
+            $.each(json, function(i, item) {
+                if (i == 0 ){
+
+                    vHMTL += '<li><a href="#" class="dropdown-toggle mnuGruProfTareas0" id="mnuGruProfTareas0"><i class="icon-edit"></i>Enviadas</a></li>';
+                }   
+            });
+
+           $("#submenuGruProfTareas").html(vHMTL);
+
+             if ($(".mnuGruProfTareas0").length) {
+                   $(".mnuGruProfTareas0").on("click", function(event) {
+                       event.preventDefault();
+                        cfgBase0();
+                        var nc = localStorage.nc;
+                        $.post(obj.getValue(0) + "tareas-list/", {
+                                user: nc,
+                                objeto: "contentMain"
+                            },
+                            function(html) {
+                                $("#contentMain").html(html);
+                                $('#breadcrumb').html(getBar('Inicio, Listado de Tareas' ));
+                            }, "html");
+                        return false;         
+                   });
+            }
+
+
+            if ($(".inbxmsj0").length) {
+                   $(".inbxmsj0").on("click", function(event) {
+                       event.preventDefault();
+                        cfgBase0();
+                        var nc = localStorage.nc;
+                        $.post(obj.getValue(0) + 'comunica-mensaje-inbox-list/', {
+                                user: nc,
+                                objeto: "contentProfile"
+                            },
+                            function(html) {
+                                $("#contentMain").hide();
+                                $("#contentProfile").show();
+                                $("#contentProfile").html(html);
+                                $('#breadcrumb').html(getBar('Inicio, Mensajes' ));
+                            }, "html");
+                        return false;         
+                   });
+            }
+
+
+            $("#menuPrincipal li").on("click", function(event) {
+                event.preventDefault();
+                $(".nav-list li").removeClass("active");
+                if ($('.open').length === null) {
+                    $(this).addClass("active open");
+                }
+            });
+
+
+            
+
+        $("#preloaderPrincipal").hide();
+        }, "json"
+    );  
+
+    function cfgBase0(){
+        resizeScreen();
+        $("#contentLevel5").empty();
+        $("#contentLevel5").hide();
+        $("#contentLevel4").empty();
+        $("#contentLevel4").hide();
+        $("#contentLevel3").empty();
+        $("#contentLevel3").hide();
+        $("#contentProfile").empty();
+        $("#contentProfile").hide();
+        $("#contentMain").show();
+        $("#contentMain").empty();
+        $("#preloaderPrincipal").show();
+        obj.setIsTimeLine(false);
+    }
+
+    $("#turniting").removeClass('hide');
+    $("#ebscohost").removeClass('hide');
+
+});
+</script>

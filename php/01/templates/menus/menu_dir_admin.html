@@ -1,0 +1,256 @@
+                    <li class="" id="subMenuCobrosOnSite"> 
+                        <a href="#" class="dropdown-toggle">
+                                <i class="icon-money"></i>
+                                <span class="menu-text"> Caja </span>
+
+                                <b class="arrow icon-angle-down"></b>
+                        </a>
+
+                        <ul class="submenu">
+                            <li>
+                                <a href="#" id="caja_onsite">
+                                    <i class="icon-money"></i>
+                                    <span class="menu-text">Pagos</span>
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a href="#" id="caja_reportpanel_1">
+                                    <i class="icon-laptop"></i>
+                                    <span class="menu-text">Reportes de Pagos</span>
+                                </a>
+                            </li>
+
+
+<!-- 
+                            <li>
+                                <a href="#" id="cat_conceptos_list">
+                                    <i class="icon-edit"></i>
+                                    <span class="menu-text">Conceptos de Pago</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="#" id="cat_emifis_list">
+                                    <i class="icon-edit"></i>
+                                    <span class="menu-text">Emisores Fiscales</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="#" id="cat_pagos_list">
+                                    <i class="icon-cogs"></i>
+                                    <span class="menu-text">Config. Pagos</span>
+                                </a>
+                            </li>
+
+
+ -->
+                            <li>
+                                <a href="#" id="caja_facturas_0">
+                                    <i class="icon icon-list-alt"></i>
+                                    <span class="menu-text">Facturas</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="#" id="convenio_familia_0">
+                                    <i class="icon icon-inbox"></i>
+                                    <span class="menu-text">Convenios</span>
+                                </a>
+                            </li>
+
+
+                        </ul>
+                    </li>
+
+                    <li id="subMenuInboxMensaje0"> 
+
+                        <a href="#" class="dropdown-toggle">
+                                <i class="icon-book"></i>
+                                <span class="menu-text">Inbox</span>
+
+                                <b class="arrow icon-angle-down"></b>
+                        </a>
+
+                        <ul class="submenu" id="submenuInBoxMsj0">                            
+                            <li>
+                                <a href="#" class="dropdown-toggle inbxmsj0" id="inbxmsj0">
+                                    <i class="icon-edit"></i>
+                                    Mensajes
+                                </a>
+                            </li>    
+                        </ul>
+                    </li>
+
+
+<script type="text/javascript">
+jQuery(function($) {
+
+    $("#preloaderPrincipal").show();
+/*
+    if ($("#cat_conceptos_list").length) {
+        $("#cat_conceptos_list").on("click", function(event) {
+            event.preventDefault();
+            cfgBase0();
+            var nc = localStorage.nc;
+            $.post(obj.getValue(0) + "cat-conceptos-list/", {
+                    user: nc
+                },
+                function(html) {
+                    $("#contentMain").html(html);
+                    $('#breadcrumb').html(getBar('Inicio,Catálogo de Conceptos de Pagos'));
+                }, "html");
+            return false;
+        });
+    }
+
+    if ($("#cat_emifis_list").length) {
+        $("#cat_emifis_list").on("click", function(event) {
+            event.preventDefault();
+            cfgBase0();
+            var nc = localStorage.nc;
+            $.post(obj.getValue(0) + "cat-emifis-list/", {
+                    user: nc
+                },
+                function(html) {
+                    $("#contentMain").html(html);
+                    $('#breadcrumb').html(getBar('Inicio,Catálogo de Emisores Fiscales'));
+                }, "html");
+            return false;
+        });
+    }
+
+    if ($("#cat_pagos_list").length) {
+        $("#cat_pagos_list").on("click", function(event) {
+            event.preventDefault();
+            cfgBase0();
+            var nc = localStorage.nc;
+            $.post(obj.getValue(0) + "cat-pagos-list/", {
+                    user: nc
+                },
+                function(html) {
+                    $("#contentMain").html(html);
+                    $('#breadcrumb').html(getBar('Inicio,Catálogo de Pagos'));
+                }, "html");
+            return false;
+        });
+    }
+
+*/
+
+    if ($("#caja_onsite").length) {
+        $("#caja_onsite").on("click", function(event) {
+            event.preventDefault();
+            cfgBase0();
+            var nc = localStorage.nc;
+            $.post(obj.getValue(0) + "caja-onsite/", {
+                    user: nc
+                },
+                function(html) {
+                    $("#contentMain").html(html);
+                    $('#breadcrumb').html(getBar('Inicio,Cobro de Conceptos'));
+                }, "html");
+            return false;
+        });
+    }
+
+    if ($("#caja_reportpanel_1").length) {
+        $("#caja_reportpanel_1").on("click", function(event) {
+            event.preventDefault();
+            cfgBase0();
+            var nc = localStorage.nc;
+            $.post(obj.getValue(0) + "caja-report-panel/", {
+                    user: nc
+                },
+                function(html) {
+                    $("#contentMain").html(html);
+                    $('#breadcrumb').html(getBar('Inicio,Panel de Reportes'));
+                }, "html");
+            return false;
+        });
+    }
+
+    if ($("#caja_facturas_0").length) {
+        $("#caja_facturas_0").on("click", function(event) {
+            event.preventDefault();
+            cfgBase0();
+            var nc = localStorage.nc;
+            $.post(obj.getValue(0) + "facturas-family/", {
+                    user: nc
+                },
+                function(html) {
+                    $("#contentMain").html(html);
+                    $('#breadcrumb').html(getBar('Inicio,Facturas por Familia'));
+                }, "html");
+            return false;
+        });
+    }
+
+    if ($("#convenio_familia_0").length) {
+        $("#convenio_familia_0").on("click", function(event) {
+            event.preventDefault();
+            cfgBase0();
+            var nc = localStorage.nc;
+            $.post(obj.getValue(0) + "family-dir-admin/", {
+                    user: nc
+                },
+                function(html) {
+                    $("#contentMain").html(html);
+                    $('#breadcrumb').html(getBar('Inicio,Convenios'));
+                }, "html");
+            return false;
+        });
+    }
+
+
+     if ($(".inbxmsj0").length) {
+           $(".inbxmsj0").on("click", function(event) {
+               event.preventDefault();
+                cfgBase0();
+                var nc = localStorage.nc;
+                $.post(obj.getValue(0) + 'comunica-mensaje-inbox-list/', {
+                        user: nc
+                    },
+                    function(html) {
+                        $("#contentMain").hide();
+                        $("#contentProfile").show();
+                        $("#contentProfile").html(html);
+                        $('#breadcrumb').html(getBar('Inicio, Mensajes' ));
+                    }, "html");
+                return false;         
+           });
+    }
+    
+
+    $("#menuPrincipal li").on("click", function(event) {
+        event.preventDefault();
+        $(".nav-list li").removeClass("active");
+        if ($('.open').length === null) {
+            $(this).addClass("active open");
+        }
+    });
+
+    function cfgBase0(){
+        resizeScreen();
+        $("#contentLevel5").empty();
+        $("#contentLevel5").hide();
+        $("#contentLevel4").empty();
+        $("#contentLevel4").hide();
+        $("#contentLevel3").empty();
+        $("#contentLevel3").hide();
+        $("#contentProfile").empty();
+        $("#contentProfile").hide();
+        $("#contentMain").show();
+        $("#contentMain").empty();
+        $("#preloaderPrincipal").show();
+        obj.setIsTimeLine(false);
+    }
+
+
+    $("#preloaderPrincipal").hide();
+
+
+})
+
+</script>

@@ -1,0 +1,218 @@
+                    <li class="open active" id="subMenuCatalogos"> 
+                        <a href="#" class="dropdown-toggle">
+                                <i class="icon-book"></i>
+                                <span class="menu-text"> Catálogos </span>
+
+                                <b class="arrow icon-angle-down"></b>
+                        </a>
+
+                        <ul class="submenu">
+                        
+
+                            <li>
+                                <a href="#" id="cat_grupos_list">
+                                    <i class="icon-edit"></i>
+                                    <span class="menu-text">Grupos</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="#" id="set_eval_config">
+                                    <i class="icon-edit"></i>
+                                    <span class="menu-text">Fijar Evaluación</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="#" id="cat_eval_config_list">
+                                    <i class="icon-edit"></i>
+                                    <span class="menu-text">Config. Evaluaciones</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="#" id="cat_alumnos_list_servesco_0">
+                                    <i class="icon-edit"></i>
+                                    <span class="menu-text">Alumnos</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="#" id="preinscripciones_list">
+                                    <i class="icon-edit"></i>
+                                    <span class="menu-text">Preinscripciones</span>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </li>
+
+                    <li id="subMenuInboxMensaje0"> 
+
+                        <a href="#" class="dropdown-toggle">
+                                <i class="icon-book"></i>
+                                <span class="menu-text">Inbox</span>
+
+                                <b class="arrow icon-angle-down"></b>
+                        </a>
+
+                        <ul class="submenu" id="submenuInBoxMsj0">                            
+                            <li>
+                                <a href="#" class="dropdown-toggle inbxmsj0" id="inbxmsj0">
+                                    <i class="icon-edit"></i>
+                                    Mensajes
+                                </a>
+                            </li>    
+                        </ul>
+                    </li>
+
+
+
+<script type="text/javascript">
+jQuery(function($) {
+
+    $("#preloaderPrincipal").show();
+
+    if ($("#cat_grupos_list").length) {
+        $("#cat_grupos_list").on("click", function(event) {
+            event.preventDefault();
+            cfgBase0();
+            var nc = localStorage.nc.split("@");
+            $.post(obj.getValue(0) + "cat-grupos-list/", {
+                    user: nc[0]
+                },
+                function(html) {
+                    $("#contentMain").html(html);
+                    $('#breadcrumb').html(getBar('Inicio,Catálogo de Grupos'));
+                    $("#preloaderPrincipal").hide();
+                }, "html");
+            return false;
+        });
+    }
+
+    if ($("#set_eval_config").length) {
+        $("#set_eval_config").on("click", function(event) {
+            event.preventDefault();
+            cfgBase0();
+            var nc = localStorage.nc.split("@");
+            $.post(obj.getValue(0) + "setEvalConfig/", {
+                    user: nc[0]
+                },
+                function(html) {
+                    $("#contentMain").hide();
+                    $("#contentProfile").show();
+                    $("#contentProfile").html(html);
+                    $('#breadcrumb').html(getBar('Inicio,Fijar Evaluación'));
+                    $("#preloaderPrincipal").hide();
+                    resizeScreenProfile();
+
+                }, "html");
+            return false;
+        });
+    }
+
+    if ($("#cat_eval_config_list").length) {
+        $("#cat_eval_config_list").on("click", function(event) {
+            event.preventDefault();
+            cfgBase0();
+            var nc = localStorage.nc;
+
+            // alert( localStorage.ClaveNivelAcceso );
+
+            $.post(obj.getValue(0) + "cat-eval-config-list/", {
+                    user: nc
+                },
+                function(html) {
+                    $("#contentMain").empty();
+                    $("#contentMain").html(html);
+                    $('#breadcrumb').html(getBar('Inicio,Catálogo de Evaluaciones'));
+                }, "html");
+            return false;
+        });
+    }
+
+    if ($("#cat_alumnos_list_servesco_0").length) {
+        $("#cat_alumnos_list_servesco_0").on("click", function(event) {
+            event.preventDefault();
+            cfgBase0();
+            var nc = localStorage.nc;
+            $.post(obj.getValue(0) + "cat-alumnos-list/", {
+                    user: nc
+                },
+                function(html) {
+                    $("#contentMain").html(html);
+                    $('#breadcrumb').html(getBar('Inicio,Catálogo de Alumnos'));
+                }, "html");
+            return false;
+        });
+    }
+
+
+    if ($(".inbxmsj0").length) {
+           $(".inbxmsj0").on("click", function(event) {
+               event.preventDefault();
+                cfgBase0();
+                var nc = localStorage.nc;
+                $.post(obj.getValue(0) + 'comunica-mensaje-inbox-list/', {
+                        user: nc
+                    },
+                    function(html) {
+                        $("#contentMain").hide();
+                        $("#contentProfile").show();
+                        $("#contentProfile").html(html);
+                        $('#breadcrumb').html(getBar('Inicio, Mensajes' ));
+                    }, "html");
+                return false;         
+           });
+    }
+    
+    if ($("#preinscripciones_list").length) {
+        $("#preinscripciones_list").on("click", function(event) {
+            event.preventDefault();
+            cfgBase0();
+            var nc = localStorage.nc;
+            $.post(obj.getValue(0) + "preinscripciones-list/", {
+                    user: nc
+                },
+                function(html) {
+                    $("#contentMain").empty();
+                    $("#contentMain").html(html);
+                    $('#breadcrumb').html(getBar('Inicio,Catálogo Preinscripciones'));
+                }, "html");
+            return false;
+        });
+    }
+
+
+
+    $("#menuPrincipal li").on("click", function(event) {
+        event.preventDefault();
+        $(".nav-list li").removeClass("active");
+        if ($('.open').length === null) {
+            $(this).addClass("active open");
+        }
+    });
+
+    function cfgBase0(){
+        resizeScreen();
+        $("#contentLevel5").empty();
+        $("#contentLevel5").hide();
+        $("#contentLevel4").empty();
+        $("#contentLevel4").hide();
+        $("#contentLevel3").empty();
+        $("#contentLevel3").hide();
+        $("#contentProfile").empty();
+        $("#contentProfile").hide();
+        $("#contentMain").show();
+        $("#contentMain").empty();
+        $("#preloaderPrincipal").show();
+        obj.setIsTimeLine(false);
+    }
+
+
+    $("#preloaderPrincipal").hide();
+
+
+})
+
+</script>

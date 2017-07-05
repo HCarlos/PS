@@ -1,0 +1,306 @@
+                    <li id="subMenuConfig"> 
+                        <a href="#" class="dropdown-toggle">
+                                <i class="icon-cogs"></i>
+                                <span class="menu-text"> Configuraciones </span>
+
+                                <b class="arrow icon-angle-down"></b>
+                        </a>
+
+                        <ul class="submenu">                            
+                            
+                            <li>
+                                <a href="#" id="cat_usuarios_list"><!-- newTask -->
+                                    <i class="icon-edit"></i>
+                                    <span class="menu-text"> Usuarios</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="#" id="asoc_grupo_to_nivel"><!-- newTask -->
+                                    <i class="icon-edit"></i>
+                                    <span class="menu-text"> Grupo a Nivel</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="#" id="asoc_alumno_to_grupo"><!-- newTask -->
+                                    <i class="icon-edit"></i>
+                                    <span class="menu-text"> Alumno a Grupo</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="#" id="asoc_observacion_to_nivel"><!-- newTask -->
+                                    <i class="icon-edit"></i>
+                                    <span class="menu-text"> Obs. a Nivel</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="#" id="asoc_grualu_to_grualu"><!-- newTask -->
+                                    <i class="icon-edit"></i>
+                                    <span class="menu-text"> Copiar Alumnos</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="#" id="asoc_profesor_to_director">
+                                    <i class="icon-edit"></i>
+                                    <span class="menu-text"> Prof a Dir</span>
+                                </a>
+                            </li>
+
+
+                            <li>
+                                <a href="#" id="cat_supervisores_caja_list">
+                                    <i class="icon-edit"></i>
+                                    <span class="menu-text">Supervisores de Caja</span>
+                                </a>
+                            </li>
+
+
+                            <li>
+                                <a href="#" id="cat_supervisores_sol_mat_list">
+                                    <i class="icon-edit"></i>
+                                    <span class="menu-text">Autorizan Solicitudes de Materiales</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="#" id="cat_supervisores_entrega_list">
+                                    <i class="icon-edit"></i>
+                                    <span class="menu-text">Entregan Materiales</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="#" id="asoc_solicitante_to_autorizante">
+                                    <i class="icon-edit"></i>
+                                    <span class="menu-text"> Solicitante a Autorizante</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="#" id="cat_lista_vencimientos">
+                                    <i class="icon-edit"></i>
+                                    <span class="menu-text"> Fechas de Vencimientos</span>
+                                </a>
+                            </li>
+
+
+                        </ul>
+                    </li>
+<script type="text/javascript">
+jQuery(function($) {
+
+    $("#preloaderPrincipal").show();
+
+    if ($("#asoc_grupo_to_nivel").length) {
+        $("#asoc_grupo_to_nivel").on("click", function(event) {
+            event.preventDefault();
+            cfgBase0();
+            var nc = localStorage.nc.split("@");
+            $.post(obj.getValue(0) + "asoc-grupo-to-nivel-list/", {
+                    user: nc
+                },
+                function(html) {
+                    $("#contentMain").html(html);
+                    $('#breadcrumb').html(getBar('Inicio,Asociar Grupos a Nivel'));
+                }, "html");
+            return false;
+        });
+    }
+
+    if ($("#asoc_alumno_to_grupo").length) {
+        $("#asoc_alumno_to_grupo").on("click", function(event) {
+            event.preventDefault();
+            cfgBase0();
+            var nc = localStorage.nc;
+            $.post(obj.getValue(0) + "asoc-alumno-to-grupo-list/", {
+                    user: nc
+                },
+                function(html) {
+                    $("#contentMain").html(html);
+                    $('#breadcrumb').html(getBar('Inicio,Asociar Alumnos a Grupos'));
+                }, "html");
+            return false;
+        });
+    }
+
+
+    if ($("#cat_usuarios_list").length) {
+        $("#cat_usuarios_list").on("click", function(event) {
+            event.preventDefault();
+            cfgBase0();
+            var nc = localStorage.nc;
+            $.post(obj.getValue(0) + "cat-usuarios-list/", {
+                    user: nc
+                },
+                function(html) {
+                    $("#contentMain").html(html);
+                    $('#breadcrumb').html(getBar('Inicio,Catálogo de Usuarios'));
+                }, "html");
+            return false;
+        });
+    }
+
+
+    if ($("#asoc_observacion_to_nivel").length) {
+        $("#asoc_observacion_to_nivel").on("click", function(event) {
+            event.preventDefault();
+            cfgBase0();
+            var nc = localStorage.nc;
+            $.post(obj.getValue(0) + "asoc-observacion-to-nivel-list/", {
+                    user: nc
+                },
+                function(html) {
+                    $("#contentMain").html(html);
+                    $('#breadcrumb').html(getBar('Inicio,Asociar Observaciones a Nivel'));
+                }, "html");
+            return false;
+        });
+    }
+
+    if ($("#asoc_grualu_to_grualu").length) {
+        $("#asoc_grualu_to_grualu").on("click", function(event) {
+            event.preventDefault();
+            cfgBase0();
+            var nc = localStorage.nc;
+            $.post(obj.getValue(0) + "asoc-grualu-to-grualu/", {
+                    user: nc
+                },
+                function(html) {
+                    $("#contentMain").html(html);
+                    $('#breadcrumb').html(getBar('Inicio,Cambiar alumno de un grupo a otro'));
+                }, "html");
+            return false;
+        });
+    }
+
+    if ($("#asoc_profesor_to_director").length) {
+        $("#asoc_profesor_to_director").on("click", function(event) {
+            event.preventDefault();
+            cfgBase0();
+            var nc = localStorage.nc;
+            $.post(obj.getValue(0) + "asoc-profesor-to-director-list/", {
+                    user: nc
+                },
+                function(html) {
+                    $("#contentMain").html(html);
+                    $('#breadcrumb').html(getBar('Inicio,Asociar Profesor a Director'));
+                }, "html");
+            return false;
+        });
+    }
+
+    if ($("#cat_supervisores_caja_list").length) {
+        $("#cat_supervisores_caja_list").on("click", function(event) {
+            event.preventDefault();
+            cfgBase0();
+            var nc = localStorage.nc;
+            $.post(obj.getValue(0) + "cat-supervisores-caja-list/", {
+                    user: nc
+                },
+                function(html) {
+                    $("#contentMain").html(html);
+                    $('#breadcrumb').html(getBar('Inicio,Supervisores de Caja'));
+                }, "html");
+            return false;
+        });
+    }
+
+
+    if ($("#cat_supervisores_sol_mat_list").length) {
+        $("#cat_supervisores_sol_mat_list").on("click", function(event) {
+            event.preventDefault();
+            cfgBase0();
+            var nc = localStorage.nc;
+            $.post(obj.getValue(0) + "cat-supervisores-sol-mat-list/", {
+                    user: nc
+                },
+                function(html) {
+                    $("#contentMain").html(html);
+                    $('#breadcrumb').html(getBar('Inicio,Autorizan Solicitud de Materiales'));
+                }, "html");
+            return false;
+        });
+    }
+
+
+    if ($("#cat_supervisores_entrega_list").length) {
+        $("#cat_supervisores_entrega_list").on("click", function(event) {
+            event.preventDefault();
+            cfgBase0();
+            var nc = localStorage.nc;
+            $.post(obj.getValue(0) + "cat-supervisores-entrega-list/", {
+                    user: nc
+                },
+                function(html) {
+                    $("#contentMain").html(html);
+                    $('#breadcrumb').html(getBar('Inicio,Entrega de Materiales'));
+                }, "html");
+            return false;
+        });
+    }
+
+    if ($("#asoc_solicitante_to_autorizante").length) {
+        $("#asoc_solicitante_to_autorizante").on("click", function(event) {
+            event.preventDefault();
+            cfgBase0();
+            var nc = localStorage.nc;
+            $.post(obj.getValue(0) + "asoc-solicitante-to-autorizante-list/", {
+                    user: nc
+                },
+                function(html) {
+                    $("#contentMain").html(html);
+                    $('#breadcrumb').html(getBar('Inicio,Asociar Solicitante a Autorizante'));
+                }, "html");
+            return false;
+        });
+    }
+
+    if ($("#cat_lista_vencimientos").length) {
+        $("#cat_lista_vencimientos").on("click", function(event) {
+            event.preventDefault();
+            cfgBase0();
+            var nc = localStorage.nc;
+            $.post(obj.getValue(0) + "cat-lista-vencimientos-list/", {
+                    user: nc
+                },
+                function(html) {
+                    $("#contentMain").html(html);
+                    $('#breadcrumb').html(getBar('Inicio,Listas de Fechas de Vencimientos'));
+                }, "html");
+            return false;
+        });
+    }
+
+    $("#menuPrincipal li").on("click", function(event) {
+        event.preventDefault();
+        $(".nav-list li").removeClass("active");
+        if ($('.open').length === null) {
+            $(this).addClass("active open");
+        }
+    });
+
+    function cfgBase0(){
+        resizeScreen();
+        $("#contentLevel5").empty();
+        $("#contentLevel5").hide();
+        $("#contentLevel4").empty();
+        $("#contentLevel4").hide();
+        $("#contentLevel3").empty();
+        $("#contentLevel3").hide();
+        $("#contentProfile").empty();
+        $("#contentProfile").hide();
+        $("#contentMain").show();
+        $("#contentMain").empty();
+        $("#preloaderPrincipal").show();
+        obj.setIsTimeLine(false);
+    }
+
+    $("#preloaderPrincipal").hide();
+
+
+});    
+</script>

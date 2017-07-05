@@ -1,0 +1,93 @@
+<li id="subMenuDirectivos0"> 
+    <a href="#" class="dropdown-toggle">
+            <i class="icon-book"></i>
+            <span class="menu-text">Directivos</span>
+
+            <b class="arrow icon-angle-down"></b>
+    </a>
+
+    <ul class="submenu">                            
+        
+        <li>
+            <a href="#" id="dir-prof-tareas-0">
+                <i class="icon-edit"></i>
+                <span class="menu-text">Tareas Profesores</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="#" id="dir-rep-materiales-0">
+                <i class="icon-edit"></i>
+                <span class="menu-text">Reporte de Materiales</span>
+            </a>
+        </li>
+
+    </ul>
+</li>
+
+
+
+<script type="text/javascript">
+jQuery(function($) {
+
+    $("#preloaderPrincipal").show();
+
+    if ($("#dir-prof-tareas-0").length) {
+        $("#dir-prof-tareas-0").on("click", function(event) {
+            event.preventDefault();
+            cfgBase0();
+            var nc = localStorage.nc.split("@");
+            $.post(obj.getValue(0) + "directores-tareas-list-01-01/", {
+                    user: nc[0]
+                },
+                function(html) {
+                    $("#contentMain").empty();
+                    $("#contentMain").html(html);
+                    $("#breadcrumb").html(getBar('Inicio,Lista de Tareas por Profesores'));
+                }, "html");
+            return false;
+        });
+    }
+
+    if ($("#dir-rep-materiales-0").length) {
+        $("#dir-rep-materiales-0").on("click", function(event) {
+            event.preventDefault();
+            cfgBase0();
+            var nc = localStorage.nc.split("@");
+            $.post(obj.getValue(0) + "directores-reportes-materiales-0/", {
+                    user: nc[0]
+                },
+                function(html) {
+                    $("#contentMain").empty();
+                    $("#contentMain").html(html);
+                    $("#breadcrumb").html(getBar('Inicio,Lista de Tareas por Profesores'));
+                }, "html");
+            return false;
+        });
+    }
+
+    $("#preloaderPrincipal").hide();
+
+    function cfgBase0(){
+        resizeScreen();
+        $("#contentLevel5").empty();
+        $("#contentLevel5").hide();
+        $("#contentLevel4").empty();
+        $("#contentLevel4").hide();
+        $("#contentLevel3").empty();
+        $("#contentLevel3").hide();
+        $("#contentProfile").empty();
+        $("#contentProfile").hide();
+        $("#contentMain").show();
+        $("#contentMain").empty();
+        $("#preloaderPrincipal").show();
+        obj.setIsTimeLine(false);
+    }
+
+
+    $("#preloaderPrincipal").hide();
+
+
+})
+
+</script>

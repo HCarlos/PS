@@ -1,0 +1,177 @@
+<li id="subMNExaOnSite" > 
+    <a href="#" class="dropdown-toggle">
+            <i class="icon-group"></i>
+            <span class="menu-text">Relaciones Públicas</span>
+
+            <b class="arrow icon-angle-down"></b>
+    </a>
+
+    <ul class="submenu">
+
+        <li>
+            <a href="#" class="dropdown-toggle" id="exa_cat_01">
+                <i class="glyphicon glyphicon-chevron-right"></i>
+                <span class="menu-text">Exalumnos</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="#" class="dropdown-toggle" id="exa_cat_02">
+                <i class="glyphicon glyphicon-chevron-right"></i>
+                <span class="menu-text">Generaciones</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="#" class="dropdown-toggle" id="exa_cat_03">
+                <i class="glyphicon glyphicon-chevron-right"></i>
+                <span class="menu-text">Panel de Reportes</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="#" class="dropdown-toggle" id="exa_cat_04">
+                <i class="glyphicon glyphicon-chevron-right"></i>
+                <span class="menu-text">Mails enviados</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="#" class="dropdown-toggle" id="exa_cat_05">
+                <i class="glyphicon glyphicon-chevron-right"></i>
+                <span class="menu-text">Imágenes</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="#" class="dropdown-toggle" id="exa_cat_06">
+                <i class="glyphicon glyphicon-chevron-right"></i>
+                <span class="menu-text">Firma</span>
+            </a>
+        </li>
+    </ul>
+    
+</li>
+
+
+
+<script type="text/javascript">
+jQuery(function($) {
+
+    $("#preloaderPrincipal").show();
+
+    if ($("#exa_cat_01").length) {
+        $("#exa_cat_01").on("click", function(event) {
+            event.preventDefault();
+            cfgBase0();
+            var nc = localStorage.nc.split("@");
+            $.post(obj.getValue(0) + "cat-exalumnos-list/", {
+                    user: nc[0]
+                },
+                function(html) {
+                    $("#contentMain").html(html);
+                    $('#breadcrumb').html(getBar('Inicio,Catálogo de Exalumnos'));
+                }, "html");
+            return false;
+        });
+    }
+
+    if ($("#exa_cat_02").length) {
+        $("#exa_cat_02").on("click", function(event) {
+            event.preventDefault();
+            cfgBase0();
+            // var nc = localStorage.nc.split("@");
+            $.post(obj.getValue(0) + "cat-generaciones-list/", {
+                    user: localStorage.nc
+                },
+                function(html) {
+                    $("#contentMain").html(html);
+                    $('#breadcrumb').html(getBar('Inicio,Catálogo de Generaciones'));
+                }, "html");
+            return false;
+        });        
+    }
+
+    if ($("#exa_cat_03").length) {
+        $("#exa_cat_03").on("click", function(event) {
+            event.preventDefault();
+            cfgBase0();
+            // var nc = localStorage.nc.split("@");
+            $.post(obj.getValue(0) + "exa-panel-reportes-1/", {
+                    user: localStorage.nc
+                },
+                function(html) {
+                    $("#contentMain").html(html);
+                    $('#breadcrumb').html(getBar('Inicio,Panel de Reportes Exalumnos'));
+                }, "html");
+            return false;
+        });        
+    }
+
+    if ($("#exa_cat_04").length) {
+        $("#exa_cat_04").on("click", function(event) {
+            event.preventDefault();
+            cfgBase0();
+            $.post(obj.getValue(0) + "exa-mails-enviados-list-1/", {
+                    user: localStorage.nc
+                },
+                function(html) {
+                    $("#contentMain").html(html);
+                    $('#breadcrumb').html(getBar('Inicio, Listado de emails enviados'));
+                }, "html");
+            return false;
+        });        
+    }
+
+    if ($("#exa_cat_05").length) {
+        $("#exa_cat_05").on("click", function(event) {
+            event.preventDefault();
+            cfgBase0();
+            $.post(obj.getValue(0) + "exa-images-list-1/", {
+                    user: localStorage.nc
+                },
+                function(html) {
+                    $("#contentMain").html(html);
+                    $('#breadcrumb').html(getBar('Inicio, Catálogo de imágenes'));
+                }, "html");
+            return false;
+        });        
+    }
+
+    if ($("#exa_cat_06").length) {
+        $("#exa_cat_06").on("click", function(event) {
+            event.preventDefault();
+            cfgBase0();
+            $.post(obj.getValue(0) + "exa-firmas-email-list/", {
+                    user: localStorage.nc
+                },
+                function(html) {
+                    $("#contentMain").html(html);
+                    $('#breadcrumb').html(getBar('Inicio, Catálogo de Firmas'));
+                }, "html");
+            return false;
+        });        
+    }
+
+
+    function cfgBase0(){
+        resizeScreen();
+        $("#contentLevel5").empty();
+        $("#contentLevel5").hide();
+        $("#contentLevel4").empty();
+        $("#contentLevel4").hide();
+        $("#contentLevel3").empty();
+        $("#contentLevel3").hide();
+        $("#contentProfile").empty();
+        $("#contentProfile").hide();
+        $("#contentMain").show();
+        $("#contentMain").empty();
+        $("#preloaderPrincipal").show();
+        obj.setIsTimeLine(false);
+    }
+
+    $("#preloaderPrincipal").hide();
+
+})
+
+</script>

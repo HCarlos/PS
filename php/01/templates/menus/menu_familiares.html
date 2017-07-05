@@ -1,0 +1,86 @@
+<li id="subMnFam1" class="open active"> 
+    <a href="#" class="dropdown-toggle">
+            <i class="icon-book"></i>
+            <span class="menu-text">Opciones</span>
+
+            <b class="arrow icon-angle-down"></b>
+    </a>
+
+    <ul class="submenu" id="submnFamTareas">                            
+        <li>
+            <a href="#" class="dropdown-toggle mnuGruFamMn" id="mnuGruFamMn-0">
+                <i class="icon-edit"></i>
+                <span id="mnuTutSp-0">Tareas</span>
+            </a>
+        </li>    
+        <li>
+            <a href="#" class="dropdown-toggle mnuGruFamMn" id="mnuGruFamMn-1">
+                <i class="icon-edit"></i>
+                <span id="mnuTutSp-1">Circulares</span>
+            </a>
+        </li>    
+        <li>
+            <a href="#" class="dropdown-toggle mnuGruFamMn" id="mnuGruFamMn-2">
+                <i class="icon-edit"></i>
+                <span id="mnuTutSp-2">Boletas</span>
+            </a>
+        </li>    
+    </ul>
+</li>
+<script type="text/javascript">        
+
+jQuery(function($) {
+
+    $("#preloaderPrincipal").show();
+
+    var arrMnuTu = ['familiares-tareas-list-01/','comunica-mensaje-inbox-list/','familiares-boletas-list/'];
+    var dtn = ['contentMain','contentProfile','contentMain'];
+    if ($(".mnuGruFamMn").length) {
+           $(".mnuGruFamMn").on("click", function(event) {
+               event.stopPropagation();
+               var sm0 = event.currentTarget.id.split('-');
+               var ind = sm0[1];
+               sm0 = $("#mnuTutSp-"+ind).html();
+                cfgBase0();
+                $("#contentMain").hide();
+                var nc = localStorage.nc;
+                $.post(obj.getValue(0) + arrMnuTu[ind], {
+                        user: nc,
+                        objeto:dtn[ind],
+                        tipoUser:"notutor"
+                    },
+                    function(html) {
+                        $("#"+dtn[ind]).show();
+                        $("#"+dtn[ind]).html(html);
+                        $('#breadcrumb').html(getBar('Inicio, '+sm0 ));
+                    }, "html");
+                return false;         
+           });
+    }
+
+    $("#subMnFam1 li").on("click", function(event) {
+        event.preventDefault();
+        $(".nav-list li").removeClass("active");
+        if ($('.open').length === null) {
+            $(this).addClass("active open");
+        }
+    });
+
+    function cfgBase0(){
+        resizeScreen();
+        $("#contentLevel5").empty();
+        $("#contentLevel5").hide();
+        $("#contentLevel4").empty();
+        $("#contentLevel4").hide();
+        $("#contentLevel3").empty();
+        $("#contentLevel3").hide();
+        $("#contentProfile").empty();
+        $("#contentProfile").hide();
+        $("#contentMain").empty();
+        $("#contentMain").hide();
+        $("#preloaderPrincipal").show();
+        obj.setIsTimeLine(false);
+    }
+
+});
+</script>

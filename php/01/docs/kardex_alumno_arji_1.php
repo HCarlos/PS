@@ -1,0 +1,910 @@
+<?php
+error_reporting(E_ALL);
+ini_set('display_errors', TRUE);
+ini_set('display_startup_errors', TRUE);
+ini_set('default_socket_timeout', 6000);
+mb_internal_encoding('UTF-8');
+
+$o = $_POST['o'];
+$c = $_POST['c'];
+$t = $_POST['t'];
+$from = $_POST['from'];
+$cantidad = $_POST['cantidad'];
+$s = $_POST['s'];
+
+if (!isset($c)){
+	header('Location: http://platsource.mx/');
+}
+
+parse_str($c);
+
+// echo $c;
+
+define('FPDF_FONTPATH','font/');
+require('../diag/sector.php');
+
+require_once('../oFunctions.php');
+$Q = oFunctions::getInstance();
+
+require_once('../oCentura.php');
+$f = oCentura::getInstance();
+
+require_once('../oCenturaPDO.php');
+$F = oCenturaPDO::getInstance();
+
+$idfamilia = $f->getIdFamFromIdUserAlu($iduseralu,1);
+
+$cad = $c."&idfamilia=".$idfamilia;
+
+$alu2 = $f->getQuerys(10,$idalumno);
+
+$alu = $f->getQuerys(10025,$cad,0,0,0,array(),$s,1);
+
+
+$fam = $f->getQuerys(10019, "u=".$u."&idalumno=".$idalumno);
+$vivecon = $f->getQuerys(112, "u=".$u."&idpersona=".$fam[0]->vive_con);
+$tutor = $f->getQuerys(112, "u=".$u."&idpersona=".$fam[0]->idtutor);
+
+$madre = $f->getQuerys(111, "u=".$u."&idfamilia=".$fam[0]->idfamilia,0,0,0,array(),'madre');
+$padre = $f->getQuerys(111, "u=".$u."&idfamilia=".$fam[0]->idfamilia,0,0,0,array(),'padre');
+
+// echo "u=".$u."&idalumno=".$idalumno;
+
+$med = $f->getQuerys(108, "u=".$u."&idalumno=".$idalumno,0,0,0,array(),'idmedalu');
+
+$emer = $f->getQuerys(115,$c);
+
+
+class PDF_Diag extends PDF_Sector {
+	var $nFont;
+	var $logoPreinscripcion;
+
+    function Header(){  }
+
+	function Footer(){  }
+
+}
+
+
+$pdf = new PDF_Diag('P','mm','Letter');
+$pdf->AliasNbPages();
+$pdf->nFont = 6;
+$pdf->SetFillColor(192,192,192);
+
+$pdf->AddPage();
+
+$pdf->Ln(5);
+
+$pdf->setX(30);
+
+// /* *********************************************************
+// ** ENCABEZADO
+// ** ********************************************************* */
+
+$pdf->SetTextColor(0,0,0);
+$pdf->SetFont('Arial','B',14);
+$pdf->Cell(110,$pdf->nFont,utf8_decode("COLEGIO ARJÍ A.C."),'',0,'L');
+$pdf->SetFont('Arial','B',12);
+$pdf->Cell(70,6,utf8_decode("K   A   R   D   E   X"),'LTRB',1,'C',true);
+
+// echo $iduseralu;
+
+// $idfamilia = $f->getIdFamFromIdUserAlu($iduseralu,1);
+
+// $cad = $c."&idfamilia=".$idfamilia;
+
+// echo $cad;
+
+// $alu = $F->getQueryPDO(72,$cad,0,0,0,array(),$s,1);
+
+if ( count($alu) > 0 ){
+
+
+	$pdf->setY(5);
+	$pdf->setX(0);
+	$pdf->Image('../../../images/web/logo-arji.gif',5,5,25,25);
+	$pdf->SetFont('ARIAL','',6);
+	$pdf->Ln(20);
+	$pdf->setX(5);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Cell(205,4,utf8_decode('Página 1 de 2'),'',1,'R');
+
+	$pdf->Ln(5);
+	$pdf->setX(30);
+	$pdf->SetFont('Arial','B',10);
+	$pdf->Cell(22,$pdf->nFont,'','',0,'R');
+	$pdf->SetFont('Arial','',10);
+	$pdf->Cell(123,$pdf->nFont,'','',0,'L');
+	$pdf->SetFont('Arial','B',10);
+	$pdf->Cell(15,$pdf->nFont,utf8_decode("FECHA:"),'',0,'R');
+	$pdf->SetFont('Arial','',10);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(20,$pdf->nFont,date('d-m-Y'),'',1,'R');
+
+	// lINEA 1
+	$pdf->SetFont('ARIAL','B',10);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Ln(10);
+	$pdf->setX(5);
+	$pdf->Cell(205,4,'DATOS PERSONALES DEL ALUMNO(A)','',1,'C');
+	$pdf->setX(5);
+	$y = $pdf->GetY();
+	$pdf->SetDrawColor(152,72,7);
+	$pdf->RoundedRect(5, $y, 205, 54, 0, '1234');
+
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->Ln(4);
+	$pdf->setX(5);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Cell(40,4,'NOMBRE DEL ALUMNO(A)','',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(53,4,utf8_decode(mb_strtoupper($alu[0]->ap_paterno,'UTF-8')),'B',0,'C');
+	$pdf->Cell(53,4,utf8_decode(mb_strtoupper($alu[0]->ap_materno,'UTF-8')),'B',0,'C');
+	$pdf->Cell(53,4,utf8_decode(mb_strtoupper($alu[0]->nombre,'UTF-8')),'B',1,'C');
+
+	$pdf->SetFont('ARIAL','',5);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Ln(1);
+	$pdf->setX(5);
+	$pdf->Cell(40,2,'','',0,'L');
+	$pdf->Cell(53,2,'APELLIDO PATERNO','',0,'C');
+	$pdf->Cell(53,2,'APELLIDO MATERNO','',0,'C');
+	$pdf->Cell(53,2,'NOMBRE(S)','',1,'C');
+
+
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Ln(2);
+	$pdf->setX(5);
+	$pdf->Cell(10,4,'CURP','',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(40,4,utf8_decode(mb_strtoupper($alu[0]->curp,'UTF-8')),'B',0,'C');
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Cell(5,4,'','',0,'L');
+	$pdf->Cell(34,4,utf8_decode('GRADO QUE CURSA'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(49,4,utf8_decode(mb_strtoupper($alu[0]->grado.', '.$alu[0]->grupo,'UTF-8')),'B',0,'C');
+	$pdf->Cell(6,4,'','',0,'L');
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Cell(25,4,utf8_decode('CICLO ESCOLAR'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(30,4,utf8_decode(mb_strtoupper($alu[0]->ciclo,'UTF-8')),'B',1,'C');
+
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Ln(4);
+	$pdf->setX(5);
+	$pdf->Cell(14,4,'HOMBRE','',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$lH = intval($alu[0]->genero)==1?'X':'';
+	$lM = intval($alu[0]->genero)==0?'X':'';
+	$pdf->Cell(5,4,$lH,'B',0,'C');
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Cell(11,4,'MUJER','',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(5,4,$lM,'B',0,'C');
+	$pdf->Cell(10,4,'','',0,'L');
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Cell(5,4,'','',0,'L');
+	$pdf->Cell(29,4,utf8_decode('FECHA DE INGRESO'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(36,4,utf8_decode(mb_strtoupper($alu2[0]->cfecha_ingreso,'UTF-8')),'B',0,'C');
+	$pdf->Cell(10,4,'','',0,'L');
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Cell(5,4,'','',0,'L');
+	$pdf->Cell(33,4,utf8_decode('EDAD AL 1° DE SEPT.'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+
+	// $pdf->Cell(36,4,utf8_decode(mb_strtoupper($alu[0]->edad,'UTF-8')),'B',1,'C');
+	$pdf->Cell(36,4,utf8_decode(mb_strtoupper($Q->getEdad1Sep($alu2[0]->fecha_nacimiento),'UTF-8')),'B',1,'C');
+
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Ln(4);
+	$pdf->setX(5);
+	$pdf->Cell(31,4,utf8_decode('LUGAR NACIMIENTO'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(86,4,utf8_decode(mb_strtoupper($alu2[0]->lugar_nacimiento,'UTF-8')),'B',0,'C');
+	$pdf->Cell(10,4,'','',0,'L');
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Cell(5,4,'','',0,'L');
+	$pdf->Cell(31,4,utf8_decode('FECHA NACIMIENTO'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(36,4,utf8_decode(mb_strtoupper($alu2[0]->cfecha_nacimiento,'UTF-8')),'B',1,'C');
+
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Ln(4);
+	$pdf->setX(5);
+	$pdf->Cell(60,4,utf8_decode('ENFERMEDADES / REACIONES ALÉRGICAS'),'',0,'L');
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(70,4,utf8_decode(mb_strtoupper($alu2[0]->enfermedades.' / '.$alu2[0]->reacciones_alergicas,'UTF-8')),'B',0,'C');
+	$pdf->Cell(5,4,'','',0,'L');
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Cell(5,4,'','',0,'L');
+	$pdf->Cell(23,4,utf8_decode('TIPO SANGRE'),'',0,'L');
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(36,4,utf8_decode(mb_strtoupper($alu2[0]->tipo_sangre,'UTF-8')),'B',1,'C');
+
+	if ( $med[0]->medico == "EMPTY EMPTY EMPTY" || $med[0]->medico == "EMPTY1 EMPTY EMPTY" ){
+		$nommed0 = "";
+	}else{
+		$nommed0 = $med[0]->medico;
+	}
+	$telmed1 = $med[0]->tel1 == "empty" ? "" : $med[0]->tel1;
+	$telmed2 = $med[0]->tel2 == "empty" ? "" : $med[0]->tel2;
+
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Ln(4);
+	$pdf->setX(5);
+	$pdf->Cell(35,4,utf8_decode('PEDIATRA O DOCTOR'),'',0,'L');
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(70,4,utf8_decode(mb_strtoupper($nommed0,'UTF-8')),'B',0,'C');
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Cell(20,4,utf8_decode('TELÉFONO'),'',0,'R');
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(74,4,$telmed1.' '.$telmed2,'B',1,'L');
+
+
+
+	// lINEA 2
+	$pdf->SetFont('ARIAL','B',10);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Ln(20);
+	$pdf->setX(5);
+	$pdf->Cell(205,4,'DATOS DE LA MADRE O TUTORA','',1,'C');
+	$pdf->setX(5);
+	$y = $pdf->GetY();
+	$pdf->RoundedRect(5, $y, 205, 54, 0, '1234');
+
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Ln(4);
+	$pdf->setX(5);
+	$pdf->Cell(35,4,utf8_decode('NOMBRE DE LA MADRE'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(102,4,utf8_decode(mb_strtoupper($madre[0]->nombre_persona,'UTF-8')),'B',0,'C');
+	$pdf->Cell(6,4,'','',0,'L');
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Cell(5,4,'','',0,'L');
+	$pdf->Cell(10,4,utf8_decode('CURP'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(41,4,utf8_decode(mb_strtoupper($madre[0]->curp_persona,'UTF-8')),'B',1,'C');
+
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Ln(4);
+	$pdf->setX(5);
+	$pdf->Cell(35,4,utf8_decode('LUGAR DE NACIMIENTO'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(85,4,utf8_decode(mb_strtoupper($madre[0]->lugar_nacimiento_persona,'UTF-8')),'B',0,'C');
+	$pdf->Cell(10,4,'','',0,'L');
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Cell(35,4,utf8_decode('FECHA DE NACIMIENTO'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(34,4,utf8_decode(mb_strtoupper($madre[0]->cfecha_nacimiento,'UTF-8')),'B',1,'C');
+
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Ln(4);
+	$pdf->setX(5);
+	$pdf->Cell(20,4,utf8_decode('OCUPACIÓN'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(81,4,utf8_decode(mb_strtoupper($madre[0]->ocupacion,'UTF-8')),'B',0,'C');
+	$pdf->Cell(10,4,'','',0,'L');
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Cell(31,4,utf8_decode('LUGAR DE TRABAJO'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(57,4,utf8_decode(mb_strtoupper($madre[0]->lugar_trabajo,'UTF-8')),'B',1,'C');
+
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Ln(4);
+	$pdf->setX(5);
+	$pdf->Cell(36,4,utf8_decode('DOMICILIO PARTICULAR'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->SetFont('ARIAL','',7);
+	$pdf->Cell(163,4,utf8_decode(mb_strtoupper($madre[0]->domicilio_generico,'UTF-8')),'B',1,'C');
+
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Ln(4);
+	$pdf->setX(5);
+	$pdf->Cell(30,4,utf8_decode('TELÉFONO DE CASA'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(44,4,$madre[0]->tel1,'B',0,'C');
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Cell(5,4,'','',0,'L');
+	$pdf->Cell(17,4,utf8_decode('CELULAR'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(41,4,$madre[0]->tel2,'B',0,'C');
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Cell(5,4,'','',0,'L');
+	$pdf->Cell(16,4,utf8_decode('OFICINA'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(41,4,$madre[0]->cel1.' '.$madre[0]->cel2,'B',1,'C');
+
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Ln(4);
+	$pdf->setX(5);
+	$pdf->Cell(13,4,utf8_decode('E-MAIL'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(186,4,utf8_decode($madre[0]->email1.' '.$madre[0]->email2),'B',1,'C');
+
+
+	// lINEA 3
+	$pdf->SetFont('ARIAL','B',10);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Ln(22);
+	$pdf->setX(5);
+	$pdf->Cell(205,4,'DATOS DEL PADRE O TUTOR','',1,'C');
+	$pdf->setX(5);
+	$y = $pdf->GetY();
+	$pdf->RoundedRect(5, $y, 205, 66, 0, '1234');
+
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Ln(4);
+	$pdf->setX(5);
+	$pdf->Cell(35,4,utf8_decode('NOMBRE DEL PADRE'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(102,4,utf8_decode(mb_strtoupper($padre[0]->nombre_persona,'UTF-8')),'B',0,'C');
+	$pdf->Cell(6,4,'','',0,'L');
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Cell(5,4,'','',0,'L');
+	$pdf->Cell(10,4,utf8_decode('CURP'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(41,4,utf8_decode(mb_strtoupper($padre[0]->curp_persona,'UTF-8')),'B',1,'C');
+
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Ln(4);
+	$pdf->setX(5);
+	$pdf->Cell(35,4,utf8_decode('LUGAR DE NACIMIENTO'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(85,4,utf8_decode(mb_strtoupper($padre[0]->lugar_nacimiento_persona,'UTF-8')),'B',0,'C');
+	$pdf->Cell(10,4,'','',0,'L');
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Cell(35,4,utf8_decode('FECHA DE NACIMIENTO'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(34,4,utf8_decode(mb_strtoupper($padre[0]->cfecha_nacimiento,'UTF-8')),'B',1,'C');
+
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Ln(4);
+	$pdf->setX(5);
+	$pdf->Cell(20,4,utf8_decode('OCUPACIÓN'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(81,4,utf8_decode(mb_strtoupper($padre[0]->ocupacion,'UTF-8')),'B',0,'C');
+	$pdf->Cell(10,4,'','',0,'L');
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Cell(31,4,utf8_decode('LUGAR DE TRABAJO'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(57,4,utf8_decode(mb_strtoupper($padre[0]->lugar_trabajo,'UTF-8')),'B',1,'C');
+
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Ln(4);
+	$pdf->setX(5);
+	$pdf->Cell(36,4,utf8_decode('DOMICILIO PARTICULAR'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->SetFont('ARIAL','',7);
+	$pdf->Cell(163,4,utf8_decode(mb_strtoupper($padre[0]->domicilio_generico,'UTF-8')),'B',1,'C');
+
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Ln(4);
+	$pdf->setX(5);
+	$pdf->Cell(30,4,utf8_decode('TELÉFONO DE CASA'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(44,4,$padre[0]->tel1,'B',0,'C');
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Cell(5,4,'','',0,'L');
+	$pdf->Cell(17,4,utf8_decode('CELULAR'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(41,4,$padre[0]->tel2,'B',0,'C');
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Cell(5,4,'','',0,'L');
+	$pdf->Cell(16,4,utf8_decode('OFICINA'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(41,4,$padre[0]->cel1.' '.$padre[0]->cel2,'B',1,'C');
+
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Ln(4);
+	$pdf->setX(5);
+	$pdf->Cell(13,4,utf8_decode('E-MAIL'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(186,4,utf8_decode($padre[0]->email1.' '.$padre[0]->email2),'B',1,'C');
+
+
+	$pdf->SetFont('ARIAL','',6);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Ln(10);
+	$pdf->setX(5);
+	$pdf->Cell(205,4,utf8_decode('Página 2 de 2'),'',1,'R');
+
+
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Ln(10);
+	$pdf->setX(5);
+	switch ( intval($alu[0]->idtutor) ) {
+		case $madre[0]->idpersona:
+			$tut = "MADRE: ".utf8_decode(mb_strtoupper($madre[0]->nombre_persona,'UTF-8'));
+			break;
+		case $padre[0]->idpersona:
+			$tut = "PADRE: ".utf8_decode(mb_strtoupper($padre[0]->nombre_persona,'UTF-8'));
+			break;	
+		default:
+			$tut = utf8_decode(strtoupper($tutor[0]->parentezco)).": ".utf8_decode(mb_strtoupper($tutor[0]->nombre_persona,'UTF-8'));
+			break;	
+	}
+	$pdf->Cell(30,4,utf8_decode('QUIEN ES EL TUTOR'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(169,4,$tut,'B',1,'C');
+
+
+	if ( count($emer) > 0 ) {
+
+		$nom0  = $emer[0]->nombre == "EMPTY1" ? "" : $emer[0]->nombre;
+		$tel01 = $emer[0]->tel1 == "EMPTY1" ? "" : $emer[0]->tel1;
+		$par0  = $emer[0]->parentezco == "EMPTY1" ? "" : $emer[0]->parentezco;
+
+		$nom1  = $emer[1]->nombre == "EMPTY" ? "" : $emer[1]->nombre;
+		$tel11 = $emer[1]->tel1 == "EMPTY" ? "" : $emer[1]->tel1;
+		$par1  = $emer[1]->parentezco == "EMPTY" ? "" : $emer[1]->tel1;
+
+	}else{
+
+		$nom0 = "";
+		$tel01 = "";
+		$par0 = "";
+
+		$nom1 = "";
+		$tel11 = "";
+		$par1 = "";
+
+	}
+
+
+
+	// lINEA 4
+
+	$pdf->SetFont('ARIAL','B',10);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Ln(10);
+	$pdf->setX(5);
+	$pdf->Cell(205,4,utf8_decode('TELÉFONOS DE EMERGENCIA'),'',1,'C');
+	$pdf->setX(5);
+	$y = $pdf->GetY();
+	$pdf->RoundedRect(5, $y, 205, 230, 0, '1234');
+
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Ln(4);
+	$pdf->setX(5);
+	$pdf->Cell(15,4,utf8_decode('NOMBRE'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(44,4,$nom0,'B',0,'C');
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Cell(8,4,'','',0,'L');
+	$pdf->Cell(18,4,utf8_decode('TELÉFONO'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(41,4,$tel01,'B',0,'C');
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Cell(9,4,'','',0,'L');
+	$pdf->Cell(23,4,utf8_decode('PARENTESCO'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(41,4,$par0,'B',1,'C');
+
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Ln(4);
+	$pdf->setX(5);
+	$pdf->Cell(15,4,utf8_decode('NOMBRE'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(44,4,$nom1,'B',0,'C');
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Cell(8,4,'','',0,'L');
+	$pdf->Cell(18,4,utf8_decode('TELÉFONO'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(41,4,$tel11,'B',0,'C');
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Cell(9,4,'','',0,'L');
+	$pdf->Cell(23,4,utf8_decode('PARENTESCO'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(41,4,$par1,'B',1,'C');
+
+	$pdf->SetFont('ARIAL','',6);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Ln(4);
+	$pdf->setX(5);
+	$pdf->Cell(205,2,'Aviso de Privacidad: http://www.arji.edu.mx/privacy.html','',1,'L');
+
+	// Línea 17 = FINALLY
+	$pdf->setY(205);
+	$pdf->Ln(1);
+	$pdf->setX(5);
+	// $pdf->SetTextColor(64);
+	$pdf->SetFont('Arial','',8);
+	$pdf->MultiCell(205, 5, utf8_decode(mb_strtoupper("DOY MI AUTORIZACIÓN PARA QUE EN CASO DE EMERGENCIA Y EN CASO DE NO ENCONTRARLOS EN LOS TELÉFONOS CITADOS, NI A LAS PERSONAS QUE AUTORIZAMOS PARA CASOS DE EMERGENCIA, LA ESCUELA PROCEDA SEGÚN SEA CONVENIENTE, PARA QUE MI HIJO(A) SEA ATENDIDO(A).", 'UTF-8') ) );
+
+	$pdf->setY(222);
+	$pdf->Ln(1);
+	$pdf->setX(5);
+	$pdf->SetFont('Arial','',8);
+	$pdf->MultiCell(205, 5, utf8_decode(mb_strtoupper("CONSCIENTE DE LOS OBJETIVOS Y MÉTODOS DEL COLEGIO ARJÍ, FIRMO COMO CORRESPONSABLE Y FACTOR DETERMINANTE EN EL LOGRO DE LOS MISMOS.", 'UTF-8') ) );
+
+	$pdf->setY(248);
+	$pdf->setX(5);
+	$pdf->Ln(1);
+	$pdf->SetFont('Courier','B',10);
+	$pdf->Cell(80,6,'_________________________________________','',0,'C');
+	$pdf->Cell(35,6,'','',0,'C');
+	$pdf->Cell(80,6,'_________________________________________','',1,'C');
+
+	$pdf->setY(252);
+	$pdf->setX(5);
+	$pdf->Ln(1);
+	$pdf->SetFont('Courier','B',10);
+	$pdf->Cell(80,6,'FIRMA DEL PADRE O TUTOR','',0,'C');
+	$pdf->Cell(35,6,'','',0,'C');
+	$pdf->Cell(80,6,'FIRMA DE LA MADRE','',1,'C');
+
+
+
+/*
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->setX(5);
+	$pdf->Ln(8);
+	$pdf->Cell(5,4,'','',0,'L');
+	$pdf->Cell(43,4,utf8_decode('COLEGIO DEL QUE PROCEDE'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(156,4,$alu[0]->colegio_procede,'B',1,'C');
+
+	$bNo = intval($alu[0]->bilingue) == 0 ? 'X':'';
+	$bSi = intval($alu[0]->bilingue) == 1 ? 'X':'';
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->setX(5);
+	$pdf->Ln(4);
+	$pdf->Cell(5,4,'','',0,'L');
+	$pdf->Cell(30,4,utf8_decode('BILINGÜE'),'',0,'L');
+	$pdf->Cell(8,4,utf8_decode('SI'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(10,4,$bSi,'B',0,'C');
+	$pdf->Cell(10,4,'','',0,'L');
+	$pdf->SetTextColor(152,72,7);
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->Cell(8,4,utf8_decode('NO'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(10,4,$bNo,'B',0,'C');
+	$pdf->Cell(18,4,'','',0,'L');
+	$pdf->SetTextColor(152,72,7);
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->Cell(20,4,utf8_decode('2DO IDIOMA'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(85,4,utf8_decode(mb_strtoupper($alu[0]->idioma_2,'UTF-8')),'B',1,'C');
+
+	$bNo = intval($alu[0]->tiene_hermanos) == 0 ? 'X':'';
+	$bSi = intval($alu[0]->tiene_hermanos) == 1 ? 'X':'';
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->setX(5);
+	$pdf->Ln(8);
+	$pdf->Cell(5,4,'','',0,'L');
+	$pdf->Cell(70,4,utf8_decode('¿TIENE HERMANOS EN ESTA ESCUELA?'),'',0,'L');
+	$pdf->Cell(8,4,utf8_decode('SI'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(10,4,$bSi,'B',0,'C');
+	$pdf->Cell(10,4,'','',0,'L');
+	$pdf->SetTextColor(152,72,7);
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->Cell(16,4,utf8_decode('GRADOS'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(56,4,utf8_decode(mb_strtoupper($alu[0]->grado_hermanos,'UTF-8')),'B',0,'C');
+	$pdf->Cell(10,4,'','',0,'L');
+	$pdf->SetTextColor(152,72,7);
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->Cell(8,4,utf8_decode('NO'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(10,4,$bNo,'B',1,'C');
+
+	$bNo = intval($alu[0]->tuvo_hermanos) == 0 ? 'X':'';
+	$bSi = intval($alu[0]->tuvo_hermanos) == 1 ? 'X':'';
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->setX(5);
+	$pdf->Ln(4);
+	$pdf->Cell(5,4,'','',0,'L');
+	$pdf->Cell(70,4,utf8_decode('¿TUVO HERMANOS EN AÑOS ANTERIORES?'),'',0,'L');
+	$pdf->Cell(8,4,utf8_decode('SI'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(10,4,$bSi,'B',0,'C');
+	$pdf->Cell(10,4,'','',0,'L');
+	$pdf->SetTextColor(152,72,7);
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->Cell(27,4,utf8_decode('CICLO ESCOLAR'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(45,4,utf8_decode(mb_strtoupper($alu[0]->ciclo_hermanos,'UTF-8')),'B',0,'C');
+	$pdf->Cell(10,4,'','',0,'L');
+	$pdf->SetTextColor(152,72,7);
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->Cell(8,4,utf8_decode('NO'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(10,4,$bNo,'B',1,'C');
+
+	$bNo = intval($alu[0]->hijo_exalumno) == 0 ? 'X':'';
+	$bSi = intval($alu[0]->hijo_exalumno) == 1 ? 'X':'';
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->setX(5);
+	$pdf->Ln(4);
+	$pdf->Cell(5,4,'','',0,'L');
+	$pdf->Cell(70,4,utf8_decode('¿ES HIJO DE EXALUMNO?'),'',0,'L');
+	$pdf->Cell(8,4,utf8_decode('SI'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(10,4,$bSi,'B',0,'C');
+	$pdf->Cell(10,4,'','',0,'L');
+	$pdf->SetTextColor(152,72,7);
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->Cell(8,4,utf8_decode('NO'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(10,4,$bNo,'B',1,'C');
+
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->setX(5);
+	$pdf->Ln(4);
+	$pdf->Cell(5,4,'','',0,'L');
+	$pdf->Cell(40,4,utf8_decode('¿QUIÉN LO RECOMIENDA?'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(159,4,$alu[0]->quien_recomienda,'B',1,'C');
+
+	$bNo = intval($alu[0]->recomienda_hijos) == 0 ? 'X':'';
+	$bSi = intval($alu[0]->recomienda_hijos) == 1 ? 'X':'';
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->setX(5);
+	$pdf->Ln(4);
+	$pdf->Cell(5,4,'','',0,'L');
+	$pdf->Cell(98,4,utf8_decode('LA PERSONA QUE RECOMIENDA, ¿TIENE HIJOS EN EL COLEGIO?'),'',0,'L');
+	$pdf->Cell(8,4,utf8_decode('SI'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(10,4,$bSi,'B',0,'C');
+	$pdf->Cell(10,4,'','',0,'L');
+	$pdf->SetTextColor(152,72,7);
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->Cell(8,4,utf8_decode('NO'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(10,4,$bNo,'B',1,'C');
+
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->setX(5);
+	$pdf->Ln(4);
+	$pdf->Cell(5,4,'','',0,'L');
+	$pdf->Cell(98,4,utf8_decode('¿POR QUÉ ELIGIÓ ESTE COLEGIO?'),'',1,'L');
+
+	$y = $pdf->GetY();
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+		
+	$pdf->Ln(1);
+	$pdf->setY($y-4);
+	$pdf->setX(56);
+	$pdf->MultiCell(149, 4, utf8_decode(mb_strtoupper($alu[0]->porque_eligio,'UTF-8')),'', 'J');
+
+	// LINEA 5
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->setY(120);
+	$pdf->setX(5);
+	$pdf->Ln(15);
+	$pdf->Cell(215,4,"FECHA __________________________________",'',1,'C');
+
+	// LINEA 6
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->setX(5);
+	$pdf->Ln(40);
+	$pdf->Cell(80,4,'','',0,'L');
+	$pdf->Cell(60,4,"FIRMA DEL PADRE O TUTOR",'T',0,'C');
+	$pdf->Cell(70,4,'','',1,'L');
+
+	// lINEA 7
+
+	$pdf->setY(190);
+	$pdf->setX(5);
+
+	$pdf->SetFont('ARIAL','B',10);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Ln(20);
+	$pdf->Cell(205,4,utf8_decode('DATOS FISCALES'),'',1,'C');
+	$pdf->setX(5);
+	$y = $pdf->GetY();
+	$pdf->RoundedRect(5, $y, 205, 49, 0, '1234');
+
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->setX(5);
+	$pdf->Ln(4);
+	$pdf->Cell(5,4,'','',0,'L');
+	$pdf->Cell(40,4,utf8_decode('NOMBRE O RAZÓN SOCIAL'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(160,4,$alu[0]->razon_social_fiscal,'B',1,'C');
+
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->setX(5);
+	$pdf->Ln(4);
+	$pdf->Cell(5,4,'','',0,'L');
+	$pdf->Cell(10,4,utf8_decode('RFC'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(85,4,$alu[0]->rfc_fiscal,'B',0,'C');
+	$pdf->Cell(9,4,'','',0,'L');
+	$pdf->Cell(11,4,utf8_decode('CURP'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(85,4,$alu[0]->curp_fiscal,'B',1,'C');
+
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->Ln(4);
+	$pdf->setX(5);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Cell(29,4,'DOMICILIO FISCAL','',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(103,4,utf8_decode(mb_strtoupper($alu[0]->calle_fiscal,'UTF-8')),'B',0,'C');
+	$pdf->Cell(34,4,utf8_decode(mb_strtoupper($alu[0]->num_ext_fiscal,'UTF-8')),'B',0,'C');
+	$pdf->Cell(34,4,utf8_decode(mb_strtoupper($alu[0]->num_int_fiscal,'UTF-8')),'B',1,'C');
+
+	$pdf->SetFont('ARIAL','',5);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Ln(1);
+	$pdf->setX(5);
+	$pdf->Cell(29,2,'','',0,'L');
+	$pdf->Cell(103,2,'CALLE','',0,'C');
+	$pdf->Cell(34,2,'NÚM. EXT.','',0,'C');
+	$pdf->Cell(34,2,'NÚM. INT.','',1,'C');
+
+
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Ln(4);
+	$pdf->setX(5);
+	$pdf->Cell(2,4,'','',0,'L');
+	$pdf->Cell(85,4,utf8_decode(mb_strtoupper($alu[0]->colonia_fiscal,'UTF-8')),'B',0,'C');
+	$pdf->Cell(50,4,utf8_decode(mb_strtoupper($alu[0]->localidad_fiscal,'UTF-8')),'B',0,'C');
+	$pdf->Cell(21,4,utf8_decode(mb_strtoupper($alu[0]->estado_fiscal,'UTF-8')),'B',0,'C');
+	$pdf->Cell(21,4,utf8_decode(mb_strtoupper($alu[0]->pais_fiscal,'UTF-8')),'B',0,'C');
+	$pdf->Cell(21,4,utf8_decode(mb_strtoupper($alu[0]->cp_fiscal,'UTF-8')),'B',1,'C');
+
+	$pdf->SetFont('ARIAL','',5);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Ln(1);
+	$pdf->setX(5);
+	$pdf->Cell(2,2,'','',0,'L');
+	$pdf->Cell(85,2,'COLONIA','',0,'C');
+	$pdf->Cell(50,2,'LOCALIDAD','',0,'C');
+	$pdf->Cell(21,2,'ESTADO','',0,'C');
+	$pdf->Cell(21,2,'MÉXICO','',0,'C');
+	$pdf->Cell(21,2,'C.P.','',1,'C');
+
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->setX(5);
+	$pdf->Ln(4);
+	$pdf->Cell(5,4,'','',0,'L');
+	$pdf->Cell(19,4,utf8_decode('TELÉFONO'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(50,4,$alu[0]->tel1_fiscal,'B',0,'C');
+	$pdf->Cell(10,4,'','',0,'L');
+	$pdf->SetFont('ARIAL','',8);
+	$pdf->SetTextColor(152,72,7);
+	$pdf->Cell(25,4,utf8_decode('E-MAIL FISCAL'),'',0,'L');
+	// $pdf->SetFont('ARIAL','B',8);
+	$pdf->SetTextColor(64);
+	$pdf->Cell(96,4,utf8_decode($alu[0]->email1_fiscal),'B',1,'C');
+*/
+
+
+}else{
+
+	$pdf->setX(5);
+	$pdf->Ln(4);
+	$pdf->Cell(5,4,'','',0,'L');
+	$pdf->Cell(100,4,utf8_decode('NO SE ENCONTRÓ EL ALUMNO(A)'),'',0,'L');
+
+}
+
+$pdf->Output();
+
+?>

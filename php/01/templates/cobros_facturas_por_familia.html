@@ -1,0 +1,503 @@
+
+<div class="row-fluid">
+	<div class="span12">
+		<div class="row-fluid">
+			<div class="wd100prc">
+
+				<form class="form-search">
+					<input class="input-large form-control altoMoz wd10prc inline text-right" id="cfamilia_id" name="cfamilia_id" type="number" placeholder="ID Familia" autofocus >
+					<input class="input-large form-control altoMoz wd60prc" id="cfamilia" name="cfamilia" type="text" placeholder="Buscar Familia" disabled="disabled">
+					<button id="findFamily" name="findFamily" class="btn btn-purple btn-small">
+						<i class="icon-search icon-only icon-on-right bigger-110"></i>
+					</button>
+					<button id="refreshFamily" name="refreshFamily" class="btn btn-green btn-small">
+						<i class="icon-refresh icon-only icon-on-right bigger-110"></i>
+					</button>
+					<input type="hidden" id="idfamilia" name="idfamilia" value="" />
+				</form>
+			</div>
+		</div>
+		
+		<div class="row-fluid">
+
+			<div class="span12">
+					
+				<div class="alert alert-danger" id="alerta">
+					<button type="button" class="close" data-dismiss="alert">
+						<i class="icon-remove"></i>
+					</button>
+					<strong><span id="famalucob0"></span></strong>
+				</div>
+
+				<div id="sample-table-2_wrapper" class="dataTables_wrapper" role="grid">
+
+					<table aria-describedby="sample-table-2_info" id="sample-table-2" class="table table-striped table-bordered table-hover dataTable">
+										
+						<thead>
+							<tr role="row">
+								<th aria-label="idfactura: activate to sort column ascending" style="width: 50px;" aria-controls="sample-table-2" tabindex="0" role="columnheader" class="sorting" >ID</th>
+								<th aria-label="fecha: activate to sort column ascending" style="width: 100px;" aria-controls="sample-table-2" tabindex="1" role="columnheader" class="sorting">FECHA</th>
+								<th aria-label="cfolio: activate to sort column ascending" style="width: 80px;" aria-controls="sample-table-2" tabindex="2" role="columnheader" class="sorting">FACTURA</th>
+								<th aria-label="total: activate to sort column ascending" style="width: 80px;" aria-controls="sample-table-2" tabindex="3" role="columnheader" class="sorting">IMPORTE</th>
+								<th aria-label="pdf: activate to sort column ascending" style="width: 80px;" aria-controls="sample-table-2" tabindex="4" role="columnheader" class="sorting">PDF</th>
+								<th aria-label="xml: activate to sort column ascending" style="width: 80px;" aria-controls="sample-table-2" tabindex="5" role="columnheader" class="sorting">XML</th>
+								<th aria-label="email: activate to sort column ascending" style="width: 80px;" aria-controls="sample-table-2" tabindex="6" role="columnheader" class="sorting">EMAIL</th>
+								<th aria-label="" style="width: 200px;" colspan="1" rowspan="1" role="columnheader" class="sorting_disabled"></th>
+							</tr>
+						</thead>
+										
+						<tbody aria-relevant="all" aria-live="polite" role="alert"></tbody>
+					</table>
+
+				</div><!--PAGE CONTENT ENDS-->
+
+			</div><!--/span-->
+
+		</div>
+
+	</div> <!-- /.span -->
+</div> <!-- /.row-fluid -->
+
+<script type="text/javascript"> 
+
+jQuery(function($) {
+
+	var stream = io.connect(obj.getValue(4));
+	var IdFamilia = 0;
+	var Tutor = "";
+	var arrAlu = [];
+	var arrCon = [];
+	var subtotal=0;
+	var descto = 0;
+	var importe=0;
+	var recargo=0;
+	var total=0;
+	var oTable;
+	var init = true;		
+
+	$("#alerta").hide();	
+
+	function getTable(){
+
+		oTable = $('#sample-table-2').dataTable({
+	        "oLanguage": {
+	                    	"sLengthMenu": "_MENU_ registros por página",
+	                    	"oPaginate": {
+	                                		"sPrevious": "Prev",
+	                                		"sNext": "Next"
+	                                     },
+	                        "sSearch": "Buscar",
+	                        "sProcessing":"Procesando...",
+	                        "sLoadingRecords":"Cargando...",
+	 						"sZeroRecords": "No hay registros",
+	            			"sInfo": "_START_ - _END_ de _TOTAL_ registros",
+	            			"sInfoEmpty": "No existen datos",
+	            			"sInfoFiltered": "(De _MAX_ registros)"                                        
+	        			},	
+	        "aaSorting": [[ 0, "desc" ]],			
+			"aoColumns": [ null, null, null, null, null, null, null, { "bSortable": false }],
+			"aLengthMenu": [[20, 25, 50, -1], [20, 25, 50, "Todos"]],
+			"bRetrieve": true,
+			"bDestroy": false
+	 	});
+
+	}
+	
+	$("#findFamily").on('click', function(event) {
+		event.preventDefault();
+
+		var idf = parseInt( $("#cfamilia_id").val() ,0);
+
+		console.log(idf);
+
+		//return false;
+
+		if ( isNaN(idf) ) {
+
+	        $("#contentProfile").html("");
+	        $("#contentMain").hide(function(){
+		        $("#preloaderPrincipal").show();
+		        obj.setIsTimeLine(false);
+		        var nc = localStorage.nc;
+		        $.post(obj.getValue(0) + "find-family-pagos/", {
+					user: nc
+		            },
+		            function(html) {	
+		            	if (html!="NoFamilia"){                
+		                $("#contentProfile").html(html).show('slow',function(){
+		                	//$("#contentProfile");	
+			                $('#breadcrumb').html(getBar('Inicio, Pago de Conceptos '));
+		                });
+		            	}else{
+		            		alert("No se encontró la familia");	
+		            	}
+		            }, "html");
+	        });
+
+    	}else{
+
+			$("#tblPagos1 > tbody").html("");
+			$("#famalucob1").addClass("hide");
+	        var nc = "u="+localStorage.nc+"&idfamilia="+idf;
+						console.log(nc);
+	        $.post(obj.getValue(0) + "data/", {o:28, t:10012, c:nc, p:11, from:0, cantidad:0, s:''},
+	        function(json) {
+					$("#preloaderPrincipal").hide();
+
+					try {
+					    if(eval(json[0]) !== undefined){
+
+							var idfl = parseInt( json[0].idfamilia ,0);
+							console.log(idfl);
+			        		if ( !isNaN(idfl) ){
+
+								$("#famalucob1").removeClass("hide");
+								$("#cfamilia").val(json[0].familia+' - '+json[0].familia+' - '+json[0].tutor);
+								Tutor = json[0].tutor;
+
+								IdFamilia = parseInt( json[0].idfamilia ,0);
+								getFacturas(IdFamilia);
+
+
+			    			}else{
+			    				IdFamilia = 0;
+			    				alert("Error 0: "+json[0].msg);	
+			    			}
+
+					    }else{
+
+		    				IdFamilia = idf;
+		    				$("#alerta").show();
+							$("#famalucob0").html("No encontraron datos de esta Familia.");
+							$("#preloaderPrincipal").hide();
+
+
+					    }
+					} catch (e) {
+					    alert("Error 1: "+e.message);
+					    return false;
+					}					
+
+	    	}, "json");
+
+
+    	}
+        return false;
+
+	});
+	
+	$("#refreshFamily").on('click', function(event) {
+		event.preventDefault();
+		getFacturas(IdFamilia);
+	});	
+
+	function getTable(){
+
+		oTable = $('#sample-table-2').dataTable({
+	        "oLanguage": {
+	                    	"sLengthMenu": "_MENU_ registros por página",
+	                    	"oPaginate":{
+	                                		"sPrevious": "Prev",
+	                                		"sNext": "Next"
+	                                    },
+	                        "sSearch": "Buscar",
+	                        "sProcessing":"Procesando...",
+	                        "sLoadingRecords":"Cargando...",
+	 						"sZeroRecords": "No hay registros",
+	            			"sInfo": "_START_ - _END_ de _TOTAL_ registros",
+	            			"sInfoEmpty": "No existen datos",
+	            			"sInfoFiltered": "(De _MAX_ registros)"                                        
+	        			},	
+	        "aaSorting": [[ 0, "desc" ]],			
+			"aoColumns": [ null, null, null, null, null, null, null, { "bSortable": false }],
+			"aLengthMenu": [[50, 100, 150, -1], [50, 100, 150, "Todos"]],
+			"bRetrieve": true,
+			"bDestroy": false
+	 	});
+
+	}
+
+	function getFacturas(IdFamilia){
+		
+		$("#alerta").hide();
+		$("#preloaderPrincipal").show();
+		$('#sample-table-2 > tbody').empty();
+
+		var tB = "";
+        var nc = "u="+localStorage.nc+"&idfamilia="+IdFamilia;
+        $.post(obj.getValue(0) + "data/", {o:0, t:10017, c:nc, p:10, from:0, cantidad:0, s:''},
+        function(json) {
+
+        		if ( parseInt(json.length,0) > 0 ){
+        			var ie0;
+					$.each(json, function(i, item) {
+						var xxs = item.serie;
+						ie0 = parseInt(item.isfe,0)==1?true:false;
+						td0 = parseInt(item.tipo_documento,0)==1?true:false;
+						
+						tB +=' 			<tr class="odd">';
+						tB +=' ';
+						tB +='				<td>';
+						tB +='					'+padl(item.idfactura,6);
+						tB +='				</td>';
+						tB +='				<td class="textRight" >'+item.fecha_timbrado+'</td>';
+						tB +='				<td class="textRight" >'+item.cfolio+' '+xxs.search("FM");+'</td>';
+						tB +='				<td class="textRight" >'+item.total+'</td>';
+						tB +='				<td><a class="blue clsidfac0 " href="#" id="idfac0*'+item.directorio+item.pdf+'">'+item.pdf+'</a></td>';
+						tB +='				<td><a class="blue clsidfac1 " href="#" id="idfac1*'+item.directorio+item.xml+'">'+item.xml+'</a></td>';
+						tB +='				<td><a class="blue clsidfac2 " href="#" id="email0*'+item.email+'*'+item.directorio+item.pdf+'*'+item.directorio+item.xml+'">'+item.email+'</a></td>';
+						tB +='				<td>';
+						tB +='					<div class="hidden-phone visible-desktop action-buttons">';
+						tB +=' ';
+						
+						if (ie0){
+						
+							tB +='						<a class="cafe createNotaCredito" href="#" id="idNC0*'+item.idfactura+'*'+ie0+'" title="Crea una Nota de Crédito" >';
+							tB +='							<i class="fa fa-file-archive-o bigger-130"></i>';
+							tB +='						</a>';
+							tB +=' ';
+
+							tB +='						<a class="blue createFacturaManual" href="#" id="idFM0*'+item.idfactura+'*'+ie0+'" title="Crea una Factura Manual" >';
+							tB +='							<i class="fa fa-file-archive-o bigger-130"></i>';
+							tB +='						</a>';
+							tB +=' ';
+						
+						}else{
+							if (td0){
+								tB +='						<a class="green createNotaCredito" href="#" id="idNC1*'+item.idfactura+'*'+ie0+'" title="Modifica Nota de Crédito" >';
+								tB +='							<i class="icon icon-pencil bigger-130"></i>';
+								tB +='						</a>';
+								tB +=' ';
+								tB +='						<a class="red delNC0" href="#"  id="idNC2*'+item.idfactura+'"  title="Quitar Nota de Crédito" >';
+								tB +='							<i class="icon-trash bigger-130"></i>';
+								tB +='						</a>';
+								tB +=' ';
+							}else{ 
+								tB +='						<a class="blue createFacturaManual" href="#" id="idFM1*'+item.idfactura+'*'+ie0+'" title="Modifica Factura Manual" >';
+								tB +='							<i class="icon icon-pencil bigger-130"></i>';
+								tB +='						</a>';
+								tB +=' ';
+								tB +='						<a class="orange delFM0" href="#"  id="idFM2*'+item.idfactura+'"  title="Quitar Factura Manual" >';
+								tB +='							<i class="icon-trash bigger-130"></i>';
+								tB +='						</a>';
+								tB +=' ';
+							}	
+
+						}
+
+						/*
+						tB +='						<a class="red delAlumno" href="#"  id="delAlumno-'+item.idalumno+'" >';
+						tB +='							<i class="icon-trash bigger-130"></i>';
+						tB +='						</a>';
+						*/
+					
+						tB +='					</div> ';
+						tB +=' ';
+						tB +='				</td> ';
+						tB +='			</tr> ';
+					});
+					
+					// alert(tB);
+
+					$('#sample-table-2 > tbody').html(tB);
+					
+
+					$("#preloaderPrincipal").hide();
+
+					$(".clsidfac0").on("click",function(event){
+						event.preventDefault();
+						var item = this.id.split('*');
+						window.open(obj.getValue(0) + "uw_fe/"+item[1],'_blank');
+					});
+
+					$(".clsidfac1").on("click",function(event){
+						event.preventDefault();
+						var item = this.id.split('*');
+						window.open(obj.getValue(0) + "uw_fe/"+item[1],'_blank');
+					});
+
+					$(".clsidfac2").on("click",function(event){
+						event.preventDefault();
+						var item = this.id.split('*');
+				
+						var atach ="Le enviamos la factura:<br/><br/>"+obj.getValue(0)+ "uw_fe/"+item[2]+"<br/>"+obj.getValue(0)+ "uw_fe/"+item[3];
+
+						document.location.href="mailto:"+item[1]+"?body="+atach;
+
+/*
+			        var temp=document.createElement("form");
+			        temp.action="mailto:"+item[1];
+			        temp.method="POST";
+			        temp.enctype="multipart/form-data";
+			        temp.style.display="none";
+			        for(var x in PARAMS) {
+			            var opt=document.createElement("textarea");
+			            opt.name=x;
+			            opt.value=PARAMS[x];
+			            temp.appendChild(opt);
+			        }
+			        document.body.appendChild(temp);
+			        temp.submit();
+			        closeWindow();
+			        return temp;
+*/
+
+					});
+
+					$(".createNotaCredito").on("click",function(event){
+						event.preventDefault();
+
+						var item = this.id.split('*');
+
+						var nc = localStorage.nc; 
+
+				        $("#contentProfile").html("");
+				        $("#contentMain").hide(function(){
+					        $("#preloaderPrincipal").show();
+					        obj.setIsTimeLine(false);
+					        var nc = localStorage.nc;
+					        $.post(obj.getValue(0) + "nota-credito-0/", {
+								user: nc,
+								idfactura:item[1],
+								idfamilia:IdFamilia,
+								isfe: item[2],
+								tutor: Tutor
+					            },
+					            function(html) {
+					            	var ley0;	
+					                $("#contentProfile").html(html).show('slow',function(){
+					                	ley0 = (item[2]=='true')?"Nueva":"Modificar";
+						                $('#breadcrumb').html(getBar('Inicio, <span class="red">'+ley0+' Nota de Crédito</span> '));
+					                });
+					                $("#preloaderPrincipal").hide();
+					            }, "html");
+				        });
+
+					});
+
+		           				
+					$(".delNC0").on("click",function(event){
+						event.preventDefault();
+						var item = event.currentTarget.id.split('*');
+						$("#preloaderPrincipal").show();
+						var r = confirm("¿Desea ELIMINAR el Documento ("+item[1]+") ?");
+						if (r){
+	  	 	 	 	 	  	var nc = "u="+localStorage.nc+"&idfactura="+item[1];
+				            $.post(obj.getValue(0) + "data/", {o:28, t:2, c:nc, p:2, from:0, cantidad:0, s:''},
+				            function(json) {
+									$("#preloaderPrincipal").hide();
+				            		if (json[0].msg=="OK"){
+				            			alert("Documento ELIMINADO con éxito.");
+										//stream.emit("cliente", {mensaje: "PLATSOURCE|DELETECONCEPTFROMALU|PROP|"+item[2]});
+				        			}else{
+				        				alert(json[0].msg);	
+				        			}
+				        			getFacturas(IdFamilia);
+				        	}, "json");
+				        }
+					});
+					
+
+					$(".createFacturaManual").on("click",function(event){
+						event.preventDefault();
+
+						var item = this.id.split('*');
+
+						var nc = localStorage.nc; 
+
+				        $("#contentProfile").html("");
+				        $("#contentMain").hide(function(){
+					        $("#preloaderPrincipal").show();
+					        obj.setIsTimeLine(false);
+					        var nc = localStorage.nc;
+					        $.post(obj.getValue(0) + "factura-manual-0/", {
+								user: nc,
+								idfactura:item[1],
+								idfamilia:IdFamilia,
+								isfe: item[2],
+								tutor: Tutor
+					            },
+					            function(html) {
+					            	var ley0;	
+					                $("#contentProfile").html(html).show('slow',function(){
+					                	ley0 = (item[2]=='true')?"Nueva":"Modificar";
+						                $('#breadcrumb').html(getBar('Inicio, <span class="red">'+ley0+' Factura Manual</span> '));
+					                });
+					                $("#preloaderPrincipal").hide();
+					            }, "html");
+				        });
+
+					});
+
+		           				
+					$(".delFM0").on("click",function(event){
+						event.preventDefault();
+						var item = event.currentTarget.id.split('*');
+						$("#preloaderPrincipal").show();
+						var r = confirm("¿Desea ELIMINAR el Documento ("+item[1]+") ?");
+						if (r){
+	  	 	 	 	 	  	var nc = "u="+localStorage.nc+"&idfactura="+item[1];
+				            $.post(obj.getValue(0) + "data/", {o:28, t:2, c:nc, p:2, from:0, cantidad:0, s:''},
+				            function(json) {
+									$("#preloaderPrincipal").hide();
+				            		if (json[0].msg=="OK"){
+				            			alert("Documento ELIMINADO con éxito.");
+										//stream.emit("cliente", {mensaje: "PLATSOURCE|DELETECONCEPTFROMALU|PROP|"+item[2]});
+				        			}else{
+				        				alert(json[0].msg);	
+				        			}
+				        			getFacturas(IdFamilia);
+				        	}, "json");
+				        }
+					});
+				
+					//alert("Intro");
+					
+					getTable();
+
+
+    			}else{
+
+    				$("#alerta").show();
+					$("#famalucob0").html("No se encontraron datos_._");
+					$("#preloaderPrincipal").hide();    				
+    				alert("No se encontraron datos._.");	
+    			}
+
+    	}, "json");
+
+	}
+
+
+
+
+	function jsNodeMsg0(datosServer) {
+		var ms = datosServer.mensaje.split("|");
+		//obj.setIsTimeLine(true);
+		if ( ms[1] == 'IDFAMILY' && ms[4] == localStorage.nc) {
+			IdFamilia = parseInt(ms[2],0);
+			$("#idfamilia").val(IdFamilia);
+			$("#cfamilia").val(ms[3]);
+			getFacturas(IdFamilia);
+		}
+
+		if ( ms[1] == 'PAGOAPLICADO' && ms[4] == localStorage.nc ) {
+			getFacturas(IdFamilia);
+		}
+
+
+		if ( ms[1] == 'DELETECONCEPTFROMALU' && ms[4] == localStorage.nc ) {
+			getFacturas(IdFamilia);
+		}
+
+	}
+
+	stream.on("servidor", jsNodeMsg0);
+
+	$("#preloaderPrincipal").hide();
+
+	$("#cfamilia_id").focus();
+
+});		
+
+</script>

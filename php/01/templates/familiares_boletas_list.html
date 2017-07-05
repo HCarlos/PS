@@ -1,0 +1,292 @@
+<table aria-describedby="sample-table-2_info" id="sample-table-2" class="table table-striped table-bordered table-hover dataTable">
+					
+	<thead>
+		<tr role="row">
+			<th aria-label="idgrualu: activate to sort column ascending" style="width: 50px;" aria-controls="sample-table-2" tabindex="0" role="columnheader" class="sorting" >ID</th>
+			<th aria-label="grupo: activate to sort column ascending" style="width: 100px;" aria-controls="sample-table-2" tabindex="1" role="columnheader" class="sorting">GRUPO</th>
+			<th aria-label="alumno: activate to sort column ascending" style="width: 80px;" aria-controls="sample-table-2" tabindex="2" role="columnheader" class="sorting">ALUMNO</th>
+			<th aria-label="url: activate to sort column ascending" style="width: 80px;" aria-controls="sample-table-2" tabindex="5" role="columnheader" class="sorting">BOLETA</th>
+		</tr>
+	</thead>
+					
+	<tbody aria-relevant="all" aria-live="polite" role="alert"></tbody>
+</table>
+
+<script type="text/javascript"> 
+
+jQuery(function($) {
+
+	// var stream = io.connect(obj.getValue(4));
+	var IdFamilia = 0;
+	var Tutor = "";
+
+	var oTable;
+	var init = true;		
+
+	function getTableFactsforTutor(){
+
+		oTable = $('#sample-table-2').dataTable({
+	        "oLanguage": {
+	                    	"sLengthMenu": "_MENU_ registros por página",
+	                    	"oPaginate": {
+	                                		"sPrevious": "Prev",
+	                                		"sNext": "Next"
+	                                     },
+	                        "sSearch": "Buscar",
+	                        "sProcessing":"Procesando...",
+	                        "sLoadingRecords":"Cargando...",
+	 						"sZeroRecords": "No hay registros",
+	            			"sInfo": "_START_ - _END_ de _TOTAL_ registros",
+	            			"sInfoEmpty": "No existen datos",
+	            			"sInfoFiltered": "(De _MAX_ registros)"                                        
+	        			},	
+	        "aaSorting": [[ 0, "desc" ]],			
+			"aoColumns": [ null, null, null, null],
+			"aLengthMenu": [[20, 25, 50, -1], [20, 25, 50, "Todos"]],
+			"bRetrieve": true,
+			"bDestroy": false
+	 	});
+
+	}
+	
+
+	$("#refreshFamily").on('click', function(event) {
+		event.preventDefault();
+		getBoletasFromTutores(IdFamilia);
+	});	
+
+	function getBoletasFromTutores(IdFamilia){
+		
+		$("#preloaderPrincipal").show();
+		$('#sample-table-2 > tbody').empty();
+
+		var tB = "";
+        var nc = "u="+localStorage.nc+"&idfamilia="+IdFamilia;
+        $.post(obj.getValue(0) + "data/", {o:2, t:7, c:nc, p:0, from:0, cantidad:0, s:''},
+        function(json) {
+
+        		if ( parseInt(json.length,0) > 0 ){
+					$.each(json, function(i, item) {
+						var CveNiv = parseInt(item.clave_nivel,0);
+						var IdEmp = parseInt(localStorage.IdEmp,0);
+						var ver_boleta_interna = parseInt(item.ver_boleta_interna,0)
+						var grupo_bloqueado = parseInt(item.grupo_bloqueado,0)
+						tB +=' 			<tr class="odd">';
+						tB +='				<td>'+padl(item.data,6)+'</td>';
+						tB +='				<td class="textRight" >'+item.grupo+'</td>';
+						tB +='				<td class="textRight" >'+item.label+'</td>';
+						tB +='				<td class="center">';
+						tB +='					<div class="action-buttons">';
+
+						if ( ver_boleta_interna == 1 ){	
+
+							if ( IdEmp == 1 ){
+
+								tB +='						<a class="blue printBolCalAluFromTutores1" href="#" id="l1-'+item.data+'-'+item.clave_nivel+'-0'+'"  data-rel="tooltip" data-placement="top" title="Ver Boleta de Calificaciones" >';
+								tB +='							<i class="icon-print bigger-130"></i>'
+								tB +='						</a>';
+
+							}
+
+						}	
+
+						if ( IdEmp == 1 ){
+
+							tB +=' ';
+							tB +='						<a class="red detailBolCalAluFromTutores1" href="#" id="l2|'+item.data+'|'+item.clave_nivel+'|'+item.grupo+'|'+item.label+'"  data-rel="tooltip" data-placement="top" title="Ver Detalle de Calificaciones" >';
+							tB +='							<i class="icon-list bigger-130"></i>'
+							tB +='						</a>';
+
+						}
+						
+						tB +='					</div>';
+						tB +='				</td>';
+						tB +='			</tr> ';
+					});
+					
+					$('#sample-table-2 > tbody').html(tB);
+					
+
+					$("#preloaderPrincipal").hide();
+
+					$(".printBolCalAluFromTutores1").on("click",function(event){
+						event.preventDefault();
+						var arr = event.currentTarget.id.split('-');
+				        var cveNivel = parseInt(arr[2],0);
+				        var numbol = parseInt(arr[3],0);
+				        getBolCalFromTutores(arr[1],cveNivel,numbol);
+					});
+
+					$(".detailBolCalAluFromTutores1").on("click",function(event){
+						event.preventDefault();
+						var arr = event.currentTarget.id.split('|');
+				        var cveNivel = parseInt(arr[2],0);
+				        getDetailCalFromTutores(arr[1],cveNivel,arr[3],arr[4]);
+					});
+
+					if (init==true){
+						getTableFactsforTutor();
+						init = false;
+					}else{
+						oTable.fnClearTable();
+						oTable.fnDraw();
+					}
+
+					$('[data-rel=tooltip]').tooltip();
+
+    			}else{
+
+
+					if (init==true){
+						getTableFactsforTutor();
+						init = false;
+					}else{
+						oTable.fnClearTable();
+						oTable.fnDraw();
+					}
+
+					$("#famalucob0").html("No se encontraron datos.");
+					$("#preloaderPrincipal").hide();
+
+    			}
+
+    	}, "json");
+
+	}
+
+		
+	function getBolCalFromTutores(IdGruAlu,ClaveNivel,NumBol){
+
+    	// alert("Boleta en Proceso de Evaluación");
+    	// return false;
+
+		var logoEmp =obj.getConfig(100,0); 
+		var logoIbo =obj.getConfig(100,1); 
+        var url;
+
+		var nc = "user="+localStorage.nc+"&strgrualu="+IdGruAlu+
+				"&logoEmp="+logoEmp+
+				"&logoIbo="+logoIbo;
+
+        var PARAMS = {o:0, t:40, c:nc, p:10, from:0, cantidad:0, s:' order by orden_impresion asc '};
+        if ( NumBol == 0){
+	        if (ClaveNivel==5){
+	        	url = obj.getValue(0)+"print-calif-prepa-interna-arji/";
+	        }else if (ClaveNivel==4){
+	        	url = obj.getValue(0)+"print-calif-secundaria-interna-arji/";
+	        }else if (ClaveNivel==2){
+	        	url = obj.getValue(0)+"print-calif-primaria-interna-arji/";
+	        }else if (ClaveNivel==3){
+	        	url = obj.getValue(0)+"print-calif-primaria-interna-arji/";
+	        }else if (ClaveNivel==1){
+	        	url = obj.getValue(0)+"print-calif-kinder-interna-arji-esp/";
+	        }else{
+	        	alert("Boleta en Construcción");
+	        	return false;
+	        }
+    	}else{
+	        if (ClaveNivel==1){
+	        	url = obj.getValue(0)+"print-calif-kinder-interna-arji-ing/";
+	        }else{
+	        	alert("Boleta en Construcción");
+	        	return false;
+	        }
+
+    	}
+
+        var tit = "Tutor-Boleta-Impresa-"+localStorage.nc+'-'+IdGruAlu;
+        trackOutboundLink(url,tit);
+
+        var temp=document.createElement("form");
+        temp.action=url;
+        temp.method="POST";
+        temp.target="_blank";
+        temp.style.display="none";
+        for(var x in PARAMS) {
+            var opt=document.createElement("textarea");
+            opt.name=x;
+            opt.value=PARAMS[x];
+            temp.appendChild(opt);
+        }
+        document.body.appendChild(temp);
+        temp.submit();
+        return temp;
+ 	};
+
+
+	function getDetailCalFromTutores(IdGruAlu,ClaveNivel,Grupo,Alumno){
+
+        $("#contentProfile").empty();
+        $("#contentMain").hide(function(){
+	        $("#preloaderPrincipal").show();
+	        obj.setIsTimeLine(false);
+	        var nc = localStorage.nc;
+
+	        var url = obj.getValue(0) + "tutores-boletas-detail-list/";
+	        var tit = "Tutor-Boleta-Detalle-"+nc+'-'+IdGruAlu;
+
+	        trackOutboundLink(url,tit);
+
+	        $.post(url, {
+				user: nc,
+				idgrualu: IdGruAlu,
+				clave_nivel: ClaveNivel,
+				grupo: Grupo,
+				alumno: Alumno,
+				screenOrigen: "contentMain",
+				screenDestino: "contentProfile"
+	            },
+	            function(html) {	                
+	                $("#contentProfile").html(html).show('slow',function(){
+		                $('#breadcrumb').html(getBar('Inicio, Detalle de Calificaciones '));
+	                });
+	            }, "html");
+        });
+        return false;
+
+
+ 	};
+
+
+
+	function js_getBoletasFromTutores(datosServer) {
+		var ms = datosServer.mensaje.split("|");
+		//obj.setIsTimeLine(true);
+		if ( ms[1] == 'IDFAMILY'  ) {
+			IdFamilia = parseInt(ms[2],0);
+			$("#idfamilia").val(IdFamilia);
+			$("#cfamilia").val(ms[3]);
+			getBoletasFromTutores(IdFamilia);
+		}
+
+		if ( ms[1] == 'PAGOAPLICADO' ) {
+			getBoletasFromTutores(IdFamilia);
+		}
+
+
+		if ( ms[1] == 'DELETECONCEPTFROMALU' ) {
+			getBoletasFromTutores(IdFamilia);
+		}
+
+	}
+	
+	$("#preloaderPrincipal").show();
+    var nc = "u="+localStorage.nc;
+    $.post(obj.getValue(0)+"data/", { o:1, t:62, p:0,c:nc,from:0,cantidad:0, s:" limit 1 " },
+        function(json){
+        	IdFamilia = json[0].data;
+        	getBoletasFromTutores(IdFamilia);
+        	var fam = getBar('Inicio, Boletas de la Familia');
+        	$('#breadcrumb').html(fam+': <strong class="text-warning orange">'+json[0].label+'</strong>');
+        $("#preloaderPrincipal").hide();
+        }, "json"
+	);
+
+
+	// stream.on("servidor", js_getBoletasFromTutores);
+	
+	$("#preloaderPrincipal").hide();
+
+});		
+
+</script>

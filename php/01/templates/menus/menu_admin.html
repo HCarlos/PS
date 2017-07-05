@@ -1,0 +1,81 @@
+<li id="subMenuCatGruposAluTareas" class="open active"> 
+    <a href="#" class="dropdown-toggle">
+            <i class="icon-book"></i>
+            <span class="menu-text">Menú</span>
+
+            <b class="arrow icon-angle-down"></b>
+    </a>
+
+    <ul class="submenu" id="submenuGruAluTareas">                            
+        <li>
+            <a href="#" class="dropdown-toggle mnuGruAluTareas0" id="mnuGruAluTareas-0">
+                <i class="icon-edit"></i>
+                Comunicados
+            </a>
+        </li>    
+    </ul>
+</li>
+
+
+
+<script type="text/javascript">        
+
+jQuery(function($) {
+
+    $("#preloaderPrincipal").show();
+
+
+     if ($(".mnuGruAluTareas0").length) {
+           $(".mnuGruAluTareas0").on("click", function(event) {
+               event.preventDefault();
+               var ar = event.currentTarget.id.split('-');
+               var dtn = ['contentProfile'];
+               var arr = ['comunica-mensaje-inbox-list/'];
+               var msg = ['Mensajes'];
+               var i = parseInt(ar[1],0);
+                cfgBase0();
+                var nc = localStorage.nc;
+                $.post(obj.getValue(0) + arr[i], {
+                        user: nc,
+                        objeto:dtn[i]
+                    },
+                    function(html) {
+                        $("#"+dtn[i]).show();
+                        $("#"+dtn[i]).html(html);
+                        $('#breadcrumb').html(getBar('Inicio, '+msg[i] ));
+                        $("#preloaderPrincipal").hide();
+
+                    }, "html");
+                return false;         
+           });
+    }
+
+
+    $("#subMenuCatGruposAluTareas li").on("click", function(event) {
+        event.preventDefault();
+        $(".nav-list li").removeClass("active");
+        if ($('.open').length === null) {
+            $(this).addClass("active open");
+        }
+    });
+
+    function cfgBase0(){
+        resizeScreen();
+        $("#contentLevel5").empty();
+        $("#contentLevel5").hide();
+        $("#contentLevel4").empty();
+        $("#contentLevel4").hide();
+        $("#contentLevel3").empty();
+        $("#contentLevel3").hide();
+        $("#contentProfile").empty();
+        $("#contentProfile").hide();
+        $("#contentMain").empty();
+        $("#contentMain").hide();
+        $("#preloaderPrincipal").show();
+        obj.setIsTimeLine(false);
+    }
+    
+    $("#preloaderPrincipal").hide();
+
+});
+</script>

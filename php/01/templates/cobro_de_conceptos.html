@@ -1,0 +1,665 @@
+
+<div class="row-fluid">
+	<div class="span12">
+		<div class="row-fluid">
+			<div class="wd100prc">
+
+				<form class="form-search">
+					<input class="input-large form-control altoMoz wd10prc inline text-right" id="cfamilia_id" name="cfamilia_id" type="number" placeholder="ID Familia" autofocus >
+					<input class="input-large form-control altoMoz wd50prc" id="cfamilia" name="cfamilia" type="text" placeholder="Buscar Familia" disabled="disabled">
+					<button id="findFamily" class="btn btn-info btn-xs font10px" title="Buscar Familia">
+						<i class="icon-search icon-only icon-on-right bigger-130"></i>
+					</button>
+					<button id="refreshFamily" class="btn btn-success btn-xs font10px" title="Actualizar Datos">
+						<i class="icon-refresh icon-only icon-on-right bigger-130"></i>
+					</button>
+
+					<button id="getConvenio" class="btn btn-danger btn-xs font10px" title="Ver Convenio">
+						<i class="icon-bell-alt icon-animated-bell bigger-150"></i>
+					</button>
+
+					<button id="findFamByIdEdoCta" class="btn btn-default btn-xs font10px" title="Buscar datos del ID" type="button">
+						<i class="icon-info-sign bigger-150"></i>
+					</button>
+
+					<div class="btn-group btn-xs pull-right" id="mnuOpciones">
+						<button class="btn btn-info btn-xs dropdown-toggle font10px" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="font12px">Opciones</span> <span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu">
+							<li>
+							    <a href="#" id="refreshEdoFamily" name="refreshEdoFamily">
+							        <i class="fa fa-connectdevelop"></i>
+							        Actualizar Estado de Cuenta
+							    </a>
+							</li>
+
+							<li class="divider"></li>
+
+							<li>
+							    <a href="#" id="RefScotiaBank" name="RefScotiaBank">
+							        <i class="fa fa-credit-card"></i>
+							        Línea de Captura SCOTIABANK
+							    </a>
+							</li>
+
+							<li class="divider"></li>
+
+							<li>
+							    <a href="#" id="RefBancomer" name="RefBancomer">
+							        <i class="fa fa-credit-card"></i>
+							        Línea de Captura BANCOMER
+							    </a>
+							</li>
+
+							<li class="divider"></li>
+
+							<li>
+							    <a href="#" id="refreshVence" name="refreshVence">
+							        <i class="fa fa-refresh"></i>
+							        Actualizar Vencimientos
+							    </a>
+							</li>
+
+						</ul>
+					</div>
+
+					<input type="hidden" id="idfamilia" name="idfamilia" value="" />
+				</form>
+			</div>
+		</div>
+		
+		<div class="row-fluid">
+
+			<div class="span6">
+				<div class="content" id="famalucob0">
+
+				</div>	
+
+			</div><!--/span-->
+
+			<div class="span6">
+				<div class="tabbable hide" id="famalucob1">
+
+					<ul class="nav nav-tabs" id="myTab1">
+						<li class="active">
+							<a data-toggle="tab">
+								<i class="green icon-money bigger-110"></i>
+								Conceptos a pagar
+							</a>
+						</li>
+
+					</ul>
+
+					<div class="tab-content ">
+
+						<table class="detFac" id="tblPagos1">
+							<thead>
+								<tr>
+									<th>ID</th>
+									<th>Concepto</th>
+									<th>Descto</th>
+									<th>Rgo</th>
+									<th>Importe</th>
+									<th></th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
+
+							</tbody>
+							<tfoot>
+								<tr>
+									<th></th>
+									<th>Total</th>
+									<th class="tbl50W textRight price" id="tblTotalDescto" ></th>
+									<th class="tbl50W textRight price" id="tblTotalRecargo" ></th>
+									<th class="tbl50W textRight price" id="tblTotalImporte" ></th>
+									<th></th>
+									<th></th>
+								</tr>							
+							</tfoot>
+						</table>
+						<table class="spaced">
+							<tr>
+								<td class="wd20prc">Método de Pago</td>
+								<td class="wd80prc">
+									<select id="idmetododepago" name="idmetododepago" size="1" class="marginLeft1em altoMoz wd80prc">
+									</select> 
+								</td>
+								<td colspan="4"></td>
+							</tr>	
+							<tr>
+								<td class="wd20prc">Referencia</td>
+								<td class="wd80prc">
+									<input type="text" id="referencia" name="referencia" class="marginLeft1em altoMoz wd80prc" autofocus/>
+								</td>
+							<tr>	
+
+						</table>
+	
+						
+					</div>
+					<div class="divider"></div>
+						<p class="pull-right">
+								<button class="btn btn-primary" id="pagarConceptos0">
+								<i class="icon-ok bigger-125"></i>
+								Pagar
+							</button>
+						</p>				
+				</div>	
+
+
+			</div><!--/span-->
+
+		</div>
+
+	</div> <!-- /.span -->
+</div> <!-- /.row-fluid -->
+
+<script type="text/javascript"> 
+
+jQuery(function($) {
+
+	var stream = io.connect(obj.getValue(4));
+	var IdFamilia = 0;
+	var Tutor = "";
+	var arrAlu = [];
+	var arrCon = [];
+	var subtotal=0;
+	var descto = 0;
+	var descto_becas = 0;
+	var importe=0;
+	var recargo=0;
+	var total=0;
+	var Convenio = "";
+
+	$("#mnuOpciones").hide();
+	$("#getConvenio").hide();
+
+	
+	$('[data-rel=tooltip]').tooltip();
+
+	$("#findFamily").on('click', function(event) {
+		event.preventDefault();
+		//alert(event.currentTarget.id);
+		var idf = parseInt( $("#cfamilia_id").val() ,0);
+
+		console.log(idf);
+
+		//return false;
+
+		if ( isNaN(idf) ) {
+
+	        $("#contentProfile").empty();
+	        $("#contentMain").hide(function(){
+		        $("#preloaderPrincipal").show();
+		        obj.setIsTimeLine(false);
+		        var nc = localStorage.nc;
+		        $.post(obj.getValue(0) + "find-family-pagos/", {
+					user: nc
+		            },
+		            function(html) {	
+		            	if (html!="NoFamilia"){                
+		                $("#contentProfile").html(html).show('slow',function(){
+		                	//$("#contentProfile");	
+			                $('#breadcrumb').html(getBar('Inicio, Pago de Conceptos '));
+		                });
+		            	}else{
+		            		alert("No se encontró la familia");	
+		            	}
+		            }, "html");
+	        });
+
+    	}else{
+
+			$("#famalucob0").empty();
+			$("#tblPagos1 > tbody").empty();
+			$("#famalucob1").addClass("hide");
+	        var nc = "u="+localStorage.nc+"&idfamilia="+idf;
+						console.log(nc);
+	        $.post(obj.getValue(0) + "data/", {o:28, t:10012, c:nc, p:11, from:0, cantidad:0, s:''},
+	        function(json) {
+					$("#preloaderPrincipal").hide();
+
+					try {
+					    if(eval(json[0]) !== undefined){
+
+							var idfl = parseInt( json[0].idfamilia ,0);
+							console.log(idfl);
+			        		if ( !isNaN(idfl) ){
+
+								$("#famalucob1").removeClass("hide");
+								$("#cfamilia").val(json[0].familia+' - '+json[0].familia+' - '+json[0].tutor);
+								Tutor = json[0].tutor;
+
+								IdFamilia = parseInt( json[0].idfamilia ,0);
+								getAlumnos(IdFamilia);
+
+
+			    			}else{
+			    				IdFamilia = 0;
+			    				alert("Error 0: "+json[0].msg);	
+			    			}
+
+					    }else{
+
+		    				IdFamilia = idf;
+		    				// $("#cfamilia_id").val(0);
+		    				// alert("Error: No se encontró la Familia.");	
+
+
+							$("#famalucob0").html("No encontró el Estado de Cuenta de esta Familia.<br/>Puede crearlo <a href='#' id='genFamily-"+IdFamilia+"' class='genFamily'>ahora mismo</a> ó intentar con otra familia.");
+							$("#preloaderPrincipal").hide();
+							$(".genFamily").on("click",function(event){
+								event.preventDefault();
+								setEdoCtaFam(IdFamilia);
+
+							});
+
+
+					    }
+					} catch (e) {
+					    alert("Error 1: "+e.message);
+					    return false;
+					}					
+
+	    	}, "json");
+
+
+    	}
+        return false;
+
+	});
+	
+	$("#refreshFamily").on('click', function(event) {
+		event.preventDefault();
+		getAlumnos(IdFamilia);
+	});	
+
+	function getAlumnos(IdFamilia){
+		$("#preloaderPrincipal").show();
+		$("#mnuOpciones").hide();
+		$("#famalucob1").addClass('hide');
+		$("#famalucob0").html("Realizando consulta...");
+        var nc = localStorage.nc;
+	    $.post(obj.getValue(0) + "fill-family-members/", {
+				idfamilia: IdFamilia,
+				tutor: Tutor,
+				user: nc
+	        },
+	        function(html) {	 
+	        	if (IdFamilia>0){        
+	        		if (html!=="NoFamilia"){         
+		            
+			            $("#famalucob0").html(html);
+			           	$("#tblPagos1 > tbody").empty();
+			            $("#famalucob1").removeClass('hide');
+						$("#preloaderPrincipal").hide();
+						$("#mnuOpciones").show();
+						$(".chkPago0").on("change",function(event){
+							event.preventDefault();
+							setChecking(this, this.id);
+						});
+						getConvenio(IdFamilia);
+
+
+						$('[data-toggle="tooltip"]').tooltip();
+	            	
+	            	}else{
+						$("#famalucob0").html("No encontró el Estado de Cuenta de esta Familia.<br/>Puede crearlo <a href='#' id='genFamily-"+IdFamilia+"' class='genFamily'>ahora mismo</a> ó intentar con otra familia.");
+						$("#preloaderPrincipal").hide();
+						$(".genFamily").on("click",function(event){
+							event.preventDefault();
+							setEdoCtaFam(IdFamilia);
+
+						});
+
+						return false;
+	            	}
+
+				}else{
+
+					$("#famalucob0").html("No encontró la Familia.<br/>Intenten con otra...");
+					$("#preloaderPrincipal").hide();
+					return false;
+
+				}
+
+	        }, "html");
+
+	}
+
+
+	function setChecking(obj,id){
+		subtotal = 0;
+		descto   = 0;
+		descto_becas   = 0;
+		importe  = 0;
+		recargo  = 0;
+		total    = 0;
+
+		$("#tblPagos1 > tbody").empty();
+		$(".chkPago0").each(function(i,item){
+			if ($(this).is(':checked') ){
+
+				var itemx = item.id;
+				itemx = itemx.split("*");
+				subtotal += parseFloat(itemx[7],2);
+				descto_becas += parseFloat(itemx[10],2);
+				descto += parseFloat(itemx[4],2);
+				importe += parseFloat(itemx[8],2);
+				recargo += parseFloat(itemx[5],2);
+				total += parseFloat(itemx[6],2);
+				//var concp = ;
+				var tr1 = $( "#id0-"+itemx[1] ).html() ;
+				tr1 = str_replace("id0","id1",tr1);
+				tr1 = str_replace("chkPago0","chkPago1",tr1);
+				tr1 = str_replace("idconcept0","idconcept1",tr1);
+				tr1 = str_replace("btns0","btns1",tr1);
+
+				// alert(tr1);
+
+				$("#tblPagos1 > tbody").append("<tr id='"+"id1-"+itemx[1]+"'>"+tr1+"</tr>");
+				
+				// console.log(tr1);
+				
+				$("#tblTotalDescto").html( commaSeparateNumber(descto+descto_becas) );
+				$("#tblTotalRecargo").html( commaSeparateNumber(recargo) );
+				$("#tblTotalImporte").html( commaSeparateNumber(total) );
+				$("#tblTotalTotal").html( commaSeparateNumber(total) );
+				
+				$( ".chkPago1" ).prop("disabled",true) ;
+				$( ".btns1" ).empty();
+				
+
+				//console.log("tblPagos1 > tbody > input#id1*"+itemx[1]+"*"+itemx[2]+"*"+itemx[3]+"*"+itemx[4]+"*"+itemx[5]+"*"+itemx[6]);
+
+			}
+		});
+	}
+
+	$("#pagarConceptos0").on("click",function(event){
+		event.preventDefault();
+		setPago();
+	});
+
+	function setPago(){
+		
+		/*
+		
+		if (importe<=0){
+			alert("No existen datos...");
+			return false;
+		}
+
+		*/
+		
+		var ispago = confirm("Desea efectuar el pago ahora mismo?");
+		if (!ispago){
+			return false;
+		}
+		
+		var Ids = '';
+		var IdFs = '';
+		var IdAs = '';
+		var arrSubtotal = '';
+		var arrDesctoBecas = '';
+		var arrImporte = '';
+		var arrDescto = '';
+		var arrRecargo = '';
+		var arrTotal = '';
+		var arrIdPago = '';
+		var arrConcepto = '';
+
+		$(".chkPago1").each(function(i,item){
+			
+			var itemx   = item.id;
+			itemx       = itemx.split("*");				
+
+			Ids         += Ids         == '' ? itemx[1] : '|' + itemx[1];
+			IdFs        += IdFs        == '' ? itemx[2] : '|' + itemx[2];
+			IdAs        += IdAs        == '' ? itemx[3] : '|' + itemx[3];
+
+			arrSubtotal += arrSubtotal == '' ? itemx[7] : '|' + itemx[7];
+			arrDescto   += arrDescto   == '' ? itemx[4] : '|' + itemx[4];
+			arrImporte  += arrImporte  == '' ? itemx[8] : '|' + itemx[8];
+			arrRecargo  += arrRecargo  == '' ? itemx[5] : '|' + itemx[5];
+			arrTotal    += arrTotal    == '' ? itemx[6] : '|' + itemx[6];
+			arrIdPago   += arrIdPago   == '' ? itemx[9] : '|' + itemx[9];
+			arrDesctoBecas += arrDesctoBecas == '' ? itemx[10] : '|' + itemx[10];
+			
+			arrConcepto += arrConcepto == '' ? $("#idconcept1-"+itemx[1]).html() : '|' + $("#idconcept1-"+itemx[1]).html();
+
+		});		
+
+		var idmp  = $("#idmetododepago").val();
+		var refer = $("#referencia").val();
+
+		var nc = "user="+localStorage.nc+"&ids="+Ids+"&idfs="+IdFs+"&idas="+IdAs+
+				 "&subtotal="+subtotal+"&descto_becas="+descto_becas+"&importe="+importe+
+				 "&descto="+descto+"&recargo="+recargo+"&total="+total+
+				 "&arrSubtotal="+arrSubtotal+"&arrDesctoBecas="+arrDesctoBecas+"&arrImporte="+arrImporte+
+				 "&arrDescto="+arrDescto+"&arrRecargo="+arrRecargo+"&arrTotal="+arrTotal+
+				 "&arrIdPago="+arrIdPago+"&arrConcepto="+arrConcepto+"&idmetododepago="+idmp+"&referencia="+refer;
+
+		// console.log(nc);
+
+		// alert(nc);	
+		// return false;
+
+        $.post(obj.getValue(0) + "data/", {o:28, t:9, c:nc, p:2, from:0, cantidad:0, s:''},
+        function(json) {
+				$("#preloaderPrincipal").hide();
+        		if (json[0].msg=="OK"){
+        			alert("Pago APLICADO con éxito.");
+					stream.emit("cliente", {mensaje: "PLATSOURCE|PAGOAPLICADO|PROP|"+arrIdPago});
+					//getAlumnos(IdFamilia);
+    			}else{
+    				alert(json[0].msg);	
+    			}
+    	}, "json");
+
+	}
+
+	$("#refreshEdoFamily").on("click",function(event){
+		event.preventDefault();
+		setEdoCtaFam(IdFamilia);
+	})
+
+
+	function setEdoCtaFam(IdFamilia){
+	    var nc = "u="+localStorage.nc+"&idfamilia="+IdFamilia;
+	    $.post(obj.getValue(0) + "data/", {o:28, t:10, c:nc, p:2, from:0, cantidad:0, s:''},
+	    function(json) {
+				$("#preloaderPrincipal").hide();
+	    		if (json[0].msg=="OK"){
+	    			alert("Proceso ejecutado con éxito.");
+					stream.emit("cliente", {mensaje: "PLATSOURCE|IDFAMILY|PROP|"+item[2]});
+					//getAlumnos(IdFamilia);
+				}else{
+					alert(json[0].msg);	
+				}
+		}, "json");
+    }    
+
+
+
+    
+
+	$("#RefScotiaBank").on("click",function(event){
+		event.preventDefault();
+		printLinCapScotiaBank(IdFamilia);
+	})
+
+
+	function printLinCapScotiaBank(IdFamilia){
+
+        var PARAMS = {u:localStorage.nc,idfamilia:IdFamilia};  
+        var url = obj.getValue(0)+"referencias-scotiabank-1-a/";
+
+        var temp=document.createElement("form");
+        temp.action=url;
+        temp.method="POST";
+        temp.target="_blank";
+        temp.style.display="none";
+        for(var x in PARAMS) {
+            var opt=document.createElement("textarea");
+            opt.name=x;
+            opt.value=PARAMS[x];
+            temp.appendChild(opt);
+        }
+        document.body.appendChild(temp);
+        temp.submit();
+        closeWindow();
+        return temp;
+
+    }    
+
+
+
+	$("#RefBancomer").on("click",function(event){
+		event.preventDefault();
+		printLinCapBancomer(IdFamilia);
+	})
+
+	function printLinCapBancomer(IdFamilia){
+
+        var PARAMS = {u:localStorage.nc,idfamilia:IdFamilia};  
+        var url = obj.getValue(0)+"referencias-bancomer-1-a/";
+
+        var temp=document.createElement("form");
+        temp.action=url;
+        temp.method="POST";
+        temp.target="_blank";
+        temp.style.display="none";
+        for(var x in PARAMS) {
+            var opt=document.createElement("textarea");
+            opt.name=x;
+            opt.value=PARAMS[x];
+            temp.appendChild(opt);
+        }
+        document.body.appendChild(temp);
+        temp.submit();
+        closeWindow();
+        return temp;
+
+    }    
+
+
+	$("#refreshVence").on("click",function(event){
+		event.preventDefault();
+	    var nc = "u="+localStorage.nc+"&idfamilia="+IdFamilia;
+	    $.post(obj.getValue(0) + "data/", {o:28, t:0, c:nc, p:56, from:0, cantidad:0, s:''},
+	    function(json) {
+				$("#preloaderPrincipal").hide();
+	    		if (json[0].msg=="OK"){
+	    			alert("Proceso ejecutado con éxito.");
+					stream.emit("cliente", {mensaje: "PLATSOURCE|REFRESH-EDO-CTA|PROP|"+IdFamilia});
+					getAlumnos(IdFamilia);
+				}else{
+					alert(json[0].msg);	
+				}
+		}, "json");
+	})
+
+    function getMetodoPago(){
+       $("#preloaderPrincipal").show();
+       $("#idmetododepago").empty();
+        var nc = "u="+localStorage.nc;
+        $.post(obj.getValue(0)+"data/", { o:1, t:31, p:0,c:nc,from:0,cantidad:0, s:"" },
+            function(json){
+                var nc,it,df;
+               $.each(json, function(i, item) {
+               		df = parseInt(item.isdefault,0);
+               		df = df==1?' selected':'';
+                    $("#idmetododepago").append('<option value="'+item.data+'" '+df+' > '+item.label+'</option>');
+                });
+            	$("#preloaderPrincipal").hide();
+               //getEmiFisCombo();
+            }, "json"
+        );  
+    }
+
+	function jsNodeMsg0(datosServer) {
+		var ms = datosServer.mensaje.split("|");
+		//obj.setIsTimeLine(true);
+		if ( ms[1] == 'IDFAMILY' && ms[4] == localStorage.nc ) {
+			IdFamilia = parseInt(ms[2],0);
+			$("#idfamilia").val(IdFamilia);
+			$("#cfamilia").val(ms[3]);
+			getAlumnos(IdFamilia);
+		}
+
+		if ( ms[1] == 'PAGOAPLICADO' && ms[4] == localStorage.nc ) {
+			getAlumnos(IdFamilia);
+		}
+
+
+		if ( ms[1] == 'DELETECONCEPTFROMALU' && ms[4] == localStorage.nc ) {
+			getAlumnos(IdFamilia);
+		}
+
+	}
+
+	$("#getConvenio").on("click",function(event){
+		event.preventDefault();
+
+
+		$.post(obj.getValue(0) + "get-convenio-pop/", {
+				idfamilia: IdFamilia,
+				convenio: Convenio
+			},
+			function(html) {
+				$("#divUploadImage").html(html);
+				$("#divUploadImage").modal('toggle');
+		}, "html");
+
+
+	})
+
+
+	function getConvenio(IdFamilia){
+        var nc = "u="+localStorage.nc+"&idfamilia="+IdFamilia;
+        $.post(obj.getValue(0) + "data/", {o:1, t:22, c:nc, p:54, from:0, cantidad:0, s:''},
+        function(json) {
+        	if ( json.length > 0 ){
+				$("#getConvenio").show();
+				Convenio = json[0].convenio;
+			}
+
+    	}, "json");
+
+	}
+
+
+
+
+
+	$("#findFamByIdEdoCta").on("click",function(event){
+		event.preventDefault();
+
+
+		$.post(obj.getValue(0) + "get-findIdEdoCta-pop/", {
+				user: localStorage.nc
+			},
+			function(html) {
+				$("#divUploadImage").html(html);
+				$("#divUploadImage").modal('toggle');
+		}, "html");
+
+
+	})
+
+	getMetodoPago();
+
+	stream.on("servidor", jsNodeMsg0);
+
+	$("#getConvenio").hide();
+
+	$("#preloaderPrincipal").hide();
+
+	$("#cfamilia_id").focus();
+
+});		
+
+</script>

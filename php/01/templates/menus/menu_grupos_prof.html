@@ -1,0 +1,206 @@
+<li class="open" id="subMenuCatGruposProf"> 
+    <a href="#" class="dropdown-toggle">
+            <i class="icon-book"></i>
+            <span class="menu-text">Calificaciones</span>
+            <b class="arrow icon-angle-down"></b>
+    </a>
+    <ul class="submenu" id="submenuGruProf">                            
+    </ul>
+</li>
+
+<li id="subMenuCatGruposProfPAI"> 
+    <a href="#" class="dropdown-toggle">
+            <i class="icon-book"></i>
+            <span class="menu-text">Calif. PAI </span>
+            <b class="arrow icon-angle-down"></b>
+    </a>
+    <ul class="submenu" id="submenuGruProfPAI">                            
+    </ul>
+</li>
+
+
+<!-- <li id="subMenuCatGruposProfAux"> 
+    <a href="#" id="capture_cal_config_mkb">
+        <i class="icon-edit"></i>
+        <span class="menu-text">Test 1</span>
+    </a>
+</li>
+ -->
+ 
+<script type="text/javascript">        
+
+jQuery(function($) {
+
+    $("#subMenuCatGruposProfPAI").hide();
+    $("#preloaderPrincipal").show();    
+           //alert(localStorage.nc);
+
+    var nc = "u="+localStorage.nc;
+    $.post(obj.getValue(0)+"data/", { o:1, t:16, p:0,c:nc,from:0,cantidad:0, s:" order by idgrupo asc " },
+        function(json){
+            var vHMTL="";
+           $.each(json, function(i, item) {
+                //$("#lstAlumnos").append('<option value="'+item.data+'" > '+item.label+'</option>');
+
+                vHMTL += '<li><a href="#" class="dropdown-toggle mnuGruProf" id="mnuGruProf-'+item.data+'" ><i class="icon-edit"></i><span class="menu-text mnuTxT" id="mnuTxT-'+item.data+'">'+item.label+'</span></a></li>';
+
+                if ( !$("#subMenuCatGruposProfPAI").is(":visible") ){
+                    if ( parseInt(item.ispai_grupo,0) > 0 ){
+                        $("#subMenuCatGruposProfPAI").show();
+                    }
+                }
+
+
+            });
+           
+           $("#submenuGruProf").html(vHMTL);
+           // "capture_cal/"
+            if ($(".mnuGruProf").length) {
+                   $(".mnuGruProf").on("click", function(event) {
+                        event.preventDefault();
+                        var arr = event.currentTarget.id.split('-');
+                           
+                        $("#contentMain").empty();
+
+                        var nc = "u="+localStorage.nc+"&idgrupo="+arr[1];
+                        $.post(obj.getValue(0)+"data/", { o:0, t:0, p:17, c:nc, from:0, cantidad:0, s:"" },
+                            function(json) {
+                                var res = parseInt( json[0].msg );
+                                if ( res > 0 ) {
+                                    alert("Grupo Bloqueado");
+                                    return false;
+                                }
+
+                                var lblGrupoSel0=$("#mnuTxT-"+arr[1]).html();
+                                localStorage.grupo_cal = lblGrupoSel0;
+                                cfgBase0();
+                                var nc = localStorage.nc;
+                                $.post(obj.getValue(0) + "config-markbook/", {
+                                        user: nc,
+                                        idgrupo:arr[1],
+                                        grupo: lblGrupoSel0
+                                    },
+                                    function(html) {
+                                        $("#contentMain").html(html);
+                                        $('#breadcrumb').html(getBar('Inicio, Captura de Calificaciones: <span class="smaller lighter red">'+lblGrupoSel0+'</span>'  ));
+                                }, "html");
+                                
+                                return false;
+                        
+                        }, "json");
+
+                   
+                   });
+
+                    $("#menuPrincipal li").on("click", function(event) {
+                        event.preventDefault();
+                        $(".nav-list li").removeClass("active");
+                        if ($('.open').length === null) {
+                            $(this).addClass("active open");
+                        }
+                    });
+
+
+            }
+
+        $("#preloaderPrincipal").hide();
+        }, "json"
+    );  
+
+    /*
+    
+    $.IsGrupo = function(IdGrupo){
+        // return false;
+        var nc = "u="+localStorage.nc+"&idgrupo="+IdGrupo;
+        $.post(obj.getValue(0)+"data/", { o:0, t:0, p:17, c:nc, from:0, cantidad:0, s:"" },
+            function(json) {
+                var res = parseInt( json[0].msg );
+                if ( res > 0 ) {
+                    return false;
+                }
+            }, "json");
+        return true;
+    }
+
+    */
+
+    var nc = "u="+localStorage.nc;
+    $.post(obj.getValue(0)+"data/", { o:1, t:66, p:0,c:nc,from:0,cantidad:0, s:" order by idgrupo asc " },
+        function(json){
+            var vHMTL="";
+            $.each(json, function(i, item) {
+                //$("#lstAlumnos").append('<option value="'+item.data+'" > '+item.label+'</option>');
+                vHMTL += '<li><a href="#" class="dropdown-toggle mnuGruProfPAI" id="mnuGruProfPAI-'+item.data+'-'+item.grado_pai+'" ><i class="icon-edit"></i><span class="menu-text mnuTxTPAI" id="mnuTxTPAI-'+item.data+'">'+item.label+'</span></a></li>';
+            });
+           
+            $("#submenuGruProfPAI").html(vHMTL);
+
+            if ($(".mnuGruProfPAI").length) {
+                   $(".mnuGruProfPAI").on("click", function(event) {
+                        event.preventDefault();
+                        var arr = event.currentTarget.id.split('-');
+                        var GradoPai = arr[2];
+
+                        $("#contentMain").empty();
+                           
+                        var nc = "u="+localStorage.nc+"&idgrupo="+arr[1];
+                        $.post(obj.getValue(0)+"data/", { o:0, t:0, p:17, c:nc, from:0, cantidad:0, s:"" },
+                            function(json) {
+                                var res = parseInt( json[0].msg );
+                                if ( res > 0 ) {
+                                    alert("Grupo Bloqueado");
+                                    return false;
+                                }
+
+                                // alert("Módulo en Construcción. Avisaremos cuando este listo.");
+
+                                var lblGrupoSel0=$("#mnuTxT-"+arr[1]).html();
+                                localStorage.grupo_cal = lblGrupoSel0;
+                                cfgBase0();
+                                var nc = localStorage.nc;
+                                $.post(obj.getValue(0) + "config-pai-1/", {
+                                        user: nc,
+                                        idgrupo:arr[1],
+                                        grado_pai: GradoPai, 
+                                        grupo: lblGrupoSel0
+                                    },
+                                    function(html) {
+                                        $("#contentMain").html(html);
+                                        $('#breadcrumb').html(getBar('Inicio, Captura de Calificaciones PAI: <span class="smaller lighter red">'+lblGrupoSel0+'</span>'  ));
+                                }, "html");
+
+                                $("#preloaderPrincipal").hide();
+
+                        }, "json");
+
+                   });
+
+            }
+
+            $("#preloaderPrincipal").hide();
+
+        }, "json"
+
+    );  
+
+
+
+    function cfgBase0(){
+        resizeScreen();
+        $("#contentLevel5").empty();
+        $("#contentLevel5").hide();
+        $("#contentLevel4").empty();
+        $("#contentLevel4").hide();
+        $("#contentLevel3").empty();
+        $("#contentLevel3").hide();
+        $("#contentProfile").empty();
+        $("#contentProfile").hide();
+        $("#contentMain").show();
+        $("#contentMain").empty();
+        $("#preloaderPrincipal").show();
+        obj.setIsTimeLine(false);
+    }
+
+
+});
+</script>

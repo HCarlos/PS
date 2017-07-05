@@ -1,0 +1,79 @@
+<li id="subMenuComunica0" class="open active"> 
+    <a href="#" class="dropdown-toggle">
+            <i class="icon-book"></i>
+            <span class="menu-text">Comunicados</span>
+
+            <b class="arrow icon-angle-down"></b>
+    </a>
+
+    <ul class="submenu" id="submenuComunica0">                            
+        
+        <li>
+            <a href="#" class="dropdown-toggle mnuComunica0" id="mnuComunica0-0">
+                <i class="icon-edit"></i>
+                <span id="mnuComunica1-0">Mensajes</span>
+            </a>
+        </li>   
+
+        <li>
+            <a href="#" class="dropdown-toggle mnuComunica0" id="mnuComunica0-1">
+                <i class="icon-edit"></i>
+                <span id="mnuComunica1-1">Mis Grupos</span>
+            </a>
+        </li>    
+
+    </ul>
+</li>
+<script type="text/javascript">        
+
+jQuery(function($) {
+
+    $("#preloaderPrincipal").show();
+
+    var arrMnuTu = ['comunica-mensajes-list/','comunica-grupos-list/'];
+    if ($(".mnuComunica0").length) {
+           $(".mnuComunica0").on("click", function(event) {
+               event.stopPropagation();
+               var sm0 = event.currentTarget.id.split('-');
+               var ind = sm0[1];
+               sm0 = $("#mnuComunica1-"+ind).html();
+                cfgBase0();
+                var nc = localStorage.nc;
+                $.post(obj.getValue(0) + arrMnuTu[ind], {
+                        user: nc
+                    },
+                    function(html) {
+
+                        $("#contentMain").html(html);
+                        $('#breadcrumb').html(getBar('Inicio, '+sm0 ));
+                    }, "html");
+                return false;         
+           });
+    }
+
+    $("#subMenuComunica0 li").on("click", function(event) {
+        event.preventDefault();
+        $(".nav-list li").removeClass("active");
+        if ($('.open').length === null) {
+            $(this).addClass("active open");
+        }
+    });
+
+    function cfgBase0(){
+        resizeScreen();
+        $("#contentLevel5").empty();
+        $("#contentLevel5").hide();
+        $("#contentLevel4").empty();
+        $("#contentLevel4").hide();
+        $("#contentLevel3").empty();
+        $("#contentLevel3").hide();
+        $("#contentProfile").empty();
+        $("#contentProfile").hide();
+        $("#contentMain").show();
+        $("#contentMain").empty();
+        $("#preloaderPrincipal").show();
+        obj.setIsTimeLine(false);
+    }
+
+});
+</script>
