@@ -16,8 +16,6 @@ $f = oCentura::getInstance();
 
 parse_str($data);
 
-// echo $data;
-
 $rs = $f->getQuerys(10016,$data,0,0,0,array(),"",1);
 if ( $tiporeporte==3 ){
 	$title = "REPORTE DE VENCIMIENTOS";
@@ -26,11 +24,6 @@ if ( $tiporeporte==3 ){
 }else{
 	$title = "REPORTE DE FACTURAS";
 }
-
-// if ( count($rs) > 0 ){
-// 	$l=0;
-// 	$r0=$r1=$r2=$r3=$r4=0;
-// 	foreach ($rs as $i => $value) {
 
 ?>
 
