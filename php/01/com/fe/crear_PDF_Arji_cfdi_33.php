@@ -99,11 +99,11 @@ class PDF extends FPDF
 	$pdf->Ln(5);
 	$pdf->SetFont('Arial','B',8);
 	$pdf->SetTextColor(255,255,255);
-     $pdf->Cell(75,5,utf8_decode('DESCRIPCIÓN'),1,0,'C',true);
-     $pdf->Cell(30,5,'UNIDAD',1,0,'C',true);
-     $pdf->Cell(30,5,'PRECIO UNITARIO',1,0,'C',true);
-     $pdf->Cell(30,5,"CANTIDAD",1,0,'C',true);
-     $pdf->Cell(30,5,"IMPORTE",1,1,'C',true);
+	$pdf->Cell(75,5,utf8_decode('DESCRIPCIÓN'),1,0,'C',true);
+	$pdf->Cell(30,5,'UNIDAD',1,0,'C',true);
+	$pdf->Cell(30,5,'PRECIO UNITARIO',1,0,'C',true);
+	$pdf->Cell(30,5,"CANTIDAD",1,0,'C',true);
+	$pdf->Cell(30,5,"IMPORTE",1,1,'C',true);
 	$pdf->SetFont('Arial','',8);
 	$pdf->SetTextColor(0,0,0);
 

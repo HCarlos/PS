@@ -58,18 +58,6 @@ $rs = $fP->getQueryPDO(45,$data,0,0,0,array(),"",1);
 						<a href="#" id="sendEmail2">Formato 2</a>
 					</li>
 
-<!--
-					<li>
-						<a href="#" id="printFormato3">Formato 3</a>
-					</li>
-					
-					<li class="divider"></li>
-
-					<li>
-						<a href="#" id="printReinscripcion">Reinscripción</a>
-					</li>
--->
-
 				</ul>
 			</div>
 
@@ -89,17 +77,6 @@ $rs = $fP->getQueryPDO(45,$data,0,0,0,array(),"",1);
 						<a href="#" id="printFormato2">Formato 2</a>
 					</li>
 
-<!--
-					<li>
-						<a href="#" id="printFormato3">Formato 3</a>
-					</li>
-					
-					<li class="divider"></li>
-
-					<li>
-						<a href="#" id="printReinscripcion">Reinscripción</a>
-					</li>
--->
 
 				</ul>
 

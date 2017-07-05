@@ -19,6 +19,13 @@ parse_str($data);
 // echo $data;
 
 $rs = $f->getQuerys(10016,$data,0,0,0,array(),"",1);
+if ( $tiporeporte==3 ){
+	$title = "REPORTE DE VENCIMIENTOS";
+}else if ( $tiporeporte==4 ){
+	$title = "REPORTE DE RECORDATORIOS";
+}else{
+	$title = "REPORTE DE FACTURAS";
+}
 
 // if ( count($rs) > 0 ){
 // 	$l=0;
@@ -41,7 +48,7 @@ $rs = $f->getQuerys(10016,$data,0,0,0,array(),"",1);
 			<div class="widget-toolbar orange pull-left no-border ">
 				<h3 class="grey lighter  pull-left position-relative wd100prc">
 					<i class="icon-print green"></i>
-					LISTADO DE FACTURAS
+					<?= $title; ?>
 				</h3>
 			</div>
 

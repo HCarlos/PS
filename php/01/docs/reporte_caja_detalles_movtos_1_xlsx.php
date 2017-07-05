@@ -52,16 +52,27 @@ foreach ($result as $i => $value) {
 	
 		$descto = $result[$i]->descto_becas + $result[$i]->descto;
 
-		$arrAlu = $f->getQuerys(10025,"u=".$user."&idfamilia=".$result[$i]->idfamilia."&idalumno=".$result[$i]->idalumno,0,0,0,array(),"",1);
+		$cad0 = "u=".$u."&idfamilia=".$result[$i]->idfamilia."&idalumno=".$result[$i]->idalumno;
+
+		$arrAlu = $f->getQuerys(10025,$cad0,0,0,0,array(),"",1);
 
 		$oS->setCellValue("A".$k, $result[$i]->idedocta);
 		$oS->setCellValue("B".$k, $result[$i]->concepto);
 		$oS->setCellValue("C".$k, $result[$i]->idfamilia);
 		$oS->setCellValue("D".$k, $result[$i]->familia);
-		$oS->setCellValue("E".$k, $arrAlu[0]->idalumno );
-		$oS->setCellValue("F".$k, $arrAlu[0]->apellidos_alumno );
-		$oS->setCellValue("G".$k, $arrAlu[0]->nombres_alumno );
-		$oS->setCellValue("H".$k, $arrAlu[0]->grupo );
+
+		if ( count($arrAlu) > 0 ){
+			$oS->setCellValue("E".$k, $arrAlu[0]->idalumno );
+			$oS->setCellValue("F".$k, $arrAlu[0]->apellidos_alumno );
+			$oS->setCellValue("G".$k, $arrAlu[0]->nombres_alumno );
+			$oS->setCellValue("H".$k, $arrAlu[0]->grupo );
+		}else{
+			$oS->setCellValue("E".$k, $result[$i]->idalumno );
+			$oS->setCellValue("F".$k, $result[$i]->alumno );
+			$oS->setCellValue("G".$k, $result[$i]->familia );
+			$oS->setCellValue("H".$k, '' );
+		}
+
 		$oS->setCellValue("I".$k, $result[$i]->fecha_de_pago);
 		$oS->setCellValue("J".$k, $result[$i]->subtotal);
 		$oS->setCellValue("K".$k, $result[$i]->descto);
