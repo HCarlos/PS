@@ -11,15 +11,9 @@ ini_set('display_startup_errors', TRUE);
 
 date_default_timezone_set('America/Mexico_City');
 
-require_once('vo/voConn.php');
 require_once('vo/voConnPDO.php');
-require_once('vo/voCombo.php');
-require_once('vo/voUsuario.php');
 
 require_once('vo/voEmpty.php');
-
-require_once('vo/voEstado.php');
-require_once('vo/voMunicipio.php');
 
 class oCenturaPDO {
 	 
@@ -52,102 +46,108 @@ class oCenturaPDO {
 				return self::$instancia;
 	}
 
-	 private function getIdUserFromAlias($str){
-	  
-	    $query = "select iduser from usuarios where username = '$str' and status_usuario = 1";
+	private function getIdUserFromAlias($str){
 
-     	$Conn = new voConnPDO();
+		$query = "select iduser from usuarios where username = '$str' and status_usuario = 1";
+
+		$Conn = new voConnPDO();
 		$result = $Conn->queryFetchAllAssocOBJ($query);
 
 		if (!$result) {
-				$ret=0;
+			$ret=0;
 		}else{
-			   	$ret= $result[0]->iduser;
+		   	$ret= $result[0]->iduser;
 		}
 
 		$Conn = null;
 
-	    return $ret;
-	 }
+		return $ret;
 
-	 private function getIdEmpFromAlias($str){
-	  
-	    $query = "select idemp from usuarios where username = '$str' and status_usuario = 1";
+	}
 
-     	$Conn = new voConnPDO();
+	private function getIdEmpFromAlias($str){
+
+		$query = "select idemp from usuarios where username = '$str' and status_usuario = 1";
+
+		$Conn = new voConnPDO();
 		$result = $Conn->queryFetchAllAssocOBJ($query);
 
 		if (!$result) {
-				$ret=0;
+			$ret=0;
 		}else{
-				$ret= $result[0]->idemp;
+			$ret= $result[0]->idemp;
 		}
 
 		$Conn = null;
 
-	    return $ret;
-	 }
+		return $ret;
+	
+	}
 
-	 private function getIdEmpFromIdEdoCta($id){
-	  
-	    $query = "select idemp from estados_de_cuenta where idedocta = $id";
+	private function getIdEmpFromIdEdoCta($id){
 
-     	$Conn = new voConnPDO();
+		$query = "select idemp from estados_de_cuenta where idedocta = $id";
+
+		$Conn = new voConnPDO();
 		$result = $Conn->queryFetchAllAssocOBJ($query);
 
 		if (!$result) {
-				$ret=0;
+			$ret=0;
 		}else{
-				$ret= $result[0]->idemp;
+			$ret= $result[0]->idemp;
 		}
-	    return $ret;
-	 }
+		return $ret;
 
-	 private function getCicloFromIdEmp($idemp=0){
-	  
-	    $query = "select idciclo from cat_ciclos where idemp = $idemp and predeterminado = 1 and status_ciclo = 1 limit 1";
+	}
 
-     	$Conn = new voConnPDO();
+	private function getCicloFromIdEmp($idemp=0){
+
+		$query = "select idciclo from cat_ciclos where idemp = $idemp and predeterminado = 1 and status_ciclo = 1 limit 1";
+
+		$Conn = new voConnPDO();
 		$result = $Conn->queryFetchAllAssocOBJ($query);
 
 		if ($result <= 0) {
-			$ret=0;
+		$ret=0;
 		}else{
-				$ret = $result[0]->idciclo;
+			$ret = $result[0]->idciclo;
 		}
-	    return $ret;
-	 }
+		return $ret;
+	
+	}
 
-	 private function getNivelFromIdGrupo($idgrupo=0,$idciclo=0){
-	  
-	    $query = "select idnivel from _viNivel_Grupos where idgrupo = $idgrupo and idciclo = $idciclo limit 1";
+	private function getNivelFromIdGrupo($idgrupo=0,$idciclo=0){
 
-     	$Conn = new voConnPDO();
+		$query = "select idnivel from _viNivel_Grupos where idgrupo = $idgrupo and idciclo = $idciclo limit 1";
+
+		$Conn = new voConnPDO();
 		$result = $Conn->queryFetchAllAssocOBJ($query);
 
 		if ($result <= 0) {
-			$ret=0;
+		$ret=0;
 		}else{
-				$ret = $result[0]->idnivel;
+			$ret = $result[0]->idnivel;
 		}
-	    return $ret;
-	 }
+		return $ret;
+
+	}
 
 
-	 private function getNivelFromIdUserAlu($iduseralu=0){
-	  
-	    $query = "select idnivel from _viGrupo_Alumnos where iduseralu = $iduseralu order by idciclo desc limit 1";
+	private function getNivelFromIdUserAlu($iduseralu=0){
 
-     	$Conn = new voConnPDO();
+		$query = "select idnivel from _viGrupo_Alumnos where iduseralu = $iduseralu order by idciclo desc limit 1";
+
+		$Conn = new voConnPDO();
 		$result = $Conn->queryFetchAllAssocOBJ($query);
 
 		if ($result <= 0) {
-			$ret=0;
+		$ret=0;
 		}else{
-				$ret = $result[0]->idnivel;
+			$ret = $result[0]->idnivel;
 		}
-	    return $ret;
-	 }
+		return $ret;
+
+	}
 
 	public function IsLockGroupAcademico($cad) {
 		
@@ -284,10 +284,10 @@ class oCenturaPDO {
 	 }
 
 
-    public function getComboPDO($index=0,$arg="",$pag=0,$limite=0,$tipo=0,$otros=""){
+	public function getComboPDO($index=0,$arg="",$pag=0,$limite=0,$tipo=0,$otros=""){
 
 		$query="";
-    	switch ($index){
+		switch ($index){
 
 			case 0:
 					parse_str($arg);
@@ -526,7 +526,7 @@ class oCenturaPDO {
 
 	  	}
 
-     	$Conn = new voConnPDO();
+	 	$Conn = new voConnPDO();
 		$result = $Conn->queryFetchAllAssocOBJ($query);
 
 		$Conn = null;
@@ -1446,61 +1446,62 @@ class oCenturaPDO {
 	}
 
 
-     public function setAsocia($tipo=0,$arg="",$pag=0,$limite=0,$var2=0, $otros=""){
-	  	$query="";
+	public function setAsocia($tipo=0,$arg="",$pag=0,$limite=0,$var2=0, $otros=""){
+
+		$query="";
 		$vRet = "Error";
 
-	  	$ip=$_SERVER['REMOTE_ADDR']; 
-	  	$host=gethostbyaddr($_SERVER['REMOTE_ADDR']);
-     	$Conn = new voConnPDO();
+		$ip=$_SERVER['REMOTE_ADDR']; 
+		$host=gethostbyaddr($_SERVER['REMOTE_ADDR']);
+		$Conn = new voConnPDO();
 
-    	switch ($tipo){
-			case 51:
-				switch($var2){
-					case 10:
-						parse_str($arg);
-						$iduser = $this->getIdUserFromAlias($u);
-						$idemp = $this->getIdEmpFromAlias($u);
+		switch ($tipo){
+		case 51:
+			switch($var2){
+				case 10:
+					parse_str($arg);
+					$iduser = $this->getIdUserFromAlias($u);
+					$idemp = $this->getIdEmpFromAlias($u);
 
-	          			$ar = explode("|",$dests);
-						foreach($ar as $i=>$valor){
-							if ((int)($ar[$i])>0){
-								$query = "Insert Into pase_salida_alumnos(idpsa,idalumno,idciclo,clave_nivel,idgrupo,idemp,ip,host,creado_por,creado_el)
-																	value($idpsa,$ar[$i],$idciclo,$clave_nivel,$idgrupo,$idemp,'$ip','$host',$iduser,NOW())";
-								
-								$result = $Conn->exec($query);
+		  			$ar = explode("|",$dests);
+					foreach($ar as $i=>$valor){
+						if ((int)($ar[$i])>0){
+							$query = "Insert Into pase_salida_alumnos(idpsa,idalumno,idciclo,clave_nivel,idgrupo,idemp,ip,host,creado_por,creado_el)
+																value($idpsa,$ar[$i],$idciclo,$clave_nivel,$idgrupo,$idemp,'$ip','$host',$iduser,NOW())";
+							
+							$result = $Conn->exec($query);
 
-								if ($result != 1){
-									$vR = $Conn->errorInfo();
-									$vRet = 'Hey'; //var_dump($vR[2]);
-								}else{
-									$vRet = "OK";
-								}
-
+							if ($result != 1){
+								$vR = $Conn->errorInfo();
+								$vRet = 'Hey'; //var_dump($vR[2]);
+							}else{
+								$vRet = "OK";
 							}
+
 						}
-						break;		
-					case 20:
-						parse_str($arg);
-	          			$ar = explode("|",$dests);
-						foreach($ar as $i=>$valor){
-							if ((int)($ar[$i])>0){
-								$query = "Delete from pase_salida_alumnos where idpsaalumno = ".$ar[$i];
+					}
+					break;		
+				case 20:
+					parse_str($arg);
+		  			$ar = explode("|",$dests);
+					foreach($ar as $i=>$valor){
+						if ((int)($ar[$i])>0){
+							$query = "Delete from pase_salida_alumnos where idpsaalumno = ".$ar[$i];
 
-								$result = $Conn->exec($query);
+							$result = $Conn->exec($query);
 
-								if ($result != 1){
-									$vR = $Conn->errorInfo();
-									$vRet = var_dump($vR[2]);
-								}else{
-									$vRet = "OK";
-								}
-
+							if ($result != 1){
+								$vR = $Conn->errorInfo();
+								$vRet = var_dump($vR[2]);
+							}else{
+								$vRet = "OK";
 							}
+
 						}
-						break;		
-				}
-				break;
+					}
+					break;		
+			}
+			break;
 		}
 
 	}
@@ -1511,9 +1512,9 @@ class oCenturaPDO {
 
 	  	$ip=$_SERVER['REMOTE_ADDR']; 
 	  	$host=gethostbyaddr($_SERVER['REMOTE_ADDR']);
-     	$Conn = new voConnPDO();
+	 	$Conn = new voConnPDO();
 
-    	switch ($index){
+		switch ($index){
 
 
 			case 19:
@@ -1919,48 +1920,6 @@ class oCenturaPDO {
 						parse_str($arg);
 						$idusr = $this->getIdUserFromAlias($u);
 				        $idemp = $this->getIdEmpFromAlias($u);
-
-/*
-						$fi = explode('-',$fecha_inicio_eval_1);
-						$fi1 = $fi[2].'-'.$fi[1].'-'.$fi[0];
-						$ff = explode('-',$fecha_fin_eval_1);
-						$ff1 = $ff[2].'-'.$ff[1].'-'.$ff[0];
-
-						$fi = explode('-',$fecha_inicio_eval_2);
-						$fi2 = $fi[2].'-'.$fi[1].'-'.$fi[0];
-						$ff = explode('-',$fecha_fin_eval_2);
-						$ff2 = $ff[2].'-'.$ff[1].'-'.$ff[0];
-
-						$fi = explode('-',$fecha_inicio_eval_3);
-						$fi3 = $fi[2].'-'.$fi[1].'-'.$fi[0];
-						$ff = explode('-',$fecha_fin_eval_3);
-						$ff3 = $ff[2].'-'.$ff[1].'-'.$ff[0];
-
-						$fi = explode('-',$fecha_inicio_eval_4);
-						$fi4 = $fi[2].'-'.$fi[1].'-'.$fi[0];
-						$ff = explode('-',$fecha_fin_eval_4);
-						$ff4 = $ff[2].'-'.$ff[1].'-'.$ff[0];
-
-						$fi = explode('-',$fecha_inicio_eval_5);
-						$fi5 = $fi[2].'-'.$fi[1].'-'.$fi[0];
-						$ff = explode('-',$fecha_fin_eval_5);
-						$ff5 = $ff[2].'-'.$ff[1].'-'.$ff[0];
-
-						$fi = explode('-',$fecha_inicio_eval_6);
-						$fi6 = $fi[2].'-'.$fi[1].'-'.$fi[0];
-						$ff = explode('-',$fecha_fin_eval_6);
-						$ff6 = $ff[2].'-'.$ff[1].'-'.$ff[0];
-
-						$fi = explode('-',$fecha_inicio_eval_7);
-						$fi7 = $fi[2].'-'.$fi[1].'-'.$fi[0];
-						$ff = explode('-',$fecha_fin_eval_7);
-						$ff7 = $ff[2].'-'.$ff[1].'-'.$ff[0];
-
-						$fi = explode('-',$fecha_inicio_eval_8);
-						$fi8 = $fi[2].'-'.$fi[1].'-'.$fi[0];
-						$ff = explode('-',$fecha_fin_eval_8);
-						$ff8 = $ff[2].'-'.$ff[1].'-'.$ff[0];
-*/
 
 						$fecha_inicio_eval_1 = $fecha_inicio_eval_1 == '' ? '0000-00-00' : $fecha_inicio_eval_1;
 						$fecha_inicio_eval_2 = $fecha_inicio_eval_2 == '' ? '0000-00-00' : $fecha_inicio_eval_2;
@@ -2546,7 +2505,6 @@ class oCenturaPDO {
 							if ($result != 1){
 								$vR = $Conn->errorInfo();
 								$vRet = "ERROR M3";
-;
 							}else{
 								$vRet = "OK";
 							}
@@ -3620,9 +3578,6 @@ class oCenturaPDO {
 	}
 
 
-
-
-
 	public function setPagos($id=0,$importe=0,$referencia='',$IdUser=0){
 	  	$query="";
 		$vRet = "Error";
@@ -3768,9 +3723,6 @@ class oCenturaPDO {
 	}
 
 
-
-
-
 	public function setPreinscripciones($tipo=0,$cad=""){
 
 	  	$query="";
@@ -3778,7 +3730,7 @@ class oCenturaPDO {
 
 	  	$ip=$_SERVER['REMOTE_ADDR']; 
 	  	$host=gethostbyaddr($_SERVER['REMOTE_ADDR']);
-     	$Conn = new voConnPDO();
+	 	$Conn = new voConnPDO();
 
 		switch($tipo){
 			case 0:
@@ -4098,7 +4050,7 @@ class oCenturaPDO {
 
 		return $vRet;
 
-}
+	}
 
 
 	public function updateVencimientoEdoCta($cad) {
@@ -4166,7 +4118,6 @@ class oCenturaPDO {
 	    return $ret;
 
 	}
-
 
 
 	public function setCloneMatConSave($cad=''){
