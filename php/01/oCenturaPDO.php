@@ -810,7 +810,6 @@ class oCenturaPDO {
 					$cvn = " AND clave_nivel = $clave_nivel AND idgrupo = $idgrupo ";
 				}
 
-
 				$query = "	SELECT idfamilia, familia, idalumno 
 							FROM _viEdoCtaFamilia 
 							WHERE idemp = $idemp 

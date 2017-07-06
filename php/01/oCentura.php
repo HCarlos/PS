@@ -6894,6 +6894,7 @@ class oCentura {
 					break;
 
 				case 10016:
+
 					parse_str($cad);
 			        $idemp = $this->getIdEmpFromAlias($u);	
 			        
@@ -6914,8 +6915,6 @@ class oCentura {
 				        $pagado =  " status_movto = 1 And ( fecha_de_pago >= '".$fi."' and fecha_de_pago <= '".$ff."' )";
 					}
 
-			        
-
 					$query = "SELECT idedocta, idconcepto, concepto, familia, alumno, mes, directorio, 
 									is_pagos_diversos, fecha_de_pago, cfolio, idfamilia, pdf, xml,
 									subtotal, descto_becas, descto, importe, recargo, total,
@@ -6934,6 +6933,7 @@ class oCentura {
 					break;
 
 				case 10017:
+				
 					parse_str($cad);
 			        $idemp = $this->getIdEmpFromAlias($u);				
 					$query = " SELECT *

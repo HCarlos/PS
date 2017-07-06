@@ -31,7 +31,6 @@ $idfamregfis = $_POST['idfamregfis'];
                             <span class="lbl"></span>
                         </td>
                     </tr>
-                  
 
                     <tr>
                         <td><label for="status_famregfis" class="textRight">Estatus</label></td>
@@ -41,23 +40,23 @@ $idfamregfis = $_POST['idfamregfis'];
                             <span class="lbl"></span>
                         </td>
                     </tr>
-                  
 
                 </table>
-
 
                 <input type="hidden" name="idfamilia" id="de" value="<?php echo $idfamilia; ?>">
                 <input type="hidden" name="idfamregfis" id="idfamregfis" value="<?php echo $idfamregfis; ?>">
                 <input type="hidden" name="user" id="user" value="<?php echo $user; ?>">
+            
             <fieldset class="fieldset3">
                 <h3></h3>
-                <button type="button" class="btn btn-default pull-right" data-dismiss="modal" id="closeFormUpload">
+                <button type="button" class="btn btn-default pull-right marginLeft2em" data-dismiss="modal" id="closeFormUpload">
                     <i class="fa fa-chevron-circle-left" aria-hidden="true"></i>
                     Cerrar
                 </button>
                 <span class="muted"></span>
                 <button type="submit" class="btn btn-primary pull-right"><i class="icon-save"></i>Guardar</button>
             </fieldset>
+            
         </form>
 </div>
 <script type="text/javascript">
