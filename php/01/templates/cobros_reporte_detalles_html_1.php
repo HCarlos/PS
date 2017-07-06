@@ -14,6 +14,8 @@ $Q = oFunctions::getInstance();
 require_once('../oCentura.php');
 $f = oCentura::getInstance();
 
+// echo $data;
+
 parse_str($data);
 
 $rs = $f->getQuerys(10016,$data,0,0,0,array(),"",1);

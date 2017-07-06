@@ -20,6 +20,8 @@ if (!isset($data)){
 	header('Location: http://platsource.mx/');
 }
 
+// echo $data;
+
 parse_str($data);
 
 set_include_path(get_include_path() . PATH_SEPARATOR . '../PHPExcel/Classes/');

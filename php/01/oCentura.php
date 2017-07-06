@@ -6902,9 +6902,11 @@ class oCentura {
 			        $fi = $f0[2].'-'.$f0[1].'-'.$f0[0].' 00:00:00';
 			        $ff = $f1[2].'-'.$f1[1].'-'.$f1[0].' 23:59:00';
 
-			        // $conce =  intval($conceptos) > 0 ? ' idconcepto = '.$conceptos.' and ':'';
-			        $conce =  intval($vconcepto) > 0 ? ' idconcepto = '.$vconcepto.' and ':'';
-			        
+					if ( $tiporeporte==3 || $tiporeporte==4 ){
+				        $conce =  intval($vconcepto) > 0 ? ' idconcepto = '.$vconcepto.' and ':'';		        
+					}else{
+			        	$conce =  intval($conceptos) > 0 ? ' idconcepto = '.$conceptos.' and ':'';
+					}
 
 					if ( $tiporeporte==3 || $tiporeporte==4 ){
 				        $pagado =  " status_movto = 0 ";

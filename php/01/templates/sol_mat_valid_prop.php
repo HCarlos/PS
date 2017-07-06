@@ -33,17 +33,14 @@ $idsolicituddematerialdetalle = $_POST['idsolicituddematerialdetalle'];
                         </td>
                     </tr>
 
-                  
-
                 </table>
-
 
                 <input type="hidden" name="idsolicituddematerial" id="de" value="<?php echo $idsolicituddematerial; ?>">
                 <input type="hidden" name="idsolicituddematerialdetalle" id="idsolicituddematerialdetalle" value="<?php echo $idsolicituddematerialdetalle; ?>">
                 <input type="hidden" name="user" id="user" value="<?php echo $user; ?>">
             <fieldset class="fieldset3">
                 <h3></h3>
-                <button type="button" class="btn btn-default pull-right" data-dismiss="modal" id="closeFrmSolMatDet0"><i class="icon-signout"></i>Cerrar</button>
+                <button type="button" class="btn btn-default pull-right marginLeft2em" data-dismiss="modal" id="closeFrmSolMatDet0"><i class="icon-signout"></i>Cerrar</button>
                 <span class="muted"></span>
                 <button type="submit" class="btn btn-primary pull-right"><i class="icon-save"></i>Guardar</button>
             </fieldset>
