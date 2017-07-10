@@ -170,11 +170,13 @@ mysql_close($mysql);
 
 $cadConc = $cadOrd;	
 
-include("crear_XML_Arji.php");
+include("crear_XML_Arji_cfdi_33.php");
 
 //Generamos la Cadena Original
 
 $cfdi = $cadena_xml; //simplexml_load_file("facturas/Factura-".$serie."-".$folio.".xml");
+
+echo $cadena_xml;
 
 $xml = new DOMDocument();
 $xml->loadXML($cadena_xml) or die("\n\n\nXML no válido..");
@@ -210,7 +212,7 @@ $folfis="";
 
 $cadena_xml = "";
 
-include("crear_XML_Arji.php");
+include("crear_XML_Arji_cfdi_33.php");
 
 // $cadena_xml =  htmlentities($cadena_xml);
 
@@ -227,7 +229,10 @@ fclose($new_xml);
 // Ahora Timbramos la Factura
 
 // https://www.factorumweb.com/FactorumWSV32/FactorumCFDiService.asmx 
-$servicio = "https://www.factorumweb.com/FactorumWSv33/FactorumCFDiService.asmx?wsdl";
+// $servicio = "https://www.factorumweb.com/FactorumWSv33/FactorumCFDiService.asmx?wsdl";
+
+$servicio = "http://qav33.factorumweb.com/factorumwsv32/FactorumCFDiService.asmx?wsdl";
+
 $parametros=array();
 $data = file_get_contents($myXML);
 $parametros['usuario']  = $file_user;
@@ -337,11 +342,11 @@ foreach ($xml->xpath('//t:TimbreFiscalDigital') as $tfd) {
 		unlink($folSer2);
 		
 		if ( $result != 1 ){
-			include("crear_PDF_Arji.php");
+			include("crear_PDF_Arji_cfdi_33.php");
 			print "ERROR: ".mysql_error();
 		} else{
 
-			include("crear_PDF_Arji.php");
+			include("crear_PDF_Arji_cfdi_33.php");
 
 			$dir_upload = "http://platsource.mx/uw_fe/".$directorio;
 			$pdf = $fpdf;

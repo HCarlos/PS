@@ -36,6 +36,7 @@ include("includes/metas.php");
 										<option value="3">Reporte de Vencimientos</option>
 										<option value="4">Recordatorios Vencimientos</option>
 										<option value="5">Recargos por Niveles y Conceptos</option>
+										<option value="6">Analisis por Concepto</option>
 									</select>							
 								</td>
 							</tr>
@@ -53,21 +54,21 @@ include("includes/metas.php");
 									</select>							
 								</td>
 							</tr>
-							<tr class="rowVencimientos serviciosCobrados">
+							<tr class="rowVencimientos serviciosCobrados clsAnalisis">
 								<td><label for="vconcepto">Concepto:</label></td>
 								<td colspan="3">
 									<select id="vconcepto" name="vconcepto">
 									</select>							
 								</td>
 							</tr>
-							<tr class="rowVencimientos">
+							<tr class="rowVencimientos clsAnalisis">
 								<td><label for="clave_nivel">Nivel:</label></td>
 								<td colspan="3">
 									<select id="clave_nivel" name="clave_nivel">
 									</select>							
 								</td>
 							</tr>
-							<tr class="rowVencimientos">
+							<tr class="rowVencimientos clsAnalisis">
 								<td><label for="idgrupo">grupo:</label></td>
 								<td colspan="3">
 									<select id="idgrupo" name="idgrupo">
@@ -89,7 +90,7 @@ include("includes/metas.php");
 									<select id="conceptos" name="conceptos" size="1"></select>							
 								</td>
 							</tr>
-	 						<tr>
+	 						<tr id="rangoFechas">
 								<td><label for="fi">Desde: </label></td>
 								<td>
 									
@@ -372,27 +373,49 @@ jQuery(function($) {
 	 	event.preventDefault();
 		var eval = parseInt( $(this).val() ,0 ); 
 		
+		$("#rowNivConceptos").removeClass("borderSelect"); 	
+		$("#rangoFechas").removeClass("borderSelect"); 	
+		$(".rowVencimientos").removeClass("borderSelect"); 	
+		$(".clsAnalisis").removeClass("borderSelect"); 	
+
+
 		$("#rowNivConceptos").hide(); 			
 		$("#rowTBeca").hide(); 			
+		// $("#rangoFechas").hide(); 			
 		$(".rowVencimientos").hide(); 	
 		$(".serviciosCobrados").hide(); 	
+		$(".clsAnalisis").hide(); 	
 
 		if (eval == 0){
-			$("#rowNivConceptos").show(); 			
+			$("#rowNivConceptos").show(); 	
 		}
 
 		if (eval == 1){
-			 $("#rowNivConceptos").show(); 			
+			$("#rowNivConceptos").show(); 			
+			$("#rowNivConceptos").addClass("borderSelect"); 	
+			$("#rangoFechas").addClass("borderSelect"); 	
 			 //$(".serviciosCobrados").show(); 			
 		}
 
 		if (eval == 2){
 			$("#rowTBeca").show(); 			
+			$("#rowTBeca").addClass("borderSelect"); 	
+			$("#rangoFechas").addClass("borderSelect"); 	
 		}
 
 		if ( eval == 3 || eval == 4){
 			// $("#rowNivConceptos").show(); 
 			$(".rowVencimientos").show(); 			
+			$(".rowVencimientos").addClass("borderSelect"); 	
+		}
+
+		if (eval == 5){
+			$("#rangoFechas").addClass("borderSelect"); 	
+		}
+
+		if (eval == 6){
+			$(".clsAnalisis").show(); 	
+			$(".clsAnalisis").addClass("borderSelect"); 	
 		}
 
 

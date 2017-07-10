@@ -302,6 +302,10 @@ switch($index){
 		
 }
 
+
+
+/*
+
 function emoticons($msg){
 	$url = "http://187.157.42.100/chating/images/emoticons/";
 	$img = "<img src='http://187.157.42.100/chating/images/emoticons/sonrisa1.png' />";
@@ -316,6 +320,9 @@ function emoticons($msg){
 	return $output;	
 
 }
+
+*/
+
 
 
 $m = json_encode($ret);

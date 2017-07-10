@@ -314,3 +314,5 @@ input:focus, .Input-Cal{-webkit-border-radius: 0.25em !important;
 
 
 .VerLey{ cursor:pointer !important; }
+
+.borderSelect{border-radius: 5 !important; border: 3px !important; border-color: #E35F5F !important; border-style: solid !important; }
