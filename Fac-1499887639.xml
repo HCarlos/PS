@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cfdi:Comprobante Certificado="MIIGMzCCBBugAwIBAgIUMDAwMDEwMDAwMDA0MDQ3NTczNjUwDQYJKoZIhvcNAQELBQAwggGyMTgwNgYDVQQDDC9BLkMuIGRlbCBTZXJ2aWNpbyBkZSBBZG1pbmlzdHJhY2nDs24gVHJpYnV0YXJpYTEvMC0GA1UECgwmU2VydmljaW8gZGUgQWRtaW5pc3RyYWNpw7NuIFRyaWJ1dGFyaWExODA2BgNVBAsML0FkbWluaXN0cmFjacOzbiBkZSBTZWd1cmlkYWQgZGUgbGEgSW5mb3JtYWNpw7NuMR8wHQYJKoZIhvcNAQkBFhBhY29kc0BzYXQuZ29iLm14MSYwJAYDVQQJDB1Bdi4gSGlkYWxnbyA3NywgQ29sLiBHdWVycmVybzEOMAwGA1UEEQwFMDYzMDAxCzAJBgNVBAYTAk1YMRkwFwYDVQQIDBBEaXN0cml0byBGZWRlcmFsMRQwEgYDVQQHDAtDdWF1aHTDqW1vYzEVMBMGA1UELRMMU0FUOTcwNzAxTk4zMV0wWwYJKoZIhvcNAQkCDE5SZXNwb25zYWJsZTogQWRtaW5pc3RyYWNpw7NuIENlbnRyYWwgZGUgU2VydmljaW9zIFRyaWJ1dGFyaW9zIGFsIENvbnRyaWJ1eWVudGUwHhcNMTcwMTA5MTY0MTI0WhcNMjEwMTA5MTY0MTI0WjCB0zEnMCUGA1UEAxMeQ09NRVJDSUFMSVpBRE9SQSBBUkpJIFNBIERFIENWMScwJQYDVQQpEx5DT01FUkNJQUxJWkFET1JBIEFSSkkgU0EgREUgQ1YxJzAlBgNVBAoTHkNPTUVSQ0lBTElaQURPUkEgQVJKSSBTQSBERSBDVjElMCMGA1UELRMcQ0FSOTMwODE2RkgwIC8gQ09HQTQ5MDgxNkQ3OTEeMBwGA1UEBRMVIC8gQ09HQTQ5MDgxNkhBU0JOTDA4MQ8wDQYDVQQLEwZVTklEQUQwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQC+6KnUEBxWHKe4+++F7JsGFxvqVad0o2RXFTWXOwagrbPmAR0OVZVHY7S2pEfIqm7cBPdl/IQBLJ2Mnv+wj7I6Ej4adeAjm5w4iGRxgmuSFCVuvAPQRlTSJmMAiZIGWEe9jUf8AYzBVO1smRA8VX9eZx+2tx1AmNou5U6WFnZyHvqbWl3TMaNDUn+yQ5zSYIt+TES5F2vJGCfcwArG4xldlQGJoSDU6/sBYSPxm9LWORxWPXfgjAyuaXeRZaf24rtSGCWpHr2tVKE/3tF6wqqOqQE6ShLL6G4gU6yQb/PJ7cGC8j5XXnM7NugQuqDwBgge14VovLc0wCvA/X84Kg47AgMBAAGjHTAbMAwGA1UdEwEB/wQCMAAwCwYDVR0PBAQDAgbAMA0GCSqGSIb3DQEBCwUAA4ICAQAuylUhX7q1+xxf459yLk2P89xKseJ+uT9MrVFDGe9BFophYYeDdfqu4JitKtYjux7aihmzyZgwh0S2AhqTuYld0avn+BIM2Y18gxnIOoqk9KaBcbb0VJr1+ZiNYU3kSk3OH8CQ1kS7N1NvYG5gGPhOfpCjPJbK9IHR+33BW+BrUVQCgPypRCoHcndYV5ukdB63ODw4uEFZNhd6F0muHwpU4+V+Ks54yrLA5Pq3WbFZwGFzpMuX+lIrwKQo+8+3/uC9j9pwMQwE2FcY98qZYB5bNja/Q8y4afyfh5dyA2YjZUEtuGFwJOOU7BlenocQ5o2SmD4AoWFkHk910XzWWzjhKzlnHHGVX8NK3z4k7VSKFVlU/wfRiIkxLWM9jcmN7rjlpkra+c3OfOUBE90wcinHN+05mlPT/7WjcF3bXqfkxo2aDiMaM+4cIi5Fmd/QJY/dCdjHayGEDqKhc1+SmAdQ9uvMrnRdMAnDCWgWCvwbkEfoUDx4b3pejo5CTiRiQ/p/kJr8hc0su9uu7JnlE9iqh5+DB1u029R547Hup/andl0UKS7PzPxHoSl2NeC/w0vjnZ4rvecDIahK4XmEMlm7Bzy13uw7v7WKjdJn8f+E7cE17oshCkQ2gmQM/TX47JtsvYuDmW62IAVuKwOuAMr99XKwfud+BCiIgA44dZ0FQQ==" Sello="CqzmjYUCGdkEBN8Cd1t8FYE65wq8XqFs+qWIylM4WJV00A3yDwmFXxLdIqy05a8/RRQsmvx/vE0cpaY9cB9D9g8VQBWdYpmyaMCVs3dTmwi7+5Xm6DxFoyC/pf0KHXd2SR9AXs7nlfT4mqKtLky17bC4Gz7XuM/L0PysaE2mIm+CBm0xJ9OzxyL5O6+zQn+rrjwCw1sCQuBJU+gXoCfn5wpHP5ZMi2+wxTV5vfkMxCcCTY8UOaxc471b2mxZmd6pGMjKQMYdRNNRJiz/DaiTdHCbNWL92bel1Qf4XXcHhl/i31xdkaF0ifhjjWMY7AWJntEkKRI8e2ouRmLYy7lnBg==" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Version="3.3" Serie="B" Folio="1499887639" Fecha="2017-07-12T14:22:19" FormaPago="04" NoCertificado="00001000000404757365" SubTotal="8.62" Moneda="MXN" Total="10.00" TipoDeComprobante="I" MetodoPago="PUE" LugarExpedicion="86160" xsi:schemaLocation="http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv33.xsd" xmlns:cfdi="http://www.sat.gob.mx/cfd/3">
+  <cfdi:Emisor Rfc="CAR930816FH0" RegimenFiscal="601" Nombre="COMERCIALIZADORA ARJI S.A. DE C.V." />
+  <cfdi:Receptor Rfc="AAQM610917QJA" UsoCFDI="G01" Nombre="MENDOZA RODRIGUEZ JESUS GABRIEL" />
+  <cfdi:Conceptos>
+    <cfdi:Concepto Cantidad="1" Unidad="Pieza" Descripcion="Pruaba CFDI 3.3" ValorUnitario="10.00" Importe="8.62" ClaveProdServ="01010101" ClaveUnidad="H87">
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="8.62" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="1.38" />
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+  </cfdi:Conceptos>
+  <cfdi:Impuestos TotalImpuestosTrasladados="1.38">
+    <cfdi:Traslados>
+      <cfdi:Traslado Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="1.38" />
+    </cfdi:Traslados>
+  </cfdi:Impuestos>
+</cfdi:Comprobante>

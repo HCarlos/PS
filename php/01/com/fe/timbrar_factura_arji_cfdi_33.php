@@ -162,7 +162,7 @@ $descuento    = mysql_result($fe1, 0,"descto");
 $recargo      = mysql_result($fe1, 0,"recargo");
 $subtotal2    = mysql_result($fe1, 0,"importe2");
 $iva          = mysql_result($fe1, 0,"iva");
-$total        =  mysql_result($fe1, 0,"total");
+$total        = mysql_result($fe1, 0,"total");
 $total_cadena = $total;
 $forma_pago   =  "Pago en una sola exhibición";//trim($_REQUEST['forma_pago']); 
 
@@ -170,7 +170,7 @@ mysql_close($mysql);
 
 $cadConc = $cadOrd;	
 
-include("crear_XML_Arji_cfdi_33.php");
+include("crear_XML_Arji_cfdi_33_".$serie.".php");
 
 //Generamos la Cadena Original
 
@@ -212,7 +212,7 @@ $folfis="";
 
 $cadena_xml = "";
 
-include("crear_XML_Arji_cfdi_33.php");
+include("crear_XML_Arji_cfdi_33_".$serie.".php");
 
 // $cadena_xml =  htmlentities($cadena_xml);
 
@@ -239,9 +239,12 @@ $parametros['usuario']  = $file_user;
 $parametros['rfc']      = $file_rfc;
 $parametros['password'] = $file_pass;
 $parametros['xml']=$data; //string, pero se maneja String aqui
+set_time_limit(600);
+ini_set("default_socket_timeout", 600);
 try {
 	$client = new SoapClient($servicio, $parametros);
-	$result = $client->FactorumGenYaSelladoConArchivo($parametros);
+	// $result = $client->FactorumGenYaSelladoConArchivo($parametros);
+	$result = $client->FactorumGenYaSelladoConArchivoTest($parametros);
 } catch (SoapFault $E) {  
     echo $E->faultstring; 
     return false;

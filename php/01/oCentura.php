@@ -444,7 +444,7 @@ class oCentura {
 								parse_str($arg);
 						        $idemp = $this->getIdEmpFromAlias($u);
 								$query = "SELECT materia as label, idgrumat as data 
-										FROM _viGrupo_Materias where  idciclo = $idciclo and idgrupo = $idgrupo and padre = $idgrumat and idemp = $idemp $otros ";
+										FROM _viGrupo_Materias where idciclo = $idciclo and idgrupo = $idgrupo and padre = $idgrumat and idemp = $idemp $otros ";
 								break;	
 							case 21:
 								parse_str($arg);

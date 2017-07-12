@@ -538,6 +538,15 @@ class oCenturaPDO {
 	public function getQueryPDO($tipo=0,$cad="",$type=0,$from=0,$cant=0,$ar=array(),$otros="",$withPag=1) {
 		$query="";
     	switch ($tipo){
+
+			case -5:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT *
+							FROM empresa
+							where idemp = $idemp ";
+				break;
+
 			case -1:
 				parse_str($cad);
 		        $idemp = $this->getIdEmpFromAlias($u);
@@ -883,7 +892,7 @@ class oCenturaPDO {
 				$idemp = $this->getIdEmpFromAlias($u);
 				$idciclo = $this->getCicloFromIdEmp($idemp);
 				$query = "SELECT idgrualu
-						FROM _viGrupo_Alumnos where idciclo = $idciclo and idgrupo = $idgrupo and idemp = $idemp and idciclo = $idciclo and status_grualu = 1 order by num_lista ";
+						FROM _viGrupo_Alumnos where idciclo = $idciclo and idgrupo = $idgrupo and idemp = $idemp and status_grualu = 1 order by num_lista ";
 				break;		
 
 			case 24: // ARJI
@@ -1431,6 +1440,40 @@ class oCenturaPDO {
 							ORDER BY idedocta ASC 
 							LIMIT 1	
 							";
+				break;
+
+			case 73:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$idciclo = $this->getCicloFromIdEmp($idemp);
+				$query = "SELECT *
+						FROM _viGrupo_Alumnos where idciclo = $idciclo and clave_nivel = $clave_nivel and idemp = $idemp and status_grualu = 1
+						Order By idgrupo, num_lista asc ";
+				break;
+
+			case 74:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$idciclo = $this->getCicloFromIdEmp($idemp);
+				$query = "SELECT *
+						FROM _viGrupo_Alumnos where idciclo = $idciclo and clave_nivel = $clave_nivel and idgrupo = $idgrupo and idemp = $idemp and status_grualu = 1
+						Order By num_lista asc ";
+				break;
+
+			case 75:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);		
+		        $idciclo = $this->getCicloFromIdEmp($idemp);		
+				$query = "SELECT *
+								FROM _viEdosCta
+							where 
+								idfamilia = $idfamilia and 
+								idalumno = $idalumno and 
+								idciclo = $idciclo and 
+								idemp = $idemp and 
+								idconcepto = $idconcepto and 
+								deuda_anterior = 0 
+							$otros ";
 				break;
 
 	  	}

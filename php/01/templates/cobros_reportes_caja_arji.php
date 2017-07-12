@@ -36,7 +36,7 @@ include("includes/metas.php");
 										<option value="3">Reporte de Vencimientos</option>
 										<option value="4">Recordatorios Vencimientos</option>
 										<option value="5">Recargos por Niveles y Conceptos</option>
-										<option value="6">Analisis por Concepto</option>
+										<option value="6">Análisis por Concepto</option>
 									</select>							
 								</td>
 							</tr>
@@ -207,6 +207,9 @@ jQuery(function($) {
 
 	        	case 5:
 					nRep = "rep-caja-niv-concepto-recargo/";
+	        		break;
+	        	case 6:
+					nRep = "rep-caja-analisis-conceptos/";
 	        		break;
 	        }
 
