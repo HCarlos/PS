@@ -90,6 +90,25 @@ include("includes/metas.php");
 									<select id="conceptos" name="conceptos" size="1"></select>							
 								</td>
 							</tr>
+
+							<tr class="clsAnalisis">
+								<td><label for="status0">Status:</label></td>
+								<td colspan="3">
+									<input name="status0" id="status0-0" class="ace status0" type="radio" value="0" checked>
+									<label class="lbl" for="status0-0"> Todos</label>
+
+									<span class="marginLeft2em"></span>
+
+									<input name="status0" id="status0-1" class="ace status0" type="radio" value="1" >
+									<label class="lbl" for="status0-1"> Pagados</label>
+
+									<span class="marginLeft2em"></span>
+
+									<input name="status0" id="status0-2" class="ace status0" type="radio" value="2" >
+									<label class="lbl" for="status0-2"> No Pagados</label>
+								</td>
+							</tr>
+
 	 						<tr id="rangoFechas">
 								<td><label for="fi">Desde: </label></td>
 								<td>
@@ -109,6 +128,7 @@ include("includes/metas.php");
 									
 								</td>
 							</tr>
+
 							<tr>
 								<td><label for="formato">Formato:</label></td>
 								<td colspan="3">
@@ -169,8 +189,9 @@ jQuery(function($) {
         if ( !ValidateForm() ){
         	return false;
         }
-        var opt = parseInt( $(".formato:checked").val() );
-        var tr = parseInt($("#tiporeporte").val(),0);
+        var opt    = parseInt( $(".formato:checked").val() );
+        var optSts = parseInt( $(".status0:checked").val() );
+        var tr     = parseInt($("#tiporeporte").val(),0);
         var url, PARAMS, queryString, nRep;
         
         $("#cconceptos").val( $("#conceptos option:selected").text() );
@@ -181,7 +202,7 @@ jQuery(function($) {
 
         queryString = $("#frmPanelReports0").serialize();
 
-        // alert(queryString);
+        alert(queryString);
  
         if ( opt == 0) {
 	        switch( tr ){

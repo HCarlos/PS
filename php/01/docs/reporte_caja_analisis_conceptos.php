@@ -26,6 +26,8 @@ class PDF_Diag extends PDF_Sector {
     var $IdGrupo;
     var $cClave_Nivel;
     var $cIdGrupo;
+    var $Status0;
+    var $Consecutivo;
 
     function Header(){ 
 
@@ -44,14 +46,16 @@ class PDF_Diag extends PDF_Sector {
 		if ($this->IdGrupo == 0){
 			$this->Cell(13,6,"NIVEL: ",'',0,'L');
 			$this->SetFont('Arial','B',9);
-			$this->Cell(53,6,strtoupper($this->cClave_Nivel),'',0,'L');
+			$this->Cell(55,6,strtoupper($this->cClave_Nivel),'',0,'L');
 		}else{
 			$this->Cell(15,6,"GRUPO: ",'',0,'L');
 			$this->SetFont('Arial','B',9);
-			$this->Cell(51,6,strtoupper($this->cIdGrupo),'',0,'L');
+			$this->Cell(53,6,strtoupper($this->cIdGrupo),'',0,'L');
 		}
 		$this->SetFont('Arial','',6);
 		$this->Cell(100,6,utf8_decode("FECHA DE IMPRESION: ").DATE('d-m-Y h:m:s'),'',1,'R');
+	    $this->Cell(199,4,utf8_decode('Página ').$this->PageNo().' de {nb}',0,0,'R');
+
 		$this->Ln(10);
 
 		$this->SetFont('Arial','B',8);
@@ -63,16 +67,16 @@ class PDF_Diag extends PDF_Sector {
 		$this->Cell(12,6,'IDFAM','LBT',0,'C');
 		$this->Cell(90,6,'A  L  U  M  N  O','LBT',0,'L');
 		$this->SetFont('Arial','',6);
-		$this->Cell($this->aC,6,'SEP','LBT',0,'C');
-		$this->Cell($this->aC,6,'OCT','LBT',0,'C');
-		$this->Cell($this->aC,6,'NOV','LBT',0,'C');
-		$this->Cell($this->aC,6,'DIC','LBT',0,'C');
-		$this->Cell($this->aC,6,'ENE','LBT',0,'C');
-		$this->Cell($this->aC,6,'FEB','LBT',0,'C');
-		$this->Cell($this->aC,6,'MAR','LBT',0,'C');
-		$this->Cell($this->aC,6,'ABR','LBT',0,'C');
-		$this->Cell($this->aC,6,'MAY','LBT',0,'C');
-		$this->Cell($this->aC,6,'JUN','LBT',0,'C');
+		$this->Cell($this->aC,6,'1','LBT',0,'C');
+		$this->Cell($this->aC,6,'2','LBT',0,'C');
+		$this->Cell($this->aC,6,'3','LBT',0,'C');
+		$this->Cell($this->aC,6,'4','LBT',0,'C');
+		$this->Cell($this->aC,6,'5','LBT',0,'C');
+		$this->Cell($this->aC,6,'6','LBT',0,'C');
+		$this->Cell($this->aC,6,'7','LBT',0,'C');
+		$this->Cell($this->aC,6,'8','LBT',0,'C');
+		$this->Cell($this->aC,6,'9','LBT',0,'C');
+		$this->Cell($this->aC,6,'10','LBT',0,'C');
 		$this->SetFont('Arial','B',6);
 		$this->Cell($this->aC,6,'STS','LBTR',1,'C');
 
@@ -83,6 +87,7 @@ class PDF_Diag extends PDF_Sector {
 	{
 		$this->Ln(5);
 		$this->setX(5);
+	    $this->SetFont('Arial','',6);
 
 		// Pagado en Caja
 		$this->SetFillColor(64,64,64);
@@ -104,7 +109,7 @@ class PDF_Diag extends PDF_Sector {
 
 		// Adeudo
 		$this->SetFillColor(255,125,125);
-		$this->Cell($this->aC,6,'','LBTR',0,'L',true);
+		$this->Cell($this->aC,6,'#','LBTR',0,'C',true);
 		$this->Cell(2,6,'','',0,'L',false);
 		$this->Cell(30,6,'ADEUDO','',1,'L',false);
 
@@ -135,7 +140,8 @@ $pdf->Clave_Nivel = intval($clave_nivel);
 $pdf->IdGrupo = intval($idgrupo);
 $pdf->cClave_Nivel = $cclave_nivel;
 $pdf->cIdGrupo = $cidgrupo;
-
+$pdf->Status0 = intval($status0);
+$pdf->Consecutivo = 0;
 $pdf->AddPage();
 
 if ($pdf->IdGrupo == 0){
@@ -144,24 +150,18 @@ if ($pdf->IdGrupo == 0){
 	$rsAlu = $F->getQueryPDO(74,"u=".$u."&clave_nivel=".$pdf->Clave_Nivel."&idgrupo=".$pdf->IdGrupo);	
 }
 
+$idgrupo = intval($rsAlu[0]->idgrupo);
+
 $pdf->SetTextColor(0,0,0);
 
 if ( count($rsAlu) > 0 ){
 	foreach ($rsAlu as $i => $value) {
-		
-		$pdf->SetFont('Arial','',8);
-		$pdf->setX(5);
-		if ($pdf->IdGrupo == 0){
-			$pdf->Cell(25,6,substr($rsAlu[$i]->grupo,0,15),'LBT',0,'C');
-		}		
-		$pdf->Cell(10,6,$rsAlu[$i]->num_lista,'LBT',0,'C');
-		$pdf->Cell(12,6,$rsAlu[$i]->idfamilia,'LBT',0,'C');
-		$pdf->Cell(90,6,utf8_decode($rsAlu[$i]->alumno),'LBT',0,'L');
 	
 		$rsPago = $F->getQueryPDO(75,
 			"u=".$u.
 			"&idfamilia=".$rsAlu[$i]->idfamilia.
 			"&idalumno=".$rsAlu[$i]->idalumno.
+			"&status0=".$status0.
 			"&idconcepto=".$pdf->IdConcepto,
 			0,0,0,array(),
 			" order by num_pago asc ");	
@@ -171,8 +171,26 @@ if ( count($rsAlu) > 0 ){
 		
 		if ( $countPagos > 0){
 
+			if ($idgrupo != intval($rsAlu[$i]->idgrupo) ){
+				$idgrupo = intval($rsAlu[$i]->idgrupo);
+				if ($pdf->Status0 == 0){
+					$pdf->AddPage();
+				}
+			}
+			
+			$pdf->SetFont('Arial','',8);
+			$pdf->setX(5);
+			if ($pdf->IdGrupo == 0){
+				$pdf->Cell(25,6,substr($rsAlu[$i]->grupo,0,15),'LBT',0,'C');
+			}		
+			$pdf->Consecutivo++;
+			$pdf->Cell(10,6,$pdf->Consecutivo,'LBT',0,'C');
+			$pdf->Cell(12,6,$rsAlu[$i]->idfamilia,'LBT',0,'C');
+			$pdf->Cell(90,6,utf8_decode($rsAlu[$i]->alumno),'LBT',0,'L');
 
 			$numPagos = $countPagos > 0 ? $rsPago[0]->num_pagos == 0 ? 1 : $rsPago[0]->num_pagos : 0;
+
+			$numPagos = $numPagos > 10 ? 10 : $numPagos;
 
 			$pdf->SetFont('Arial','',6);
 
@@ -201,7 +219,7 @@ if ( count($rsAlu) > 0 ){
 						if ($leyenda != 'PAG'){						
 							$leyenda = (($numPagos == $numPago) && ($numPagos > 0)) ? 'PAG' : $rsPago[$j-1]->num_pago;
 						}else{
-							$leyenda = $rsPago[$j-1]->num_pago;
+							$leyenda = ' ';
 						}
 						$pdf->SetFillColor(255,125,125);
 						$pdf->Cell($pdf->aC,6,$leyenda,$cuadro,$cierre,'C',true);
@@ -218,29 +236,14 @@ if ( count($rsAlu) > 0 ){
 			}
 
 		}else{
-			$pdf->Cell($pdf->aC*$numCol,6,'NO TIENE ESTADO DE CUENTA','LBTR',1,'L',false);				
+			if ($pdf->Status0 == 0 && $countPagos > 0){
+				$pdf->SetFont('Arial','',6);
+				$pdf->Cell($pdf->aC*$numCol,6,utf8_decode('CONCEPTO NO ENCONTRADO Ó EDO. CTA. INEXISTENTE'),'LBTR',1,'L',false);				
+			}
 		}
 
 
-	
-
 	}
-
-	// Pintamos los Totales
-/*
-	$total = $r0+$r1+$r2+$r3+$r4;
-	$total = $total==0?'':number_format($total,2);
-
-	$pdf->setX(5);
-	$pdf->Cell(5,6,'','',0,'C');
-	$pdf->Cell(45,6,'TOTAL:','',0,'L');
-	$pdf->Cell(25,6,$total,'T',0,'R');
-	$pdf->Cell(25,6,$r0==0?'':number_format($r0,2) ,'',0,'R');
-	$pdf->Cell(25,6,$r2==0?'':number_format($r2,2) ,'',0,'R');
-	$pdf->Cell(25,6,$r1==0?'':number_format($r1,2) ,'',0,'R');
-	$pdf->Cell(25,6,$r3==0?'':number_format($r3,2) ,'',0,'R');
-	$pdf->Cell(25,6,$r4==0?'':number_format($r4,2) ,'',1,'R');
-*/	
 
 }else{
 	$pdf->SetFont('Arial','I',10);

@@ -1463,7 +1463,19 @@ class oCenturaPDO {
 			case 75:
 				parse_str($cad);
 		        $idemp = $this->getIdEmpFromAlias($u);		
-		        $idciclo = $this->getCicloFromIdEmp($idemp);		
+		        $idciclo = $this->getCicloFromIdEmp($idemp);	
+		        $sts = intval($status0);
+		        switch ($sts) {
+		        		case 0:
+		        			$csts = ' ';
+		        			break;
+		        		case 1:
+		        			$csts = ' and status_movto = 1';
+		        			break;
+		        		case 2:
+		        			$csts = ' and status_movto = 0';
+		        			break;
+		        	}	
 				$query = "SELECT *
 								FROM _viEdosCta
 							where 
@@ -1473,6 +1485,7 @@ class oCenturaPDO {
 								idemp = $idemp and 
 								idconcepto = $idconcepto and 
 								deuda_anterior = 0 
+								$csts
 							$otros ";
 				break;
 
