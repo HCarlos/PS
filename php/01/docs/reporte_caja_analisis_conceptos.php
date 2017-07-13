@@ -178,12 +178,13 @@ if ( count($rsAlu) > 0 ){
 				}
 			}
 			
-			$pdf->SetFont('Arial','',8);
+			$pdf->SetFont('Arial','',6);
 			$pdf->setX(5);
 			if ($pdf->IdGrupo == 0){
-				$pdf->Cell(25,6,substr($rsAlu[$i]->grupo,0,15),'LBT',0,'C');
+				$pdf->Cell(25,6,substr($rsAlu[$i]->grupo,0,30),'LBT',0,'C');
 			}		
 			$pdf->Consecutivo++;
+			$pdf->SetFont('Arial','',8);
 			$pdf->Cell(10,6,$pdf->Consecutivo,'LBT',0,'C');
 			$pdf->Cell(12,6,$rsAlu[$i]->idfamilia,'LBT',0,'C');
 			$pdf->Cell(90,6,utf8_decode($rsAlu[$i]->alumno),'LBT',0,'L');
@@ -236,7 +237,18 @@ if ( count($rsAlu) > 0 ){
 			}
 
 		}else{
-			if ($pdf->Status0 == 0 && $countPagos > 0){
+			if ($pdf->Status0 == 0 ){
+
+				$pdf->SetFont('Arial','',6);
+				$pdf->setX(5);
+				if ($pdf->IdGrupo == 0){
+					$pdf->Cell(25,6,substr($rsAlu[$i]->grupo,0,30),'LBT',0,'C');
+				}		
+				$pdf->SetFont('Arial','',8);
+				$pdf->Cell(10,6,'','LBT',0,'C');
+				$pdf->Cell(12,6,$rsAlu[$i]->idfamilia,'LBT',0,'C');
+				$pdf->Cell(90,6,utf8_decode($rsAlu[$i]->alumno),'LBT',0,'L');
+
 				$pdf->SetFont('Arial','',6);
 				$pdf->Cell($pdf->aC*$numCol,6,utf8_decode('CONCEPTO NO ENCONTRADO Ó EDO. CTA. INEXISTENTE'),'LBTR',1,'L',false);				
 			}

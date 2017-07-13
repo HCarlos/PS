@@ -668,7 +668,7 @@ class oCentura {
 								$idciclo = $this->getCicloFromIdEmp($idemp);
 
 								$query = "SELECT grupo as label, idgrupo as data 
-										FROM _viNivel_Grupos where idemp = $idemp and idciclo = $idciclo and clave_nivel = $clave_nivel and grupo_ciclo_nivel_visible = 1 and status_grupo = 1 
+										FROM _viNivel_Grupos where idemp = $idemp and idciclo = $idciclo and clave_nivel = $clave_nivel and grupo_ciclo_nivel_visible = 1 and activo_en_caja = 1 and status_grupo = 1 
 										Order By idgrupo asc ";
 								break;		
 

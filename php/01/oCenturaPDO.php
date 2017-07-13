@@ -1447,7 +1447,7 @@ class oCenturaPDO {
 		        $idemp = $this->getIdEmpFromAlias($u);
 				$idciclo = $this->getCicloFromIdEmp($idemp);
 				$query = "SELECT *
-						FROM _viGrupo_Alumnos where idciclo = $idciclo and clave_nivel = $clave_nivel and idemp = $idemp and status_grualu = 1
+						FROM _viGrupo_Alumnos where idciclo = $idciclo and clave_nivel = $clave_nivel and idemp = $idemp and activo_en_caja = 1 and status_grualu = 1
 						Order By idgrupo, num_lista asc ";
 				break;
 
