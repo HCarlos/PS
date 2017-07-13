@@ -189,9 +189,9 @@ if ( count($rsAlu) > 0 ){
 			$pdf->Cell(12,6,$rsAlu[$i]->idfamilia,'LBT',0,'C');
 			$pdf->Cell(90,6,utf8_decode($rsAlu[$i]->alumno),'LBT',0,'L');
 
-			$numPagos = $countPagos > 0 ? $rsPago[0]->num_pagos == 0 ? 1 : $rsPago[0]->num_pagos : 0;
+			$numPagos = $countPagos > 0 ? intval($rsPago[0]->num_pagos) == 0 ? 1 : intval($rsPago[0]->num_pagos) : 0;
 
-			$numPagos = $numPagos > 10 ? 10 : $numPagos;
+			$numPagos = $numPagos > 10 ? 10 : $numPagos < $countPagos ? $countPagos : $numPagos;
 
 			$pdf->SetFont('Arial','',6);
 
@@ -238,6 +238,13 @@ if ( count($rsAlu) > 0 ){
 
 		}else{
 			if ($pdf->Status0 == 0 ){
+
+				if ($idgrupo != intval($rsAlu[$i]->idgrupo) ){
+					$idgrupo = intval($rsAlu[$i]->idgrupo);
+					if ($pdf->Status0 == 0){
+						$pdf->AddPage();
+					}
+				}
 
 				$pdf->SetFont('Arial','',6);
 				$pdf->setX(5);
