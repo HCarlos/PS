@@ -202,7 +202,7 @@ jQuery(function($) {
 
         queryString = $("#frmPanelReports0").serialize();
 
-        alert(queryString);
+        // alert(queryString);
  
         if ( opt == 0) {
 	        switch( tr ){
