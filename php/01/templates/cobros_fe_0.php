@@ -406,7 +406,21 @@ jQuery(function($) {
 					cad0 += "</tr>";
 					cad2 += cad2!=""?";":"";
                		//cad2 +="1"+"|"+json[i].descrip_prod+"|"+json[i].total+"|"+json[i].total+"|"+json[i].nombre_completo_alumno+"|"+json[i].curp+"|"+json[i].clave_registro_nivel+"|"+json[i].nivel_fiscal+"|"+json[i].rfc;
-               		cad2 +="1"+"|"+json[i].descrip_prod+"|"+json[i].importe+"|"+json[i].importe+"|"+json[i].nombre_completo_alumno+"|"+json[i].curp+"|"+json[i].clave_registro_nivel+"|"+json[i].nivel_fiscal+"|"+json[i].rfc+"|"+json[i].idedocta+"|"+json[i].iva+"|"+json[i].importe2+"|"+json[i].total;
+               		cad2 +="1"+"|"+
+               				json[i].descrip_prod+"|"+
+               				json[i].importe+"|"+
+               				json[i].importe+"|"+
+               				json[i].nombre_completo_alumno+"|"+
+               				json[i].curp+"|"+
+               				json[i].clave_registro_nivel+"|"+
+               				json[i].nivel_fiscal+"|"+
+               				json[i].rfc+"|"+
+               				json[i].idedocta+"|"+
+               				json[i].iva+"|"+
+               				json[i].importe2+"|"+
+               				json[i].total+"|"+
+               				json[i].subtotal;
+               				
 					$("#tblDelFac > tbody").append(cad0);
                 });
 				$("#cadOrd").val(cad2);

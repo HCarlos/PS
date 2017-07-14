@@ -87,12 +87,18 @@ switch ($serie){
 			break;
 	case "B":
 			
-			$num_certificado   = "00001000000404757365";
-			$file_cer          = "00001000000404757365_comercializadora_arji/00001000000404757365.txt";
-			$file_key          = "00001000000404757365_comercializadora_arji/CSD_UNIDAD_CAR930816FH0_20170109_103815.pem";
-			$file_user         = "caja_arji@hotmail.com";
-			$file_rfc          = "CAR930816FH0";
-			$file_pass         = "CAR930816FH0";
+			// $num_certificado   = "00001000000404757365";
+			// $file_cer          = "00001000000404757365_comercializadora_arji/00001000000404757365.txt";
+			// $file_key          = "00001000000404757365_comercializadora_arji/CSD_UNIDAD_CAR930816FH0_20170109_103815.pem";
+			$num_certificado   = "20001000000300005693";
+			$file_cer          = "00001000000404757365_comercializadora_arji/20001000000300005693.txt";
+			$file_key          = "00001000000404757365_comercializadora_arji/CSD_Unidad_1_ACO560518KW7_20141124_183636.pem";
+			// $file_user         = "caja_arji@hotmail.com";
+			// $file_rfc          = "CAR930816FH0";
+			// $file_pass         = "CAR930816FH0";
+			$file_user         = "prueba1@factorum.com.mx";
+			$file_rfc          = "ACO560518KW7";
+			$file_pass         = "prueba2011";
 			$cadena_original   = "00001000000404757365_comercializadora_arji/cadenaoriginal_3_3.xslt";
 			$dir_imgs          = "arji_Imgs/";
 			$dir_upload        = "../../../../uw_fe/";
@@ -169,6 +175,12 @@ $forma_pago   =  "Pago en una sola exhibición";//trim($_REQUEST['forma_pago']);
 mysql_close($mysql);
 
 $cadConc = $cadOrd;	
+
+/*
+if (!(function_exists('openssl_sign') && defined('OPENSSL_ALGO_SHA256'))) {
+    die('Unsupported PHP version or OpenSSH extension missing');
+}
+*/
 
 include("crear_XML_Arji_cfdi_33_".$serie.".php");
 
