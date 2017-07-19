@@ -287,7 +287,8 @@ if ( count($alu) > 0 ){
 	$pdf->Cell(35,4,utf8_decode('NOMBRE DE LA MADRE'),'',0,'L');
 	// $pdf->SetFont('ARIAL','B',8);
 	$pdf->SetTextColor(64);
-	$pdf->Cell(102,4,utf8_decode(mb_strtoupper($madre[0]->nombre_persona,'UTF-8')),'B',0,'C');
+	$nombreMama = count($madre) <= 0 ? '' : $madre[0]->nombre_persona;
+	$pdf->Cell(102,4,utf8_decode(mb_strtoupper($nombreMama,'UTF-8')),'B',0,'C');
 	$pdf->Cell(6,4,'','',0,'L');
 	$pdf->SetFont('ARIAL','',8);
 	$pdf->SetTextColor(152,72,7);
@@ -295,7 +296,8 @@ if ( count($alu) > 0 ){
 	$pdf->Cell(10,4,utf8_decode('CURP'),'',0,'L');
 	// $pdf->SetFont('ARIAL','B',8);
 	$pdf->SetTextColor(64);
-	$pdf->Cell(41,4,utf8_decode(mb_strtoupper($madre[0]->curp_persona,'UTF-8')),'B',1,'C');
+	$curpMama = count($madre) <= 0 ? '' : $madre[0]->curp_persona;
+	$pdf->Cell(41,4,utf8_decode(mb_strtoupper($curpMama,'UTF-8')),'B',1,'C');
 
 	$pdf->SetFont('ARIAL','',8);
 	$pdf->SetTextColor(152,72,7);
@@ -304,14 +306,16 @@ if ( count($alu) > 0 ){
 	$pdf->Cell(35,4,utf8_decode('LUGAR DE NACIMIENTO'),'',0,'L');
 	// $pdf->SetFont('ARIAL','B',8);
 	$pdf->SetTextColor(64);
-	$pdf->Cell(85,4,utf8_decode(mb_strtoupper($madre[0]->lugar_nacimiento_persona,'UTF-8')),'B',0,'C');
+	$lnMama = count($madre) <= 0 ? '' : $madre[0]->lugar_nacimiento_persona;
+	$pdf->Cell(85,4,utf8_decode(mb_strtoupper($lnMama,'UTF-8')),'B',0,'C');
 	$pdf->Cell(10,4,'','',0,'L');
 	$pdf->SetFont('ARIAL','',8);
 	$pdf->SetTextColor(152,72,7);
 	$pdf->Cell(35,4,utf8_decode('FECHA DE NACIMIENTO'),'',0,'L');
 	// $pdf->SetFont('ARIAL','B',8);
 	$pdf->SetTextColor(64);
-	$pdf->Cell(34,4,utf8_decode(mb_strtoupper($madre[0]->cfecha_nacimiento,'UTF-8')),'B',1,'C');
+	$fnMama = count($madre) <= 0 ? '' : $madre[0]->cfecha_nacimiento;
+	$pdf->Cell(34,4,utf8_decode(mb_strtoupper($fnMama,'UTF-8')),'B',1,'C');
 
 	$pdf->SetFont('ARIAL','',8);
 	$pdf->SetTextColor(152,72,7);
@@ -320,14 +324,16 @@ if ( count($alu) > 0 ){
 	$pdf->Cell(20,4,utf8_decode('OCUPACIÓN'),'',0,'L');
 	// $pdf->SetFont('ARIAL','B',8);
 	$pdf->SetTextColor(64);
-	$pdf->Cell(81,4,utf8_decode(mb_strtoupper($madre[0]->ocupacion,'UTF-8')),'B',0,'C');
+	$ocupaMama = count($madre) <= 0 ? '' : $madre[0]->ocupacion;
+	$pdf->Cell(81,4,utf8_decode(mb_strtoupper($ocupaMama,'UTF-8')),'B',0,'C');
 	$pdf->Cell(10,4,'','',0,'L');
 	$pdf->SetFont('ARIAL','',8);
 	$pdf->SetTextColor(152,72,7);
 	$pdf->Cell(31,4,utf8_decode('LUGAR DE TRABAJO'),'',0,'L');
 	// $pdf->SetFont('ARIAL','B',8);
 	$pdf->SetTextColor(64);
-	$pdf->Cell(57,4,utf8_decode(mb_strtoupper($madre[0]->lugar_trabajo,'UTF-8')),'B',1,'C');
+	$ltMama = count($madre) <= 0 ? '' : $madre[0]->lugar_trabajo;
+	$pdf->Cell(57,4,utf8_decode(mb_strtoupper($ltMama,'UTF-8')),'B',1,'C');
 
 	$pdf->SetFont('ARIAL','',8);
 	$pdf->SetTextColor(152,72,7);
@@ -337,7 +343,8 @@ if ( count($alu) > 0 ){
 	// $pdf->SetFont('ARIAL','B',8);
 	$pdf->SetTextColor(64);
 	$pdf->SetFont('ARIAL','',7);
-	$pdf->Cell(163,4,utf8_decode(mb_strtoupper($madre[0]->domicilio_generico,'UTF-8')),'B',1,'C');
+	$dmpMama = count($madre) <= 0 ? '' : $madre[0]->domicilio_generico;
+	$pdf->Cell(163,4,utf8_decode(mb_strtoupper($dmpMama,'UTF-8')),'B',1,'C');
 
 	$pdf->SetFont('ARIAL','',8);
 	$pdf->SetTextColor(152,72,7);
@@ -346,21 +353,25 @@ if ( count($alu) > 0 ){
 	$pdf->Cell(30,4,utf8_decode('TELÉFONO DE CASA'),'',0,'L');
 	// $pdf->SetFont('ARIAL','B',8);
 	$pdf->SetTextColor(64);
-	$pdf->Cell(44,4,$madre[0]->tel1,'B',0,'C');
+	$tel1Mama = count($madre) <= 0 ? '' : $madre[0]->tel1;
+	$pdf->Cell(44,4,$tel1Mama,'B',0,'C');
 	$pdf->SetFont('ARIAL','',8);
 	$pdf->SetTextColor(152,72,7);
 	$pdf->Cell(5,4,'','',0,'L');
 	$pdf->Cell(17,4,utf8_decode('CELULAR'),'',0,'L');
 	// $pdf->SetFont('ARIAL','B',8);
 	$pdf->SetTextColor(64);
-	$pdf->Cell(41,4,$madre[0]->tel2,'B',0,'C');
+	$tel2Mama = count($madre) <= 0 ? '' : $madre[0]->tel2;
+	$pdf->Cell(41,4,$tel2Mama,'B',0,'C');
 	$pdf->SetFont('ARIAL','',8);
 	$pdf->SetTextColor(152,72,7);
 	$pdf->Cell(5,4,'','',0,'L');
 	$pdf->Cell(16,4,utf8_decode('OFICINA'),'',0,'L');
 	// $pdf->SetFont('ARIAL','B',8);
 	$pdf->SetTextColor(64);
-	$pdf->Cell(41,4,$madre[0]->cel1.' '.$madre[0]->cel2,'B',1,'C');
+	$cel1Mama = count($madre) <= 0 ? '' : $madre[0]->cel1;
+	$cel2Mama = count($madre) <= 0 ? '' : $madre[0]->cel2;
+	$pdf->Cell(41,4,$cel1Mama.' '.$cel2Mama,'B',1,'C');
 
 	$pdf->SetFont('ARIAL','',8);
 	$pdf->SetTextColor(152,72,7);
@@ -369,7 +380,9 @@ if ( count($alu) > 0 ){
 	$pdf->Cell(13,4,utf8_decode('E-MAIL'),'',0,'L');
 	// $pdf->SetFont('ARIAL','B',8);
 	$pdf->SetTextColor(64);
-	$pdf->Cell(186,4,utf8_decode($madre[0]->email1.' '.$madre[0]->email2),'B',1,'C');
+	$email1Mama = count($madre) <= 0 ? '' : $madre[0]->email1;
+	$email2Mama = count($madre) <= 0 ? '' : $madre[0]->email2;
+	$pdf->Cell(186,4,utf8_decode($email1Mama.' '.$email2Mama),'B',1,'C');
 
 
 	// lINEA 3
@@ -389,7 +402,8 @@ if ( count($alu) > 0 ){
 	$pdf->Cell(35,4,utf8_decode('NOMBRE DEL PADRE'),'',0,'L');
 	// $pdf->SetFont('ARIAL','B',8);
 	$pdf->SetTextColor(64);
-	$pdf->Cell(102,4,utf8_decode(mb_strtoupper($padre[0]->nombre_persona,'UTF-8')),'B',0,'C');
+	$nombrePapa = count($padre) <= 0 ? '' : $padre[0]->nombre_persona;
+	$pdf->Cell(102,4,utf8_decode(mb_strtoupper($nombrePapa,'UTF-8')),'B',0,'C');
 	$pdf->Cell(6,4,'','',0,'L');
 	$pdf->SetFont('ARIAL','',8);
 	$pdf->SetTextColor(152,72,7);
@@ -397,7 +411,8 @@ if ( count($alu) > 0 ){
 	$pdf->Cell(10,4,utf8_decode('CURP'),'',0,'L');
 	// $pdf->SetFont('ARIAL','B',8);
 	$pdf->SetTextColor(64);
-	$pdf->Cell(41,4,utf8_decode(mb_strtoupper($padre[0]->curp_persona,'UTF-8')),'B',1,'C');
+	$curpPapa = count($padre) <= 0 ? '' : $padre[0]->curp_persona;
+	$pdf->Cell(41,4,utf8_decode(mb_strtoupper($curpPapa,'UTF-8')),'B',1,'C');
 
 	$pdf->SetFont('ARIAL','',8);
 	$pdf->SetTextColor(152,72,7);
@@ -406,14 +421,16 @@ if ( count($alu) > 0 ){
 	$pdf->Cell(35,4,utf8_decode('LUGAR DE NACIMIENTO'),'',0,'L');
 	// $pdf->SetFont('ARIAL','B',8);
 	$pdf->SetTextColor(64);
-	$pdf->Cell(85,4,utf8_decode(mb_strtoupper($padre[0]->lugar_nacimiento_persona,'UTF-8')),'B',0,'C');
+	$lnPapa = count($padre) <= 0 ? '' : $padre[0]->lugar_nacimiento_persona;
+	$pdf->Cell(85,4,utf8_decode(mb_strtoupper($lnPapa,'UTF-8')),'B',0,'C');
 	$pdf->Cell(10,4,'','',0,'L');
 	$pdf->SetFont('ARIAL','',8);
 	$pdf->SetTextColor(152,72,7);
 	$pdf->Cell(35,4,utf8_decode('FECHA DE NACIMIENTO'),'',0,'L');
 	// $pdf->SetFont('ARIAL','B',8);
 	$pdf->SetTextColor(64);
-	$pdf->Cell(34,4,utf8_decode(mb_strtoupper($padre[0]->cfecha_nacimiento,'UTF-8')),'B',1,'C');
+	$fnPapa = count($padre) <= 0 ? '' : $padre[0]->cfecha_nacimiento;
+	$pdf->Cell(34,4,utf8_decode(mb_strtoupper($fnPapa,'UTF-8')),'B',1,'C');
 
 	$pdf->SetFont('ARIAL','',8);
 	$pdf->SetTextColor(152,72,7);
@@ -422,14 +439,16 @@ if ( count($alu) > 0 ){
 	$pdf->Cell(20,4,utf8_decode('OCUPACIÓN'),'',0,'L');
 	// $pdf->SetFont('ARIAL','B',8);
 	$pdf->SetTextColor(64);
-	$pdf->Cell(81,4,utf8_decode(mb_strtoupper($padre[0]->ocupacion,'UTF-8')),'B',0,'C');
+	$ocupaPapa = count($padre) <= 0 ? '' : $padre[0]->ocupacion;
+	$pdf->Cell(81,4,utf8_decode(mb_strtoupper($ocupaPapa,'UTF-8')),'B',0,'C');
 	$pdf->Cell(10,4,'','',0,'L');
 	$pdf->SetFont('ARIAL','',8);
 	$pdf->SetTextColor(152,72,7);
 	$pdf->Cell(31,4,utf8_decode('LUGAR DE TRABAJO'),'',0,'L');
 	// $pdf->SetFont('ARIAL','B',8);
 	$pdf->SetTextColor(64);
-	$pdf->Cell(57,4,utf8_decode(mb_strtoupper($padre[0]->lugar_trabajo,'UTF-8')),'B',1,'C');
+	$ltPapa = count($padre) <= 0 ? '' : $padre[0]->lugar_trabajo;
+	$pdf->Cell(57,4,utf8_decode(mb_strtoupper($ltPapa,'UTF-8')),'B',1,'C');
 
 	$pdf->SetFont('ARIAL','',8);
 	$pdf->SetTextColor(152,72,7);
@@ -439,7 +458,8 @@ if ( count($alu) > 0 ){
 	// $pdf->SetFont('ARIAL','B',8);
 	$pdf->SetTextColor(64);
 	$pdf->SetFont('ARIAL','',7);
-	$pdf->Cell(163,4,utf8_decode(mb_strtoupper($padre[0]->domicilio_generico,'UTF-8')),'B',1,'C');
+	$dmpPapa = count($padre) <= 0 ? '' : $padre[0]->domicilio_generico;
+	$pdf->Cell(163,4,utf8_decode(mb_strtoupper($dmpPapa,'UTF-8')),'B',1,'C');
 
 	$pdf->SetFont('ARIAL','',8);
 	$pdf->SetTextColor(152,72,7);
@@ -448,21 +468,25 @@ if ( count($alu) > 0 ){
 	$pdf->Cell(30,4,utf8_decode('TELÉFONO DE CASA'),'',0,'L');
 	// $pdf->SetFont('ARIAL','B',8);
 	$pdf->SetTextColor(64);
-	$pdf->Cell(44,4,$padre[0]->tel1,'B',0,'C');
+	$tel1Papa = count($padre) <= 0 ? '' : $padre[0]->tel1;
+	$pdf->Cell(44,4,$tel1Papa,'B',0,'C');
 	$pdf->SetFont('ARIAL','',8);
 	$pdf->SetTextColor(152,72,7);
 	$pdf->Cell(5,4,'','',0,'L');
 	$pdf->Cell(17,4,utf8_decode('CELULAR'),'',0,'L');
 	// $pdf->SetFont('ARIAL','B',8);
 	$pdf->SetTextColor(64);
-	$pdf->Cell(41,4,$padre[0]->tel2,'B',0,'C');
+	$tel2Papa = count($padre) <= 0 ? '' : $padre[0]->tel2;
+	$pdf->Cell(41,4,$tel2Papa,'B',0,'C');
 	$pdf->SetFont('ARIAL','',8);
 	$pdf->SetTextColor(152,72,7);
 	$pdf->Cell(5,4,'','',0,'L');
 	$pdf->Cell(16,4,utf8_decode('OFICINA'),'',0,'L');
 	// $pdf->SetFont('ARIAL','B',8);
 	$pdf->SetTextColor(64);
-	$pdf->Cell(41,4,$padre[0]->cel1.' '.$padre[0]->cel2,'B',1,'C');
+	$cel1Papa = count($padre) <= 0 ? '' : $padre[0]->cel1;
+	$cel2Papa = count($padre) <= 0 ? '' : $padre[0]->cel2;
+	$pdf->Cell(41,4,$cel1Papa.' '.$cel2Papa,'B',1,'C');
 
 	$pdf->SetFont('ARIAL','',8);
 	$pdf->SetTextColor(152,72,7);
@@ -471,7 +495,9 @@ if ( count($alu) > 0 ){
 	$pdf->Cell(13,4,utf8_decode('E-MAIL'),'',0,'L');
 	// $pdf->SetFont('ARIAL','B',8);
 	$pdf->SetTextColor(64);
-	$pdf->Cell(186,4,utf8_decode($padre[0]->email1.' '.$padre[0]->email2),'B',1,'C');
+	$email1Papa = count($padre) <= 0 ? '' : $padre[0]->email1;
+	$email2Papa = count($padre) <= 0 ? '' : $padre[0]->email2;
+	$pdf->Cell(186,4,utf8_decode($email1Papa.' '.$email2Papa),'B',1,'C');
 
 
 	$pdf->SetFont('ARIAL','',6);
@@ -487,13 +513,17 @@ if ( count($alu) > 0 ){
 	$pdf->setX(5);
 	switch ( intval($alu[0]->idtutor) ) {
 		case $madre[0]->idpersona:
-			$tut = "MADRE: ".utf8_decode(mb_strtoupper($madre[0]->nombre_persona,'UTF-8'));
+			$nombreMama = count($madre) <= 0 ? '' : $madre[0]->nombre_persona;
+			$tut = "MADRE: ".utf8_decode(mb_strtoupper($nombreMama,'UTF-8'));
 			break;
 		case $padre[0]->idpersona:
-			$tut = "PADRE: ".utf8_decode(mb_strtoupper($padre[0]->nombre_persona,'UTF-8'));
+			$nombrePapa = count($padre) <= 0 ? '' : $padre[0]->nombre_persona;
+			$tut = "PADRE: ".utf8_decode(mb_strtoupper($nombrePapa,'UTF-8'));
 			break;	
 		default:
-			$tut = utf8_decode(strtoupper($tutor[0]->parentezco)).": ".utf8_decode(mb_strtoupper($tutor[0]->nombre_persona,'UTF-8'));
+			$nombreTutor = count($tut) <= 0 ? '' : $tut[0]->nombre_persona;
+			$parentTutor = count($tut) <= 0 ? '' : $tut[0]->parentezco;
+			$tut = utf8_decode(strtoupper($parentTutor)).": ".utf8_decode(mb_strtoupper($nombreTutor,'UTF-8'));
 			break;	
 	}
 	$pdf->Cell(30,4,utf8_decode('QUIEN ES EL TUTOR'),'',0,'L');

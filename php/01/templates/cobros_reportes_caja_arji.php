@@ -342,6 +342,7 @@ jQuery(function($) {
                $.each(json, function(i, item) {
                     $("#clave_nivel").append('<option value="'+item.data+'"> '+item.label+'</option>');
                 });
+		        $("#clave_nivel").append('<option value="-1">Todos los niveles</option>');
                 getGpoNiv();
             }, "json"
         );  

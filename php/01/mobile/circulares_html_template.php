@@ -180,7 +180,7 @@ html {
                         foreach ($rat as $i => $value) {
          
                     ?>
-                        <li><a href="http://platsource.mx/<?= $rat[0]->directorio; ?>/<?= $rat[0]->archivo; ?>" target="_blank" rel="external"><?= $rat[0]->descripcion_archivo; ?></a>  <small class="grey"><i><?= $rat[0]->creado_el; ?></i></small>  </li>
+                        <li><a href="http://platsource.mx/<?= $rat[0]->directorio; ?><?= $rat[0]->archivo; ?>" target="_blank" rel="external"><?= $rat[0]->descripcion_archivo; ?></a>  <small class="grey"><i><?= $rat[0]->creado_el; ?></i></small>  </li>
                     <?php
                         } 
                     ?>

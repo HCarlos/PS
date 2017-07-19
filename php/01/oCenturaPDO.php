@@ -1469,18 +1469,32 @@ class oCenturaPDO {
 				parse_str($cad);
 		        $idemp = $this->getIdEmpFromAlias($u);
 				$idciclo = $this->getCicloFromIdEmp($idemp);
-				$query = "SELECT *
-						FROM _viGrupo_Alumnos WHERE idciclo = $idciclo AND clave_nivel = $clave_nivel AND idemp = $idemp AND activo_en_caja = 1 AND status_grualu = 1
-						ORDER BY idgrupo, num_lista ASC ";
+				$clave_nivel = intval($clave_nivel);
+				if ($clave_nivel > -1){
+					$query = "SELECT *
+							FROM _viGrupo_Alumnos WHERE idciclo = $idciclo AND clave_nivel = $clave_nivel AND idemp = $idemp AND activo_en_caja = 1 AND status_grualu = 1
+							ORDER BY idgrupo, num_lista ASC ";
+					}else{
+						$query = "SELECT *
+								FROM _viGrupo_Alumnos WHERE idciclo = $idciclo AND idemp = $idemp AND activo_en_caja = 1 AND status_grualu = 1
+								ORDER BY clave_nivel, idgrupo, num_lista ASC ";
+					}		
 				break;
 
 			case 74:
 				parse_str($cad);
 		        $idemp = $this->getIdEmpFromAlias($u);
 				$idciclo = $this->getCicloFromIdEmp($idemp);
-				$query = "SELECT *
-						FROM _viGrupo_Alumnos WHERE idciclo = $idciclo AND clave_nivel = $clave_nivel AND idgrupo = $idgrupo AND idemp = $idemp AND status_grualu = 1
-						ORDER BY num_lista ASC ";
+				$clave_nivel = intval($clave_nivel);
+				if ($clave_nivel > -1){
+					$query = "SELECT *
+							FROM _viGrupo_Alumnos WHERE idciclo = $idciclo AND clave_nivel = $clave_nivel AND idgrupo = $idgrupo AND idemp = $idemp AND status_grualu = 1
+							ORDER BY num_lista ASC ";
+				}else{
+					$query = "SELECT *
+							FROM _viGrupo_Alumnos WHERE idciclo = $idciclo AND idgrupo = $idgrupo AND idemp = $idemp AND status_grualu = 1
+							ORDER BY num_lista ASC ";
+				}
 				break;
 
 			case 75:
@@ -2375,7 +2389,7 @@ class oCenturaPDO {
 												SET device_token = '$device_token',
 													status_device = 1
 											WHERE iddevice = $IDs";
-								$vRet = $this->guardarDatos($query);
+								$vRet = $this->guardarDatos($query3);
 							}
 							break;	
 					} // 56
@@ -3274,13 +3288,12 @@ class oCenturaPDO {
 
 	  	$ip=$_SERVER['REMOTE_ADDR']; 
 	  	$host=gethostbyaddr($_SERVER['REMOTE_ADDR']);
-	 	// $Conn = new voConnPDO();
 
 		switch($tipo){
 			case 0:
 				parse_str($cad);
-				$idusr = $this->getIdUserFromAlias($user);
-		        $idemp = $this->getIdEmpFromAlias($user);
+				$idusr   = $this->getIdUserFromAlias($user);
+		        $idemp   = $this->getIdEmpFromAlias($user);
 				$idciclo = $this->getCicloFromIdEmp($idemp);		        
 				
 				$tiene_hermanos 	   = !isset($tiene_hermanos)?0:1;
@@ -3579,20 +3592,7 @@ class oCenturaPDO {
 
 		}
 
-/*
-		$result = $Conn->exec($query);
-
-		if ($result != 1){
-			$vR = $Conn->errorInfo();
-			$vRet = $vR;//var_dump($vR[2]);
-		}else{
-			$vRet = "OK";
-		}
-
-
-		$Conn = null;
-*/	  
-		$result = $f->guardarDatos($query);
+		$result = $this->guardarDatos($query);
 		return $vRet;
 
 	}
@@ -3601,19 +3601,17 @@ class oCenturaPDO {
 	public function UPDATEVencimientoEdoCta($cad) {
 
 		parse_str($cad);
-     	$Conn = new voConnPDO();
 
 		$query = "SET @X = Actualizar_Pagos_Metodo_B(".$idfamilia.",0,1)";
-		$ret = $Conn->query($query);
+		$ret = $this->execQuery($query);
 
 		$query="SELECT @X AS outvar;";
-		$result = $Conn->query($query);
+		$result = $this->execQuery($query);
 		foreach ($result AS $x)
 		{
 		    $ret=$x['outvar'];
 		}
 
-		$Conn = null;
 	    return $ret;
 
 	}
@@ -3621,13 +3619,12 @@ class oCenturaPDO {
 	public function refreshVencimientos($cad) {
 
 		parse_str($cad);
-     	$Conn = new voConnPDO();
 
 		$query = "SET @X = Actualizar_Pagos_Metodo_B(".$idfamilia.",0,1)";
-		$ret = $Conn->query($query);
+		$ret = $this->execQuery($query);
 
 		$query="SELECT @X AS outvar;";
-		$result = $Conn->query($query);
+		$result = $this->execQuery($query);
 		foreach ($result AS $x)
 		{
 		    $ret=$x['outvar'];
@@ -3636,10 +3633,10 @@ class oCenturaPDO {
 		if ( $ret == "OK" ) {
 
 			$query = "SET @Y = Actualizar_Pagos_Metodo_A(".$idfamilia.",0,1)";
-			$ret = $Conn->query($query);
+			$ret = $this->execQuery($query);
 
 			$query="SELECT @Y AS outvar;";
-			$result = $Conn->query($query);
+			$result = $this->execQuery($query);
 			foreach ($result AS $x)
 			{
 			    $ret=$x['outvar'];
@@ -3647,7 +3644,6 @@ class oCenturaPDO {
 
 		}
 
-		$Conn = null;
 	    return $ret;
 
 	}
@@ -3668,7 +3664,6 @@ class oCenturaPDO {
 
 	  	$ip=$_SERVER['REMOTE_ADDR']; 
 	  	$host=gethostbyaddr($_SERVER['REMOTE_ADDR']);
-     	// $Conn = new voConnPDO();
 
 		parse_str($cad);
 		$idusr = $this->getIdUserFromAlias($u);
@@ -3718,13 +3713,10 @@ class oCenturaPDO {
 		        $idemp = $this->getIdEmpFromAlias($u);
 
 			    $q0 = "SELECT MAX(idgrumatcon) AS ids FROM grupo_materia_config ";
-				// $r0 = $Conn->queryFetchAllAssocOBJ($q0);
-				// $idgrumatcon = $r0[0]->ids;
 			    $r0 = $this->getArray($q0);
 			    $idgrumatcon = !$r0 ? 0 : $r0[0]->ids;
 
 			    $q1 = "SELECT * FROM grupo_materia_config_markbook WHERE idgrumatcon = $idgrumatconold ";
-				// $r1 = $Conn->queryFetchAllAssocOBJ($q1);
 			    $r1 = $this->getArray($q1);
 				foreach($r1 AS $j=>$valor){
 					$db = $r1[$j]->descripcion_breve;
@@ -3744,26 +3736,23 @@ class oCenturaPDO {
 				}
 			}
 		}
-		// $Conn = null;
 	    return $vRet;
 	}
 
 	public function refreshBoletaPAIBI($cad) {
 
 		parse_str($cad);
-     	$Conn = new voConnPDO();
 
 		$query = "SET @X = Actualizar_Boletas_PAIBI(".$idgrumat.")";
-		$ret = $Conn->query($query);
+		$ret = $this->execQuery($query);
 
 		$query="SELECT @X AS outvar;";
-		$result = $Conn->query($query);
+		$result = $this->execQuery($query);
 		foreach ($result AS $x)
 		{
 		    $ret=$x['outvar'];
 		}
 
-		$Conn = null;
 	    return $ret;
 
 	}

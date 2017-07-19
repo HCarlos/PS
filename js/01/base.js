@@ -30,7 +30,7 @@ function oObject() {
 	var keyUP60   = [20]; // Caja
 	var minHeight = 0;
 
-	var pURLS = ["platsource.mx", "www.platsource.mx", "platsource.com.mx", "www.platsource.com.mx"];
+	var pURLS = ["platsource.mx", "www.platsource.mx", "platsource.com.mx", "www.platsource.com.mx", "platsource.tecnointel.mx"];
 	
 	var pHost = ["http://platsource.mx/", /iphone|ipad|ipod|android/i.test(navigator.userAgent), false, /msie\s6/i.test(navigator.userAgent), "http://187.217.204.100:1803"];
 	// var pHost = ["http://platsource.mx/", /iphone|ipad|ipod|android/i.test(navigator.userAgent), false, /msie\s6/i.test(navigator.userAgent), "http://187.217.204.101:9602"];
