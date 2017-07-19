@@ -4,7 +4,7 @@
 $data = $_POST['data'];
 parse_str($data);
 
-require_once("../vo/voConn.php");
+// require_once("../vo/voConn.php");
 require_once("../oCentura.php");
 $f = oCentura::getInstance();
 
@@ -14,10 +14,10 @@ $idemp = $f->getPubIdEmp($user);
 $ip=$_SERVER['REMOTE_ADDR']; 
 $host=gethostbyaddr($_SERVER['REMOTE_ADDR']);//$_SERVER["REMOTE_HOST"]; 
 
-$Conn = voConn::getInstance();
-$mysql = mysql_connect($Conn->server, $Conn->user, $Conn->pass);
-mysql_select_db($Conn->db);
-mysql_query("SET NAMES 'utf8'");	
+// $Conn = voConn::getInstance();
+// $mysql = mysql_connect($Conn->server, $Conn->user, $Conn->pass);
+// mysql_select_db($Conn->db);
+// mysql_query("SET NAMES 'utf8'");	
 
 $isExistUser = $f->isExistUserFromEmp($user);
 
@@ -25,7 +25,7 @@ $idtareaexistente = $idcommensaje;
 
 $arr = array();
 
-mysql_close($mysql);
+// mysql_close($mysql);
 
 $isFiles = false;
 
@@ -46,10 +46,10 @@ if ( $v2 !== md5($user.$idcommensaje) ||  $isExistUser <= 0 ){
 			$res2 = saveFileTarea($_FILES['file_'.$i],'foto-'.$i,$arr,$idtareaexistente,$IdTar,$idemp,$i);
 			if ( $res2['status'] == "OK" ){
 
-				$Conn = voConn::getInstance();
-				$mysql = mysql_connect($Conn->server, $Conn->user, $Conn->pass);
-				mysql_select_db($Conn->db);
-				mysql_query("SET NAMES 'utf8'");	
+				// $Conn = voConn::getInstance();
+				// $mysql = mysql_connect($Conn->server, $Conn->user, $Conn->pass);
+				// mysql_select_db($Conn->db);
+				// mysql_query("SET NAMES 'utf8'");	
 
 				$query = "Insert Into com_mensaje_archivos(
 											idcommensaje,
@@ -61,7 +61,7 @@ if ( $v2 !== md5($user.$idcommensaje) ||  $isExistUser <= 0 ){
 											host,
 											creado_por,
 											creado_el
-										)value( 
+										)values( 
 											$IdTar,
 											'up_mensajes/',
 											'".$res2['image']."',
@@ -72,7 +72,8 @@ if ( $v2 !== md5($user.$idcommensaje) ||  $isExistUser <= 0 ){
 								    		$idusr,
 								    		NOW()
 								    		)";
-				$result = mysql_query($query); 
+				// $result = mysql_query($query); 
+				$result = $f->guardarDatos($query);
 				
 			}
 

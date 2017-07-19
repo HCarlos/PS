@@ -4,7 +4,6 @@
 $data = $_POST['data'];
 parse_str($data);
 
-require_once("../vo/voConn.php");
 require_once("../oCentura.php");
 $f = oCentura::getInstance();
 
@@ -15,10 +14,6 @@ $ip=$_SERVER['REMOTE_ADDR'];
 $host=gethostbyaddr($_SERVER['REMOTE_ADDR']);//$_SERVER["REMOTE_HOST"]; 
 
 $vRet = "Error";
-$Conn = voConn::getInstance();
-$mysql = mysql_connect($Conn->server, $Conn->user, $Conn->pass);
-mysql_select_db($Conn->db);
-mysql_query("SET NAMES 'utf8'");	
 
 $isExistUser = $f->isExistUserFromEmp($user);
 
@@ -65,12 +60,12 @@ if ($isExistUser > 0 ){
 						    		NOW()
 						    		)";
 
-		$result = mysql_query($query); 
-		$result = mysql_query("SELECT MAX(idtarea) as IDs from tareas");
-		$IdTar=intval(mysql_result($result, 0,"IDs"));
+		$vRet = $f->guardarDatos($query);
+		$query = "SELECT MAX(idtarea) as IDs from tareas";
+		$result = $f->getArray($query);
+		$IdTar = !$result ? 0 : intval($result[0]->IDs);
 
 	}else{
-		mysql_query("SET NAMES 'utf8'");	
 		$query = "update tareas set titulo_tarea = '$titulo',
 									tarea = '$tarea',
 									fecha_inicio = '".$fecha_inicio."',
@@ -80,10 +75,9 @@ if ($isExistUser > 0 ){
 									modi_por = $idusr,
 									modi_el = NOW()
 					Where idtarea = ".$idtarea;
-		$result = mysql_query($query); 
-		$ret = $result==false ? mysql_error():"OK";
+		$ret = $f->guardarDatos($query);
+
 		$IdTar=$idtarea;
-		//$arr['message'] = 'Datos guardados con éxito! '.$ret;
 
 	}
 
@@ -111,7 +105,7 @@ if ($isExistUser > 0 ){
 								    		$idusr,
 								    		NOW()
 								    		)";
-				$result = mysql_query($query); 
+				$result = $f->guardarDatos($query);
 				$arr = $res2;
 				
 			}	
@@ -148,7 +142,7 @@ if ($isExistUser > 0 ){
 									    		$idusr,
 									    		NOW()
 									    		)";
-					$result = mysql_query($query); 
+				$result = $f->guardarDatos($query);
 			 	}
 
 	}
@@ -160,8 +154,6 @@ if ($isExistUser > 0 ){
 	$arr['image'] = 'none';
 
 }
-
-mysql_close($mysql);
 
 echo json_encode($arr);
 
@@ -184,8 +176,7 @@ function saveFileTarea($file,$descripcion="",$arr=array(),$objeto,$idtarea,$idem
 			//$nameFile = md5($name).time();
 			$nameFile = $idtarea.'_'.$idemp.'_'.$i;
 			$ext = end(explode(".", $name));
-			$nFle   = $nameFile.".".strtolower($ext);//$file['name']."_|_".$curp."_|_";
-
+			$nFle   = $nameFile.".".strtolower($ext);
 			$save_path = '../../../up_tareas/'.$nFle;
 
 			
@@ -196,7 +187,7 @@ function saveFileTarea($file,$descripcion="",$arr=array(),$objeto,$idtarea,$idem
 				$y = ++$i;
 				$nameFile = $idtarea.'_'.$idemp.'_'.$y;
 				$ext = end(explode(".", $name));
-				$nFle   = $nameFile.".".strtolower($ext);//$file['name']."_|_".$curp."_|_";
+				$nFle   = $nameFile.".".strtolower($ext);
 
 				$save_path = '../../../up_tareas/'.$nFle;
 

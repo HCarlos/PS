@@ -11,10 +11,9 @@ ini_set('display_startup_errors', TRUE);
 header("html/text; charset=utf-8");  
 header("Cache-Control: no-cache");
 
-require_once('../../vo/voConn.php');
+// require_once('../../vo/voConn.php');
 require_once('../../oCentura.php');
-
-$Q = oCentura::getInstance();
+$f = oCentura::getInstance();
 
 $arg   = $_POST["data"];
 parse_str($arg);
@@ -44,14 +43,19 @@ $f0 = date_create();
 $folSer = date_timestamp_get($f0);
 $folio = $folSer;
 
-//$Q->setSaveData(40,$folio,0,0,6);
-$Conn = voConn::getInstance();
-$mysql = mysql_connect($Conn->server, $Conn->user, $Conn->pass);
-mysql_select_db($Conn->db);
-mysql_query("SET NAMES UTF8");
+//$f->setSaveData(40,$folio,0,0,6);
+
+// $Conn = voConn::getInstance();
+// $mysql = mysql_connect($Conn->server, $Conn->user, $Conn->pass);
+// mysql_SELECT_db($Conn->db);
+// mysql_query("SET NAMES UTF8");
+
+
 
 $efxi = explode('-', $idemisorfiscal);
-$ef = mysql_query("select rfc,razon_social,calle, num_ext, num_int,colonia,localidad,estado,cp,pais,is_iva from _viEmiFis where idemisorfiscal = ".$efxi[0]." and idemp = $idemp and status_emisor_fiscal = 1");
+// $ef = mysql_query("SELECT rfc,razon_social,calle, num_ext, num_int,colonia,localidad,estado,cp,pais,is_iva FROM _viEmiFis WHERE idemisorfiscal = ".$efxi[0]." AND idemp = $idemp AND status_emisor_fiscal = 1");
+$query = "SELECT rfc,razon_social,calle, num_ext, num_int,colonia,localidad,estado,cp,pais,is_iva FROM _viEmiFis WHERE idemisorfiscal = ".$efxi[0]." AND idemp = $idemp AND status_emisor_fiscal = 1";
+$ef = $f->getArray($query);
 
 switch ($serie){
 	case "A":
@@ -67,7 +71,7 @@ switch ($serie){
 			$dir_upload        = "../../../../uw_fe/";
 			$file_logo         = "logo_arji.gif";
 			$file_back         = "back.jpg";
-
+/*
 			$rfc_emisor           	= mysql_result($ef, 0,"rfc");
 			$razon_social_emisor  	= mysql_result($ef, 0,"razon_social");
 			$calle_emisor         	= mysql_result($ef, 0,"calle");
@@ -79,6 +83,19 @@ switch ($serie){
 			$codigo_postal_emisor 	= mysql_result($ef, 0,"cp");
 			$pais_emisor          	= mysql_result($ef, 0,"pais");
 			$is_iva          	    = intval(mysql_result($ef, 0,"is_iva"));
+*/
+			$rfc_emisor           	= $ef[0]->rfc;
+			$razon_social_emisor  	= $ef[0]->razon_social;
+			$calle_emisor         	= $ef[0]->calle;
+			$num_exterior_emisor  	= $ef[0]->num_ext;
+			$num_interior_emisor  	= $ef[0]->num_int;
+			$colonia_emisor       	= $ef[0]->colonia;
+			$localidad_emisor     	= $ef[0]->localidad;
+			$estado_emisor        	= $ef[0]->estado;
+			$codigo_postal_emisor 	= $ef[0]->cp;
+			$pais_emisor          	= $ef[0]->pais;
+			$is_iva          	    = intval($ef[0]->is_iva);
+
 			$regimen_fiscal_emisor 	= "ASOCIACION CIVIL";
 			
 			$rgb  = array(64,105,154);
@@ -98,7 +115,7 @@ switch ($serie){
 			$dir_upload        = "../../../../uw_fe/";
 			$file_logo         = "logo_comer_arji.gif";
 			$file_back         = "back.jpg";
-
+/*
 			$rfc_emisor            = mysql_result($ef, 0,"rfc");
 			$razon_social_emisor   = mysql_result($ef, 0,"razon_social");
 			$calle_emisor          = mysql_result($ef, 0,"calle");
@@ -110,6 +127,19 @@ switch ($serie){
 			$codigo_postal_emisor  = mysql_result($ef, 0,"cp");
 			$pais_emisor           = mysql_result($ef, 0,"pais");
 			$is_iva          	   = intval(mysql_result($ef, 0,"is_iva"));
+*/			
+			$rfc_emisor           	= $ef[0]->rfc;
+			$razon_social_emisor  	= $ef[0]->razon_social;
+			$calle_emisor         	= $ef[0]->calle;
+			$num_exterior_emisor  	= $ef[0]->num_ext;
+			$num_interior_emisor  	= $ef[0]->num_int;
+			$colonia_emisor       	= $ef[0]->colonia;
+			$localidad_emisor     	= $ef[0]->localidad;
+			$estado_emisor        	= $ef[0]->estado;
+			$codigo_postal_emisor 	= $ef[0]->cp;
+			$pais_emisor          	= $ef[0]->pais;
+			$is_iva          	    = intval($ef[0]->is_iva);
+
 			$regimen_fiscal_emisor = "PERSONAS MORALES DEL REGIMEN GENERAL";
 			
 			$rgb  = array(64,105,154);
@@ -119,29 +149,49 @@ switch ($serie){
 }
 
 
-$fe0 = mysql_query("select idfamilia, tutor from _viEdosCta where idfactura = $idfactura and idemp = $idemp limit 1");
-$idfamilia 	= mysql_result($fe0, 0,"idfamilia");
-$tutor 	    = mysql_result($fe0, 0,"tutor");
+// $fe0 = mysql_query("SELECT idfamilia, tutor FROM _viEdosCta WHERE idfactura = $idfactura AND idemp = $idemp limit 1");
+$query = "SELECT idfamilia, tutor FROM _viEdosCta WHERE idfactura = $idfactura AND idemp = $idemp LIMIT 1";
+$fe0 = $f->getArray($query);
+// $idfamilia 	= mysql_result($fe0, 0,"idfamilia");
+// $tutor 	    = mysql_result($fe0, 0,"tutor");
+$idfamilia = $fe0[0]->idfamilia;
+$tutor     = $fe0[0]->tutor;
 
 
 $certificado_texto = "";
 $sello             = "";	
 
-$result = mysql_query("select rfc,razon_social,calle,num_ext, num_int,colonia, localidad,estado, pais, cp from _viRegFis where idregfis = $idregfis and idemp = $idemp limit 1");
-$rfc           = mysql_result($result, 0,"rfc");//$arrec[0]; // trim($_REQUEST['rfc']); 
+// $result = mysql_query("SELECT rfc,razon_social,calle,num_ext, num_int,colonia, localidad,estado, pais, cp FROM _viRegFis WHERE idregfis = $idregfis AND idemp = $idemp limit 1");
+$query = "SELECT rfc,razon_social,calle,num_ext, num_int,colonia, localidad,estado, pais, cp FROM _viRegFis WHERE idregfis = $idregfis AND idemp = $idemp limit 1";
+$result = $f->getArray($query);
+$rfc           = $result[0]->rfc; // mysql_result($result, 0,"rfc");
 $rf0           = explode('-',$rfc);  
 $rfc           = $rf0[0];
+
+/*
 $razon_social  = mysql_result($result, 0,"razon_social");//$arrec[1]; // trim($_REQUEST['razon_social']);
 $calle         = mysql_result($result, 0,"calle");//$arrec[2]; // trim($_REQUEST['calle']); 
 $num_exterior  = mysql_result($result, 0,"num_ext");//$arrec[3]; // trim($_REQUEST['num_exterior']); 
 $num_interior  = mysql_result($result, 0,"num_int");//$arrec[4]; // trim($_REQUEST['num_interior']);
 $colonia       = mysql_result($result, 0,"colonia");//$arrec[5]; // trim($_REQUEST['colonia']); 
 $localidad     = mysql_result($result, 0,"localidad");//$arrec[6]; // trim($_REQUEST['localidad']);
-//$municipio     = mysql_result($result, 0,"municipio");//$arrec[7]; // trim($_REQUEST['municipio']); 
 $estado        = mysql_result($result, 0,"estado");//$arrec[8]; // trim($_REQUEST['estado']); 
 $pais          = mysql_result($result, 0,"pais");//$arrec[9]; // trim($_REQUEST['pais']);
 $codigo_postal = mysql_result($result, 0,"cp");//$arrec[10]; // trim($_REQUEST['codigo_postal']); 
 $referencia    = $referenciaFE;//$arrec[11]; // trim($_REQUEST['referencia']);
+*/
+
+$razon_social  = $result[0]->razon_social;
+$calle         = $result[0]->calle;
+$num_exterior  = $result[0]->num_ext;
+$num_interior  = $result[0]->num_int;
+$colonia       = $result[0]->colonia;
+$localidad     = $result[0]->localidad;
+$estado        = $result[0]->estado;
+$pais          = $result[0]->pais;
+$codigo_postal = $result[0]->cp;
+$referencia    = $referenciaFE;
+
 
 $tot = $total; //$_GET["total"];	
 $iva    = $iva; //0;
@@ -155,8 +205,11 @@ if (in_array($subtt, array("XAXX","XEXX") ) ){
 	$iva = 0;
 }
 
-$fe1 = mysql_query("select importe, descto, recargo, importe2, iva, total from facturas_encabezado where idfactura = $idfactura and idemp = $idemp limit 1");
+// $fe1 = mysql_query("SELECT importe, descto, recargo, importe2, iva, total FROM facturas_encabezado WHERE idfactura = $idfactura AND idemp = $idemp limit 1");
+$query = "SELECT importe, descto, recargo, importe2, iva, total FROM facturas_encabezado WHERE idfactura = $idfactura AND idemp = $idemp limit 1";
+$fe1 = $f->getArray($query);
 
+/*
 $subtotal     = mysql_result($fe1, 0,"importe");
 $descuento    = mysql_result($fe1, 0,"descto");
 $recargo      = mysql_result($fe1, 0,"recargo");
@@ -165,8 +218,18 @@ $iva          = mysql_result($fe1, 0,"iva");
 $total        =  mysql_result($fe1, 0,"total");
 $total_cadena = $total;
 $forma_pago   =  "Pago en una sola exhibición";//trim($_REQUEST['forma_pago']); 
+*/
 
-mysql_close($mysql);
+$subtotal     = $fe1[0]->importe;
+$descuento    = $fe1[0]->descto;
+$recargo      = $fe1[0]->recargo;
+$subtotal2    = $fe1[0]->importe2;
+$iva          = $fe1[0]->iva;
+$total        = $fe1[0]->total;
+$total_cadena = $total;
+$forma_pago   = "Pago en una sola exhibición";
+
+// mysql_close($mysql);
 
 $cadConc = $cadOrd;	
 
@@ -251,14 +314,14 @@ foreach($result as $key => $value) {
 
 $folSer2 = $dir_upload."Fac-".$folSer.".xml";
 
-$Conn = voConn::getInstance();
-$mysql = mysql_connect($Conn->server, $Conn->user, $Conn->pass);
-mysql_select_db($Conn->db);
-mysql_query("SET NAMES UTF8");
+// $Conn = voConn::getInstance();
+// $mysql = mysql_connect($Conn->server, $Conn->user, $Conn->pass);
+// mysql_SELECT_db($Conn->db);
+// mysql_query("SET NAMES UTF8");
 
-$folio  = $Q->getFolioTim($serie,$idemp);
+$folio  = $f->getFolioTim($serie,$idemp);
 
-mysql_close($mysql);
+// mysql_close($mysql);
 
 $folSer = $serie."-".str_pad($folio, 6, "0", STR_PAD_LEFT);
 $x_x    = $dir_upload.$idcliente."/"."Fac-".$folSer.".pdf";
@@ -312,13 +375,13 @@ foreach ($xml->xpath('//t:TimbreFiscalDigital') as $tfd) {
 	if ($folfis!=""){
 		$fxml = "Fac-".$folSer.".xml";
 		$fpdf = "Fac-".$folSer.".pdf";
-
+/*
 		$Conn = voConn::getInstance();
 		$mysql = mysql_connect($Conn->server, $Conn->user, $Conn->pass);
-		mysql_select_db($Conn->db);
+		mysql_SELECT_db($Conn->db);
 
 		$result = mysql_query("
-			update facturas_encabezado 
+			UPDATE facturas_encabezado 
 				set isfe = 1, 
 					idemisorfiscal = ".$efxi[0].", 
 					idregfis = $idregfis,
@@ -332,11 +395,30 @@ foreach ($xml->xpath('//t:TimbreFiscalDigital') as $tfd) {
 					fecha_timbrado = NOW(), 
 					directorio = '$directorio',
 					email_enviado = '$email1'  
-				where idfactura = $idfactura");
+				WHERE idfactura = $idfactura");
+*/
+
+		$query = "
+			UPDATE facturas_encabezado 
+				SET isfe = 1, 
+					idemisorfiscal = ".$efxi[0].", 
+					idregfis = $idregfis,
+					metodo_de_pago = $idmetododepagoFE,
+					referencia = '$referencia',
+					UUID = '$folfis', 
+					xml = '$fxml', 
+					pdf='$fpdf', 
+					serie = '$serie', 
+					folio = $folio, 
+					fecha_timbrado = NOW(), 
+					directorio = '$directorio',
+					email_enviado = '$email1'  
+				WHERE idfactura = $idfactura";
+		$result = $f->guardarDatos($query);
 
 		unlink($folSer2);
 		
-		if ( $result != 1 ){
+		if ( $result != "OK" ){
 			include("crear_PDF_Arji.php");
 			print "ERROR: ".mysql_error();
 		} else{
@@ -352,7 +434,7 @@ foreach ($xml->xpath('//t:TimbreFiscalDigital') as $tfd) {
 
 		}
 
-		mysql_close($mysql);
+		// mysql_close($mysql);
 
 
 	}

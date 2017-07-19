@@ -12,7 +12,7 @@ header("Cache-Control: no-cache");
 $data = $_POST['data'];
 parse_str($data);
 
-require_once("../vo/voConn.php");
+// require_once("../vo/voConn.php");
 require_once("../oCentura.php");
 $f = oCentura::getInstance();
 
@@ -22,14 +22,14 @@ $idemp = $f->getPubIdEmp($user);
 $ip=$_SERVER['REMOTE_ADDR']; 
 $host=gethostbyaddr($_SERVER['REMOTE_ADDR']);
 
-$Conn = voConn::getInstance();
-$mysql = mysql_connect($Conn->server, $Conn->user, $Conn->pass);
-mysql_select_db($Conn->db);
-mysql_query("SET NAMES 'utf8'");	
+// $Conn = voConn::getInstance();
+// $mysql = mysql_connect($Conn->server, $Conn->user, $Conn->pass);
+// mysql_select_db($Conn->db);
+// mysql_query("SET NAMES 'utf8'");	
 
 $isExistUser = $f->isExistUserFromEmp($user);
 
-mysql_close($mysql);
+// mysql_close($mysql);
 
 $isFiles = false;
 
@@ -55,10 +55,10 @@ if ($v1 !== md5($user.$idexaimage) || $isExistUser <= 0 ){
 			$res2 = saveFileTarea($_FILES['file_'.$i],'foto-'.$i,$arr,$idexaimageexistente,$IdEI,$idemp,$i);
 			if ( $res2['status'] == "OK" ){
 
-				$Conn = voConn::getInstance();
-				$mysql = mysql_connect($Conn->server, $Conn->user, $Conn->pass);
-				mysql_select_db($Conn->db);
-				mysql_query("SET NAMES 'utf8'");	
+				// $Conn = voConn::getInstance();
+				// $mysql = mysql_connect($Conn->server, $Conn->user, $Conn->pass);
+				// mysql_select_db($Conn->db);
+				// mysql_query("SET NAMES 'utf8'");	
 
 				$query = "Insert Into exa_imagenes(
 											idexaimage,
@@ -83,9 +83,11 @@ if ($v1 !== md5($user.$idexaimage) || $isExistUser <= 0 ){
 								    		$idusr,
 								    		NOW()
 								    		)";
-				$result = mysql_query($query); 
+				// $result = mysql_query($query); 
 
-				mysql_close($mysql);
+				// mysql_close($mysql);
+
+				$result = $f->guardarDatos($query);
 
 				
 			}

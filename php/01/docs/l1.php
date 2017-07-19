@@ -19,16 +19,18 @@ set_time_limit(600);
 
 require_once("../PHPExcel/Classes/PHPExcel.php");
 require_once("../PHPExcel/Classes/PHPExcel/Reader/Excel2007.php");
-require_once('../vo/voConn.php');
+// require_once('../vo/voConn.php');
 require_once("../oFunctions.php");
+require_once("../oCentura.php");
+$f = oCentura::getInstance();
 
 $arg = $_POST["arg"];
 
 $F = oFunctions::getInstance();
-$Conn = voConn::getInstance();
-$mysql = mysql_connect($Conn->server, $Conn->user, $Conn->pass);
-mysql_select_db($Conn->db);
-mysql_query("SET NAMES UTF8");
+// $Conn = voConn::getInstance();
+// $mysql = mysql_connect($Conn->server, $Conn->user, $Conn->pass);
+// mysql_select_db($Conn->db);
+// mysql_query("SET NAMES UTF8");
 
 $objReader = PHPExcel_IOFactory::createReader('Excel2007');
 $objReader->setReadDataOnly(false);
@@ -40,81 +42,82 @@ $fileout= "--rep-1.xlsx";
 //$query = "Select count(idprodgpo) as sumid, idprodgpo,abrdep as grupo, grupo as dependencia from _viDemanda where (fecha between '$fi' and '$ff')  group by idprodgpo";
 $query = "SELECT * FROM _viUsuariosBecas $cad ";
 
-$result = mysql_query($query);
+// $result = mysql_query($query);
+$result = $this->getArray($query);
 
 $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel); //objeto de PHPExcel, para escribir en el excel
 $objWriter->setIncludeCharts(TRUE);
 
 
 	$i=9;$k=0;	
-	while ($fila = mysql_fetch_object($result)) {
+	// while ($fila = mysql_fetch_object($result)) {
+	foreach ($result as $j => $value) {
 
+		$objPHPExcel->getActiveSheet()->setCellValue("A".$i, $result[$j]->idusuario);
+		$objPHPExcel->getActiveSheet()->setCellValue("B".$i, $result[$j]->curp);
+		$objPHPExcel->getActiveSheet()->setCellValue("C".$i, $result[$j]->apellido_paterno);
 
-		$objPHPExcel->getActiveSheet()->setCellValue("A".$i, $fila->idusuario);
-		$objPHPExcel->getActiveSheet()->setCellValue("B".$i, $fila->curp);
-		$objPHPExcel->getActiveSheet()->setCellValue("C".$i, $fila->apellido_paterno);
+		$objPHPExcel->getActiveSheet()->setCellValue("D".$i, $result[$j]->apellido_materno);
+		$objPHPExcel->getActiveSheet()->setCellValue("E".$i, $result[$j]->nombre);
+		$objPHPExcel->getActiveSheet()->setCellValue("F".$i, $result[$j]->fecha_nacimiento);
 
-		$objPHPExcel->getActiveSheet()->setCellValue("D".$i, $fila->apellido_materno);
-		$objPHPExcel->getActiveSheet()->setCellValue("E".$i, $fila->nombre);
-		$objPHPExcel->getActiveSheet()->setCellValue("F".$i, $fila->fecha_nacimiento);
+		$objPHPExcel->getActiveSheet()->setCellValue("G".$i, $result[$j]->lugar_nacimiento);
+		$objPHPExcel->getActiveSheet()->setCellValue("H".$i, $result[$j]->sexo);
+		$objPHPExcel->getActiveSheet()->setCellValue("I".$i, $result[$j]->edad);
+		$objPHPExcel->getActiveSheet()->setCellValue("J".$i, $result[$j]->escuela);
+		$objPHPExcel->getActiveSheet()->setCellValue("K".$i, $result[$j]->otra_escuela);
 
-		$objPHPExcel->getActiveSheet()->setCellValue("G".$i, $fila->lugar_nacimiento);
-		$objPHPExcel->getActiveSheet()->setCellValue("H".$i, $fila->sexo);
-		$objPHPExcel->getActiveSheet()->setCellValue("I".$i, $fila->edad);
-		$objPHPExcel->getActiveSheet()->setCellValue("J".$i, $fila->escuela);
-		$objPHPExcel->getActiveSheet()->setCellValue("K".$i, $fila->otra_escuela);
-
-		$objPHPExcel->getActiveSheet()->setCellValue("L".$i, $fila->nivelc);
-		$objPHPExcel->getActiveSheet()->setCellValue("M".$i, $fila->grado);
-		$objPHPExcel->getActiveSheet()->setCellValue("N".$i, $fila->promedio);
-		$objPHPExcel->getActiveSheet()->setCellValue("O".$i, $fila->calle);
-		$objPHPExcel->getActiveSheet()->setCellValue("P".$i, $fila->no_ext);
-		$objPHPExcel->getActiveSheet()->setCellValue("Q".$i, $fila->no_int);
+		$objPHPExcel->getActiveSheet()->setCellValue("L".$i, $result[$j]->nivelc);
+		$objPHPExcel->getActiveSheet()->setCellValue("M".$i, $result[$j]->grado);
+		$objPHPExcel->getActiveSheet()->setCellValue("N".$i, $result[$j]->promedio);
+		$objPHPExcel->getActiveSheet()->setCellValue("O".$i, $result[$j]->calle);
+		$objPHPExcel->getActiveSheet()->setCellValue("P".$i, $result[$j]->no_ext);
+		$objPHPExcel->getActiveSheet()->setCellValue("Q".$i, $result[$j]->no_int);
 		
 
-		$objPHPExcel->getActiveSheet()->setCellValue("R".$i, $fila->colonia);
-		$objPHPExcel->getActiveSheet()->setCellValue("S".$i, $fila->localidad);
-		$objPHPExcel->getActiveSheet()->setCellValue("T".$i, $fila->ciudad);
-		$objPHPExcel->getActiveSheet()->setCellValue("U".$i, $fila->municipio);
-		$objPHPExcel->getActiveSheet()->setCellValue("V".$i, $fila->estado);
-		$objPHPExcel->getActiveSheet()->setCellValue("W".$i, $fila->email);
+		$objPHPExcel->getActiveSheet()->setCellValue("R".$i, $result[$j]->colonia);
+		$objPHPExcel->getActiveSheet()->setCellValue("S".$i, $result[$j]->localidad);
+		$objPHPExcel->getActiveSheet()->setCellValue("T".$i, $result[$j]->ciudad);
+		$objPHPExcel->getActiveSheet()->setCellValue("U".$i, $result[$j]->municipio);
+		$objPHPExcel->getActiveSheet()->setCellValue("V".$i, $result[$j]->estado);
+		$objPHPExcel->getActiveSheet()->setCellValue("W".$i, $result[$j]->email);
 
-	TUTOR	IFE	ARCHIVO IFE	DOM TUTOR	STATUS
+	// TUTOR	IFE	ARCHIVO IFE	DOM TUTOR	STATUS
 
 
-		$objPHPExcel->getActiveSheet()->setCellValue("X".$i, $fila->celular);
-		$objPHPExcel->getActiveSheet()->setCellValue("Y".$i, $fila->telefono);
-		$objPHPExcel->getActiveSheet()->setCellValue("Z".$i, $fila->formato1);
-		$objPHPExcel->getActiveSheet()->setCellValue("AA".$i, $fila->no_apoyo);
-		$objPHPExcel->getActiveSheet()->setCellValue("AB".$i, $fila->tipo_asesoria);
-		$objPHPExcel->getActiveSheet()->setCellValue("AC".$i, $fila->beneficiario);
+		$objPHPExcel->getActiveSheet()->setCellValue("X".$i, $result[$j]->celular);
+		$objPHPExcel->getActiveSheet()->setCellValue("Y".$i, $result[$j]->telefono);
+		$objPHPExcel->getActiveSheet()->setCellValue("Z".$i, $result[$j]->formato1);
+		$objPHPExcel->getActiveSheet()->setCellValue("AA".$i, $result[$j]->no_apoyo);
+		$objPHPExcel->getActiveSheet()->setCellValue("AB".$i, $result[$j]->tipo_asesoria);
+		$objPHPExcel->getActiveSheet()->setCellValue("AC".$i, $result[$j]->beneficiario);
 
-		$objPHPExcel->getActiveSheet()->setCellValue("AD".$i, $fila->beneficio);
-		$objPHPExcel->getActiveSheet()->setCellValue("AE".$i, $fila->tipo_asesoria2);
-		$objPHPExcel->getActiveSheet()->setCellValue("AF".$i, $fila->beneficiario2);
-		$objPHPExcel->getActiveSheet()->setCellValue("AG".$i, $fila->beneficio2);
-		$objPHPExcel->getActiveSheet()->setCellValue("AH".$i, $fila->tipo_asesoria2);
-		$objPHPExcel->getActiveSheet()->setCellValue("AI".$i, $fila->beneficiario3);
+		$objPHPExcel->getActiveSheet()->setCellValue("AD".$i, $result[$j]->beneficio);
+		$objPHPExcel->getActiveSheet()->setCellValue("AE".$i, $result[$j]->tipo_asesoria2);
+		$objPHPExcel->getActiveSheet()->setCellValue("AF".$i, $result[$j]->beneficiario2);
+		$objPHPExcel->getActiveSheet()->setCellValue("AG".$i, $result[$j]->beneficio2);
+		$objPHPExcel->getActiveSheet()->setCellValue("AH".$i, $result[$j]->tipo_asesoria2);
+		$objPHPExcel->getActiveSheet()->setCellValue("AI".$i, $result[$j]->beneficiario3);
 
-		$objPHPExcel->getActiveSheet()->setCellValue("AJ".$i, $fila->beneficio3);
-		$objPHPExcel->getActiveSheet()->setCellValue("AK".$i, $fila->compromiso1);
-		$objPHPExcel->getActiveSheet()->setCellValue("AL".$i, $fila->compromiso2);
-		$objPHPExcel->getActiveSheet()->setCellValue("AM".$i, $fila->compromiso3);
-		$objPHPExcel->getActiveSheet()->setCellValue("AN".$i, $fila->areayuda);
-		$objPHPExcel->getActiveSheet()->setCellValue("AO".$i, $fila->areayuda2);
-		$objPHPExcel->getActiveSheet()->setCellValue("AP".$i, $fila->areayuda3);
+		$objPHPExcel->getActiveSheet()->setCellValue("AJ".$i, $result[$j]->beneficio3);
+		$objPHPExcel->getActiveSheet()->setCellValue("AK".$i, $result[$j]->compromiso1);
+		$objPHPExcel->getActiveSheet()->setCellValue("AL".$i, $result[$j]->compromiso2);
+		$objPHPExcel->getActiveSheet()->setCellValue("AM".$i, $result[$j]->compromiso3);
+		$objPHPExcel->getActiveSheet()->setCellValue("AN".$i, $result[$j]->areayuda);
+		$objPHPExcel->getActiveSheet()->setCellValue("AO".$i, $result[$j]->areayuda2);
+		$objPHPExcel->getActiveSheet()->setCellValue("AP".$i, $result[$j]->areayuda3);
 
-		$objPHPExcel->getActiveSheet()->setCellValue("AQ".$i, $fila->tutor);
-		$objPHPExcel->getActiveSheet()->setCellValue("AR".$i, $fila->ife);
-		$objPHPExcel->getActiveSheet()->setCellValue("AS".$i, $fila->ife_file);
-		$objPHPExcel->getActiveSheet()->setCellValue("AT".$i, $fila->dom_tutor);
-		$objPHPExcel->getActiveSheet()->setCellValue("AU".$i, $fila->status);
-		$objPHPExcel->getActiveSheet()->setCellValue("AV".$i, $fila->is_beca);
+		$objPHPExcel->getActiveSheet()->setCellValue("AQ".$i, $result[$j]->tutor);
+		$objPHPExcel->getActiveSheet()->setCellValue("AR".$i, $result[$j]->ife);
+		$objPHPExcel->getActiveSheet()->setCellValue("AS".$i, $result[$j]->ife_file);
+		$objPHPExcel->getActiveSheet()->setCellValue("AT".$i, $result[$j]->dom_tutor);
+		$objPHPExcel->getActiveSheet()->setCellValue("AU".$i, $result[$j]->status);
+		$objPHPExcel->getActiveSheet()->setCellValue("AV".$i, $result[$j]->is_beca);
 
 
 		++$i;++$k;
 		$objPHPExcel->getActiveSheet()->insertNewRowBefore($i, 1);
-		//$title=$iddep==0?"CATALOGO DE SERVICIOS POR DEPENDENCIA ":"CATALOGO DE SERVICIOS DE '".utf8_decode($fila->grupo)."'";
+		//$title=$iddep==0?"CATALOGO DE SERVICIOS POR DEPENDENCIA ":"CATALOGO DE SERVICIOS DE '".utf8_decode($result[$j]->grupo)."'";
 	}
 	$j = $i+3;
 	//$objPHPExcel->getActiveSheet()->setCellValue("C3", $title);

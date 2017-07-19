@@ -208,60 +208,6 @@ $pdf->Cell(5,$pdf->nFont,'','L',0,'L');
 $pdf->Cell(5,$pdf->nFont,'','L',1,'L');
 
 
-
-
-// /* *********************************************************
-// /* *********************************************************
-
-// ** IMPRIME LISTADO
-// ** ********************************************************* */
-
-/*
-$pdf->SetFont('Arial','B',12);
-$pdf->SetFillColor(208,208,208);
-$pdf->setX(5);
-
-// Línea 1
-$pdf->setX(5);
-$pdf->SetFont('Arial','B',8);
-$pdf->Cell(35,$pdf->nFont,utf8_decode("FOLIO"),'LB',0,'L',1);
-$pdf->Cell(20,$pdf->nFont,utf8_decode("FECHA"),'LB',0,'C',1);
-$pdf->Cell(46,$pdf->nFont,utf8_decode("SOLICITANTE"),'LB',0,'L',1);
-$pdf->Cell(66,$pdf->nFont,utf8_decode("UBICACIÓN"),'LB',0,'L',1);
-$pdf->Cell(15,$pdf->nFont,utf8_decode("PREDIAL"),'LB',0,'L',1);
-$pdf->Cell(20,$pdf->nFont,utf8_decode("TERRENO"),'LB',0,'R',1);
-$pdf->Cell(20,$pdf->nFont,utf8_decode("CONSTRUC."),'LB',0,'R',1);
-$pdf->Cell(22,$pdf->nFont,utf8_decode("CATASTRAL"),'LB',0,'L',1);
-$pdf->Cell(25,$pdf->nFont,utf8_decode("V. CONCLUIDO"),'LBR',1,'L',1);
-
-$rst = mysql_query($query);
-$lID = 0;
-$pdf->SetFont('Arial','',7);
-while ($fila = mysql_fetch_object($rst)) {
-	$pdf->setX(5);
-	$pdf->Cell(35,$pdf->nFont,utf8_decode($fila->folio_format),'LB',0,'L',0);
-	$pdf->Cell(20,$pdf->nFont,utf8_decode($fila->cfecha_avaluo),'LB',0,'C',0);
-	$pdf->Cell(46,$pdf->nFont,utf8_decode($fila->nombre_solicitante),'LB',0,'L',0);
-	$pdf->Cell(66,$pdf->nFont,utf8_decode(substr(trim($fila->ubicacion),0,50)),'LB',0,'L',0);
-	$pdf->Cell(15,$pdf->nFont,utf8_decode($fila->cuenta_predial),'LB',0,'L',0);
-	$pdf->Cell(20,$pdf->nFont,number_format($fila->superficie_terreno, 2, '.', ','),'LB',0,'R',0);
-	$pdf->Cell(20,$pdf->nFont,number_format($fila->superficie_construccion, 2, '.', ','),'LB',0,'R',0);
-	$pdf->Cell(22,$pdf->nFont,utf8_decode($fila->cuenta_catastral),'LB',0,'L',0);
-	$pdf->Cell(25,$pdf->nFont,number_format($fila->valor_concluido, 2, '.', ','),'LBR',1,'R',0);
-	++$lID;
-}
-
-$pdf->setX(5);
-$pdf->Cell(244,$pdf->nFont,utf8_decode("TOTAL DE REGISTROS: "),'LB',0,'R',0);
-$pdf->SetFont('Arial','B',7);
-$pdf->Cell(25,$pdf->nFont,$lID,'TLBR',1,'R',1);
-
-*/
-// /* *********************************************************
-// ** CLOSE REPORT
-// ** ********************************************************* */
-
-//mysql_free_result($rst);
 $pdf->Output();
 
 ?>

@@ -1,18 +1,15 @@
 <?php 
-
-
-
+/*
 ini_set('display_errors', '0');
 error_reporting(E_ALL | E_STRICT);
 
 error_reporting(E_ALL);
 ini_set('display_errors', TRUE);
 ini_set('display_startup_errors', TRUE);
-
+*/
 date_default_timezone_set('America/Mexico_City');
 
 require_once('vo/voConnPDO.php');
-
 require_once('vo/voEmpty.php');
 
 class oCenturaPDO {
@@ -48,7 +45,7 @@ class oCenturaPDO {
 
 	private function getIdUserFromAlias($str){
 
-		$query = "select iduser from usuarios where username = '$str' and status_usuario = 1";
+		$query = "SELECT iduser FROM usuarios WHERE username = '$str' AND status_usuario = 1";
 
 		$Conn = new voConnPDO();
 		$result = $Conn->queryFetchAllAssocOBJ($query);
@@ -58,16 +55,13 @@ class oCenturaPDO {
 		}else{
 		   	$ret= $result[0]->iduser;
 		}
-
 		$Conn = null;
-
 		return $ret;
-
 	}
 
 	private function getIdEmpFromAlias($str){
 
-		$query = "select idemp from usuarios where username = '$str' and status_usuario = 1";
+		$query = "SELECT idemp FROM usuarios WHERE username = '$str' AND status_usuario = 1";
 
 		$Conn = new voConnPDO();
 		$result = $Conn->queryFetchAllAssocOBJ($query);
@@ -77,16 +71,13 @@ class oCenturaPDO {
 		}else{
 			$ret= $result[0]->idemp;
 		}
-
 		$Conn = null;
-
 		return $ret;
-	
 	}
 
 	private function getIdEmpFromIdEdoCta($id){
 
-		$query = "select idemp from estados_de_cuenta where idedocta = $id";
+		$query = "SELECT idemp FROM estados_de_cuenta WHERE idedocta = $id";
 
 		$Conn = new voConnPDO();
 		$result = $Conn->queryFetchAllAssocOBJ($query);
@@ -96,13 +87,14 @@ class oCenturaPDO {
 		}else{
 			$ret= $result[0]->idemp;
 		}
+		$Conn = null;
 		return $ret;
 
 	}
 
 	private function getCicloFromIdEmp($idemp=0){
 
-		$query = "select idciclo from cat_ciclos where idemp = $idemp and predeterminado = 1 and status_ciclo = 1 limit 1";
+		$query = "SELECT idciclo FROM cat_ciclos WHERE idemp = $idemp AND predeterminado = 1 AND status_ciclo = 1 LIMIT 1";
 
 		$Conn = new voConnPDO();
 		$result = $Conn->queryFetchAllAssocOBJ($query);
@@ -112,13 +104,14 @@ class oCenturaPDO {
 		}else{
 			$ret = $result[0]->idciclo;
 		}
+		$Conn = null;
 		return $ret;
 	
 	}
 
 	private function getNivelFromIdGrupo($idgrupo=0,$idciclo=0){
 
-		$query = "select idnivel from _viNivel_Grupos where idgrupo = $idgrupo and idciclo = $idciclo limit 1";
+		$query = "SELECT idnivel FROM _viNivel_Grupos WHERE idgrupo = $idgrupo AND idciclo = $idciclo LIMIT 1";
 
 		$Conn = new voConnPDO();
 		$result = $Conn->queryFetchAllAssocOBJ($query);
@@ -128,6 +121,7 @@ class oCenturaPDO {
 		}else{
 			$ret = $result[0]->idnivel;
 		}
+		$Conn = null;
 		return $ret;
 
 	}
@@ -135,7 +129,7 @@ class oCenturaPDO {
 
 	private function getNivelFromIdUserAlu($iduseralu=0){
 
-		$query = "select idnivel from _viGrupo_Alumnos where iduseralu = $iduseralu order by idciclo desc limit 1";
+		$query = "SELECT idnivel FROM _viGrupo_Alumnos WHERE iduseralu = $iduseralu ORDER BY idciclo DESC LIMIT 1";
 
 		$Conn = new voConnPDO();
 		$result = $Conn->queryFetchAllAssocOBJ($query);
@@ -145,6 +139,7 @@ class oCenturaPDO {
 		}else{
 			$ret = $result[0]->idnivel;
 		}
+		$Conn = null;
 		return $ret;
 
 	}
@@ -154,7 +149,7 @@ class oCenturaPDO {
 		parse_str($cad);
 
         $idemp = $this->getIdEmpFromAlias($u);
-	    $query = "select count(idgrupo) as idgrupo from cat_grupos where idgrupo = $idgrupo and idemp = $idemp and bloqueado = 1 limit 1";
+	    $query = "SELECT count(idgrupo) AS idgrupo FROM cat_grupos WHERE idgrupo = $idgrupo AND idemp = $idemp AND bloqueado = 1 LIMIT 1";
 
      	$Conn = new voConnPDO();
 		$result = $Conn->queryFetchAllAssocOBJ($query);
@@ -164,13 +159,14 @@ class oCenturaPDO {
 		}else{
 				$ret = $result[0]->idgrupo;
 		}
+		$Conn = null;
 	    return $ret;
 
 	}
 
 	private function IsExistUserConnect($iduser,$idemp) {
 	  
-	    $query = "select iduser from usuarios_conectados where iduser = $iduser and idemp = $idemp limit 1";
+	    $query = "SELECT iduser FROM usuarios_conectados WHERE iduser = $iduser AND idemp = $idemp LIMIT 1";
 
      	$Conn = new voConnPDO();
 		$result = $Conn->queryFetchAllAssocOBJ($query);
@@ -180,12 +176,13 @@ class oCenturaPDO {
 		}else{
 				$ret= $result[0]->iduser;
 		}
+		$Conn = null;
 	    return $ret;
 	 }
 
 	private function IsConnectUser($iduser,$idemp) {
 	  
-	    $query = "select iduser from usuarios_conectados where iduser = $iduser and idemp = $idemp and isconectado = 1 limit 1";
+	    $query = "SELECT iduser FROM usuarios_conectados WHERE iduser = $iduser AND idemp = $idemp AND isconectado = 1 LIMIT 1";
 
      	$Conn = new voConnPDO();
 		$result = $Conn->queryFetchAllAssocOBJ($query);
@@ -195,6 +192,7 @@ class oCenturaPDO {
 		}else{
 				$ret= $result[0]->iduser;
 		}
+		$Conn = null;
 	    return $ret;
 	 }
 
@@ -204,13 +202,13 @@ class oCenturaPDO {
 
      	$Conn = new voConnPDO();
 		$ret = $Conn->queryFetchAllAssocOBJ($query);
-
+		$Conn = null;
 	    return $ret;
 	 }
 
 	 public function getLogoEmp($idemp){
 	  
-	    $query = "select valor from config where llave = 'logo-emp-rep' and idemp = $idemp";
+	    $query = "SELECT valor FROM config WHERE llave = 'logo-emp-rep' AND idemp = $idemp";
 
      	$Conn = new voConnPDO();
 		$result = $Conn->queryFetchAllAssocOBJ($query);
@@ -220,12 +218,13 @@ class oCenturaPDO {
 		}else{
 				$ret= $result[0]->valor;
 		}
+		$Conn = null;
 	    return $ret;
 	 }
 
 	 public function getLogoIB($idemp){
 	  
-	    $query = "select valor from config where llave = 'logo-ib-emp' and idemp = $idemp";
+	    $query = "SELECT valor FROM config WHERE llave = 'logo-ib-emp' AND idemp = $idemp";
 
      	$Conn = new voConnPDO();
 		$result = $Conn->queryFetchAllAssocOBJ($query);
@@ -235,13 +234,14 @@ class oCenturaPDO {
 		}else{
 				$ret= $result[0]->valor;
 		}
+		$Conn = null;
 	    return $ret;
 	 }
 
 
 	 public function getNombreEmp($idemp){
 	  
-	    $query = "select rs from empresa where idemp = $idemp";
+	    $query = "SELECT rs FROM empresa WHERE idemp = $idemp";
 
      	$Conn = new voConnPDO();
 		$result = $Conn->queryFetchAllAssocOBJ($query);
@@ -251,6 +251,7 @@ class oCenturaPDO {
 		}else{
 				$ret= $result[0]->rs;
 		}
+		$Conn = null;
 	    return $ret;
 	 }
 
@@ -283,6 +284,38 @@ class oCenturaPDO {
 		return $rc1;	
 	 }
 
+	private function guardarDatos($query=""){
+
+			$Conn = new voConnPDO();
+			$ret = array();
+			$result = $Conn->exec($query);
+
+			if ($result != 1){
+				$ret = $result;
+			}else{
+				$ret = "OK";
+			}
+
+			$Conn = null;
+			return $ret;
+
+	}
+
+	private function getArray($query){
+
+			$rs=0;
+		 	$Conn = new voConnPDO();
+			$rst = $Conn->queryFetchAllAssocOBJ($query);
+			$Conn = null;
+			return $rst;
+	}
+
+	private function execQuery($query){
+			$Conn = new voConnPDO();
+			$rst = $Conn->query($query);
+			$Conn = null;
+			return $rst;
+	}
 
 	public function getComboPDO($index=0,$arg="",$pag=0,$limite=0,$tipo=0,$otros=""){
 
@@ -292,46 +325,45 @@ class oCenturaPDO {
 			case 0:
 					parse_str($arg);
 					$pass = md5($passwordL);
-					$query = "SELECT _viUsuarios.*, username as label, concat(iduser,'|',password,'|',idemp,'|',empresa,'|',idusernivelacceso,'|',registrosporpagina,'|',clave,'|',param1) as data 
-							FROM  _viUsuarios where username = '$username' and password = '$pass' and status_usuario = 1";
+					$query = "SELECT username AS label, concat(iduser,'|',password,'|',idemp,'|',empresa,'|',idusernivelacceso,'|',registrosporpagina,'|',clave,'|',param1) AS data 
+							FROM  _viUsuarios WHERE username = '$username' AND password = '$pass' AND status_usuario = 1";
 				break;						
 
 			case 1:
 				parse_str($arg);
 				$idemp = $this->getIdEmpFromAlias($u);
-				// $idciclo = $this->getCicloFromIdEmp($idemp);		        
 				$idnivel = $this->getNivelFromIdGrupo($idgrupo,$idciclo);		        
-				$query = "SELECT grupo as label, idgrupo as data 
-						FROM _viNivel_Grupos where idemp = $idemp and idciclo = $idciclo and idnivel = $idnivel
-						Order By idgrupo asc ";
+				$query = "SELECT grupo AS label, idgrupo AS data 
+						FROM _viNivel_Grupos WHERE idemp = $idemp AND idciclo = $idciclo AND idnivel = $idnivel
+						ORDER BY idgrupo ASC ";
 				break;		
 
 			case 2:
 				$query = "SELECT *
-						FROM _viEdosCta where idedocta = $arg limit 1";
+						FROM _viEdosCta WHERE idedocta = $arg LIMIT 1";
 				break;		
 
 			case 3:
 				parse_str($arg);
 				$idemp = $this->getIdEmpFromAlias($u);
-				$query = "SELECT descripcion as label, idlistavencimiento as data
-						FROM cat_listas_vencimientos where idemp = $idemp ";
+				$query = "SELECT descripcion AS label, idlistavencimiento AS data
+						FROM cat_listas_vencimientos WHERE idemp = $idemp ";
 				break;		
 
 			case 4:
 				parse_str($arg);
 				$idemp = $this->getIdEmpFromAlias($u);
 				$idciclo = $this->getCicloFromIdEmp($idemp);		        
-				$query = "SELECT distinct materia as label , idgrumat as data, idboleta, alumno
-						FROM _viBoletas where idgrualu = $idgrualu and isagrupadora_grumat = 0 and idciclo = $idciclo and idemp = $idemp order by orden_impresion asc ";
+				$query = "SELECT DISTINCT materia AS label , idgrumat AS data, idboleta, alumno
+						FROM _viBoletas WHERE idgrualu = $idgrualu AND isagrupadora_grumat = 0 AND idciclo = $idciclo AND idemp = $idemp ORDER BY orden_impresion ASC ";
 				break;		
 
 			case 5:
 				parse_str($arg);
 				$idemp = $this->getIdEmpFromAlias($u);
 				$eval = intval($eval)+1;
-				$query = "SELECT *, round(cal_real,1) as calreal, trim(descripcion) as desc2
-						FROM _viGruMatBol where idgrumat = $idgrumat and num_eval = $eval and idboleta = $idboleta and idemp = $idemp order by idbolpar asc ";
+				$query = "SELECT *, round(cal_real,1) AS calreal, trim(descripcion) AS desc2
+						FROM _viGruMatBol WHERE idgrumat = $idgrumat AND num_eval = $eval AND idboleta = $idboleta AND idemp = $idemp ORDER BY idbolpar ASC ";
 				break;	
 
 			case 6:
@@ -339,28 +371,26 @@ class oCenturaPDO {
 				parse_str($arg);
 				$idemp = $this->getIdEmpFromAlias($u);
 				$idciclo = $this->getCicloFromIdEmp($idemp);		        
-				$query = "SELECT *, descripcion_avanzada as descavanz
+				$query = "SELECT *, descripcion_avanzada AS descavanz
 						FROM _viGruMatConMKB 
-						where idbolpar = $idbolpar 
-							and idboleta = $idboleta 
-							and idgrumatcon = $idgrumatcon 
-							and idgrualu = $idgrualu
-							and idciclo = $idciclo
-							and idemp = $idemp order by idbolpar asc ";
+						WHERE idbolpar = $idbolpar 
+							AND idboleta = $idboleta 
+							AND idgrumatcon = $idgrumatcon 
+							AND idgrualu = $idgrualu
+							AND idciclo = $idciclo
+							AND idemp = $idemp ORDER BY idbolpar ASC ";
 				break;		
 
 			case 7:
 
 				parse_str($arg);
-				// $idemp = $this->getIdEmpFromAlias($u);
-				// $idciclo = $this->getCicloFromIdEmp($idemp);
 				$eval = intval($eval) ;
 				$cal = "cal".$eval;		        
 				$con = "con".$eval;		        
 				$ina = "ina".$eval;		        
-				$query = "SELECT round($cal,0) as cal, $con as con, $ina as ina, profesor
+				$query = "SELECT round($cal,0) AS cal, $con AS con, $ina AS ina, profesor
 						FROM _viBoletas 
-						where idboleta = $idboleta ";
+						WHERE idboleta = $idboleta ";
 				break;		
 
 			case 8:
@@ -371,17 +401,17 @@ class oCenturaPDO {
 				$eval = intval($eval) + 1;	        
 				$query = "SELECT *
 						FROM _viBolAsist 
-						where idgrualu = $idgrualu 
-							and idboleta = $idboleta 
-							and evaluacion = $eval 
-							and idemp = $idemp
-							and (asistencia = 0 or asistencia = 3 or observaciones != '')  order by fecha desc ";
+						WHERE idgrualu = $idgrualu 
+							AND idboleta = $idboleta 
+							AND evaluacion = $eval 
+							AND idemp = $idemp
+							AND (asistencia = 0 OR asistencia = 3 OR observaciones != '') ORDER BY fecha DESC ";
 				break;		
 			case 9:
 				parse_str($arg);
 				$idemp = $this->getIdEmpFromAlias($u);
 				$query = "SELECT prefijo_evaluacion, numero_evaluaciones
-						FROM cat_niveles where idemp = $idemp and clave_nivel = $clave_nivel limit 1 ";
+						FROM cat_niveles WHERE idemp = $idemp AND clave_nivel = $clave_nivel LIMIT 1 ";
 				break;		
 
 			case 10: // 
@@ -389,14 +419,14 @@ class oCenturaPDO {
 				$idemp = $this->getIdEmpFromAlias($u);
 				$idciclo = $this->getCicloFromIdEmp($idemp);
 
-				$query = "SELECT nombres_alumno as label, idgrualu as data, grupo, clave_nivel, ver_boleta_interna, grupo_bloqueado, grado, grado_pai, ispai_grupo
+				$query = "SELECT nombres_alumno AS label, idgrualu AS data, grupo, clave_nivel, ver_boleta_interna, grupo_bloqueado, grado, grado_pai, ispai_grupo
 						FROM _viGrupo_Alumnos 
-						where idemp = $idemp 
-							and idciclo = $idciclo 
-							and idalumno = $idalumno 
-							and status_grualu = 1 
-							and grupo_bloqueado = 0 
-						Order By label asc ";
+						WHERE idemp = $idemp 
+							AND idciclo = $idciclo 
+							AND idalumno = $idalumno 
+							AND status_grualu = 1 
+							AND grupo_bloqueado = 0 
+						ORDER BY label ASC ";
 				break;		
 
 			case 11:
@@ -404,9 +434,9 @@ class oCenturaPDO {
 				$idemp = $this->getIdEmpFromAlias($u);
 				$idciclo = $this->getCicloFromIdEmp($idemp);
 
-				$query = "SELECT distinct vencimiento as data
+				$query = "SELECT DISTINCT vencimiento AS data
 						FROM _viEdosCta 
-						where idemp = $idemp 
+						WHERE idemp = $idemp 
 							  AND idciclo = $idciclo 
 						";
 
@@ -416,20 +446,20 @@ class oCenturaPDO {
 				parse_str($arg);
 				$idemp = $this->getIdEmpFromAlias($u);
 				$query = "SELECT idemergencia, nombre, tel1, parentezco
-						FROM cat_emergencias where idemp = $idemp ";
+						FROM cat_emergencias WHERE idemp = $idemp ";
 				break;		
 
 			case 13:
 				$query = "SELECT idemergencia, nombre, tel1, parentezco, status_emergencia
-						FROM cat_emergencias where idemergencia = ".$arg;
+						FROM cat_emergencias WHERE idemergencia = ".$arg;
 				break;		
 
 			case 14:
 				parse_str($arg);
 				$idemp = $this->getIdEmpFromAlias($u);
 				$idciclo = $this->getCicloFromIdEmp($idemp);		        
-				$query = "SELECT distinct materia as label , idgrumat as data, idboleta, alumno
-						FROM _viBolForPAI where idgrualu = $idgrualu and idciclo = $idciclo and idemp = $idemp order by idboleta asc ";
+				$query = "SELECT DISTINCT materia AS label , idgrumat AS data, idboleta, alumno
+						FROM _viBolForPAI WHERE idgrualu = $idgrualu AND idciclo = $idciclo AND idemp = $idemp ORDER BY idboleta ASC ";
 				break;		
 
 			case 15:
@@ -437,15 +467,15 @@ class oCenturaPDO {
 				$idemp = $this->getIdEmpFromAlias($u);
 				$idciclo = $this->getCicloFromIdEmp($idemp);		        
 				$query = "SELECT idboleta, materia, idgrumat, idpaiareadisciplinaria, grado_pai
-						FROM _viBolForPAI where idgrualu = $idgrualu and ispai_grupo = 1 and ispai_materia = 1 and idciclo = $idciclo and idemp = $idemp order by orden_impresion asc ";
+						FROM _viBolForPAI WHERE idgrualu = $idgrualu AND ispai_grupo = 1 AND ispai_materia = 1 AND idciclo = $idciclo AND idemp = $idemp ORDER BY orden_impresion ASC ";
 				break;	
 
 			case 16:
 				parse_str($arg);
 				$idemp = $this->getIdEmpFromAlias($u);
-				$query = "SELECT generacion as label, idgeneracion as data  
-						FROM exa_generaciones where idemp = $idemp and status_generacion = 1
-						Order By data asc ";
+				$query = "SELECT generacion AS label, idgeneracion AS data  
+						FROM exa_generaciones WHERE idemp = $idemp AND status_generacion = 1
+						ORDER BY data ASC ";
 				break;		
 
 			case 51:
@@ -456,13 +486,13 @@ class oCenturaPDO {
 				$pos = array_search($cve, $arr0);
 				$arr1 = array(1,2,3,4,5);
 				if ( intval($otros) > 0 ){
-					$query = "SELECT concat(director,' - ',nivel) as label, iddirector as data 
-							FROM _viDirectores where idemp = $idemp and status_director = 1 and clave_nivel IN ($otros)
-							Order By data asc ";
+					$query = "SELECT concat(director,' - ',nivel) AS label, iddirector AS data 
+							FROM _viDirectores WHERE idemp = $idemp AND status_director = 1 AND clave_nivel IN ($otros)
+							ORDER BY data ASC ";
 				}else{
-					$query = "SELECT concat(director,' - ',nivel) as label, iddirector as data 
-							FROM _viDirectores where idemp = $idemp and status_director = 1 
-							Order By data asc ";
+					$query = "SELECT concat(director,' - ',nivel) AS label, iddirector AS data 
+							FROM _viDirectores WHERE idemp = $idemp AND status_director = 1 
+							ORDER BY data ASC ";
 				}		
 				break;	
 
@@ -474,9 +504,9 @@ class oCenturaPDO {
 
 				$query = "SELECT *
 						FROM grupo_materia_config_save 
-						where idprofesor = $idusr 
-								and idciclo = $idciclo 
-								and idemp = $idemp 
+						WHERE idprofesor = $idusr 
+								AND idciclo = $idciclo 
+								AND idemp = $idemp 
 						";
 				break;		
 
@@ -484,10 +514,10 @@ class oCenturaPDO {
 
 				$query = "SELECT ruta
 						FROM _viPDFs 
-						Where status_pdf = 1 and 
+						WHERE status_pdf = 1 AND 
 								categoria_pdf = 0
-						Order By idpdf desc 
-						Limit 1 
+						ORDER BY idpdf DESC 
+						LIMIT 1 
 						";
 				break;		
 
@@ -496,11 +526,11 @@ class oCenturaPDO {
 				$idnivel = $this->getNivelFromIdUserAlu($arg);
 				$query = "SELECT ruta
 						FROM _viPDFs 
-						Where status_pdf = 1 and 
+						WHERE status_pdf = 1 AND 
 								idnivel = $idnivel and
 								categoria_pdf = 1
-						Order By idpdf desc 
-						Limit 1 
+						ORDER BY idpdf DESC 
+						LIMIT 1 
 						";
 				break;		
 
@@ -509,9 +539,9 @@ class oCenturaPDO {
 		        $idemp = $this->getIdEmpFromAlias($u);
 				$query = "SELECT *
 						FROM cat_beneficios_giros 
-						Where idemp = $idemp and 
+						WHERE idemp = $idemp AND 
 								status_giro_beneficio = 1 
-						Order By idgirobeneficio desc ";
+						ORDER BY idgirobeneficio DESC ";
 				break;		
 
 			case 60:
@@ -519,18 +549,13 @@ class oCenturaPDO {
 		        $idemp = $this->getIdEmpFromAlias($u);
 				$query = "SELECT *
 						FROM exa_generaciones
-						Where idemp = $idemp and 
+						WHERE idemp = $idemp AND 
 								status_generacion = 1 
-						Order By idgeneracion desc ";
+						ORDER BY idgeneracion DESC ";
 				break;		
 
 	  	}
-
-	 	$Conn = new voConnPDO();
-		$result = $Conn->queryFetchAllAssocOBJ($query);
-
-		$Conn = null;
-
+		$result = $this->getArray($query);
 		return $result;
 	}
 
@@ -544,14 +569,14 @@ class oCenturaPDO {
 		        $idemp = $this->getIdEmpFromAlias($u);
 				$query = "SELECT *
 							FROM empresa
-							where idemp = $idemp ";
+							WHERE idemp = $idemp ";
 				break;
 
 			case -1:
 				parse_str($cad);
 		        $idemp = $this->getIdEmpFromAlias($u);
 				$query = "SELECT *
-						FROM empresa where idemp = $idemp and status_empresa = 1 limit 1";
+						FROM empresa WHERE idemp = $idemp AND status_empresa = 1 LIMIT 1";
 				break;			
 
 			case 0:
@@ -559,35 +584,35 @@ class oCenturaPDO {
 		        $idemp = $this->getIdEmpFromAlias($u);
 				$idciclo = $this->getCicloFromIdEmp($idemp);		        
 				$query = "SELECT *
-						FROM _viGruMatConMKB where idgrumatconmkb = $idgrumatconmkb and idemp = $idemp and idciclo = $idciclo and status_alumno = 1 order by num_lista asc";
+						FROM _viGruMatConMKB WHERE idgrumatconmkb = $idgrumatconmkb AND idemp = $idemp AND idciclo = $idciclo AND status_alumno = 1 ORDER BY num_lista asc";
 				break;						
 			case 1:
 				parse_str($cad);
 		        $idemp = $this->getIdEmpFromAlias($u);
 				$idciclo = $this->getCicloFromIdEmp($idemp);		        
 				$query = "SELECT *
-						FROM _viBoletas where idgrumat = $idgrumat and idemp = $idemp and idciclo = $idciclo order by num_lista asc";
+						FROM _viBoletas WHERE idgrumat = $idgrumat AND idemp = $idemp AND idciclo = $idciclo ORDER BY num_lista asc";
 				break;						
 			case 2:
 				parse_str($cad);
 		        $idemp = $this->getIdEmpFromAlias($u);
 				$idciclo = $this->getCicloFromIdEmp($idemp);		        
 				$query = "SELECT *
-						FROM _viBolAsist where idgrumat = $idgrumat and fecha = '$fecha' and idemp = $idemp order by num_lista asc";
+						FROM _viBolAsist WHERE idgrumat = $idgrumat AND fecha = '$fecha' AND idemp = $idemp ORDER BY num_lista asc";
 				break;						
 			case 3:
 				parse_str($cad);
 		        $idemp = $this->getIdEmpFromAlias($u);
 				$idciclo = $this->getCicloFromIdEmp($idemp);		        
 				$query = "SELECT *
-						FROM _viGruMatConMKB where idgrumatcon = $idgrumatcon and idgrumatconmkb = $idgrumatconmkb and idgrualu = $idgrualu and idemp = $idemp and idciclo = $idciclo and status_alumno = 1 limit 1";
+						FROM _viGruMatConMKB WHERE idgrumatcon = $idgrumatcon AND idgrumatconmkb = $idgrumatconmkb AND idgrualu = $idgrualu AND idemp = $idemp AND idciclo = $idciclo AND status_alumno = 1 LIMIT 1";
 				break;						
 
 			case 4:
 				parse_str($cad);
 		        $idemp = $this->getIdEmpFromAlias($u);
 				$query = "SELECT *
-						FROM _viUsuariosConectados where idemp = $idemp and isconectado = 1 ";
+						FROM _viUsuariosConectados WHERE idemp = $idemp AND isconectado = 1 ";
 				break;						
 
 			case 5:
@@ -602,10 +627,10 @@ class oCenturaPDO {
 				if (    in_array( $cve, $arr0 )     ) {
 						$query = "SELECT *
 								FROM _viEvalConfig
-								Where idemp = $idemp and clave_nivel IN ($otros) order by clave_nivel asc ";
+								WHERE idemp = $idemp AND clave_nivel IN ($otros) ORDER BY clave_nivel ASC ";
 				}else{
 						$query = "SELECT *
-						FROM _viEvalConfig where idemp = $idemp order by clave_nivel asc ";
+						FROM _viEvalConfig WHERE idemp = $idemp ORDER BY clave_nivel ASC ";
 				}
 
 				break;						
@@ -613,7 +638,7 @@ class oCenturaPDO {
 			case 6:
 				$query = "SELECT *
 								FROM evaluaciones_config
-							where idevalconfig = $cad ";
+							WHERE idevalconfig = $cad ";
 				break;
 
 			case 7:
@@ -621,15 +646,13 @@ class oCenturaPDO {
 		        $idemp = $this->getIdEmpFromAlias($u);
 				$idciclo = $this->getCicloFromIdEmp($idemp);		        
 				$query = "SELECT *
-						FROM _viBolAsist where idboleta = $idboleta and fecha = '$fecha' and evaluacion = $eval and idemp = $idemp order by num_lista asc";
+						FROM _viBolAsist WHERE idboleta = $idboleta AND fecha = '$fecha' AND evaluacion = $eval AND idemp = $idemp ORDER BY num_lista asc";
 				break;		
 
 			case 8:
 				parse_str($cad);
-		  //       $idemp = $this->getIdEmpFromAlias($u);
-				// $idciclo = $this->getCicloFromIdEmp($idemp);		        
 				$query = "SELECT *
-						FROM boleta_partes where idboleta = $idboleta and idgrumatcon = $idgrumatcon limit 1";
+						FROM boleta_partes WHERE idboleta = $idboleta AND idgrumatcon = $idgrumatcon LIMIT 1";
 				break;						
 
 			case 9:  // Get Eval for IdGruAlu
@@ -652,17 +675,17 @@ class oCenturaPDO {
 		        }
 		        
 		        if ( $numval == 9 ){
-					$query = "SELECT ".$ncal." as cal, ".$ncon." as con, ".$nina." as ina, idmatclas, padre
+					$query = "SELECT ".$ncal." AS cal, ".$ncon." AS con, ".$nina." AS ina, idmatclas, padre
 									FROM _viBoletas
-								Where idboleta = $idboleta $otros ";
+								WHERE idboleta = $idboleta $otros ";
 		        }elseif ( $numval == 10 ){
-					$query = "SELECT ".$ncal." as cal, ".$ncon." as con, ".$nina." as ina, idmatclas, padre
+					$query = "SELECT ".$ncal." AS cal, ".$ncon." AS con, ".$nina." AS ina, idmatclas, padre
 									FROM _viBoletas
-								Where idboleta = $idboleta $otros ";
+								WHERE idboleta = $idboleta $otros ";
 				}else{
-					$query = "SELECT ".$ncal." as cal, ".$ncon." as con, ".$nina." as ina, ".$nobs." as obs, idmatclas, padre
+					$query = "SELECT ".$ncal." AS cal, ".$ncon." AS con, ".$nina." AS ina, ".$nobs." AS obs, idmatclas, padre
 									FROM _viBoletas
-								Where idboleta = $idboleta $otros ";
+								WHERE idboleta = $idboleta $otros ";
 				}
 
 				break;
@@ -672,19 +695,19 @@ class oCenturaPDO {
 		        $idemp = $this->getIdEmpFromAlias($u);
 				$query = "SELECT *
 								FROM pases_salida
-							Where idciclo = $idciclo and idgrupo = $idgrupo and idemp = $idemp and status_psa = 1  order by idpsa desc ";
+							WHERE idciclo = $idciclo AND idgrupo = $idgrupo AND idemp = $idemp AND status_psa = 1 ORDER BY idpsa DESC ";
 				break;
 			case 11:
 				$query = "SELECT  *
 								FROM pases_salida 
-							where idpsa = $cad ";
+							WHERE idpsa = $cad ";
 				break;
 
 			case 12:
 				parse_str($cad);
 				$query = "SELECT *
 								FROM _viPSA_Alumnos
-							Where idpsa = $idpsa order by idpsa asc ";
+							WHERE idpsa = $idpsa ORDER BY idpsa ASC ";
 				break;
 
 			case 13:
@@ -696,17 +719,17 @@ class oCenturaPDO {
 				$pos = array_search($cve, $arr0);
 				$arr1 = array(1,2,3,4,5);
 
-								// Where idemp = $idemp and grupo_ciclo_nivel_visible = 1 and clave_nivel IN ($otros) order by clave_nivel asc";
+								// WHERE idemp = $idemp AND grupo_ciclo_nivel_visible = 1 AND clave_nivel IN ($otros) ORDER BY clave_nivel asc";
 
 				if (    in_array( $cve, $arr0 )     ) {
 						$query = "SELECT idgponiv, idgrupo, grupo_visible, grupo_ciclo_nivel_visible, bloqueado, clave, grupo, 
 										ciclo, clave_nivel, grado, idciclo
 								FROM _viNivel_Grupos
-								Where idemp = $idemp and grupo_ciclo_nivel_visible = 1 and clave_nivel IN ($otros) order by idnivel, idgrupo asc";
+								WHERE idemp = $idemp AND grupo_ciclo_nivel_visible = 1 AND clave_nivel IN ($otros) ORDER BY idnivel, idgrupo asc";
 				}else{
 						$query = "SELECT *
 										FROM _viNivel_Grupos
-									Where idemp = $idemp and grupo_ciclo_nivel_visible = 1 order by  idnivel, idgrupo asc";
+									WHERE idemp = $idemp AND grupo_ciclo_nivel_visible = 1 ORDER BY  idnivel, idgrupo asc";
 				}
 
 				break;
@@ -715,21 +738,21 @@ class oCenturaPDO {
 				parse_str($cad);
 				$idemp = $this->getIdEmpFromAlias($u);
 				$query = "SELECT alumno, idalumno 
-						FROM _viGrupo_Alumnos where idciclo = $idciclo and idgrupo = $idgrupo and idemp = $idemp and status_grualu = 1
-						order by alumno asc ";
+						FROM _viGrupo_Alumnos WHERE idciclo = $idciclo AND idgrupo = $idgrupo AND idemp = $idemp AND status_grualu = 1
+						ORDER BY alumno ASC ";
 				break;		
 
 			case 15:
 				$query = "SELECT  *
 								FROM _viPSA 
-							where idpsa = $cad ";
+							WHERE idpsa = $cad ";
 				break;
 
 			case 16:
 				parse_str($cad);
 				$query = "SELECT *
 								FROM _viPSA_Alumnos
-							Where idpsa = $idpsa and idalumno = $idalumno limit 1 ";
+							WHERE idpsa = $idpsa AND idalumno = $idalumno LIMIT 1 ";
 				break;
 
 			case 17:
@@ -737,8 +760,8 @@ class oCenturaPDO {
 					$iduseralumno = $this->getIdUserFromAlias($u);
 			        $idemp = $this->getIdEmpFromAlias($u);
 
-					$query = "SELECT alumno as label, idalumno as data, nombre_alumno 
-							FROM _viFamAlu where iduseralufortutor = $iduseralumno and status_famalu = 1 and idemp = 1";
+					$query = "SELECT alumno AS label, idalumno AS data, nombre_alumno 
+							FROM _viFamAlu WHERE iduseralufortutor = $iduseralumno AND status_famalu = 1 AND idemp = 1";
 					break;		
 
 			case 18:
@@ -763,22 +786,22 @@ class oCenturaPDO {
 		        		break;
 
 		        	case 1:
-		        		$tBeca = " ( beca_arji > 0 And descto_becas > 0 ) And ";
+		        		$tBeca = " ( beca_arji > 0 AND descto_becas > 0 ) AND ";
 		        		$tDescto = " ( (beca_arji/100) * subtotal ) ";
 		        		break;
 
 		        	case 2:
-		        		$tBeca = " ( beca_sep > 0 And descto_becas > 0 ) And ";
+		        		$tBeca = " ( beca_sep > 0 AND descto_becas > 0 ) AND ";
 		        		$tDescto = " ( (beca_sep/100) * subtotal ) ";
 		        		break;
 
 		        	case 3:
-		        		$tBeca = " ( beca_bach > 0 And descto_becas > 0 ) And ";
+		        		$tBeca = " ( beca_bach > 0 AND descto_becas > 0 ) AND ";
 		        		$tDescto = " ( (beca_bach/100) * subtotal ) ";
 		        		break;
 
 		        	case 4:
-		        		$tBeca = " ( beca_sp > 0 And descto_becas > 0 ) And ";
+		        		$tBeca = " ( beca_sp > 0 AND descto_becas > 0 ) AND ";
 		        		$tDescto = " ( (beca_sp/100) * subtotal ) ";
 		        		break;		        		
 
@@ -790,18 +813,18 @@ class oCenturaPDO {
 		        $ff = $f1[2].'-'.$f1[1].'-'.$f1[0].' 23:59:59';
 
 				$query = "SELECT idconcepto, concepto, 
-								SUM( IF ( clave_nivel = 1, ".$tDescto.", 0 ) ) as 'cero', 
-								SUM( IF ( clave_nivel = 2, ".$tDescto.", 0 ) ) as 'uno', 
-								SUM( IF ( clave_nivel = 3, ".$tDescto.", 0 ) ) as 'dos', 
-								SUM( IF ( clave_nivel = 4, ".$tDescto.", 0 ) ) as 'tres', 
-								SUM( IF ( clave_nivel = 5, ".$tDescto.", 0 ) ) as 'cuatro' 
+								SUM( IF ( clave_nivel = 1, ".$tDescto.", 0 ) ) AS 'cero', 
+								SUM( IF ( clave_nivel = 2, ".$tDescto.", 0 ) ) AS 'uno', 
+								SUM( IF ( clave_nivel = 3, ".$tDescto.", 0 ) ) AS 'dos', 
+								SUM( IF ( clave_nivel = 4, ".$tDescto.", 0 ) ) AS 'tres', 
+								SUM( IF ( clave_nivel = 5, ".$tDescto.", 0 ) ) AS 'cuatro' 
 							FROM _viEdosCta
-							WHERE 	idemp = $idemp And 
-									idciclo = $idciclo And 
-									status_movto = 1 And 
-									idemisorfiscal = $emisor And 
+							WHERE 	idemp = $idemp AND 
+									idciclo = $idciclo AND 
+									status_movto = 1 AND 
+									idemisorfiscal = $emisor AND 
 									".$tBeca."
-									(fecha_de_pago >= '$fi' and fecha_de_pago <= '$ff')
+									(fecha_de_pago >= '$fi' AND fecha_de_pago <= '$ff')
 							GROUP BY idconcepto ";
 				break;
 
@@ -892,13 +915,13 @@ class oCenturaPDO {
 				$idemp = $this->getIdEmpFromAlias($u);
 				$idciclo = $this->getCicloFromIdEmp($idemp);
 				$query = "SELECT idgrualu
-						FROM _viGrupo_Alumnos where idciclo = $idciclo and idgrupo = $idgrupo and idemp = $idemp and status_grualu = 1 order by num_lista ";
+						FROM _viGrupo_Alumnos WHERE idciclo = $idciclo AND idgrupo = $idgrupo AND idemp = $idemp AND status_grualu = 1 ORDER BY num_lista ";
 				break;		
 
 			case 24: // ARJI
 				parse_str($cad);
 				$query = "SELECT alumno, idgrualu, grupo, num_lista, familia, nivel, ciclo
-						FROM _viGrupo_Alumnos where idgrualu = $idgrualu limit 1 ";
+						FROM _viGrupo_Alumnos WHERE idgrualu = $idgrualu LIMIT 1 ";
 				break;
 
 			case 25:
@@ -906,13 +929,13 @@ class oCenturaPDO {
 		        $idemp = $this->getIdEmpFromAlias($u);
 				$query = "SELECT *
 								FROM _viEmerAlu
-							Where idalumno = $idalumno and idemp = $idemp ";
+							WHERE idalumno = $idalumno AND idemp = $idemp ";
 				break;
 
 			case 26:
 				$query = "SELECT *
 								FROM _viEmerAlu
-							where idemeralu = $cad ";
+							WHERE idemeralu = $cad ";
 				break;
 
 			case 27:
@@ -920,7 +943,7 @@ class oCenturaPDO {
 		        $idemp = $this->getIdEmpFromAlias($u);
 				$query = "SELECT *
 								FROM cat_emergencias
-							Where idemp = $idemp order by idemergencia desc";
+							WHERE idemp = $idemp ORDER BY idemergencia DESC";
 				break;
 
 			case 28:
@@ -929,7 +952,7 @@ class oCenturaPDO {
 				$idciclo = $this->getCicloFromIdEmp($idemp);
 				$query = "SELECT *
 								FROM preinscripciones
-							Where idemp = $idemp and idciclo = $idciclo order by idpreinscripcion desc";
+							WHERE idemp = $idemp AND idciclo = $idciclo ORDER BY idpreinscripcion DESC";
 				break;
 
 			case 29:
@@ -938,7 +961,7 @@ class oCenturaPDO {
 				$idciclo = $this->getCicloFromIdEmp($idemp);
 				$query = "SELECT *
 								FROM preinscripciones
-							Where idemp = $idemp and idciclo = $idciclo and idpreinscripcion = $idpreinscripcion order by idpreinscripcion desc";
+							WHERE idemp = $idemp AND idciclo = $idciclo AND idpreinscripcion = $idpreinscripcion ORDER BY idpreinscripcion DESC";
 				break;
 
 			case 30:
@@ -956,7 +979,7 @@ class oCenturaPDO {
 				}
 
 
-				$query = "	SELECT distinct idfamilia, familia, idalumno 
+				$query = "	SELECT DISTINCT idfamilia, familia, idalumno 
 							FROM _viEdoCtaFamilia 
 							WHERE idemp = $idemp 
 								AND idciclo = $idciclo 
@@ -1001,7 +1024,7 @@ class oCenturaPDO {
 						FROM _viEdoCtaFamilia 
 						WHERE idemp = $idemp 
 							AND idedocta = $idedocta 
-						Limit 1 ";
+						LIMIT 1 ";
 				break;
 
 			case 33:
@@ -1013,7 +1036,7 @@ class oCenturaPDO {
 
 		        // AND iduser = $iduser 
 		        
-				$query = "SELECT distinct iddevice, iduser, device_token
+				$query = "SELECT DISTINCT iddevice, iduser, device_token
 							FROM cat_devices 
 							WHERE idemp = $idemp AND 
 									idciclo = $idciclo AND 
@@ -1032,8 +1055,8 @@ class oCenturaPDO {
 
 				$query = "SELECT *
 							FROM _viPDFs 
-							WHERE idemp = $idemp and 
-									idciclo = $idciclo and 
+							WHERE idemp = $idemp AND 
+									idciclo = $idciclo AND 
 									categoria_pdf = $categoria_pdf";
 				break;
 
@@ -1050,16 +1073,16 @@ class oCenturaPDO {
 
 				$query = "SELECT *
 						FROM cat_beneficios_giros 
-						Where idemp = $idemp and 
+						WHERE idemp = $idemp AND 
 							status_giro_beneficio = 1
-						Order By idgirobeneficio desc ";
+						ORDER BY idgirobeneficio DESC ";
 				break;	
 
 			case 37:
 				parse_str($cad);
 				$query = "SELECT *
 						FROM cat_beneficios_giros 
-						Where idgirobeneficio = $cad";
+						WHERE idgirobeneficio = $cad";
 				break;		
 
 			case 38:
@@ -1068,23 +1091,23 @@ class oCenturaPDO {
 
 				$query = "SELECT *
 						FROM _viBenAfil 
-						Where idemp = $idemp
-						Order By idbeneficio desc ";
+						WHERE idemp = $idemp
+						ORDER BY idbeneficio DESC ";
 				break;	
 
 			case 39:
 				parse_str($cad);
 				$query = "SELECT *
 						FROM _viBenAfil 
-						Where idbeneficio = $cad";
+						WHERE idbeneficio = $cad";
 				break;		
 
 			case 40:
 
 				$query = "SELECT *
 						FROM _viBenAfil 
-						Where idemp = 1
-						Order By empresa asc ";
+						WHERE idemp = 1
+						ORDER BY empresa ASC ";
 				break;	
 
 			case 41:
@@ -1092,10 +1115,10 @@ class oCenturaPDO {
 				parse_str($cad);
 				$query = "	SELECT idmobilmensaje, mensaje
 							FROM _viMobileMensajes 
-							WHERE iduser = $iduser and 
-									device_token = '$device' and 
+							WHERE iduser = $iduser AND 
+									device_token = '$device' AND 
 									status_read = $sts 
-									order by fecha desc ";
+									ORDER BY fecha DESC ";
 				break;
 
 			case 42:
@@ -1103,10 +1126,10 @@ class oCenturaPDO {
 				parse_str($cad);
 				$query = "	SELECT idmobilmensaje, titulo, mensaje
 							FROM _viMobileMensajes 
-							WHERE idmobilmensaje = $idmobilmensaje and 
-									iduser = $iduser and 
+							WHERE idmobilmensaje = $idmobilmensaje AND 
+									iduser = $iduser AND 
 									idemp = $idemp 
-							Limit 1";
+							LIMIT 1";
 				break;
 
 			case 43:
@@ -1120,16 +1143,16 @@ class oCenturaPDO {
 		        $ff = $f1[2].'-'.$f1[1].'-'.$f1[0].' 23:59:59';
 
 				$query = "SELECT idconcepto, concepto, 
-								SUM( IF ( clave_nivel = 1, recargo, 0 ) ) as 'cero', 
-								SUM( IF ( clave_nivel = 2, recargo, 0 ) ) as 'uno', 
-								SUM( IF ( clave_nivel = 3, recargo, 0 ) ) as 'dos', 
-								SUM( IF ( clave_nivel = 4, recargo, 0 ) ) as 'tres', 
-								SUM( IF ( clave_nivel = 5, recargo, 0 ) ) as 'cuatro' 
+								SUM( IF ( clave_nivel = 1, recargo, 0 ) ) AS 'cero', 
+								SUM( IF ( clave_nivel = 2, recargo, 0 ) ) AS 'uno', 
+								SUM( IF ( clave_nivel = 3, recargo, 0 ) ) AS 'dos', 
+								SUM( IF ( clave_nivel = 4, recargo, 0 ) ) AS 'tres', 
+								SUM( IF ( clave_nivel = 5, recargo, 0 ) ) AS 'cuatro' 
 							FROM _viEdosCta
-							WHERE idemp = $idemp And 
-									status_movto = 1 And 
-									idemisorfiscal = $emisor And 
-									(fecha_de_pago >= '$fi' and fecha_de_pago <= '$ff') and 
+							WHERE idemp = $idemp AND 
+									status_movto = 1 AND 
+									idemisorfiscal = $emisor AND 
+									(fecha_de_pago >= '$fi' AND fecha_de_pago <= '$ff') AND 
 									recargo > 0
 							GROUP BY idconcepto ";
 
@@ -1139,9 +1162,9 @@ class oCenturaPDO {
 				parse_str($cad);
 		        $idemp = $this->getIdEmpFromAlias($u);
 				$idusr = $this->getIdUserFromAlias($u);
-				$query = "SELECT DISTINCT profesor as label,idusuarioprofesor as data 
-						FROM _viDirProf where idemp = $idemp and idusuariodirector = $idusr
-						Order By label asc ";
+				$query = "SELECT DISTINCT profesor AS label,idusuarioprofesor AS data 
+						FROM _viDirProf WHERE idemp = $idemp AND idusuariodirector = $idusr
+						ORDER BY label ASC ";
 				break;
 
 
@@ -1200,16 +1223,16 @@ class oCenturaPDO {
 
 				$query = "SELECT *
 						FROM _viExAlumnos 
-						Where idemp = $idemp and 
+						WHERE idemp = $idemp AND 
 							status_exalumno = 1
-						Order By nombre_exalumno asc ";
+						ORDER BY nombre_exalumno ASC ";
 				break;	
 
 			case 48:
 				parse_str($cad);
 				$query = "SELECT *
 						FROM _viExAlumnos 
-						Where idexalumno = $cad";
+						WHERE idexalumno = $cad";
 				break;		
 
 			case 49:
@@ -1218,16 +1241,16 @@ class oCenturaPDO {
 
 				$query = "SELECT *
 						FROM exa_generaciones 
-						Where idemp = $idemp and 
+						WHERE idemp = $idemp AND 
 							status_generacion = 1
-						Order By generacion desc ";
+						ORDER BY generacion DESC ";
 				break;	
 
 			case 50:
 				parse_str($cad);
 				$query = "SELECT *
 						FROM exa_generaciones 
-						Where idgeneracion = $cad";
+						WHERE idgeneracion = $cad";
 				break;		
 
 			case 51:
@@ -1236,15 +1259,15 @@ class oCenturaPDO {
 
 				$query = "SELECT *
 						FROM cat_pai_criterios 
-						Where idemp = $idemp 
-						Order By idpaicriterio desc ";
+						WHERE idemp = $idemp 
+						ORDER BY idpaicriterio DESC ";
 				break;	
 
 			case 52:
 				parse_str($cad);
 				$query = "SELECT *
 						FROM cat_pai_criterios 
-						Where idpaicriterio = $cad";
+						WHERE idpaicriterio = $cad";
 				break;		
 
 			case 53:
@@ -1253,15 +1276,15 @@ class oCenturaPDO {
 
 				$query = "SELECT *
 						FROM cat_pai_areas_disciplinarias 
-						Where idemp = $idemp 
-						Order By idpaiareadisciplinaria desc ";
+						WHERE idemp = $idemp 
+						ORDER BY idpaiareadisciplinaria DESC ";
 				break;	
 
 			case 54:
 				parse_str($cad);
 				$query = "SELECT *
 						FROM cat_pai_areas_disciplinarias 
-						Where idpaiareadisciplinaria = $cad";
+						WHERE idpaiareadisciplinaria = $cad";
 				break;		
 
 			case 55:
@@ -1269,15 +1292,15 @@ class oCenturaPDO {
 		        $idemp = $this->getIdEmpFromAlias($u);
 				$query = "SELECT idpaiconcepto, area_disciplinaria, descripcion_criterio_large, concepto, rango_califica, grado_pai
 						FROM _viPAIConceptos 
-						Where idemp = $idemp 
-						Order By idpaiconcepto desc ";
+						WHERE idemp = $idemp 
+						ORDER BY idpaiconcepto DESC ";
 				break;	
 
 			case 56:
 				parse_str($cad);
 				$query = "SELECT *
 						FROM _viPAIConceptos 
-						Where idpaiconcepto = $cad";
+						WHERE idpaiconcepto = $cad";
 				break;		
 
 			case 57:
@@ -1285,23 +1308,23 @@ class oCenturaPDO {
 		        $idemp = $this->getIdEmpFromAlias($u);
 				$query = "SELECT idpaiobjetivo, area_disciplinaria, descripcion_criterio, objetivo, grado_pai
 						FROM _viPAIObjetivos 
-						Where idemp = $idemp 
-						Order By idpaiobjetivo desc ";
+						WHERE idemp = $idemp 
+						ORDER BY idpaiobjetivo DESC ";
 				break;	
 
 			case 58:
 				parse_str($cad);
 				$query = "SELECT *
 						FROM _viPAIObjetivos 
-						Where idpaiobjetivo = $cad";
+						WHERE idpaiobjetivo = $cad";
 				break;		
 
 			case 59:
 				parse_str($cad);
 				$idemp = $this->getIdEmpFromAlias($u);
-				$query = "SELECT solicitan as label, idsolicita as data 
-						FROM _viSolAut where idemp = $idemp and idautoriza = $otros
-						Order By label asc ";
+				$query = "SELECT solicitan AS label, idsolicita AS data 
+						FROM _viSolAut WHERE idemp = $idemp AND idautoriza = $otros
+						ORDER BY label ASC ";
 				break;
 
 
@@ -1312,10 +1335,10 @@ class oCenturaPDO {
 				$query = "SELECT concepto, criterio, descripcion_criterio, descripcion_criterio_large
 						FROM _viPAIConceptos 
 						WHERE idpaiareadisciplinaria = $idpaiareadisciplinaria
-							  and idpaicriterio = $idpaicriterio
-							  and grado_pai = $grado_pai
-							  and rango_califica = $rc1
-							  and idemp = $idemp
+							  AND idpaicriterio = $idpaicriterio
+							  AND grado_pai = $grado_pai
+							  AND rango_califica = $rc1
+							  AND idemp = $idemp
 						limit 1 ";
 				break;
 
@@ -1324,16 +1347,16 @@ class oCenturaPDO {
 		        $idemp = $this->getIdEmpFromAlias($u);
 				$query = "SELECT *
 						FROM cat_listas_vencimientos
-						Where idemp = $idemp and 
+						WHERE idemp = $idemp AND 
 								status_fecha_vencimiento = 1 
-						Order By idlistavencimiento desc ";
+						ORDER BY idlistavencimiento DESC ";
 				break;		
 
 			case 62:
 				parse_str($cad);
 				$query = "SELECT *
 						FROM cat_listas_vencimientos 
-						Where idlistavencimiento = $cad";
+						WHERE idlistavencimiento = $cad";
 				break;		
 
 
@@ -1344,9 +1367,9 @@ class oCenturaPDO {
 
 				$query = "SELECT idexalumno, nombre_exalumno, generacion, email, profesion, ocupacion
 							FROM _viExAlumnos
-							WHERE idemp = $idemp And 
-									status_exalumno = 1 And 
-									(idgeneracion >= $desdegen and idgeneracion <= $hastagen)
+							WHERE idemp = $idemp AND 
+									status_exalumno = 1 AND 
+									(idgeneracion >= $desdegen AND idgeneracion <= $hastagen)
 							ORDER BY idgeneracion asc, nombre_exalumno asc";
 				break;
 
@@ -1355,9 +1378,9 @@ class oCenturaPDO {
 		        $idemp = $this->getIdEmpFromAlias($u);	
 				$query = "SELECT idexaemailenviado, para, cuerpo, titulo, iddestinatarios, creado_por, creado_el
 							FROM exa_emails_enviados
-							WHERE idemp = $idemp And 
+							WHERE idemp = $idemp AND 
 									status_emails_enviados  = 1 
-							ORDER BY idexaemailenviado desc";
+							ORDER BY idexaemailenviado DESC";
 				break;
 
 			case 65:
@@ -1365,7 +1388,7 @@ class oCenturaPDO {
 		        $idemp = $this->getIdEmpFromAlias($u);	
 				$query = "SELECT *
 							FROM _viExaEmailsEnviados
-							WHERE idemp = $idemp And 
+							WHERE idemp = $idemp AND 
 									idexaemailenviado  = $idexaemailenviado";
 				break;
 
@@ -1374,7 +1397,7 @@ class oCenturaPDO {
 		        $idemp = $this->getIdEmpFromAlias($u);	
 				$query = "SELECT *
 							FROM _viExAlumnos
-							WHERE idemp = $idemp And 
+							WHERE idemp = $idemp AND 
 									idexalumno  = $idexalumno";
 				break;
 
@@ -1392,7 +1415,7 @@ class oCenturaPDO {
 		        $idemp = $this->getIdEmpFromAlias($u);	
 				$query = "SELECT *
 							FROM exa_imagenes
-							WHERE idemp = $idemp And 
+							WHERE idemp = $idemp AND 
 									idexaimage  = $idexaimage";
 				break;
 
@@ -1410,7 +1433,7 @@ class oCenturaPDO {
 		        $idemp = $this->getIdEmpFromAlias($u);	
 				$query = "SELECT *
 							FROM exa_firmas_email
-							WHERE idemp = $idemp And 
+							WHERE idemp = $idemp AND 
 									idexafirma  = $idexafirma";
 				break;
 
@@ -1422,7 +1445,7 @@ class oCenturaPDO {
 				$query = "SELECT idexafirma, descripcion_firma, firma
 							FROM exa_firmas_email
 							WHERE idemp = $idemp And
-									status_exa_firma = 1 And 
+									status_exa_firma = 1 AND 
 									creado_por = $idusr ";
 
 				break;
@@ -1447,8 +1470,8 @@ class oCenturaPDO {
 		        $idemp = $this->getIdEmpFromAlias($u);
 				$idciclo = $this->getCicloFromIdEmp($idemp);
 				$query = "SELECT *
-						FROM _viGrupo_Alumnos where idciclo = $idciclo and clave_nivel = $clave_nivel and idemp = $idemp and activo_en_caja = 1 and status_grualu = 1
-						Order By idgrupo, num_lista asc ";
+						FROM _viGrupo_Alumnos WHERE idciclo = $idciclo AND clave_nivel = $clave_nivel AND idemp = $idemp AND activo_en_caja = 1 AND status_grualu = 1
+						ORDER BY idgrupo, num_lista ASC ";
 				break;
 
 			case 74:
@@ -1456,8 +1479,8 @@ class oCenturaPDO {
 		        $idemp = $this->getIdEmpFromAlias($u);
 				$idciclo = $this->getCicloFromIdEmp($idemp);
 				$query = "SELECT *
-						FROM _viGrupo_Alumnos where idciclo = $idciclo and clave_nivel = $clave_nivel and idgrupo = $idgrupo and idemp = $idemp and status_grualu = 1
-						Order By num_lista asc ";
+						FROM _viGrupo_Alumnos WHERE idciclo = $idciclo AND clave_nivel = $clave_nivel AND idgrupo = $idgrupo AND idemp = $idemp AND status_grualu = 1
+						ORDER BY num_lista ASC ";
 				break;
 
 			case 75:
@@ -1470,36 +1493,29 @@ class oCenturaPDO {
 		        			$csts = ' ';
 		        			break;
 		        		case 1:
-		        			$csts = ' and status_movto = 1';
+		        			$csts = ' AND status_movto = 1';
 		        			break;
 		        		case 2:
-		        			$csts = ' and status_movto = 0';
+		        			$csts = ' AND status_movto = 0';
 		        			break;
 		        	}	
 				$query = "SELECT *
 								FROM _viEdosCta
-							where 
-								idfamilia = $idfamilia and 
-								idalumno = $idalumno and 
-								idciclo = $idciclo and 
-								idemp = $idemp and 
-								idconcepto = $idconcepto and 
+							WHERE 
+								idfamilia = $idfamilia AND 
+								idalumno = $idalumno AND 
+								idciclo = $idciclo AND 
+								idemp = $idemp AND 
+								idconcepto = $idconcepto AND 
 								deuda_anterior = 0 
 								$csts
 							$otros ";
 				break;
 
 	  	}
-
-     	$Conn = new voConnPDO();
-		$result = $Conn->queryFetchAllAssocOBJ($query);
-
-		$Conn = null;
-
-		return $result;
-			
+		$result = $this->getArray($query);
+		return $result;	
 	}
-
 
 	public function setAsocia($tipo=0,$arg="",$pag=0,$limite=0,$var2=0, $otros=""){
 
@@ -1508,7 +1524,6 @@ class oCenturaPDO {
 
 		$ip=$_SERVER['REMOTE_ADDR']; 
 		$host=gethostbyaddr($_SERVER['REMOTE_ADDR']);
-		$Conn = new voConnPDO();
 
 		switch ($tipo){
 		case 51:
@@ -1519,39 +1534,21 @@ class oCenturaPDO {
 					$idemp = $this->getIdEmpFromAlias($u);
 
 		  			$ar = explode("|",$dests);
-					foreach($ar as $i=>$valor){
+					foreach($ar AS $i=>$valor){
 						if ((int)($ar[$i])>0){
-							$query = "Insert Into pase_salida_alumnos(idpsa,idalumno,idciclo,clave_nivel,idgrupo,idemp,ip,host,creado_por,creado_el)
-																value($idpsa,$ar[$i],$idciclo,$clave_nivel,$idgrupo,$idemp,'$ip','$host',$iduser,NOW())";
-							
-							$result = $Conn->exec($query);
-
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = 'Hey'; //var_dump($vR[2]);
-							}else{
-								$vRet = "OK";
-							}
-
+							$query = "INSERT INTO pase_salida_alumnos(idpsa,idalumno,idciclo,clave_nivel,idgrupo,idemp,ip,host,creado_por,creado_el)
+																VALUES($idpsa,$ar[$i],$idciclo,$clave_nivel,$idgrupo,$idemp,'$ip','$host',$iduser,NOW())";
+							$vRet = $this->guardarDatos($query);
 						}
 					}
 					break;		
 				case 20:
 					parse_str($arg);
 		  			$ar = explode("|",$dests);
-					foreach($ar as $i=>$valor){
+					foreach($ar AS $i=>$valor){
 						if ((int)($ar[$i])>0){
-							$query = "Delete from pase_salida_alumnos where idpsaalumno = ".$ar[$i];
-
-							$result = $Conn->exec($query);
-
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = var_dump($vR[2]);
-							}else{
-								$vRet = "OK";
-							}
-
+							$query = "DELETE FROM pase_salida_alumnos WHERE idpsaalumno = ".$ar[$i];
+							$vRet = $this->guardarDatos($query);
 						}
 					}
 					break;		
@@ -1567,16 +1564,11 @@ class oCenturaPDO {
 
 	  	$ip=$_SERVER['REMOTE_ADDR']; 
 	  	$host=gethostbyaddr($_SERVER['REMOTE_ADDR']);
-	 	$Conn = new voConnPDO();
 
 		switch ($index){
-
-
 			case 19:
 				switch($tipo){
 					case 1:
-					     //$ar = $this->unserialice_force($arg);
-
 				
 						parse_str($arg);
 						$idusr = $this->getIdUserFromAlias($user);
@@ -1600,7 +1592,7 @@ class oCenturaPDO {
 
 							$vRet = "OK";
 
-							$query = "update boleta_paibi set 	
+							$query = "UPDATE boleta_paibi SET 	
 															".$ec0." = ".$arrIdPAICRIT[$i].",
 															".$ev0." = ".$arrIdPAICAL[$i].",
 															".$rc0." = ".$rc1.",
@@ -1608,16 +1600,9 @@ class oCenturaPDO {
 															host = '$host',
 															modi_por = $idusr, 
 															modi_el = NOW()
-									Where idboletapaibi = ".$arrIdPAIID[$i];
-									$result = $Conn->exec($query);
-									if ($result != 1){
-										$vR =  $Conn->errorInfo();
-										$vRet = is_null($vR[2]) ? "OK":var_dump($vR[2]);
-										
-									}
-
+									WHERE idboletapaibi = ".$arrIdPAIID[$i];
+									$vRet = $this->guardarDatos($query);
 						}					
-						
 						break;		
 				}
 				break;
@@ -1625,7 +1610,6 @@ class oCenturaPDO {
 			case 46: //46
 				switch($tipo){
 					case 1:
-					     //$ar = $this->unserialice_force($arg);
 						parse_str($arg);
 						$idusr = $this->getIdUserFromAlias($u);
 				        $idemp = $this->getIdEmpFromAlias($u);
@@ -1637,23 +1621,16 @@ class oCenturaPDO {
 						$o1 = explode('|', $obs1);
 
 						for ($i=0; $i < count($c0); $i++) { 
-							$query = "update boleta_partes_markbook set 	
+							$query = "UPDATE boleta_partes_markbook SET 	
 															calificacion = ".floatval($c1[$i]).",
 															observaciones = '".$o1[$i]."',
 															ip = '$ip', 
 															host = '$host',
 															modi_por = $idusr, 
 															modi_el = NOW()
-									Where idbolparmkb = ".intval($c0[$i]);
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = var_dump($vR[2]);
-							}else{
-								$vRet = "OK";
-							}
+									WHERE idbolparmkb = ".intval($c0[$i]);
+							$vRet = $this->guardarDatos($query);
 						}					
-
 						break;		
 				} //46
 				break;
@@ -1672,7 +1649,7 @@ class oCenturaPDO {
 						$o1 = explode('|', $obs1);
 
 						for ($i=0; $i < count($c0); $i++) { 
-							$query = "insert into boleta_asistencias(
+							$query = "INSERT INTO boleta_asistencias(
 																	idboleta,
 																	asistencia,
 																	observaciones,
@@ -1683,7 +1660,7 @@ class oCenturaPDO {
 																	host,
 																	creado_por,
 																	creado_el)
-															values(
+															VALUES(
 																	".$c0[$i].",
 																	".$c1[$i].",
 																	'".mb_strtoupper($o1[$i],'UTF-8')."',
@@ -1694,13 +1671,7 @@ class oCenturaPDO {
 																	'$host',
 																	$idusr,
 																	NOW())" ;
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = $fecha;//var_dump($vR[2]);
-							}else{
-								$vRet = "OK";
-							}
+							$vRet = $this->guardarDatos($query);
 						}					
 						break;		
 
@@ -1716,7 +1687,7 @@ class oCenturaPDO {
 						$o1 = explode('|', $obs1);
 
 						for ($i=0; $i < count($c0); $i++) { 
-							$query = "update boleta_asistencias set 	
+							$query = "UPDATE boleta_asistencias SET 	
 															asistencia = ".floatval($c1[$i]).",
 															observaciones = '".$o1[$i]."',
 															evaluacion = $evaluacion,
@@ -1724,14 +1695,8 @@ class oCenturaPDO {
 															host = '$host',
 															modi_por = $idusr, 
 															modi_el = NOW()
-									Where idbolasist = ".intval($c0[$i]);
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = var_dump($vR[2]);
-							}else{
-								$vRet = "OK";
-							}
+									WHERE idbolasist = ".intval($c0[$i]);
+							$vRet = $this->guardarDatos($query);
 						}					
 						break;		
 
@@ -1741,14 +1706,8 @@ class oCenturaPDO {
 						$c0 = explode('|', $cal0);
 
 						for ($i=0; $i < count($c0); $i++) { 
-							$query = "delete from boleta_asistencias Where idbolasist = ".intval($c0[$i]);
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = var_dump($vR[2]);
-							}else{
-								$vRet = "OK";
-							}
+							$query = "DELETE FROM boleta_asistencias WHERE idbolasist = ".intval($c0[$i]);
+							$vRet = $this->guardarDatos($query);
 						}					
 						break;		
 
@@ -1763,7 +1722,7 @@ class oCenturaPDO {
 				        $idemp = $this->getIdEmpFromAlias($u);
 				        $IsConnect = $this->IsExistUserConnect($idusr,$idemp);
 				        if (intval($IsConnect) <= 0){
-							$query = "insert into usuarios_conectados(
+							$query = "INSERT INTO usuarios_conectados(
 															iduser,
 															username,
 															isconectado,
@@ -1773,7 +1732,7 @@ class oCenturaPDO {
 															host,
 															creado_por,
 															creado_el)
-													values(
+													VALUES(
 															$idusr,
 															'$u',
 															1,
@@ -1783,40 +1742,25 @@ class oCenturaPDO {
 															'$host',
 															$idusr,
 															NOW() )" ;
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = var_dump($vR[2]);
-							}else{
-								$vRet = "OK";
-							}
+							$vRet = $this->guardarDatos($query);
 
 						}else{
 					        $IsConnect = $this->IsConnectUser($idusr,$idemp);
 					        if (intval($IsConnect) <= 0){
-								$query = "update usuarios_conectados set 	
+								$query = "UPDATE usuarios_conectados SET 	
 																isconectado = 1,
 																ultima_conexion = NOW(),
 																ip = '$ip', 
 																host = '$host',
 																modi_por = $idusr, 
 																modi_el = NOW()
-										Where iduser = $idusr and idemp = $idemp and isconectado = 0";
-								$result = $Conn->exec($query);
-								if ($result != 1){
-									$vR = $Conn->errorInfo();
-									$vRet = var_dump($vR[2]);
-								}else{
-									$vRet = "OK";
-								}
+										WHERE iduser = $idusr AND idemp = $idemp AND isconectado = 0";
+								$vRet = $this->guardarDatos($query);
 							}else{
 								$vRet = "OK";
 							}
-
 						}
-
 						break;
-
 					case 1:
 						parse_str($arg);
 
@@ -1824,25 +1768,18 @@ class oCenturaPDO {
 				        $idemp = $this->getIdEmpFromAlias($u);
 				        $IsConnect = $this->IsConnectUser($idusr,$idemp);
 				        if (intval($IsConnect) > 0){
-							$query = "update usuarios_conectados set 	
+							$query = "UPDATE usuarios_conectados SET 	
 															isconectado = 0,
 															ultima_conexion = NOW(),
 															ip = '$ip', 
 															host = '$host',
 															modi_por = $idusr, 
 															modi_el = NOW()
-									Where iduser = $idusr and idemp = $idemp and isconectado = 1";
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = var_dump($vR[2]);
-							}else{
-								$vRet = "OK";
-							}
+									WHERE iduser = $idusr AND idemp = $idemp AND isconectado = 1";
+							$vRet = $this->guardarDatos($query);
 						}else{
 							$vRet = "OK";
 						}	
-
 						break;	
 				} //49
 				break;
@@ -1894,7 +1831,7 @@ class oCenturaPDO {
 						$ff = explode('-',$fecha_fin_eval_8);
 						$ff8 = $ff[2].'-'.$ff[1].'-'.$ff[0];
 
-						$query = "insert into evaluaciones_config(
+						$query = "INSERT INTO evaluaciones_config(
 																idnivel,
 																idciclo,
 																periodo,
@@ -1927,7 +1864,7 @@ class oCenturaPDO {
 																host,
 																creado_por,
 																creado_el)
-														values(
+														VALUES(
 																$idnivel,
 																$idciclo,
 																$periodo,
@@ -1960,18 +1897,9 @@ class oCenturaPDO {
 																'$host',
 																$idusr,
 																NOW())" ;
-						$result = $Conn->exec($query);
-						if ($result != 1){
-							$vR = $Conn->errorInfo();
-							$vRet = var_dump($vR[2]);
-						}else{
-							$vRet = "OK";
-						}
-
+						$vRet = $this->guardarDatos($query);
 						break;		
-
 					case 1:
-					     //$ar = $this->unserialice_force($arg);
 						parse_str($arg);
 						$idusr = $this->getIdUserFromAlias($u);
 				        $idemp = $this->getIdEmpFromAlias($u);
@@ -1994,7 +1922,7 @@ class oCenturaPDO {
 						$fecha_fin_eval_7 = $fecha_fin_eval_7 == '' ? '0000-00-00' : $fecha_fin_eval_7;
 						$fecha_fin_eval_8 = $fecha_fin_eval_7 == '' ? '0000-00-00' : $fecha_fin_eval_8;
 
-						$query = "update evaluaciones_config set 	
+						$query = "UPDATE evaluaciones_config SET 	
 														idnivel = $idnivel,
 														idciclo = $idciclo,
 														periodo = $periodo,
@@ -2026,28 +1954,13 @@ class oCenturaPDO {
 														host = '$host',
 														modi_por = $idusr, 
 														modi_el = NOW()
-								Where idevalconfig = $idevalconfig";
-						$result = $Conn->exec($query);
-						if ($result != 1){
-							$vR = $Conn->errorInfo();
-							$vRet = var_dump($vR[2]);
-						}else{
-							$vRet = "OK";
-						}
-
+								WHERE idevalconfig = $idevalconfig";
+						$vRet = $this->guardarDatos($query);
 						break;		
 					case 2:
-						$query = "delete from evaluaciones_config Where idevalconfig = ".$arg;
-						$result = $Conn->exec($query);
-						if ($result != 1){
-							$vR = $Conn->errorInfo();
-							$vRet = var_dump($vR[2]);
-						}else{
-							$vRet = "OK";
-						}
-
+						$query = "DELETE FROM evaluaciones_config WHERE idevalconfig = ".$arg;
+						$vRet = $this->guardarDatos($query);
 						break;		
-
 				} //50
 				break;
 
@@ -2057,7 +1970,7 @@ class oCenturaPDO {
 							parse_str($arg);
 							$idusr = $this->getIdUserFromAlias($user);
 							$idemp = $this->getIdEmpFromAlias($user);
-							$query = "Insert Into pases_salida(
+							$query = "INSERT INTO pases_salida(
 																referencia,
 																fecha,
 																motivos,
@@ -2073,7 +1986,7 @@ class oCenturaPDO {
 																clave_nivel,
 																status_psa,
 																idemp,ip,host,creado_por,creado_el)
-										value(
+										VALUES(
 																'$referencia',
 																NOW(),
 																'$motivos',
@@ -2089,20 +2002,12 @@ class oCenturaPDO {
 																$clave_nivel,
 																$status_psa,
 																$idemp,'$ip','$host',$idusr,NOW())";
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = var_dump($vR[2]);
-							}else{
-								$vRet = "OK";
-							}
+							$vRet = $this->guardarDatos($query);
 							break;		
 						case 1:
-						     //$ar = $this->unserialice_force($arg);
-														  	// fecha = NOW(),
 							parse_str($arg);
 							$idusr = $this->getIdUserFromAlias($user);
-							$query = "update pases_salida set 	
+							$query = "UPDATE pases_salida SET 	
 														  	referencia = '$referencia',
 														  	motivos = '$motivos',
 														  	otro_motivo = '$otro_motivo',
@@ -2117,24 +2022,12 @@ class oCenturaPDO {
 															host = '$host',
 															modi_por = $idusr, 
 															modi_el = NOW()
-									Where idpsa = $idpsa";
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = var_dump($vR[2]);
-							}else{
-								$vRet = "OK";
-							}
+									WHERE idpsa = $idpsa";
+							$vRet = $this->guardarDatos($query);
 							break;		
 						case 2:
-							$query = "delete from pases_salida Where idpsa = ".$arg;
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = var_dump($vR[2]);
-							}else{
-								$vRet = "OK";
-							}
+							$query = "DELETE FROM pases_salida WHERE idpsa = ".$arg;
+							$vRet = $this->guardarDatos($query);
 							break;		
 					} // 51
 					break;
@@ -2150,28 +2043,21 @@ class oCenturaPDO {
 							$fn = explode('-',$fecha);
 							$fn = $fn[2].'-'.$fn[1].'-'.$fn[0];
 
-							$query = "Insert Into familia_convenios(
+							$query = "INSERT INTO familia_convenios(
 												idfamilia,
 												convenio,
 												responsable,
 												fecha,
 												avisar_caja,
 												idemp,ip,host,creado_por,creado_el)
-										value(
+										VALUES(
 												$idfamilia2,
 												'$convenio',
 												'$responsable',
 												'$fn',
 												$avisar_caja,
 												$idemp,'$ip','$host',$idusr,NOW())";
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								//$vRet = var_dump($vR[2]);
-								$vRet = $fecha; // $vR;
-							}else{
-								$vRet = "OK";
-							}
+							$vRet = $this->guardarDatos($query);
 							break;		
 						case 1:
 							parse_str($arg);
@@ -2181,7 +2067,7 @@ class oCenturaPDO {
 							$fn = explode('-',$fecha);
 							$fn = $fn[2].'-'.$fn[1].'-'.$fn[0];
 
-							$query = "update familia_convenios set 	
+							$query = "UPDATE familia_convenios SET 	
 										  	convenio = '$convenio',
 										  	responsable = '$responsable',
 										  	fecha = '$fn',
@@ -2190,14 +2076,8 @@ class oCenturaPDO {
 											host = '$host',
 											modi_por = $idusr, 
 											modi_el = NOW()
-									Where idfamconv = $idfamconv";
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = var_dump($vR[2]);
-							}else{
-								$vRet = "OK";
-							}
+									WHERE idfamconv = $idfamconv";
+							$vRet = $this->guardarDatos($query);
 							break;	
 
 						case 2:
@@ -2205,55 +2085,38 @@ class oCenturaPDO {
 							$idusr = $this->getIdUserFromAlias($u);
 							$idemp = $this->getIdEmpFromAlias($u);
 
-							$query = "delete from familia_convenios Where idfamconv = ".$idfamconv;
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = var_dump($vR[2]);
-							}else{
-								$vRet = "OK";
-							}
+							$query = "DELETE FROM familia_convenios WHERE idfamconv = ".$idfamconv;
+							$vRet = $this->guardarDatos($query);
 							break;		
 					} // 52
 					break;
-
-
-
 				case 53:
 					switch($tipo){
 						case 0:
 							parse_str($arg);
 							$idusr = $this->getIdUserFromAlias($user);
 							$idemp = $this->getIdEmpFromAlias($user);
-							//$status_emergencia = !isset($status_emergencia)?0:1;
 
-							$query = "Insert Into cat_emergencias(
+							$query = "INSERT INTO cat_emergencias(
 												nombre,
 												tel1,
 												parentezco,
 												status_emergencia,
 												idemp,ip,host,creado_por,creado_el)
-										value(
+										VALUES(
 												'$nombre',
 												'$tel1',
 												'$parentezco',
 												$status_emergencia,
 												$idemp,'$ip','$host',$idusr,NOW())";
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = $vR;
-							}else{
-								$vRet = "OK";
-							}
+							$vRet = $this->guardarDatos($query);
 							break;		
 						case 1:
 							parse_str($arg);
 							$idusr = $this->getIdUserFromAlias($user);
 							$idemp = $this->getIdEmpFromAlias($user);
-							//$status_emergencia = !isset($status_emergencia)?0:1;
 
-							$query = "update cat_emergencias set 	
+							$query = "UPDATE cat_emergencias SET 	
 										  	nombre = '$nombre',
 										  	tel1 = '$tel1',
 										  	parentezco = '$parentezco',
@@ -2262,14 +2125,8 @@ class oCenturaPDO {
 											host = '$host',
 											modi_por = $idusr, 
 											modi_el = NOW()
-									Where idemergencia = $idemergencia";
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR ="B ".$Conn->errorInfo();
-								$vRet = var_dump($vR[2]);
-							}else{
-								$vRet = "OK";
-							}
+									WHERE idemergencia = $idemergencia";
+							$vRet = $this->guardarDatos($query);
 							break;	
 
 						case 2:
@@ -2277,14 +2134,8 @@ class oCenturaPDO {
 							$idusr = $this->getIdUserFromAlias($u);
 							$idemp = $this->getIdEmpFromAlias($u);
 
-							$query = "delete from cat_emergencias Where idemergencia = ".$idemergencia;
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = var_dump($vR[2]);
-							}else{
-								$vRet = "OK";
-							}
+							$query = "DELETE FROM cat_emergencias WHERE idemergencia = ".$idemergencia;
+							$vRet = $this->guardarDatos($query);
 							break;		
 
 						case 3:
@@ -2292,33 +2143,25 @@ class oCenturaPDO {
 							$idusr = $this->getIdUserFromAlias($user);
 							$idemp = $this->getIdEmpFromAlias($user);
 							$predeterminado = !isset($predeterminado)?0:1;	
-							$query = "Insert Into emergencias_alumno(
+							$query = "INSERT INTO emergencias_alumno(
 															idemergencia,
 															idalumno,
 															predeterminado,
 															idemp,ip,host,creado_por,creado_el)
-														value(
+														VALUES(
 															$idemergencia,
 															$idalumno,
 															$predeterminado,
 												$idemp,'$ip','$host',$idusr,NOW())";
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = var_dump($vR[2]);
-							}else{
-								$vRet = "OK";
-							}
+							$vRet = $this->guardarDatos($query);
 							break;		
 							
 						case 4:
-						     //$ar = $this->unserialice_force($arg);
 							parse_str($arg);
 							$idusr = $this->getIdUserFromAlias($user);
-
 							$predeterminado = !isset($predeterminado)?0:1;	
 
-							$query = "update emergencias_alumno set 	
+							$query = "UPDATE emergencias_alumno SET 	
 															idemergencia = $idemergencia,
 															idalumno = $idalumno,
 															predeterminado = $predeterminado,
@@ -2326,27 +2169,13 @@ class oCenturaPDO {
 															host = '$host',
 															modi_por = $idusr, 
 															modi_el = NOW()
-									Where idemeralu = $idemeralu ";
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = var_dump($vR[2]);
-							}else{
-								$vRet = "OK";
-							}
+									WHERE idemeralu = $idemeralu ";
+							$vRet = $this->guardarDatos($query);
 							break;		
-
 						case 5:
-							$query = "delete from emergencias_alumno Where idemeralu = ".$arg;
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = var_dump($vR[2]);
-							}else{
-								$vRet = "OK";
-							}
+							$query = "DELETE FROM emergencias_alumno WHERE idemeralu = ".$arg;
+							$vRet = $this->guardarDatos($query);
 							break;	
-
 					} // 53
 					break;
 
@@ -2359,7 +2188,7 @@ class oCenturaPDO {
 							$idciclo = $this->getCicloFromIdEmp($idemp);		        
 							$isitem = !isset($isitem)?0:1;	
 
-							$query = "Insert Into grupo_materia_config_save(
+							$query = "INSERT INTO grupo_materia_config_save(
 												idprofesor,
 												idgrumat,
 												titulo,
@@ -2367,7 +2196,7 @@ class oCenturaPDO {
 												num_eval,
 												idciclo,
 												idemp,ip,host,creado_por,creado_el)
-										value(
+										VALUES(
 												$idusr,
 												$idgrumat,
 												'$titulo',
@@ -2375,46 +2204,28 @@ class oCenturaPDO {
 												$num_eval,
 												$idciclo,
 												$idemp,'$ip','$host',$idusr,NOW())";
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = var_dump($vR[2]);
-							}else{
-								$vRet = "OK";
-							}
+							$vRet = $this->guardarDatos($query);
 							break;		
 						case 1:
 							parse_str($arg);
 							$idusr = $this->getIdUserFromAlias($user);
 							$isitem = !isset($isitem)?0:1;	
 
-							$query = "update grupo_materia_config_save set 	
+							$query = "UPDATE grupo_materia_config_save SET 	
 										  	titulo = '$titulo',
 										  	isitem = $isitem,
 											ip = '$ip', 
 											host = '$host',
 											modi_por = $idusr, 
 											modi_el = NOW()
-									Where 	idmatconsave = $idmatconsave";
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = var_dump($vR[2]);
-							}else{
-								$vRet = "OK";
-							}
+									WHERE 	idmatconsave = $idmatconsave";
+							$vRet = $this->guardarDatos($query);
 							break;	
 
 						case 2:
 
-							$query = "delete from grupo_materia_config_save Where idmatconsave = ".$arg;
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = var_dump($vR[2]);
-							}else{
-								$vRet = "OK";
-							}
+							$query = "DELETE FROM grupo_materia_config_save WHERE idmatconsave = ".$arg;
+							$vRet = $this->guardarDatos($query);
 							break;		
 
 					} // 55
@@ -2428,56 +2239,41 @@ class oCenturaPDO {
 					        $idemp = $this->getIdEmpFromAlias($user);
 							$idciclo = $this->getCicloFromIdEmp($idemp);		        
 
-							// $qry = "SELECT iddevice as IDs from cat_devices where iduser = $idusr and UUID = '$UUID' and device_token = '$device_token' and idemp = $idemp limit 1";
-							$qry = "SELECT iddevice as IDs from cat_devices where iduser = $idusr and UUID = '$UUID' and idemp = $idemp limit 1";
-							
-							$result23 = $Conn->queryFetchAllAssocOBJ($qry);
-							
-							// $v = $result23 ? "OK" : "ERROR";
-
-							
+							$qry = "SELECT iddevice AS IDs FROM cat_devices WHERE iduser = $idusr AND UUID = '$UUID' AND idemp = $idemp LIMIT 1";							
+							$result23 = $this->getArray($qry);
 							
 							if (!$result23) {
 								
-
-								$query = "update cat_devices set 	
+								$query = "UPDATE cat_devices SET 	
 											  	status_device = 0
-										Where 	iduser = ".$idusr." and type = " . $tD ;
+										WHERE 	iduser = ".$idusr." AND type = " . $tD ;
+								$result = $this->guardarDatos($query);
 
-								$result = $Conn->exec($query);
-
-								$query = "Insert Into cat_devices(
+								$query = "INSERT INTO cat_devices(
 													iduser,
 													UUID,
 													device_token,
 													type,
 													idciclo,
 													idemp,ip,host,creado_por,creado_el)
-											value(
+											VALUES(
 													$idusr,
 													'$UUID',
 													'$device_token',
 													'$tD',
 													$idciclo,
 													$idemp,'$ip','$host',$idusr,NOW())";
-								$result = $Conn->exec($query);
-								if ($result != 1){
-									$vR = $Conn->errorInfo();
-									$vRet = $idusr;
-								}else{
-									$vRet = "OK";
-								}
+								$vRet = $this->guardarDatos($query);
 
 							}else{
 								$IDs = $result23[0]->IDs;
 
-								$query = "update cat_devices set 	
+								$query = "UPDATE cat_devices SET 	
 											  	status_device = 0
-										Where 	iduser = ".$idusr." and type = " . $tD ;
-								$result = $Conn->exec($query);
+										WHERE 	iduser = ".$idusr." AND type = " . $tD ;
+								$result = $this->guardarDatos($query);
 
-
-								$query = "update cat_devices set 	
+								$query = "UPDATE cat_devices SET 	
 											  	UUID = '$UUID',
 											  	device_token = '$device_token',
 											  	iduser = $idusr,
@@ -2487,24 +2283,15 @@ class oCenturaPDO {
 												host = '$host',
 												modi_por = $idusr, 
 												modi_el = NOW()
-										Where 	iddevice = ".$IDs;
-								$result = $Conn->exec($query);
-								if ($result != 1){
-									$vR = $Conn->errorInfo();
-									$vRet = "ERROR 2";
-								}else{
-									$vRet = "OK";
-								}
+										WHERE 	iddevice = ".$IDs;
+								$vRet = $this->guardarDatos($query);
 							}
-
-							
-
 							break;		
 						case 1:
 							parse_str($arg);
 							$idusr = $this->getIdUserFromAlias($user);
 
-							$query = "update cat_devices set 	
+							$query = "UPDATE cat_devices SET 	
 										  	UUID = '$UUID',
 										  	device_token = '$device_token',
 										  	idsuer = $idusr,
@@ -2513,26 +2300,13 @@ class oCenturaPDO {
 											host = '$host',
 											modi_por = $idusr, 
 											modi_el = NOW()
-									Where 	iddevice = $iddevice";
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = var_dump($vR[2]);
-							}else{
-								$vRet = "OK";
-							}
+									WHERE 	iddevice = $iddevice";
+							$vRet = $this->guardarDatos($query);
 							break;	
-
 						case 2:
 
-							$query = "delete from cat_devices Where iddevice = ".$arg;
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = "ERROR D2";
-							}else{
-								$vRet = "OK";
-							}
+							$query = "DELETE FROM cat_devices WHERE iddevice = ".$arg;
+							$vRet = $this->guardarDatos($query);
 							break;	
 
 						case 3:
@@ -2540,7 +2314,7 @@ class oCenturaPDO {
 							$idusr = $this->getIdUserFromAlias($user);
 					        $idemp = $this->getIdEmpFromAlias($user);
 								
-							$query = "Insert Into mobil_mensaje(
+							$query = "INSERT INTO mobil_mensaje(
 												iddevice,
 												titulo,
 												mensaje,
@@ -2548,7 +2322,7 @@ class oCenturaPDO {
 												from_module,
 												idremitente,
 												idemp,ip,host,creado_por,creado_el)
-										value(
+										VALUES(
 												$iddevice,
 												'$titulo',
 												'$mensaje',
@@ -2556,83 +2330,56 @@ class oCenturaPDO {
 												'$from_module',
 												$idusr,
 												$idemp,'$ip','$host',$idusr,NOW())";
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = "ERROR M3";
-							}else{
-								$vRet = "OK";
-							}
-
+							$vRet = $this->guardarDatos($query);
 							break;		
-
 						case 4:
 							parse_str($arg);
 							$idusr = $this->getIdUserFromAlias($user);
 					        $idemp = $this->getIdEmpFromAlias($user);
 							$idciclo = $this->getCicloFromIdEmp($idemp);		        
-							//  and device_token = '$device_token'
-							$qry = "SELECT iddevice as IDs from cat_devices where iduser = $idusr and UUID = '$UUID' and idemp = $idemp limit 1";
-							
-							$result23 = $Conn->queryFetchAllAssocOBJ($qry);
+							$qry = "SELECT iddevice AS IDs FROM cat_devices WHERE iduser = $idusr AND UUID = '$UUID' AND idemp = $idemp LIMIT 1";
+							$result23 = $this->getArray($qry);
 							
 							if (!$result23) {
 								
-								$query = "update cat_devices set 	
+								$query = "UPDATE cat_devices SET 	
 											  	status_device = 0
-										Where 	iduser = ".$idusr." and type = " . $tD ;
-								$result = $Conn->exec($query);
+										WHERE 	iduser = ".$idusr." AND type = " . $tD ;
+								$result = $this->guardarDatos($query);
 
-								$query = "Insert Into cat_devices(
+								$query = "INSERT INTO cat_devices(
 													iduser,
 													UUID,
 													device_token,
 													type,
 													idciclo,
 													idemp,ip,host,creado_por,creado_el)
-											value(
+											VALUES(
 													$idusr,
 													'$UUID',
 													'$device_token',
 													'$tD',
 													$idciclo,
 													$idemp,'$ip','$host',$idusr,NOW())";
-								$result = $Conn->exec($query);
-								if ($result != 1){
-									$vR = $Conn->errorInfo();
-									$vRet = "ERROR 1"; // var_dump($vR[2]);
-								}else{
-									$vRet = "OK";
-								}
+								$vRet = $this->guardarDatos($query);
 
 							}else{
 								$IDs = $result23[0]->IDs;
 
-								$query = "update cat_devices set 	
+								$query = "UPDATE cat_devices SET 	
 											  	status_device = 0
-										Where 	iduser = ".$idusr." and type = " . $tD ;
-								$result = $Conn->exec($query);
+										WHERE 	iduser = ".$idusr." AND type = " . $tD ;
+								$result = $this->guardarDatos($query);
 
 								$query3 = "UPDATE cat_devices 
 												SET device_token = '$device_token',
 													status_device = 1
 											WHERE iddevice = $IDs";
-								$result3 = $Conn->exec($query3);
-								if ($result3 != 1){
-									$vR = $Conn->errorInfo();
-									$vRet = "OK";
-								}else{
-									$vRet = "OK";
-								}
+								$vRet = $this->guardarDatos($query);
 							}
-
 							break;	
-
-
-
 					} // 56
 					break;
-
 				case 57:
 					switch($tipo){
 						case 0:
@@ -2642,7 +2389,7 @@ class oCenturaPDO {
 							$idciclo = $this->getCicloFromIdEmp($idemp);		        
 							$status_pdf = !isset($status_pdf)?0:1;
 
-							$query = "Insert Into cat_pdfs(
+							$query = "INSERT INTO cat_pdfs(
 												idnivel,
 												pdf,
 												ruta,
@@ -2651,7 +2398,7 @@ class oCenturaPDO {
 												categoria_pdf,
 												status_pdf,
 												idemp,ip,host,creado_por,creado_el)
-										value(
+										VALUES(
 												$idnivel,
 												'$pdf',
 												'$ruta',
@@ -2660,22 +2407,14 @@ class oCenturaPDO {
 												$categoria_pdf,
 												$status_pdf,
 												$idemp,'$ip','$host',$idusr,NOW())";
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = var_dump($vR[2]);
-							}else{
-								$vRet = "OK";
-							}
-
-
+							$vRet = $this->guardarDatos($query);
 							break;		
 						case 1:
 							parse_str($arg);
 							$idusr = $this->getIdUserFromAlias($user);
 							$status_pdf = !isset($status_pdf)?0:1;
 
-							$query = "update cat_pdfs set 	
+							$query = "UPDATE cat_pdfs SET 	
 										  	pdf = '$pdf',
 										  	idnivel = $idnivel,
 										  	status_pdf = $status_pdf,
@@ -2683,37 +2422,21 @@ class oCenturaPDO {
 											host = '$host',
 											modi_por = $idusr, 
 											modi_el = NOW()
-									Where 	idpdf = $idpdf";
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = var_dump($vR[2]);
-							}else{
-								$vRet = "OK";
-							}
+									WHERE 	idpdf = $idpdf";
+							$vRet = $this->guardarDatos($query);
 							break;	
 
 						case 2:
 
-							$qry = "SELECT ruta from cat_pdfs where idpdf = ".$arg;							
-							$rt = $Conn->queryFetchAllAssocOBJ($qry);
+							$qry = "SELECT ruta FROM cat_pdfs WHERE idpdf = ".$arg;							
+							$rt = $this->getArray($qry);
 							unlink("../../".$rt[0]->ruta);
 
 							$query = "DELETE FROM cat_pdfs WHERE idpdf = ".$arg;
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = "Hols Munfo";//var_dump($vR[2]);
-							}else{
-								$vRet = "OK";
-							}
+							$vRet = $this->guardarDatos($query);
 							break;		
-
-
-
 					} // 57
 					break;
-
 				case 58:
 					switch($tipo){
 						case 0:
@@ -2722,60 +2445,37 @@ class oCenturaPDO {
 					        $idemp = $this->getIdEmpFromAlias($user);
 							$idciclo = $this->getCicloFromIdEmp($idemp);		        
 
-							$query = "Insert Into cat_beneficios_giros(
+							$query = "INSERT INTO cat_beneficios_giros(
 												girobeneficio,
 												status_giro_beneficio,
 												idemp,ip,host,creado_por,creado_el)
-										value(
+										VALUES(
 												'$girobeneficio',
 												$status_giro_beneficio,
 												$idemp,'$ip','$host',$idusr,NOW())";
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = $vR[2]; //var_dump($vR[2]);
-							}else{
-								$vRet = "OK";
-							}
-
-
+							$vRet = $this->guardarDatos($query);
 							break;		
 						case 1:
 							parse_str($arg);
 							$idusr = $this->getIdUserFromAlias($user);
 							$status_giro_beneficio = !isset($status_giro_beneficio)?0:1;
 
-							$query = "update cat_beneficios_giros set 	
+							$query = "UPDATE cat_beneficios_giros SET 	
 										  	girobeneficio = '$girobeneficio',
 										  	status_giro_beneficio = $status_giro_beneficio,
 											ip = '$ip', 
 											host = '$host',
 											modi_por = $idusr, 
 											modi_el = NOW()
-									Where 	idgirobeneficio = $idgirobeneficio";
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = var_dump($vR[2]);
-							}else{
-								$vRet = "OK";
-							}
+									WHERE 	idgirobeneficio = $idgirobeneficio";
+							$vRet = $this->guardarDatos($query);
 							break;	
 
 						case 2:
 
 							$query = "DELETE FROM cat_beneficios_giros WHERE idgirobeneficio = ".$arg;
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = var_dump($vR[2]);
-							}else{
-								$vRet = "OK";
-							}
+							$vRet = $this->guardarDatos($query);
 							break;		
-
-
-
 					} // 58
 					break;
 
@@ -2788,7 +2488,7 @@ class oCenturaPDO {
 							$idciclo = $this->getCicloFromIdEmp($idemp);		        
 							$status_beneficio = !isset($status_beneficio)?0:1;
 
-							$query = "Insert Into cat_beneficios_afiliados(
+							$query = "INSERT INTO cat_beneficios_afiliados(
 												idgirobeneficio,
 												empresa,
 												descuento,
@@ -2804,7 +2504,7 @@ class oCenturaPDO {
 												imagen,
 												status_beneficio,
 												idemp,ip,host,creado_por,creado_el)
-										value(
+										VALUES(
 												$idgirobeneficio,
 												'$empresa',
 												'$descuento',
@@ -2820,22 +2520,14 @@ class oCenturaPDO {
 												'$imagen',
 												$status_beneficio,
 												$idemp,'$ip','$host',$idusr,NOW())";
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = $vR[2];
-							}else{
-								$vRet = "OK";
-							}
-
-
+							$vRet = $this->guardarDatos($query);
 							break;		
 						case 1:
 							parse_str($arg);
 							$idusr = $this->getIdUserFromAlias($user);
 							$status_beneficio = !isset($status_beneficio)?0:1;
 
-							$query = "update cat_beneficios_afiliados set 	
+							$query = "UPDATE cat_beneficios_afiliados SET 	
 										  	empresa = '$empresa',
 										  	idgirobeneficio = $idgirobeneficio,
 										  	descuento = '$descuento',
@@ -2853,34 +2545,18 @@ class oCenturaPDO {
 											host = '$host',
 											modi_por = $idusr, 
 											modi_el = NOW()
-									Where 	idbeneficio = $idbeneficio";
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = $vR[2];
-							}else{
-								$vRet = "OK";
-							}
+									WHERE 	idbeneficio = $idbeneficio";
+							$vRet = $this->guardarDatos($query);
 							break;	
-
 						case 2:
 
-							$qry = "SELECT imagen from cat_beneficios_afiliados where idbeneficio = ".$arg;							
-							$rt = $Conn->queryFetchAllAssocOBJ($qry);
+							$qry = "SELECT imagen FROM cat_beneficios_afiliados WHERE idbeneficio = ".$arg;							
+							$rt = $this->getArray($qry);
 							unlink("../../".$rt[0]->imagen);
 
 							$query = "DELETE FROM cat_beneficios_afiliados WHERE idbeneficio = ".$arg;
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = $vR[2];
-							}else{
-								$vRet = "OK";
-							}
+							$vRet = $this->guardarDatos($query);
 							break;		
-
-
-
 					} // 59
 					break;
 
@@ -2899,8 +2575,7 @@ class oCenturaPDO {
 
 							$num_hijos = !isset($num_hijos)?0:intval($num_hijos);
 
-
-							$query = "Insert Into cat_exalumnos(
+							$query = "INSERT INTO cat_exalumnos(
 															ap_paterno,
 															ap_materno,
 															nombre,
@@ -2921,7 +2596,7 @@ class oCenturaPDO {
 															idgeneracion,
 															status_exalumno,
 															idemp,ip,host,creado_por,creado_el)
-										values(
+										VALUES(
 															'$ap_paterno',
 															'$ap_materno',
 															'$nombre',
@@ -2942,16 +2617,9 @@ class oCenturaPDO {
 															$idgeneracion,
 															$status_exalumno,
 												$idemp,'$ip','$host',$idusr,NOW())";
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = $query; // var_dump($vR[2]);
-							}else{
-								$vRet = "OK";
-							}
+							$vRet = $this->guardarDatos($query);
 							break;		
 						case 1:
-						     //$ar = $this->unserialice_force($arg);
 							parse_str($arg);
 							$idusr = $this->getIdUserFromAlias($user);
 
@@ -2961,7 +2629,7 @@ class oCenturaPDO {
 							$isfam = !isset($isfam)?0:1;
 							$status_exalumno = !isset($status_exalumno)?0:1;
 
-							$query = "update cat_exalumnos set 	
+							$query = "UPDATE cat_exalumnos SET 	
 															ap_paterno 		= '$ap_paterno',
 															ap_materno 		= '$ap_materno',
 															nombre 			= '$nombre',
@@ -2985,24 +2653,12 @@ class oCenturaPDO {
 															host 			= '$host',
 															modi_por 		= $idusr, 
 															modi_el 		= NOW()
-									Where idexalumno = $idexalumno";
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = var_dump($vR[2]);
-							}else{
-								$vRet = "OK";
-							}
+									WHERE idexalumno = $idexalumno";
+							$vRet = $this->guardarDatos($query);
 							break;		
 						case 2:
-							$query = "delete from cat_exalumnos Where idexalumno = ".$arg;
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = var_dump($vR[2]);
-							}else{
-								$vRet = "OK";
-							}
+							$query = "DELETE FROM cat_exalumnos WHERE idexalumno = ".$arg;
+							$vRet = $this->guardarDatos($query);
 							break;		
 
 						case 3:
@@ -3010,8 +2666,7 @@ class oCenturaPDO {
 							$idusr = $this->getIdUserFromAlias($user);
 							$idemp = $this->getIdEmpFromAlias($user);
 
-
-							$query = "Insert Into exa_emails_enviados(
+							$query = "INSERT INTO exa_emails_enviados(
 															para,
 															cco,
 															titulo,
@@ -3020,7 +2675,7 @@ class oCenturaPDO {
 															idexafirma,
 															status_emails_enviados,
 															idemp,ip,host,creado_por,creado_el)
-										values(
+										VALUES(
 															'$para',
 															'$cco',
 															'$titulo',
@@ -3029,13 +2684,7 @@ class oCenturaPDO {
 															$idexafirma,
 															1,
 												$idemp,'$ip','$host',$idusr,NOW())";
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = $query; // var_dump($vR[2]);
-							}else{
-								$vRet = "OK";
-							}
+							$vRet = $this->guardarDatos($query);
 							break;		
 
 						case 4:
@@ -3043,8 +2692,7 @@ class oCenturaPDO {
 							$idusr = $this->getIdUserFromAlias($user);
 							$idemp = $this->getIdEmpFromAlias($user);
 
-
-							$query = "update exa_emails_enviados set 	
+							$query = "UPDATE exa_emails_enviados SET 	
 															para 		= '$para',
 															cco 		= '$cco',
 															titulo 		= '$titulo',
@@ -3055,28 +2703,14 @@ class oCenturaPDO {
 															host 			= '$host',
 															modi_por 		= $idusr, 
 															modi_el 		= NOW()
-									Where idexaemailenviado = $idexaemailenviado";
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = var_dump($vR[2]);
-							}else{
-								$vRet = "OK";
-							}
+									WHERE idexaemailenviado = $idexaemailenviado";
+							$vRet = $this->guardarDatos($query);
 							break;		
 
 						case 5:
-							$query = "delete from exa_emails_enviados Where idexaemailenviado = ".$arg;
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = var_dump($vR[2]);
-							}else{
-								$vRet = "OK";
-							}
+							$query = "DELETE FROM exa_emails_enviados WHERE idexaemailenviado = ".$arg;
+							$vRet = $this->guardarDatos($query);
 							break;		
-
-
 					} //60	
 					break; 
 
@@ -3097,16 +2731,9 @@ class oCenturaPDO {
 																'$generacion',
 																$status_generacion,
 																$idemp,'$ip','$host',$idusr,NOW())";
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = $vR[2];
-							}else{
-								$vRet = "OK";
-							}
+							$vRet = $this->guardarDatos($query);
 							break;		
 						case 1:
-						     //$ar = $this->unserialice_force($arg);
 							parse_str($arg);
 							$idusr = $this->getIdUserFromAlias($user);
 							$idemp = $this->getIdEmpFromAlias($user);
@@ -3121,36 +2748,22 @@ class oCenturaPDO {
 															modi_por = $idusr, 
 															modi_el = NOW()
 									WHERE idgeneracion = $idgeneracion";
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = $vR[2];
-							}else{
-								$vRet = "OK";
-							}
+							$vRet = $this->guardarDatos($query);
 							if ( $vRet == "OK" ){
 								if ( isset($predeterminado) ) {
-									$q0 = "UPDATE exa_generaciones SET predeterminado = 0 WHERE idemp = $idemp and predeterminado = 1";
-									$result = $Conn->exec($q0);
+									$q0 = "UPDATE exa_generaciones SET predeterminado = 0 WHERE idemp = $idemp AND predeterminado = 1";
+									$result = $this->getArray($q0);
 									$q1 = "UPDATE exa_generaciones SET predeterminado = 1 WHERE idgeneracion = $idgeneracion";
-									$result = $Conn->exec($q1);
+									$result = $this->getArray($q1);
 								}
 							}
 							break;		
 						case 2:
 							$query = "DELETE FROM exa_generaciones WHERE idgeneracion = ".$arg;
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = $vR[2];
-							}else{
-								$vRet = "OK";
-							}
+							$vRet = $this->guardarDatos($query);
 							break;		
 					}
 					break; // 61
-
-
 				case 62:
 					switch($tipo){
 						case 0:
@@ -3170,16 +2783,9 @@ class oCenturaPDO {
 																'$descripcion_criterio',
 																$status_pai_criterio,
 																$idemp,'$ip','$host',$idusr,NOW())";
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = $vR[2];
-							}else{
-								$vRet = "OK";
-							}
+							$vRet = $this->guardarDatos($query);
 							break;		
 						case 1:
-						     //$ar = $this->unserialice_force($arg);
 							parse_str($arg);
 							$idusr = $this->getIdUserFromAlias($user);
 							$idemp = $this->getIdEmpFromAlias($user);
@@ -3195,28 +2801,14 @@ class oCenturaPDO {
 															modi_por = $idusr, 
 															modi_el = NOW()
 									WHERE idpaicriterio = $idpaicriterio";
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = $vR[2];
-							}else{
-								$vRet = "OK";
-							}
+							$vRet = $this->guardarDatos($query);
 							break;		
 						case 2:
 							$query = "DELETE FROM cat_pai_criterios WHERE idpaicriterio = ".$arg;
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = $vR[2];
-							}else{
-								$vRet = "OK";
-							}
+							$vRet = $this->guardarDatos($query);
 							break;		
 					}
 					break; // 62
-
-
 				case 63:
 					switch($tipo){
 						case 0:
@@ -3236,16 +2828,9 @@ class oCenturaPDO {
 																$orden_impresion,
 																$status_area_disciplinaria,
 																$idemp,'$ip','$host',$idusr,NOW())";
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = $vR[2];
-							}else{
-								$vRet = "OK";
-							}
+							$vRet = $this->guardarDatos($query);
 							break;
 						case 1:
-						     //$ar = $this->unserialice_force($arg);
 							parse_str($arg);
 							$idusr = $this->getIdUserFromAlias($user);
 							$idemp = $this->getIdEmpFromAlias($user);
@@ -3261,27 +2846,14 @@ class oCenturaPDO {
 															modi_por = $idusr, 
 															modi_el = NOW()
 									WHERE idpaiareadisciplinaria = $idpaiareadisciplinaria";
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = $vR[2];
-							}else{
-								$vRet = "OK";
-							}
+							$vRet = $this->guardarDatos($query);
 							break;		
 						case 2:
 							$query = "DELETE FROM cat_pai_areas_disciplinarias WHERE idpai = ".$arg;
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = $vR[2];
-							}else{
-								$vRet = "OK";
-							}
+							$vRet = $this->guardarDatos($query);
 							break;		
 					}
 					break; // 63
-
 				case 64:
 					switch($tipo){
 						case 0:
@@ -3307,13 +2879,7 @@ class oCenturaPDO {
 																$grado_pai,
 																$status_pai_concepto,
 																$idemp,'$ip','$host',$idusr,NOW())";
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = $vR[2];
-							}else{
-								$vRet = "OK";
-							}
+							$vRet = $this->guardarDatos($query);
 							break;
 						case 1:
 							parse_str($arg);
@@ -3334,28 +2900,14 @@ class oCenturaPDO {
 															modi_por = $idusr, 
 															modi_el = NOW()
 									WHERE idpaiconcepto = $idpaiconcepto";
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = $vR[2];
-							}else{
-								$vRet = "OK";
-							}
+							$vRet = $this->guardarDatos($query);
 							break;		
 						case 2:
 							$query = "DELETE FROM pai_conceptos WHERE idpaiconcepto = ".$arg;
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = $vR[2];
-							}else{
-								$vRet = "OK";
-							}
+							$vRet = $this->guardarDatos($query);
 							break;		
 					}
 					break; // 64
-
-
 				case 65:
 					switch($tipo){
 						case 0:
@@ -3379,13 +2931,7 @@ class oCenturaPDO {
 																$grado_pai,
 																$status_pai_objetivo,
 																$idemp,'$ip','$host',$idusr,NOW())";
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = $vR[2];
-							}else{
-								$vRet = "OK";
-							}
+							$vRet = $this->guardarDatos($query);
 							break;
 						case 1:
 							parse_str($arg);
@@ -3405,23 +2951,11 @@ class oCenturaPDO {
 															modi_por = $idusr, 
 															modi_el = NOW()
 									WHERE idpaiobjetivo = $idpaiobjetivo";
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = $vR[2];
-							}else{
-								$vRet = "OK";
-							}
+							$vRet = $this->guardarDatos($query);
 							break;		
 						case 2:
 							$query = "DELETE FROM pai_objetivos WHERE idpaiobjetivo = ".$arg;
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = $vR[2];
-							}else{
-								$vRet = "OK";
-							}
+							$vRet = $this->guardarDatos($query);
 							break;		
 					}
 					break; // 65
@@ -3435,7 +2969,7 @@ class oCenturaPDO {
 
 				        $status_fecha_vencimiento = isset($status_fecha_vencimiento)?1:0;
 
-						$query = "insert into cat_listas_vencimientos(
+						$query = "INSERT INTO cat_listas_vencimientos(
 																descripcion,
 																v1,
 																v2,
@@ -3455,7 +2989,7 @@ class oCenturaPDO {
 																host,
 																creado_por,
 																creado_el)
-														values(
+														VALUES(
 																'$descripcion',
 																'$v1',
 																'$v2',
@@ -3475,25 +3009,16 @@ class oCenturaPDO {
 																'$host',
 																$idusr,
 																NOW())" ;
-						$result = $Conn->exec($query);
-						if ($result != 1){
-							$vR = $Conn->errorInfo();
-							$vRet = var_dump($vR[2]);
-						}else{
-							$vRet = "OK";
-						}
-
+						$vRet = $this->guardarDatos($query);
 						break;		
-
 					case 1:
-					     //$ar = $this->unserialice_force($arg);
 						parse_str($arg);
 						$idusr = $this->getIdUserFromAlias($u);
 				        $idemp = $this->getIdEmpFromAlias($u);
 
 				        $status_fecha_vencimiento = isset($status_fecha_vencimiento)?1:0;
 
-						$query = "update cat_listas_vencimientos set 	
+						$query = "UPDATE cat_listas_vencimientos SET 	
 														descripcion = '$descripcion',
 														v1 = '$v1',
 														v2 = '$v2',
@@ -3512,32 +3037,17 @@ class oCenturaPDO {
 														host = '$host',
 														modi_por = $idusr, 
 														modi_el = NOW()
-								Where idlistavencimiento = $idlistavencimiento";
-						$result = $Conn->exec($query);
-						if ($result != 1){
-							$vR = $Conn->errorInfo();
-							$vRet = var_dump($vR[2]);
-						}else{
-							$vRet = "OK";
-						}
-
+								WHERE idlistavencimiento = $idlistavencimiento";
+						$vRet = $this->guardarDatos($query);
 						break;		
 					case 2:
-						$query = "delete from cat_listas_vencimientos Where idlistavencimiento = ".$arg;
-						$result = $Conn->exec($query);
-						if ($result != 1){
-							$vR = $Conn->errorInfo();
-							$vRet = var_dump($vR[2]);
-						}else{
-							$vRet = "OK";
-						}
-
+						$query = "DELETE FROM cat_listas_vencimientos WHERE idlistavencimiento = ".$arg;
+						$vRet = $this->guardarDatos($query);
 						break;		
-
 				} //66
 				break;
 
-				case 68:
+			case 68:
 					switch($tipo){
 						case 0:
 							parse_str($arg);
@@ -3548,10 +3058,8 @@ class oCenturaPDO {
 							$is_default_firma = isset($is_default_firma)?1:0;
 							
 							if ( $is_default_firma == 1 ){
-
 								$query = "UPDATE exa_firmas_email  SET is_default_firma = 0 WHERE iduser = ".$idusr;
-								$result = $Conn->exec($query);
-
+								$result = $this->guardarDatos($query);
 							}	
 							
 							$query = "INSERT INTO exa_firmas_email(
@@ -3568,15 +3076,8 @@ class oCenturaPDO {
 															$is_default_firma,
 															$status_exa_firma,
 															$idemp,'$ip','$host',$idusr,NOW())";
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = $query;// $vR[2];
-							}else{
-								$vRet = "OK";
-							}
+							$vRet = $this->guardarDatos($query);
 							break;
-
 						case 1:
 							parse_str($arg);
 							$idusr = $this->getIdUserFromAlias($user);
@@ -3586,10 +3087,8 @@ class oCenturaPDO {
 							$is_default_firma = isset($is_default_firma)?1:0;
 
 							if ( $is_default_firma == 1 ){
-
 								$query = "UPDATE exa_firmas_email  SET is_default_firma = 0 WHERE iduser = ".$idusr;
-								$result = $Conn->exec($query);
-
+								$result = $this->guardarDatos($query);
 							}	
 
 							$query = "UPDATE exa_firmas_email SET 	
@@ -3602,33 +3101,15 @@ class oCenturaPDO {
 															modi_por = $idusr, 
 															modi_el = NOW()
 									WHERE idexafirma = $idexafirma";
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = $query;// $vR[2];
-							}else{
-								$vRet = "OK";
-							}
+							$vRet = $this->guardarDatos($query);
 							break;		
-
 						case 2:
 							$query = "DELETE FROM exa_firmas_email WHERE idexafirma = ".$arg;
-							$result = $Conn->exec($query);
-							if ($result != 1){
-								$vR = $Conn->errorInfo();
-								$vRet = $vR[2];
-							}else{
-								$vRet = "OK";
-							}
+							$vRet = $this->guardarDatos($query);
 							break;		
 					}
 					break; // 68
-
-
 	  	}
-
-		$Conn = null;
-		  
 		return $vRet;
 	}
 
@@ -3639,12 +3120,14 @@ class oCenturaPDO {
 
 	  	$ip=$_SERVER['REMOTE_ADDR']; 
 	  	$host=gethostbyaddr($_SERVER['REMOTE_ADDR']);
-     	$Conn = new voConnPDO();
+     	// $Conn = new voConnPDO();
 
 	    $query = "SELECT * FROM _viEdosCta WHERE idedocta = $id LIMIT 1";
 
-     	$Conn = new voConnPDO();
-		$rst = $Conn->queryFetchAllAssocOBJ($query);
+  //    	$Conn = new voConnPDO();
+		// $rst = $Conn->queryFetchAllAssocOBJ($query);
+
+	    $rst = $this->getArray($query);
 
 		if (!$rst) {
 			return false;
@@ -3673,8 +3156,6 @@ class oCenturaPDO {
 		
 		$aRecargo = $rst[0]->recargo;
 		$aDescto = $rst[0]->descto;
-		// $aImporte2 = $rst[0]->importe2;
-		// $aIva = $rst[0]->iva;
 		$aTotal = $importe;
 
 		$subtotal = $rst[0]->subtotal;
@@ -3682,8 +3163,6 @@ class oCenturaPDO {
 		$importe = $rst[0]->importe;
 		$descto = $rst[0]->descto;
 		$recargo = $rst[0]->recargo;
-		// $importe2 = $rst[0]->importe2;
-		// $iva = $rst[0]->iva;
 		$total = $importe;
 
 		$idemisorfiscal = $rst[0]->idemisorfiscal;
@@ -3693,7 +3172,7 @@ class oCenturaPDO {
 
 	    $facEnc = "INSERT INTO facturas_encabezado(idcliente,idmetododepago,idemisorfiscal,serie,referencia,fecha,fecha_total_pagado,subtotal,descto_becas,importe,descto,recargo,total,idemp,ip,host,creado_por,creado_el)
 	    		VALUES(".$IdFs.",$idmetododepago,$idemisorfiscal,'$serie','$referencia',NOW(),NOW(),$subtotal,$descto_becas,$importe,$descto,$recargo,$total,$idemp,'$ip','$host',$idusr,NOW())";
-
+/*
 		$result = $Conn->exec($facEnc);
 		if ($result != 1){
 			$vR = $Conn->errorInfo();
@@ -3701,14 +3180,22 @@ class oCenturaPDO {
 		}else{
 			$vRet = "OK";
 		}
+*/
+		$vRet = $this->guardarDatos($facEnc);
 
-	    $qry = "SELECT MAX(idfactura) as IDs from facturas_encabezado";
+
+	    $qry = "SELECT MAX(idfactura) AS IDs FROM facturas_encabezado";
+	    /*
 		$result23 = $Conn->queryFetchAllAssocOBJ($qry);
 		if (!$result23) {
 			$rFac=0;
 		}else{
 			$rFac = $result23[0]->IDs;
 		}
+		*/
+	    $result23 = $this->getArray($qry);
+	    $rFac = !$result23 ? 0 : $result23[0]->IDs;
+
 
 		$facDet = "INSERT INTO facturas_detalle(
 						idfactura,
@@ -3739,7 +3226,7 @@ class oCenturaPDO {
 						".$aRecargo.",
 						".$aTotal.",
 						$idemp,'$ip','$host',$idusr,NOW())";
-
+/*
 		$result = $Conn->exec($facDet);
 		if ($result != 1){
 			$vR = $Conn->errorInfo();
@@ -3747,7 +3234,8 @@ class oCenturaPDO {
 		}else{
 			$vRet = "OK";
 		}
-
+*/
+		$vRet = $this->guardarDatos($facDet);
 
 		$qry = "UPDATE estados_de_cuenta SET 	
 										idfactura = ".$rFac.",
@@ -3762,7 +3250,7 @@ class oCenturaPDO {
 										modi_por = $idusr, 
 										modi_el = NOW()
 				WHERE idedocta = ".$IDs;
-	
+/*	
 		$result = $Conn->exec($qry);
 		if ($result != 1){
 			$vR = $Conn->errorInfo();
@@ -3770,9 +3258,10 @@ class oCenturaPDO {
 		}else{
 			$vRet = "OK";
 		}
+*/
+		$vRet = $this->guardarDatos($qry);
 
-
-		$Conn = null;		  
+		// $Conn = null;		  
 
 		return $vRet;
 	}
@@ -3785,7 +3274,7 @@ class oCenturaPDO {
 
 	  	$ip=$_SERVER['REMOTE_ADDR']; 
 	  	$host=gethostbyaddr($_SERVER['REMOTE_ADDR']);
-	 	$Conn = new voConnPDO();
+	 	// $Conn = new voConnPDO();
 
 		switch($tipo){
 			case 0:
@@ -3804,7 +3293,7 @@ class oCenturaPDO {
 				$genero_padre 		   = !isset($genero_padre)?0:1;
 				$bilingue 			   = !isset($bilingue)?0:1;
 
-				$query = "Insert Into preinscripciones(
+				$query = "INSERT INTO preinscripciones(
 										ap_paterno_alumno,
 										ap_materno_alumno,
 										nombre_alumno,
@@ -3892,7 +3381,7 @@ class oCenturaPDO {
 										host,
 										creado_por,
 										creado_el
-									)value(
+									)VALUES(
 										'$ap_paterno_alumno',
 										'$ap_materno_alumno',
 										'$nombre_alumno',
@@ -4084,12 +3573,13 @@ class oCenturaPDO {
 										tel1_fiscal = '$tel1_fiscal',
 										modi_por = $idusr,
 										modi_el = NOW()				
-					     Where idpreinscripcion = $idpreinscripcion";
+					     WHERE idpreinscripcion = $idpreinscripcion";
 
 				break;		
 
 		}
 
+/*
 		$result = $Conn->exec($query);
 
 		if ($result != 1){
@@ -4101,23 +3591,24 @@ class oCenturaPDO {
 
 
 		$Conn = null;
-	  
-
+*/	  
+		$result = $f->guardarDatos($query);
 		return $vRet;
 
 	}
 
 
-	public function updateVencimientoEdoCta($cad) {
+	public function UPDATEVencimientoEdoCta($cad) {
 
 		parse_str($cad);
+     	$Conn = new voConnPDO();
 
 		$query = "SET @X = Actualizar_Pagos_Metodo_B(".$idfamilia.",0,1)";
 		$ret = $Conn->query($query);
 
-		$query="SELECT @X as outvar;";
+		$query="SELECT @X AS outvar;";
 		$result = $Conn->query($query);
-		foreach ($result as $x)
+		foreach ($result AS $x)
 		{
 		    $ret=$x['outvar'];
 		}
@@ -4135,9 +3626,9 @@ class oCenturaPDO {
 		$query = "SET @X = Actualizar_Pagos_Metodo_B(".$idfamilia.",0,1)";
 		$ret = $Conn->query($query);
 
-		$query="SELECT @X as outvar;";
+		$query="SELECT @X AS outvar;";
 		$result = $Conn->query($query);
-		foreach ($result as $x)
+		foreach ($result AS $x)
 		{
 		    $ret=$x['outvar'];
 		}
@@ -4147,9 +3638,9 @@ class oCenturaPDO {
 			$query = "SET @Y = Actualizar_Pagos_Metodo_A(".$idfamilia.",0,1)";
 			$ret = $Conn->query($query);
 
-			$query="SELECT @Y as outvar;";
+			$query="SELECT @Y AS outvar;";
 			$result = $Conn->query($query);
-			foreach ($result as $x)
+			foreach ($result AS $x)
 			{
 			    $ret=$x['outvar'];
 			}
@@ -4164,13 +3655,9 @@ class oCenturaPDO {
 	public function revivePago($cad='') {
 
 		parse_str($cad);
-     	$Conn = new voConnPDO();
-
 		$query = "SET @X = Revive_Pago(".$pIdEdoCta.",".$pIdUser.",'".$pUsuario."')";
-		$ret = $Conn->query($query);
-
-		$Conn = null;
-	    return $ret;
+		$vRet = $this->execQuery($query);
+		return $vRet;
 
 	}
 
@@ -4181,23 +3668,22 @@ class oCenturaPDO {
 
 	  	$ip=$_SERVER['REMOTE_ADDR']; 
 	  	$host=gethostbyaddr($_SERVER['REMOTE_ADDR']);
-     	$Conn = new voConnPDO();
+     	// $Conn = new voConnPDO();
 
 		parse_str($cad);
 		$idusr = $this->getIdUserFromAlias($u);
         $idemp = $this->getIdEmpFromAlias($u);
 		$idciclo = $this->getCicloFromIdEmp($idemp);		        
 
-	    $query = "select * from grupo_materia_config where idgrumat = $idgrumatold and num_eval = $num_eval_old ";
+	    $query = "SELECT * FROM grupo_materia_config WHERE idgrumat = $idgrumatold AND num_eval = $num_eval_old ";
 
-     	$Conn = new voConnPDO();
-		$rst = $Conn->queryFetchAllAssocOBJ($query);
+	    $rst = $this->getArray($query);
 
 		if (!$rst) {
 			return false;
 		}
 
-		foreach($rst as $i=>$valor){
+		foreach($rst AS $i=>$valor){
 
 			$descripcion = $rst[$i]->descripcion;
 			$porcentaje = $rst[$i]->porcentaje;
@@ -4206,7 +3692,7 @@ class oCenturaPDO {
 			$idalutipoactividad = $rst[$i]->idalutipoactividad;
 			$idgrumatconold = $rst[$i]->idgrumatcon;
 
-			$query = "Insert Into grupo_materia_config(
+			$query = "INSERT INTO grupo_materia_config(
 								idgrumat,
 								num_eval,
 								descripcion,
@@ -4215,7 +3701,7 @@ class oCenturaPDO {
 								secuencia,
 								idalutipoactividad,
 								idemp,ip,host,creado_por,creado_el)
-						value(
+						VALUES(
 								$idgrumat,
 								$num_eval,
 								'$descripcion',
@@ -4224,59 +3710,43 @@ class oCenturaPDO {
 								$secuencia,
 								$idalutipoactividad,
 								$idemp,'$ip','$host',$idusr,NOW())";
-			$result = $Conn->exec($query);
-			if ($result != 1){
-				$vR = $Conn->errorInfo();
-				$vRet = $vR;
-			}else{
-				$vRet = "OK";
-			}
+			$vRet = $f->guardarDatos($query);
 
 			if (intval($isitem) > 0){
 
 				$idusr = $this->getIdUserFromAlias($u);
 		        $idemp = $this->getIdEmpFromAlias($u);
 
-			    $q0 = "SELECT MAX(idgrumatcon) as ids FROM grupo_materia_config ";
-				$r0 = $Conn->queryFetchAllAssocOBJ($q0);
-				$idgrumatcon = $r0[0]->ids;
+			    $q0 = "SELECT MAX(idgrumatcon) AS ids FROM grupo_materia_config ";
+				// $r0 = $Conn->queryFetchAllAssocOBJ($q0);
+				// $idgrumatcon = $r0[0]->ids;
+			    $r0 = $this->getArray($q0);
+			    $idgrumatcon = !$r0 ? 0 : $r0[0]->ids;
 
 			    $q1 = "SELECT * FROM grupo_materia_config_markbook WHERE idgrumatcon = $idgrumatconold ";
-				$r1 = $Conn->queryFetchAllAssocOBJ($q1);
-				foreach($r1 as $j=>$valor){
+				// $r1 = $Conn->queryFetchAllAssocOBJ($q1);
+			    $r1 = $this->getArray($q1);
+				foreach($r1 AS $j=>$valor){
 					$db = $r1[$j]->descripcion_breve;
 					$da = $r1[$j]->descripcion_avanzada;
 
-					$q2 = "Insert Into grupo_materia_config_markbook(
+					$q2 = "INSERT INTO grupo_materia_config_markbook(
 										idgrumatcon,
 										descripcion_breve,
 										descripcion_avanzada,
 										idemp,ip,host,creado_por,creado_el)
-								value(
+								VALUES(
 										$idgrumatcon,
 										'$db',
 										'$da',
 										$idemp,'$ip','$host',$idusr,NOW())";
-					$r2 = $Conn->exec($q2);
-					if ($r2 != 1){
-						$vR = $Conn->errorInfo();
-						$vRet = $vR;
-					}else{
-						$vRet = "OK";
-					}
-
+					$result = $f->guardarDatos($q2);
 				}
-
 			}
-
-
 		}
-
-		$Conn = null;
+		// $Conn = null;
 	    return $vRet;
-
 	}
-
 
 	public function refreshBoletaPAIBI($cad) {
 
@@ -4286,9 +3756,9 @@ class oCenturaPDO {
 		$query = "SET @X = Actualizar_Boletas_PAIBI(".$idgrumat.")";
 		$ret = $Conn->query($query);
 
-		$query="SELECT @X as outvar;";
+		$query="SELECT @X AS outvar;";
 		$result = $Conn->query($query);
-		foreach ($result as $x)
+		foreach ($result AS $x)
 		{
 		    $ret=$x['outvar'];
 		}
@@ -4297,8 +3767,6 @@ class oCenturaPDO {
 	    return $ret;
 
 	}
-
-
 
 }
 

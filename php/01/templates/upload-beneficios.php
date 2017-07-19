@@ -4,18 +4,20 @@
 $data = $_POST['data'];
 parse_str($data);
 
-require_once("../vo/voConn.php");
+// require_once("../vo/voConn.php");
 require_once("../oCenturaPDO.php");
 $F = oCenturaPDO::getInstance();
+require_once("../oCentura.php");
+$f = oCentura::getInstance();
 
-$Conn = voConn::getInstance();
-$mysql = mysql_connect($Conn->server, $Conn->user, $Conn->pass);
-mysql_select_db($Conn->db);
-mysql_query("SET NAMES 'utf8'");	
+// $Conn = voConn::getInstance();
+// $mysql = mysql_connect($Conn->server, $Conn->user, $Conn->pass);
+// mysql_select_db($Conn->db);
+// mysql_query("SET NAMES 'utf8'");	
 
 $isExistUser = $f->isExistUserFromEmp($user);
 
-mysql_close($mysql);
+// mysql_close($mysql);
 
 $arr = array();
 $arr['status'] = 'OK';
@@ -23,11 +25,9 @@ $arr['message'] = 'Datos guardados con éxito!';
 $arr['image'] = 'none';
 
 if ( $isExistUser <= 0 ){
-
 	$arr['status'] = 'Error';
 	$arr['message'] = 'No se ha podido conectar al servidor!';
 	$arr['image'] = 'none';
-
 }else{
 
 	if (intval($idbeneficio <= 0)){

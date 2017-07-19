@@ -1,5 +1,4 @@
 <?php
-
 /*
 ini_set('display_errors', '0');     
 error_reporting(E_ALL | E_STRICT);  
@@ -8,7 +7,6 @@ error_reporting(E_ALL);
 ini_set('display_errors', TRUE);
 ini_set('display_startup_errors', TRUE);
 */
-
 
 date_default_timezone_set('America/Mexico_City');
 
@@ -19,158 +17,154 @@ require_once('vo/voUsuario.php');
 
 require_once('vo/voEmpty.php');
 
-/*
-
-require_once('vo/voAvaluo.php');
-require_once('vo/voAvaluoZona.php');
-require_once('vo/voAvaluoInmueble.php');
-require_once('vo/voEAFCompConstruccion.php');
-
-*/
-
-require_once('vo/voEstado.php');
-require_once('vo/voMunicipio.php');
-
 class oCentura {
 	 
-	 private static $instancia;
-	 public $IdEmp;
-	 public $IdUser;
-	 public $User;
-	 public $Pass;
-	 public $Nav;
-	 public $URL;
-	 public $defaultMail;
-	 public $CID;
-	 public $Mail;
-	 public $Foto;
-	 public $iva;
-	 
-	 private function __construct(){ 
-	 		$this->Nav      = "Ninguno";
-			$this->IdUser    = 0;
-			$this->User     = "";
-			$this->Pass     = "";
-			$this->iva      = 0.16;
-			$this->URL      = "http://platsource.mx/";
-	 }
+	private static $instancia;
+	public $IdEmp;
+	public $IdUser;
+	public $User;
+	public $Pass;
+	public $Nav;
+	public $URL;
+	public $defaultMail;
+	public $CID;
+	public $Mail;
+	public $Foto;
+	public $iva;
 
-	 public static function getInstance(){
-				if (  !self::$instancia instanceof self){
-					  self::$instancia = new self;
-				}
-				return self::$instancia;
-	 }
+	private function __construct(){ 
+			$this->Nav      = "Ninguno";
+		$this->IdUser    = 0;
+		$this->User     = "";
+		$this->Pass     = "";
+		$this->iva      = 0.16;
+		$this->URL      = "http://platsource.mx/";
+	}
 
-	 public function getFolioTim($serie, $idemp){
-		    mysql_query("SET NAMES UTF8");		
-		    $result = mysql_query("select max(folio) as folio from facturas_encabezado where serie = '$serie' and idemp = $idemp and isfe = 1 limit 1 ");
-
-			if (!$result) {
-    				$ret=1;
-			}else{
-    				$ret=intval(mysql_result($result, 0))+1;
+	public static function getInstance(){
+			if (  !self::$instancia instanceof self){
+				  self::$instancia = new self;
 			}
+			return self::$instancia;
+	}
 
-		    return $ret;
-	 }
+	public function getFolioTim($serie, $idemp){
+		$query = "SELECT max(folio) AS folio FROM facturas_encabezado WHERE serie = '$serie' AND idemp = $idemp AND isfe = 1 LIMIT 1 ";
 
-	 public function getFolio($serie){
-		    mysql_query("SET NAMES UTF8");
-		  
-		    $result = mysql_query("select max(folio) as folio from facturas_encabezado where serie = '$serie' limit 1 ");
+		$Conn = new voConnPDO();
+		$result = $Conn->queryFetchAllAssocOBJ($query);
 
-			if (!$result) {
-    				$ret=1;
-			}else{
-    				$ret=intval(mysql_result($result, 0))+1;
-			}
+		if (!$result) {
+				$ret=1;
+		}else{
+			   	$ret= intval($result[0]->folio)+1;
+		}
+		$Conn = null;
+		return $ret;
 
-		    return $ret;
-	 }
+	}
 
-	 
+	public function getFolio($serie){
+	    $query = "SELECT max(folio) AS folio FROM facturas_encabezado WHERE serie = '$serie' LIMIT 1 ";
 
-	 private function getIdUserFromAlias($str){
-		    mysql_query("SET NAMES UTF8");
-		  
-		    $result = mysql_query("select iduser from usuarios where username = '$str' and status_usuario = 1");
+		$Conn = new voConnPDO();
+		$result = $Conn->queryFetchAllAssocOBJ($query);
 
-			if (!$result) {
-    				$ret=0;
-			}else{
-    				$ret=intval(mysql_result($result, 0,"iduser"));
-			}
-		    return $ret;
-	 }
+		if (!$result) {
+				$ret=1;
+		}else{
+				   	$ret= intval($result[0]->folio)+1;
 
-	 private function getIdEmpFromAlias($str){
-		    mysql_query("SET NAMES UTF8");
-		  
-		    $result = mysql_query("select idemp from usuarios where username = '$str' and status_usuario = 1");
-
-			if (!$result) {
-    				$ret=0;
-			}else{
-    				$ret=intval(mysql_result($result, 0,"idemp"));
-			}
-		    return $ret;
-	 }
-
-	 private function getCicloFromIdEmp($idemp=0){
-		    mysql_query("SET NAMES UTF8");
-		  
-		    $res = mysql_query("select idciclo from cat_ciclos where idemp = $idemp and predeterminado = 1 and status_ciclo = 1 limit 1");
-
-			$num_rows = mysql_num_rows($res);
-
-			if ($num_rows <= 0) {
-    			$ret=0;
-			}else{
-					$row = mysql_fetch_row($res);
-    				$ret = intval($row[0]);
-			}
-		    return $ret;
-	 }
-
-	 private function getCicloAntFromIdEmp($idemp=0){
-		    mysql_query("SET NAMES UTF8");
-		  
-		    $res = mysql_query("select anterior from cat_ciclos where idemp = $idemp and predeterminado = 1 and status_ciclo = 1 limit 1");
-
-			$num_rows = mysql_num_rows($res);
-
-			if ($num_rows <= 0) {
-    			$ret=0;
-			}else{
-					$row = mysql_fetch_row($res);
-    				$ret = intval($row[0]);
-			}
-		    return $ret;
-	 }
+		}
+		$Conn = null;
+	    return $ret;
+	}
 
 
 
+	private function getIdUserFromAlias($str){
+	    $query = "SELECT iduser FROM usuarios WHERE username = '$str' AND status_usuario = 1";
 
-	 private function getIdFamFromIdUser($IdUsername=0, $type=0){
-		    mysql_query("SET NAMES UTF8");
-		    
-		    if ($type == 0){
-			    $res = mysql_query("SELECT idfamilia FROM _viFamPer WHERE idusername = $IdUsername AND status_famper = 1 LIMIT 1");
-		    }else if  ($type == 1) {
-			    $res = mysql_query("SELECT idfamilia FROM _viFamAlu WHERE iduseralufortutor = $IdUsername AND status_famalu = 1 LIMIT 1");
-		    }
+		$Conn = new voConnPDO();
+		$result = $Conn->queryFetchAllAssocOBJ($query);
 
-			$num_rows = mysql_num_rows($res);
+		if (!$result) {
+				$ret=0;
+		}else{
+			   	$ret= intval($result[0]->iduser);
+		}
+		$Conn = null;
+	    return $ret;
 
-			if ($num_rows <= 0) {
-    			$ret=0;
-			}else{
-					$row = mysql_fetch_row($res);
-    				$ret = intval($row[0]);
-			}
-		    return $ret;
-	 }
+	}
+
+	private function getIdEmpFromAlias($str){
+	    $query = "SELECT idemp FROM usuarios WHERE username = '$str' AND status_usuario = 1";
+
+		$Conn = new voConnPDO();
+		$result = $Conn->queryFetchAllAssocOBJ($query);
+
+		if (!$result) {
+				$ret=0;
+		}else{
+			   	$ret= intval($result[0]->idemp);
+		}
+		$Conn = null;
+	    return $ret;
+	}
+
+	private function getCicloFromIdEmp($idemp=0){
+	    $query = "SELECT idciclo FROM cat_ciclos WHERE idemp = $idemp AND predeterminado = 1 AND status_ciclo = 1 LIMIT 1";
+
+		$Conn = new voConnPDO();
+		$result = $Conn->queryFetchAllAssocOBJ($query);
+
+		if (!$result) {
+				$ret=0;
+		}else{
+			   	$ret= intval($result[0]->idciclo);
+		}
+		$Conn = null;
+	    return $ret;
+	}
+
+	private function getCicloAntFromIdEmp($idemp=0){
+	    $query = "SELECT anterior FROM cat_ciclos WHERE idemp = $idemp AND predeterminado = 1 AND status_ciclo = 1 LIMIT 1";
+
+		$Conn = new voConnPDO();
+		$result = $Conn->queryFetchAllAssocOBJ($query);
+
+		if (!$result) {
+				$ret=0;
+		}else{
+			   	$ret= intval($result[0]->anterior);
+		}
+		$Conn = null;
+	    return $ret;
+	}
+
+
+
+
+	private function getIdFamFromIdUser($IdUsername=0, $type=0){
+	    
+	    if ($type == 0){
+	    	$query = "SELECT idfamilia FROM _viFamPer WHERE idusername = $IdUsername AND status_famper = 1 LIMIT 1";
+	    }else if  ($type == 1) {
+	    	$query = "SELECT idfamilia FROM _viFamAlu WHERE iduseralufortutor = $IdUsername AND status_famalu = 1 LIMIT 1";
+	    }
+
+		$Conn = new voConnPDO();
+		$result = $Conn->queryFetchAllAssocOBJ($query);
+
+		if (!$result) {
+				$ret=0;
+		}else{
+			   	$ret= intval($result[0]->idfamilia);
+		}
+		$Conn = null;
+	    return $ret;
+	}
 
 	private function sayLiked($tipo,$val=""){
 			switch(intval($tipo)){
@@ -187,37 +181,68 @@ class oCentura {
 	}	
 
 	private function getIdProfFromAlias($str){
-	    mysql_query("SET NAMES UTF8");
-	  
-	    $result = mysql_query("select idprofesor from _viProfesores where username = '$str' and status_usuario = 1");
+	    	$query = "SELECT idprofesor FROM _viProfesores WHERE username = '$str' AND status_usuario = 1";
 
-		if (!$result) {
-				$ret=0;
-		}else{
-				$ret=intval(mysql_result($result, 0,"idprofesor"));
-		}
-	    return $ret;
-	}
+			$Conn = new voConnPDO();
+			$result = $Conn->queryFetchAllAssocOBJ($query);
 
-	public function isExistUserFromEmp($user=""){
-		    mysql_query("SET NAMES UTF8");
-		  	$idemp = $this->getPubIdEmp($user);
-		    $result = mysql_query("select iduser from usuarios where username = '$user' and status_usuario = 1 and idemp = ".$idemp." limit 1");
 			if (!$result) {
     				$ret=0;
 			}else{
-    				$ret=intval(mysql_result($result, 0,"iduser"));
+				   	$ret= intval($result[0]->idprofesor);
 			}
+			$Conn = null;
+	    	return $ret;
+	}
+
+	public function isExistUserFromEmp($user=""){
+		  	$idemp = $this->getPubIdEmp($user);
+			
+			$query = "SELECT iduser FROM usuarios WHERE username = '$user' AND status_usuario = 1 AND idemp = ".$idemp." LIMIT 1";
+
+			$Conn = new voConnPDO();
+			$result = $Conn->queryFetchAllAssocOBJ($query);
+
+			if (!$result) {
+    				$ret=0;
+			}else{
+    				$ret= intval($result[0]->iduser);
+			}
+			$Conn = null;
 		    return $ret;
-	 }
+	}
 
-     public function getCombo($index=0,$arg="",$pag=0,$limite=0,$tipo=0,$otros=""){
+	public function guardarDatos($query=""){
 
-		  // $Conn = voConnPDO::getInstance();
-		  $Conn = voConn::getInstance();
-		  $mysql = mysql_connect($Conn->server, $Conn->user, $Conn->pass);
-		  mysql_select_db($Conn->db);
-		  mysql_query("SET NAMES UTF8");
+			$Conn = new voConnPDO();
+			$ret = array();
+			$result = $Conn->exec($query);
+
+			if ($result != 1){
+				$ret = $result;
+			}else{
+				$ret = "OK";
+			}
+			$Conn = null;
+			return $ret;
+	}
+
+	public function getArray($query){
+			$rs=0;
+		 	$Conn = new voConnPDO();
+			$result = $Conn->queryFetchAllAssocOBJ($query);
+			$Conn = null;
+			return $result;
+	}
+
+	public function execQuery($query){
+			$Conn = new voConnPDO();
+			$vRet = $Conn->query($query);
+			$Conn = null;
+			return $vRet;
+	}
+
+    public function getCombo($index=0,$arg="",$pag=0,$limite=0,$tipo=0,$otros=""){
 
 		  $arr = array('voCombo');
 		  $indice = 0;
@@ -230,49 +255,49 @@ class oCentura {
 							case 0:
 								parse_str($arg);
 								$pass = md5($password);
-								$query = "SELECT username as label, iduser as data 
-										FROM  _viUsuarios where username = '$username' and password = '$pass' and status_usuario = 1 ";
+								$query = "SELECT username AS label, iduser AS data 
+										FROM  _viUsuarios WHERE username = '$username' AND password = '$pass' AND status_usuario = 1 ";
 								break;		
 						}
 						break;
 					case -1:// valida loguin de usuarios
 			          	$ar = explode(".",$arg);
 						$pass = md5($ar[1]);
-						$query = "SELECT username as label,password as data 
+						$query = "SELECT username AS label,password AS data 
 								FROM usuarios 
-								Where username = '$ar[0]' and password = '$pass' and status_usuario = 1";
+								WHERE username = '$ar[0]' AND password = '$pass' AND status_usuario = 1";
 						break;
 					case 0:
 						switch($tipo){
 							case 0:
 								parse_str($arg);
 								$pass = md5($passwordL);
-								$query = "SELECT username as label, concat(iduser,'|',password,'|',idemp,'|',empresa,'|',idusernivelacceso,'|',registrosporpagina,'|',clave,'|',param1,'|',nombre_completo_usuario) as data 
-										FROM  _viUsuarios where username = '$username' and password = '$pass' and status_usuario = 1";
+								$query = "SELECT username AS label, concat(iduser,'|',password,'|',idemp,'|',empresa,'|',idusernivelacceso,'|',registrosporpagina,'|',clave,'|',param1,'|',nombre_completo_usuario) AS data 
+										FROM  _viUsuarios WHERE username = '$username' AND password = '$pass' AND status_usuario = 1";
 								break;		
 							case 1:
 								parse_str($arg);
 								$pass = md5($passwordL);
-								$query = "SELECT username as label, concat(iduser,'|',password,'|',idemp,'|',empresa,'|',idusernivelacceso,'|',registrosporpagina,'|',clave,'|',param1,'|',nombre_completo_usuario) as data 
-										FROM  _viUsuarios where username = '$username' and password = '$pass' and status_usuario = 1";
+								$query = "SELECT username AS label, concat(iduser,'|',password,'|',idemp,'|',empresa,'|',idusernivelacceso,'|',registrosporpagina,'|',clave,'|',param1,'|',nombre_completo_usuario) AS data 
+										FROM  _viUsuarios WHERE username = '$username' AND password = '$pass' AND status_usuario = 1";
 								break;		
 							case 2:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT nivel_de_acceso as label,idusernivelacceso as data 
-										FROM usuarios_niveldeacceso where idemp = $idemp
-										Order By label asc ";
+								$query = "SELECT nivel_de_acceso AS label,idusernivelacceso AS data 
+										FROM usuarios_niveldeacceso WHERE idemp = $idemp
+										ORDER BY label ASC ";
 								break;		
 							case 3:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT concat(username,' - ',apellidos,' ',nombres) as label, iduser as data 
-										FROM  _viUsuarios where idemp = $idemp and status_usuario = 1 and idusernivelacceso = 1";
+								$query = "SELECT concat(username,' - ',apellidos,' ',nombres) AS label, iduser AS data 
+										FROM  _viUsuarios WHERE idemp = $idemp AND status_usuario = 1 AND idusernivelacceso = 1";
 								break;		
 							case 4:
 								parse_str($arg);
 								$pass = md5($passwordL);
-								$query = "SELECT username as label, concat(
+								$query = "SELECT username AS label, concat(
 																		iduser,'|',
 																		password,'|',
 																		idemp,'|',
@@ -284,8 +309,8 @@ class oCentura {
 																				WHEN NULL THEN -2 
 																				ELSE param1 END,'|',
 																		nombre_completo_usuario) 
-														as data 
-										FROM  _viUsuarios where username = '$username' and password = '$pass' and status_usuario = 1";
+														AS data 
+										FROM  _viUsuarios WHERE username = '$username' AND password = '$pass' AND status_usuario = 1";
 								break;		
 						}
 						break;						
@@ -294,117 +319,117 @@ class oCentura {
 							case 0:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT municipio as label, idmunicipio as data 
-										FROM cat_municipios where idestado = $otros and status_municipio = 1 and idemp = $idemp
-										Order By data asc ";
+								$query = "SELECT municipio AS label, idmunicipio AS data 
+										FROM cat_municipios WHERE idestado = $otros AND status_municipio = 1 AND idemp = $idemp
+										ORDER BY data ASC ";
 								break;		
 							case 1:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT estado as label, idestado as data 
-										FROM cat_estados where idemp = $idemp and status_estado = 1 and idemp = $idemp
-										Order By data asc ";
+								$query = "SELECT estado AS label, idestado AS data 
+										FROM cat_estados WHERE idemp = $idemp AND status_estado = 1 AND idemp = $idemp
+										ORDER BY data ASC ";
 								break;		
 							case 2:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT CASE WHEN predeterminado = 1 THEN CONCAT(ciclo,' (default)') else ciclo end as label, idciclo as data, predeterminado 
+								$query = "SELECT CASE WHEN predeterminado = 1 THEN CONCAT(ciclo,' (default)') else ciclo end AS label, idciclo AS data, predeterminado 
 											FROM cat_ciclos 
-											WHERE idemp = $idemp and status_ciclo = 1 Order By data asc  ";
+											WHERE idemp = $idemp AND status_ciclo = 1 ORDER BY data ASC  ";
 								break;		
 
 							case 3:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT nivel as label, idnivel as data 
-										FROM cat_niveles where idemp = $idemp and status_nivel = 1
-										Order By data asc ";
+								$query = "SELECT nivel AS label, idnivel AS data 
+										FROM cat_niveles WHERE idemp = $idemp AND status_nivel = 1
+										ORDER BY data ASC ";
 								break;		
 
 							case 4:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT grupo as label, idgrupo as data 
-										FROM cat_grupos where idemp = $idemp and status_grupo = 1  and visible = 1
-										Order By data asc ";
+								$query = "SELECT grupo AS label, idgrupo AS data 
+										FROM cat_grupos WHERE idemp = $idemp AND status_grupo = 1  AND visible = 1
+										ORDER BY data ASC ";
 								break;		
 							case 5:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT nombre_alumno as label, idalumno as data 
-										FROM _viAlumnos where idemp = $idemp and status_alumno = 1
-										Order By label asc ";
+								$query = "SELECT nombre_alumno AS label, idalumno AS data 
+										FROM _viAlumnos WHERE idemp = $idemp AND status_alumno = 1
+										ORDER BY label ASC ";
 								break;		
 							case 6:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT grupo as label, idgrupo as data 
-										FROM _viNivel_Grupos where idemp = $idemp and idciclo = $idciclo and idnivel = $otros and grupo_ciclo_nivel_visible = 1
-										Order By idgrupo asc ";
+								$query = "SELECT grupo AS label, idgrupo AS data 
+										FROM _viNivel_Grupos WHERE idemp = $idemp AND idciclo = $idciclo AND idnivel = $otros AND grupo_ciclo_nivel_visible = 1
+										ORDER BY idgrupo ASC ";
 								break;		
 							case 7:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT clasificacion as label, idmatclas as data 
-										FROM cat_materias_clasificacion where idemp = $idemp and status_materia_clasificacion
-										Order By idmatclas asc ";
+								$query = "SELECT clasificacion AS label, idmatclas AS data 
+										FROM cat_materias_clasificacion WHERE idemp = $idemp AND status_materia_clasificacion
+										ORDER BY idmatclas ASC ";
 								break;		
 							case 8:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT parentezco as label, idparentezco as data 
-										FROM cat_parentezcos where idemp = $idemp and status_parentezco
-										Order By idparentezco asc ";
+								$query = "SELECT parentezco AS label, idparentezco AS data 
+										FROM cat_parentezcos WHERE idemp = $idemp AND status_parentezco
+										ORDER BY idparentezco ASC ";
 								break;		
 							case 9:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT concat(ap_paterno,' ',ap_materno,' ',nombre) as label, idpersona as data 
-										FROM  cat_personas where idemp = $idemp and status_persona = 1 $otros ";
+								$query = "SELECT concat(ap_paterno,' ',ap_materno,' ',nombre) AS label, idpersona AS data 
+										FROM  cat_personas WHERE idemp = $idemp AND status_persona = 1 $otros ";
 								break;		
 							case 10:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT nombre_persona as label, idpersona as data, parentezco, email1, email2, 
+								$query = "SELECT nombre_persona AS label, idpersona AS data, parentezco, email1, email2, 
 												 fecha_nacimiento, cfecha_nacimiento, lugar_nacimiento_persona, 
 												username_persona, idfamper, tel1, tel2, cel1, cel2 
-										FROM _viFamPer where idfamilia = $idfamilia and idemp = $idemp and status_famper = 1
-										Order By parentezco asc ";
+										FROM _viFamPer WHERE idfamilia = $idfamilia AND idemp = $idemp AND status_famper = 1
+										ORDER BY parentezco ASC ";
 								break;		
 							case 11:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT concat(razon_social,' - ',rfc) as label, idregfis as data 
-										FROM _viRegFis where idemp = $idemp and status_regfis = 1
-										Order By razon_social asc ";
+								$query = "SELECT concat(razon_social,' - ',rfc) AS label, idregfis AS data 
+										FROM _viRegFis WHERE idemp = $idemp AND status_regfis = 1
+										ORDER BY razon_social ASC ";
 								break;		
 							case 12:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT nombre_profesor as label, idprofesor as data 
-										FROM _viProfesores where idemp = $idemp and status_profesor = 1
+								$query = "SELECT nombre_profesor AS label, idprofesor AS data 
+										FROM _viProfesores WHERE idemp = $idemp AND status_profesor = 1
 										$otros ";
 								break;		
 							case 13:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT materia as label, idmateria as data 
-										FROM _viMaterias where idemp = $idemp and status_materia = 1
+								$query = "SELECT materia AS label, idmateria AS data 
+										FROM _viMaterias WHERE idemp = $idemp AND status_materia = 1
 										$otros ";
 								break;		
 							case 14:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT alumno as label, idgrualu as data 
-										FROM _viGrupo_Alumnos where idciclo = $idciclo and idgrupo = $idgrupo and idemp = $idemp and status_grualu = 1
+								$query = "SELECT alumno AS label, idgrualu AS data 
+										FROM _viGrupo_Alumnos WHERE idciclo = $idciclo AND idgrupo = $idgrupo AND idemp = $idemp AND status_grualu = 1
 										$otros ";
 								break;		
 							case 15:
 								parse_str($arg);
 
 								$idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT alumno as label, idboleta as data 
-										FROM _viBoletas where idgrumat = $idgrumat and idemp = $idemp
+								$query = "SELECT alumno AS label, idboleta AS data 
+										FROM _viBoletas WHERE idgrumat = $idgrumat AND idemp = $idemp
 										$otros ";
 								break;		
 							case 16:
@@ -413,8 +438,8 @@ class oCentura {
 						        $idemp = $this->getIdEmpFromAlias($u);
 								$idciclo = $this->getCicloFromIdEmp($idemp);
 
-								$query = "SELECT distinct grupo as label, idgrupo as data, ispai_grupo 
-										FROM _viGrupo_Materias where idciclo = $idciclo and idprofesor = $idprofesor and isagrupadora = 0 and grupo_visible = 1 
+								$query = "SELECT DISTINCT grupo AS label, idgrupo AS data, ispai_grupo 
+										FROM _viGrupo_Materias WHERE idciclo = $idciclo AND idprofesor = $idprofesor AND isagrupadora = 0 AND grupo_visible = 1 
 										$otros ";
 								break;		
 							case 17:
@@ -422,63 +447,63 @@ class oCentura {
 								$idprofesor = $this->getIdProfFromAlias($u);
 						        $idemp = $this->getIdEmpFromAlias($u);
 								$idciclo = $this->getCicloFromIdEmp($idemp);
-								$query = "SELECT materia as label, idgrumat as data, eval_default, eval_mod, materia_bloqueada, idpaiareadisciplinaria    
-										FROM _viGrupo_Materias where idciclo = $idciclo and idprofesor = $idprofesor and idgrupo = $idgrupo and isagrupadora = 0 $otros ";
+								$query = "SELECT materia AS label, idgrumat AS data, eval_default, eval_mod, materia_bloqueada, idpaiareadisciplinaria    
+										FROM _viGrupo_Materias WHERE idciclo = $idciclo AND idprofesor = $idprofesor AND idgrupo = $idgrupo AND isagrupadora = 0 $otros ";
 								break;	
 									
 							case 18:
 								parse_str($arg);
 						        $idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT materia as label, idgrumat as data 
-										FROM _viGrupo_Materias where  idciclo = $idciclo and idgrupo = $idgrupo and isagrupadora = 1 and idemp = $idemp $otros ";
+								$query = "SELECT materia AS label, idgrumat AS data 
+										FROM _viGrupo_Materias WHERE  idciclo = $idciclo AND idgrupo = $idgrupo AND isagrupadora = 1 AND idemp = $idemp $otros ";
 								break;	
 
 							case 19:
 								parse_str($arg);
 						        $idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT materia as label, idgrumat as data 
-										FROM _viGrupo_Materias where  idciclo = $idciclo and idgrupo = $idgrupo and isagrupadora = 0 and idemp = $idemp $otros ";
+								$query = "SELECT materia AS label, idgrumat AS data 
+										FROM _viGrupo_Materias WHERE  idciclo = $idciclo AND idgrupo = $idgrupo AND isagrupadora = 0 AND idemp = $idemp $otros ";
 								break;	
 
 							case 20:
 								parse_str($arg);
 						        $idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT materia as label, idgrumat as data 
-										FROM _viGrupo_Materias where idciclo = $idciclo and idgrupo = $idgrupo and padre = $idgrumat and idemp = $idemp $otros ";
+								$query = "SELECT materia AS label, idgrumat AS data 
+										FROM _viGrupo_Materias WHERE idciclo = $idciclo AND idgrupo = $idgrupo AND padre = $idgrumat AND idemp = $idemp $otros ";
 								break;	
 							case 21:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
 								//$idciclo = $this->getCicloFromIdEmp($idemp);
-								$query = "SELECT alumno as label, idgrualu as data, num_lista, clave_nivel, 
+								$query = "SELECT alumno AS label, idgrualu AS data, num_lista, clave_nivel, 
 												genero, idalumno, usernamealumno, nombre_tutor, idfamilia, 
 												familia, email_tutor1, email_tutor2, email_fiscal, 
 												username_tutor, idtutor, ap_paterno, ap_materno, nombre, 
 												tel1_tutor, tel2_tutor, cel1_tutor, cel2_tutor, grupo,
 												fn_tutor, cfn_tutor, idemp, curp, iduseralu
-										FROM _viGrupo_Alumnos where idemp = $idemp and idciclo = $idciclo and idgrupo = $idgrupo and status_grualu = 1 order by num_lista ";
+										FROM _viGrupo_Alumnos WHERE idemp = $idemp AND idciclo = $idciclo AND idgrupo = $idgrupo AND status_grualu = 1 ORDER BY num_lista ";
 								break;		
 							case 22:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT grupo as label, idgrupo as data 
-										FROM _viGrupo_Alumnos where clave_nivel = $clave_nivel and idemp = $idemp and status_grupo = 1
-										Order By data asc ";
+								$query = "SELECT grupo AS label, idgrupo AS data 
+										FROM _viGrupo_Alumnos WHERE clave_nivel = $clave_nivel AND idemp = $idemp AND status_grupo = 1
+										ORDER BY data ASC ";
 								break;
 
 							case 23:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT observacion as label, idobservacion as data 
-										FROM cat_observaciones where idemp = $idemp and status_observacion = 1 
-										Order By data asc ";
+								$query = "SELECT observacion AS label, idobservacion AS data 
+										FROM cat_observaciones WHERE idemp = $idemp AND status_observacion = 1 
+										ORDER BY data ASC ";
 								break;		
 
 							case 24:
 								parse_str($arg);
 								// $idemp = $this->getIdEmpFromAlias($user);
-								$query = "SELECT distinct abreviatura as label, idgrumat as data 
-										FROM _viBoletas where idgrupo = $idgrupo and idciclo = $idciclo
+								$query = "SELECT DISTINCT abreviatura AS label, idgrumat AS data 
+										FROM _viBoletas WHERE idgrupo = $idgrupo AND idciclo = $idciclo
 										$otros ";
 								break;		
 
@@ -486,121 +511,121 @@ class oCentura {
 							case 25:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT concat(director,' - ',nivel) as label, iddirector as data 
-										FROM _viDirectores where idemp = $idemp and status_director = 1
-										Order By data asc ";
+								$query = "SELECT concat(director,' - ',nivel) AS label, iddirector AS data 
+										FROM _viDirectores WHERE idemp = $idemp AND status_director = 1
+										ORDER BY data ASC ";
 								break;		
 
 							case 26:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT razon_social as label, concat(idemisorfiscal,'-',serie) as data  
-										FROM cat_emisores_fiscales where idemp = $idemp and status_emisor_fiscal = 1
-										Order By data asc ";
+								$query = "SELECT razon_social AS label, concat(idemisorfiscal,'-',serie) AS data  
+										FROM cat_emisores_fiscales WHERE idemp = $idemp AND status_emisor_fiscal = 1
+										ORDER BY data ASC ";
 								break;		
 
 							case 27:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT concepto as label, idconcepto as data 
-										FROM cat_conceptos where idemp = $idemp and status_concepto = 1
-										Order By data asc ";
+								$query = "SELECT concepto AS label, idconcepto AS data 
+										FROM cat_conceptos WHERE idemp = $idemp AND status_concepto = 1
+										ORDER BY data ASC ";
 								break;		
 
 							case 28:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT nivel as label, clave_nivel as data 
-										FROM cat_niveles where idemp = $idemp and status_nivel = 1
-										Order By data asc ";
+								$query = "SELECT nivel AS label, clave_nivel AS data 
+										FROM cat_niveles WHERE idemp = $idemp AND status_nivel = 1
+										ORDER BY data ASC ";
 								break;		
 
 							case 29:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT distinct familia as label, idfamilia as data, nombre_tutor as tutor 
+								$query = "SELECT DISTINCT familia AS label, idfamilia AS data, nombre_tutor AS tutor 
 										FROM _viFamAlu 
-										where idemp = $idemp and status_famalu = 1 and familia != 'null'
-										Order By label asc ";
+										WHERE idemp = $idemp AND status_famalu = 1 AND familia != 'null'
+										ORDER BY label ASC ";
 								break;	
 
 							case 30:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT concat(razon_social,' - ',rfc) as label, idregfis as data, predeterminado 
-										FROM _viFamRegFis where idemp = $idemp and idfamilia = $idfamilia and status_famregfis = 1
-										Order By razon_social asc ";
+								$query = "SELECT concat(razon_social,' - ',rfc) AS label, idregfis AS data, predeterminado 
+										FROM _viFamRegFis WHERE idemp = $idemp AND idfamilia = $idfamilia AND status_famregfis = 1
+										ORDER BY razon_social ASC ";
 								break;		
 
 							case 31:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT metodo_de_pago as label, idmetododepago as data, metodo_de_pago_predeterminado as isdefault, clave
-										FROM cat_metodos_de_pago where idemp = $idemp and status_metodo_de_pago = 1
-										Order By clave asc ";
+								$query = "SELECT metodo_de_pago AS label, idmetododepago AS data, metodo_de_pago_predeterminado AS isdefault, clave
+										FROM cat_metodos_de_pago WHERE idemp = $idemp AND status_metodo_de_pago = 1
+										ORDER BY clave ASC ";
 								break;		
 
 							case 32:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT color as label, idcolor as data, codigo_color_hex
-										FROM cat_colores where idemp = $idemp and status_color = 1
-										Order By data asc ";
+								$query = "SELECT color AS label, idcolor AS data, codigo_color_hex
+										FROM cat_colores WHERE idemp = $idemp AND status_color = 1
+										ORDER BY data ASC ";
 								break;		
 
 							case 33:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT producto as label, idproducto as data
-										FROM cat_productos where idemp = $idemp and status_producto = 1
-										Order By data asc ";
+								$query = "SELECT producto AS label, idproducto AS data
+										FROM cat_productos WHERE idemp = $idemp AND status_producto = 1
+										ORDER BY data ASC ";
 								break;		
 
 							case 34:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT medida2 as label, idmedida as data
-										FROM cat_medidas where idemp = $idemp and status_medida = 1
-										Order By data asc ";
+								$query = "SELECT medida2 AS label, idmedida AS data
+										FROM cat_medidas WHERE idemp = $idemp AND status_medida = 1
+										ORDER BY data ASC ";
 								break;		
 
 							case 35:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT proveedor as label, idproveedor as data
-										FROM cat_proveedores where idemp = $idemp and status_proveedor = 1
-										Order By data asc ";
+								$query = "SELECT proveedor AS label, idproveedor AS data
+										FROM cat_proveedores WHERE idemp = $idemp AND status_proveedor = 1
+										ORDER BY data ASC ";
 								break;	
 
 							case 36:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT concat(apellidos,' ',nombres) as label, iduser as data 
-										FROM  _viUsuarios where idemp = $idemp and status_usuario = 1 
-										ORDER BY label asc";
+								$query = "SELECT concat(apellidos,' ',nombres) AS label, iduser AS data 
+										FROM  _viUsuarios WHERE idemp = $idemp AND status_usuario = 1 
+										ORDER BY label ASC";
 								break;
 	
 							case 37:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT autorizan as label, idusersupervisorsolmat as data 
-										FROM  _viSupervisorSolMat where idemp = $idemp and status_supervisor_sol_mat = 1 
-										ORDER BY label asc";
+								$query = "SELECT autorizan AS label, idusersupervisorsolmat AS data 
+										FROM  _viSupervisorSolMat WHERE idemp = $idemp AND status_supervisor_sol_mat = 1 
+										ORDER BY label ASC";
 								break;
 
 							case 38:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT concat(producto,' ',medida1) as label, idproducto as data, costo_unitario
-										FROM _viProductos where idemp = $idemp and status_producto = 1
-										Order By label asc ";
+								$query = "SELECT concat(producto,' ',medida1) AS label, idproducto AS data, costo_unitario
+										FROM _viProductos WHERE idemp = $idemp AND status_producto = 1
+										ORDER BY label ASC ";
 								break;		
 							case 39:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT distinct solicitan as label, idsolicita as data 
-										FROM _viSolAut where idemp = $idemp
-										Order By label asc ";
+								$query = "SELECT DISTINCT solicitan AS label, idsolicita AS data 
+										FROM _viSolAut WHERE idemp = $idemp
+										ORDER BY label ASC ";
 								break;	
 
 							case 40:
@@ -609,8 +634,8 @@ class oCentura {
 						        $idemp = $this->getIdEmpFromAlias($u);
 								$idciclo = $this->getCicloFromIdEmp($idemp);
 
-								$query = "SELECT distinct materia as label, idboleta as data 
-										FROM _viBoletas where idciclo = $idciclo and iduseralu = $iduseralu and grupo_visible = 1 and isagrupadora_grumat = 0 
+								$query = "SELECT DISTINCT materia AS label, idboleta AS data 
+										FROM _viBoletas WHERE idciclo = $idciclo AND iduseralu = $iduseralu AND grupo_visible = 1 AND isagrupadora_grumat = 0 
 										$otros ";
 								break;		
 	
@@ -619,8 +644,8 @@ class oCentura {
 								$idusertutor = $this->getIdUserFromAlias($u);
 						        $idemp = $this->getIdEmpFromAlias($u);
 						        $idciclo = $this->getCicloFromIdEmp($idemp);
-								$query = "SELECT alumno as label, iduseralufortutor as data 
-										FROM _viFamAlu where idusertutor = $idusertutor and status_famalu = 1 
+								$query = "SELECT alumno AS label, iduseralufortutor AS data 
+										FROM _viFamAlu WHERE idusertutor = $idusertutor AND status_famalu = 1 
 										$otros ";
 								break;		
 
@@ -629,8 +654,8 @@ class oCentura {
 						        $idemp = $this->getIdEmpFromAlias($u);
 								$idciclo = $this->getCicloFromIdEmp($idemp);
 
-								$query = "SELECT distinct materia as label, idboleta as data 
-										FROM _viBoletas where idciclo = $idciclo and iduseralu = $iduseralu and grupo_visible = 1 and isagrupadora_grumat = 0
+								$query = "SELECT DISTINCT materia AS label, idboleta AS data 
+										FROM _viBoletas WHERE idciclo = $idciclo AND iduseralu = $iduseralu AND grupo_visible = 1 AND isagrupadora_grumat = 0
 										$otros ";
 								break;	
 
@@ -639,8 +664,8 @@ class oCentura {
 								$idusertutor = $this->getIdUserFromAlias($u);
 						        $idemp = $this->getIdEmpFromAlias($u);
 
-								$query = "SELECT familia as label, idfamilia as data, nombre_tutor 
-										FROM _viFamAlu where idusertutor = $idusertutor and status_famalu = 1 and idemp = $idemp
+								$query = "SELECT familia AS label, idfamilia AS data, nombre_tutor 
+										FROM _viFamAlu WHERE idusertutor = $idusertutor AND status_famalu = 1 AND idemp = $idemp
 										$otros ";
 								break;		
 
@@ -649,17 +674,17 @@ class oCentura {
 								$idusertutor = $this->getIdUserFromAlias($u);
 						        $idemp = $this->getIdEmpFromAlias($u);
 
-								$query = "SELECT alumno as label, idalumno as data 
-										FROM _viFamAlu where idusertutor = $idusertutor and status_famalu = 1 and idemp = $idemp
+								$query = "SELECT alumno AS label, idalumno AS data 
+										FROM _viFamAlu WHERE idusertutor = $idusertutor AND status_famalu = 1 AND idemp = $idemp
 										$otros ";
 								break;		
 
 							case 45:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT nivel as label, clave_nivel as data 
-										FROM cat_niveles where idemp = $idemp and status_nivel = 1
-										Order By data asc ";
+								$query = "SELECT nivel AS label, clave_nivel AS data 
+										FROM cat_niveles WHERE idemp = $idemp AND status_nivel = 1
+										ORDER BY data ASC ";
 								break;		
 
 							case 46:
@@ -667,125 +692,125 @@ class oCentura {
 								$idemp = $this->getIdEmpFromAlias($u);
 								$idciclo = $this->getCicloFromIdEmp($idemp);
 
-								$query = "SELECT grupo as label, idgrupo as data 
-										FROM _viNivel_Grupos where idemp = $idemp and idciclo = $idciclo and clave_nivel = $clave_nivel and grupo_ciclo_nivel_visible = 1 and activo_en_caja = 1 and status_grupo = 1 
-										Order By idgrupo asc ";
+								$query = "SELECT grupo AS label, idgrupo AS data 
+										FROM _viNivel_Grupos WHERE idemp = $idemp AND idciclo = $idciclo AND clave_nivel = $clave_nivel AND grupo_ciclo_nivel_visible = 1 AND activo_en_caja = 1 AND status_grupo = 1 
+										ORDER BY idgrupo ASC ";
 								break;		
 
 							case 47:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
 
-								$query = "SELECT nivel_de_acceso as label, idusernivelacceso as data, clave
-										FROM usuarios_niveldeacceso where idemp = $idemp and visible_in_com = 1 
-										Order By clave asc ";
+								$query = "SELECT nivel_de_acceso AS label, idusernivelacceso AS data, clave
+										FROM usuarios_niveldeacceso WHERE idemp = $idemp AND visible_in_com = 1 
+										ORDER BY clave ASC ";
 								break;		
 
 							case 48:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT director as label, idusuariodirector as data 
+								$query = "SELECT director AS label, idusuariodirector AS data 
 										FROM _viDirectores 
-										where idemp = $idemp and status_director = 1 and director != 'null'
-										Order By label asc ";
+										WHERE idemp = $idemp AND status_director = 1 AND director != 'null'
+										ORDER BY label ASC ";
 								break;	
 
 							case 49:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
 								$idciclo = $this->getCicloFromIdEmp($idemp);
-								$query = "SELECT distinct profesor as label, idusuarioprofesor as data 
+								$query = "SELECT DISTINCT profesor AS label, idusuarioprofesor AS data 
 										FROM _viGrupo_Materias 
-										where idemp = $idemp and idciclo = $idciclo and idgrupo = $idgrupo and status_grumat = 1 and profesor != 'null'
-										Order By label asc ";
+										WHERE idemp = $idemp AND idciclo = $idciclo AND idgrupo = $idgrupo AND status_grumat = 1 AND profesor != 'null'
+										ORDER BY label ASC ";
 								break;	
 
 							case 50:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
 								$idciclo = $this->getCicloFromIdEmp($idemp);
-								$query = "SELECT distinct alumno as label, iduseralu as data 
+								$query = "SELECT DISTINCT alumno AS label, iduseralu AS data 
 										FROM _viGrupo_Alumnos 
-										where idemp = $idemp and idciclo = $idciclo and idgrupo = $idgrupo and status_grualu = 1 and alumno != 'null'
-										Order By label asc ";
+										WHERE idemp = $idemp AND idciclo = $idciclo AND idgrupo = $idgrupo AND status_grualu = 1 AND alumno != 'null'
+										ORDER BY label ASC ";
 								break;	
 
 							case 51:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
 								$idciclo = $this->getCicloFromIdEmp($idemp);
-								$query = "SELECT distinct nombre_tutor as label, idusertutor as data 
+								$query = "SELECT DISTINCT nombre_tutor AS label, idusertutor AS data 
 										FROM _viGrupo_Alumnos 
-										where idemp = $idemp and idciclo = $idciclo and idgrupo = $idgrupo and status_grualu = 1 and nombre_tutor != 'null' 
-										Order By label asc ";
+										WHERE idemp = $idemp AND idciclo = $idciclo AND idgrupo = $idgrupo AND status_grualu = 1 AND nombre_tutor != 'null' 
+										ORDER BY label ASC ";
 								break;	
 
 							case 52:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
 								$idciclo = $this->getCicloFromIdEmp($idemp);
-								$query = "SELECT distinct nombre_completo_usuario as label, iduser as data 
+								$query = "SELECT DISTINCT nombre_completo_usuario AS label, iduser AS data 
 										FROM _viUsuarios 
-										where idemp = $idemp  and idusernivelacceso = $idusernivelacceso and status_usuario = 1 and nombre_completo_usuario != 'null' 
-										Order By label asc ";
+										WHERE idemp = $idemp  AND idusernivelacceso = $idusernivelacceso AND status_usuario = 1 AND nombre_completo_usuario != 'null' 
+										ORDER BY label ASC ";
 								break;	
 
 							case 53:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
 						        $iduserpropietario = $this->getIdUserFromAlias($u);				
-								$query = "SELECT grupo as label, idcomgrupo as data 
+								$query = "SELECT grupo AS label, idcomgrupo AS data 
 										FROM com_grupos 
-										where idemp = $idemp  and iduserpropietario = $iduserpropietario and status_com_grupo = 1 and grupo != 'null' 
-										Order By label asc ";
+										WHERE idemp = $idemp  AND iduserpropietario = $iduserpropietario AND status_com_grupo = 1 AND grupo != 'null' 
+										ORDER BY label ASC ";
 								break;	
 
 							case 54:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
 						        $iduserpropietario = $this->getIdUserFromAlias($u);				
-								$query = "SELECT usuario as label, iduser as data 
+								$query = "SELECT usuario AS label, iduser AS data 
 										FROM _viComGpoUser 
-										where idemp = $idemp and idcomgrupo = $idcomgrupo 
-										Order By label asc ";
+										WHERE idemp = $idemp AND idcomgrupo = $idcomgrupo 
+										ORDER BY label ASC ";
 								break;	
 
 							case 55:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
 								//$idciclo = $this->getCicloFromIdEmp($idemp);
-								$query = "SELECT distinct alumno as label, idalumno as data, idnivel, num_lista 
+								$query = "SELECT DISTINCT alumno AS label, idalumno AS data, idnivel, num_lista 
 										FROM _viGrupo_Alumnos 
-										where idemp = $idemp and idciclo = $idciclo and idgrupo = $idgrupo and status_grualu = 1 and alumno != 'null'
-										Order By num_lista asc ";
+										WHERE idemp = $idemp AND idciclo = $idciclo AND idgrupo = $idgrupo AND status_grualu = 1 AND alumno != 'null'
+										ORDER BY num_lista ASC ";
 								break;	
 
 							case 56:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
 						        $iduserpropietario = $this->getIdUserFromAlias($u);				
-								$query = "SELECT descripcion_breve as label, idgrumatconmkb as data 
+								$query = "SELECT descripcion_breve AS label, idgrumatconmkb AS data 
 										FROM grupo_materia_config_markbook 
-										where idemp = $idemp  and idgrumatcon = $idgrumatcon and status_grumatconmkb = 1
-										Order By label asc ";
+										WHERE idemp = $idemp  AND idgrumatcon = $idgrumatcon AND status_grumatconmkb = 1
+										ORDER BY label ASC ";
 								break;
 
 							case 57:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
 								// $idciclo = $this->getCicloFromIdEmp($idemp);
-								$query = "SELECT alumno as label, idgrualu as data, num_lista, clave_nivel, 
+								$query = "SELECT alumno AS label, idgrualu AS data, num_lista, clave_nivel, 
 												genero, idalumno, usernamealumno, nombre_tutor, idfamilia, 
 												familia, email_tutor1, email_tutor2, email_fiscal, username_tutor, idtutor
-										FROM _viGrupo_Alumnos where idciclo = $idciclo and idgrupo = $idgrupo and idemp = $idemp and status_grualu = 1 order by num_lista ";
+										FROM _viGrupo_Alumnos WHERE idciclo = $idciclo AND idgrupo = $idgrupo AND idemp = $idemp AND status_grualu = 1 ORDER BY num_lista ";
 								break;		
 
 							case 58:
 								parse_str($arg);
 						        $idemp = $this->getIdEmpFromAlias($u);
 
-								$query = "SELECT alumno as label, idalumno as data 
-										FROM _viFamAlu where iduseralufortutor = $iduseralu and status_famalu = 1 and idemp = $idemp limit 1
+								$query = "SELECT alumno AS label, idalumno AS data 
+										FROM _viFamAlu WHERE iduseralufortutor = $iduseralu AND status_famalu = 1 AND idemp = $idemp LIMIT 1
 										";
 								break;		
 
@@ -795,7 +820,7 @@ class oCentura {
 								$idciclo = $this->getCicloFromIdEmp($idemp);
 
 								$query = "SELECT * 
-										FROM _viGrupo_Alumnos where idciclo = $idciclo and idemp = $idemp and iduseralu = $iduseralu and status_grualu = 1
+										FROM _viGrupo_Alumnos WHERE idciclo = $idciclo AND idemp = $idemp AND iduseralu = $iduseralu AND status_grualu = 1
 										$otros ";
 								break;		
 
@@ -804,8 +829,8 @@ class oCentura {
 								$idusertutor = $this->getIdUserFromAlias($u);
 						        $idemp = $this->getIdEmpFromAlias($u);
 						        $idciclo = $this->getCicloFromIdEmp($idemp);
-								$query = "SELECT alumno as label, iduseralufortutor as data 
-										FROM _viFamAlu where idusertutor = $idusertutor and status_famalu = 1 and idemp = $idemp and status_alumno = 1 
+								$query = "SELECT alumno AS label, iduseralufortutor AS data 
+										FROM _viFamAlu WHERE idusertutor = $idusertutor AND status_famalu = 1 AND idemp = $idemp AND status_alumno = 1 
 										$otros ";
 								break;		
 
@@ -815,8 +840,8 @@ class oCentura {
 						        $idemp      = $this->getIdEmpFromAlias($u);
 						        $idfamilia  = $this->getIdFamFromIdUser($idusername,0);
 
-								$query = "SELECT alumno as label, iduseralufortutor as data 
-										FROM _viFamAlu where idfamilia = $idfamilia and status_famalu = 1 and idemp = $idemp
+								$query = "SELECT alumno AS label, iduseralufortutor AS data 
+										FROM _viFamAlu WHERE idfamilia = $idfamilia AND status_famalu = 1 AND idemp = $idemp
 										$otros ";
 								break;		
 
@@ -826,8 +851,8 @@ class oCentura {
 						        $idemp      = $this->getIdEmpFromAlias($u);
 						        $idfamilia  = $this->getIdFamFromIdUser($idusername,0);
 
-								$query = "SELECT familia as label, idfamilia as data, nombre_tutor 
-										FROM _viFamAlu where idfamilia = $idfamilia and status_famalu = 1 and idemp = $idemp
+								$query = "SELECT familia AS label, idfamilia AS data, nombre_tutor 
+										FROM _viFamAlu WHERE idfamilia = $idfamilia AND status_famalu = 1 AND idemp = $idemp
 										$otros ";
 								break;		
 
@@ -835,7 +860,7 @@ class oCentura {
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
 								$query = "SELECT ispai_materia, isagrupadora 
-										FROM cat_materias where idemp = $idemp and status_materia = 1 and idmateria = $idmateria
+										FROM cat_materias WHERE idemp = $idemp AND status_materia = 1 AND idmateria = $idmateria
 										limit 1";
 								break;		
 
@@ -843,16 +868,16 @@ class oCentura {
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
 								$query = "SELECT ispai_grupo 
-										FROM cat_grupos where idemp = $idemp and status_grupo = 1 and idgrupo = $idgrupo
+										FROM cat_grupos WHERE idemp = $idemp AND status_grupo = 1 AND idgrupo = $idgrupo
 										limit 1";
 								break;		
 
 							case 65:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT area_disciplinaria as label, idpaiareadisciplinaria as data 
-										FROM cat_pai_areas_disciplinarias where idemp = $idemp and status_area_disciplinaria
-										Order By idpaiareadisciplinaria asc ";
+								$query = "SELECT area_disciplinaria AS label, idpaiareadisciplinaria AS data 
+										FROM cat_pai_areas_disciplinarias WHERE idemp = $idemp AND status_area_disciplinaria
+										ORDER BY idpaiareadisciplinaria ASC ";
 								break;		
 
 							case 66:
@@ -861,8 +886,8 @@ class oCentura {
 						        $idemp = $this->getIdEmpFromAlias($u);
 								$idciclo = $this->getCicloFromIdEmp($idemp);
 
-								$query = "SELECT distinct grupo as label, idgrupo as data, grado_pai
-										FROM _viGrupo_Materias where idciclo = $idciclo and idprofesor = $idprofesor and isagrupadora = 0 and grupo_visible = 1 and ispai_grupo = 1 and idpaiareadisciplinaria > 0 and idemp = $idemp 
+								$query = "SELECT DISTINCT grupo AS label, idgrupo AS data, grado_pai
+										FROM _viGrupo_Materias WHERE idciclo = $idciclo AND idprofesor = $idprofesor AND isagrupadora = 0 AND grupo_visible = 1 AND ispai_grupo = 1 AND idpaiareadisciplinaria > 0 AND idemp = $idemp 
 										$otros ";
 								break;		
 
@@ -871,8 +896,8 @@ class oCentura {
 								$idprofesor = $this->getIdProfFromAlias($u);
 						        $idemp = $this->getIdEmpFromAlias($u);
 								$idciclo = $this->getCicloFromIdEmp($idemp);
-								$query = "SELECT materia as label, idgrumat as data, eval_default, eval_mod, materia_bloqueada, idpaiareadisciplinaria, grado_pai   
-										FROM _viGrupo_Materias where idciclo = $idciclo and idprofesor = $idprofesor and idgrupo = $idgrupo and grado_pai = $grado_pai and isagrupadora = 0 and idemp = $idemp $otros ";
+								$query = "SELECT materia AS label, idgrumat AS data, eval_default, eval_mod, materia_bloqueada, idpaiareadisciplinaria, grado_pai   
+										FROM _viGrupo_Materias WHERE idciclo = $idciclo AND idprofesor = $idprofesor AND idgrupo = $idgrupo AND grado_pai = $grado_pai AND isagrupadora = 0 AND idemp = $idemp $otros ";
 								break;	
 
 
@@ -885,55 +910,55 @@ class oCentura {
 							case 0:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT grupo as label,idgponiv as data 
-										FROM _viNivel_Grupos where idemp = $idemp and idciclo = $idciclo and idnivel = $otros  and grupo_ciclo_nivel_visible = 1
-										Order By label asc ";
+								$query = "SELECT grupo AS label,idgponiv AS data 
+										FROM _viNivel_Grupos WHERE idemp = $idemp AND idciclo = $idciclo AND idnivel = $otros  AND grupo_ciclo_nivel_visible = 1
+										ORDER BY label ASC ";
 								break;		
 
 							case 1: // Obtiene a Lista de Todos los Alumnos de la empresa
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT alumno as label,idgrualu as data 
-										FROM _viGrupo_Alumnos where idemp = $idemp and idciclo = $idciclo and idgrupo = $otros
-										Order By label asc ";
+								$query = "SELECT alumno AS label,idgrualu AS data 
+										FROM _viGrupo_Alumnos WHERE idemp = $idemp AND idciclo = $idciclo AND idgrupo = $otros
+										ORDER BY label ASC ";
 								break;		
 
 							case 2:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT observacion as label,idnivobs as data 
-										FROM _viNivel_Observaciones where idemp = $idemp and idnivel = $otros
-										Order By label asc ";
+								$query = "SELECT observacion AS label,idnivobs AS data 
+										FROM _viNivel_Observaciones WHERE idemp = $idemp AND idnivel = $otros
+										ORDER BY label ASC ";
 								break;		
 							case 3:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT profesor as label,iddirprof as data 
-										FROM _viDirProf where idemp = $idemp and iddirector = $otros
-										Order By profesor asc ";
+								$query = "SELECT profesor AS label,iddirprof AS data 
+										FROM _viDirProf WHERE idemp = $idemp AND iddirector = $otros
+										ORDER BY profesor ASC ";
 								break;		
 							case 4: // Obtiene a Lista de Todos los Alumnos de la empresa basado en el Ciclo
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT alumno as label,idgrualu as data 
+								$query = "SELECT alumno AS label,idgrualu AS data 
 										FROM _viGrupo_Alumnos 
-										where idemp = $idemp and idciclo = $idciclo and idgrupo = $otros
-										Order By label asc ";
+										WHERE idemp = $idemp AND idciclo = $idciclo AND idgrupo = $otros
+										ORDER BY label ASC ";
 								break;		
 							case 5:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT grupo as label,idgponiv as data 
-										FROM _viNivel_Grupos where idemp = $idemp and idciclo = $idciclo and status_ciclo = 1  and grupo_ciclo_nivel_visible = 1
-										Order By clave_nivel, clave asc ";
+								$query = "SELECT grupo AS label,idgponiv AS data 
+										FROM _viNivel_Grupos WHERE idemp = $idemp AND idciclo = $idciclo AND status_ciclo = 1  AND grupo_ciclo_nivel_visible = 1
+										ORDER BY clave_nivel, clave ASC ";
 								break;		
 
 							case 6:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT solicitan as label, idsolicitanteautorizante as data 
-										FROM _viSolAut where idemp = $idemp and idautoriza = $otros
-										Order By label asc ";
+								$query = "SELECT solicitan AS label, idsolicitanteautorizante AS data 
+										FROM _viSolAut WHERE idemp = $idemp AND idautoriza = $otros
+										ORDER BY label ASC ";
 								break;
 
 							case 7: // 
@@ -941,17 +966,17 @@ class oCentura {
 								$idemp = $this->getIdEmpFromAlias($u);
 								$idciclo = $this->getCicloFromIdEmp($idemp);
 
-								$query = "SELECT nombres_alumno as label, idgrualu as data, grupo, clave_nivel, ver_boleta_interna, grupo_bloqueado, grado_pai, ispai_grupo
-										FROM _viGrupo_Alumnos where idemp = $idemp and idciclo = $idciclo and idfamilia = $idfamilia and status_grualu = 1
-										Order By label asc ";
+								$query = "SELECT nombres_alumno AS label, idgrualu AS data, grupo, clave_nivel, ver_boleta_interna, grupo_bloqueado, grado_pai, ispai_grupo
+										FROM _viGrupo_Alumnos WHERE idemp = $idemp AND idciclo = $idciclo AND idfamilia = $idfamilia AND status_grualu = 1
+										ORDER BY label ASC ";
 								break;		
 			
 							case 8:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT usuario as label, idcomuserasocgpo as data 
-										FROM _viComGpoUser where idemp = $idemp and idcomgrupo = $idcomgrupo and status_com_usuario_asoc_grupo = 1
-										Order By label asc ";
+								$query = "SELECT usuario AS label, idcomuserasocgpo AS data 
+										FROM _viComGpoUser WHERE idemp = $idemp AND idcomgrupo = $idcomgrupo AND status_com_usuario_asoc_grupo = 1
+										ORDER BY label ASC ";
 								break;
 
 							case 9: // 
@@ -959,9 +984,9 @@ class oCentura {
 								$idemp = $this->getIdEmpFromAlias($u);
 								$idciclo = $this->getCicloFromIdEmp($idemp);
 
-								$query = "SELECT nombres_alumno as label, idgrualu as data, grupo, clave_nivel, idfamilia
-										FROM _viGrupo_Alumnos where idemp = $idemp and idciclo = $idciclo and idfamilia = $idfamilia and idgrualu = $idgrualu and status_grualu = 1
-										Order By label asc ";
+								$query = "SELECT nombres_alumno AS label, idgrualu AS data, grupo, clave_nivel, idfamilia
+										FROM _viGrupo_Alumnos WHERE idemp = $idemp AND idciclo = $idciclo AND idfamilia = $idfamilia AND idgrualu = $idgrualu AND status_grualu = 1
+										ORDER BY label ASC ";
 								break;		
 
 							case 10: // 
@@ -969,9 +994,9 @@ class oCentura {
 								$idemp = $this->getIdEmpFromAlias($u);
 								$idciclo = $this->getCicloFromIdEmp($idemp);
 
-								$query = "SELECT nombres_alumno as label, idgrualu as data, grupo, clave_nivel
-										FROM _viGrupo_Alumnos where idemp = $idemp and idciclo = $idciclo and idalumno = $idalumno and status_grualu = 1
-										Order By label asc ";
+								$query = "SELECT nombres_alumno AS label, idgrualu AS data, grupo, clave_nivel
+										FROM _viGrupo_Alumnos WHERE idemp = $idemp AND idciclo = $idciclo AND idalumno = $idalumno AND status_grualu = 1
+										ORDER BY label ASC ";
 								break;		
 
 							case 11: 
@@ -981,11 +1006,11 @@ class oCentura {
 
 								$query = "SELECT *
 										FROM _viGrupo_Alumnos 
-											where 
-												idemp = $idemp and 
-												idciclo = $idciclo and 
-												iduseralu = $idgrualu and 
-												status_grualu = 1 and 
+											WHERE 
+												idemp = $idemp AND 
+												idciclo = $idciclo AND 
+												iduseralu = $idgrualu AND 
+												status_grualu = 1 AND 
 												grupo_bloqueado = 0 
 										limit 1";
 								break;		
@@ -998,265 +1023,226 @@ class oCentura {
 
 		  	}
 
-		  	// $result =$Conn->query($query);
+			$result = $this->getArray($query);
+			return $result;
 
-  			$result = mysql_query($query);
-
-		  	while ($obj = mysql_fetch_object($result, $arr[0])) {
-			   	 $ret[] = $obj;
-		  	}
-		  
-	       	mysql_close($mysql);
-			
-			return $ret;
-			
 	}
 
-     public function setAsocia($tipo=0,$arg="",$pag=0,$limite=0,$var2=0, $otros=""){
-		  $query="";
+    public function setAsocia($tipo=0,$arg="",$pag=0,$limite=0,$var2=0, $otros=""){
+			$query="";
 
-		  $ip=$_SERVER['REMOTE_ADDR']; 
-		  $host=gethostbyaddr($_SERVER['REMOTE_ADDR']);//$_SERVER["REMOTE_HOST"]; 
-	
-		  $vRet = "Error";
-		  $Conn = voConn::getInstance();
-		  $mysql = mysql_connect($Conn->server, $Conn->user, $Conn->pass);
-		  mysql_select_db($Conn->db);
-		  mysql_query("SET NAMES 'utf8'");	
-            	switch ($tipo){
-					case 0:
-						switch($var2){
-							case 10:
-								parse_str($otros);
-								$iduser = $this->getIdUserFromAlias($u);
-								$idemp = $this->getIdEmpFromAlias($u);
-								$idciclo = $this->getCicloFromIdEmp($idemp);
+			$ip=$_SERVER['REMOTE_ADDR']; 
+			$host=gethostbyaddr($_SERVER['REMOTE_ADDR']);
+		
+			$vRet = "Error";
+        	switch ($tipo){
+				case 0:
+					switch($var2){
+						case 10:
+							parse_str($otros);
+							$iduser = $this->getIdUserFromAlias($u);
+							$idemp = $this->getIdEmpFromAlias($u);
+							$idciclo = $this->getCicloFromIdEmp($idemp);
 
-			          			$ar = explode(".",$arg);
-			          			$item = explode("|",$ar[0]);
-								foreach($item as $i=>$valor){
-									if ((int)($item[$i])>0){
-										$query = "Insert Into nivel_grupos(idciclo,idnivel,idgrupo,idemp,ip,host,creado_por,creado_el)value($idciclo,$ar[1],$item[$i],$idemp,'$ip','$host',$iduser,NOW())";
-										$result = mysql_query($query);
-										$vRet = $result!=1?"Error.".mysql_error():"OK";
-									}
+		          			$ar = explode(".",$arg);
+		          			$item = explode("|",$ar[0]);
+							foreach($item AS $i=>$valor){
+								if ((int)($item[$i])>0){
+									$query = "INSERT INTO nivel_grupos(idciclo,idnivel,idgrupo,idemp,ip,host,creado_por,creado_el)VALUES($idciclo,$ar[1],$item[$i],$idemp,'$ip','$host',$iduser,NOW())";
+									$vRet = $this->guardarDatos($query);
 								}
-								break;		
-							case 20:
+							}
+							break;		
+						case 20:
 
-			          			$ar = explode("|",$arg);
-								foreach($ar as $i=>$valor){
-									if ((int)($ar[$i])>0){
-										$query = "Delete from nivel_grupos where idgponiv = ".$ar[$i];
-										$result = mysql_query($query);
-										$vRet = $result!=1?"Error-- ".$ar[$i].' '.mysql_error():"OK";
-									}
+		          			$ar = explode("|",$arg);
+							foreach($ar AS $i=>$valor){
+								if ((int)($ar[$i])>0){
+									$query = "DELETE FROM nivel_grupos WHERE idgponiv = ".$ar[$i];
+									$vRet = $this->guardarDatos($query);
 								}
-								break;		
-						}
-						break;
+							}
+							break;		
+					}
+					break;
 
-					case 1:
-						switch($var2){
-							case 10:
-								parse_str($otros);
-								$iduser = $this->getIdUserFromAlias($u);
-								$idemp = $this->getIdEmpFromAlias($u);
-								$idciclo = $this->getCicloFromIdEmp($idemp);
+				case 1:
+					switch($var2){
+						case 10:
+							parse_str($otros);
+							$iduser = $this->getIdUserFromAlias($u);
+							$idemp = $this->getIdEmpFromAlias($u);
+							$idciclo = $this->getCicloFromIdEmp($idemp);
 
-			          			$ar = explode(".",$arg);
-			          			$item = explode("|",$ar[0]);
-								foreach($item as $i=>$valor){
-									if ((int)($item[$i])>0){
-										$query = "Insert Into grupo_alumnos(idciclo,idgrupo,idalumno,idemp,ip,host,creado_por,creado_el)value($idciclo,$ar[1],$item[$i],$idemp,'$ip','$host',$iduser,NOW())";
-										$result = mysql_query($query);
-										$vRet = $result!=1?"Error.":"OK";
-									}
+		          			$ar = explode(".",$arg);
+		          			$item = explode("|",$ar[0]);
+							foreach($item AS $i=>$valor){
+								if ((int)($item[$i])>0){
+									$query = "INSERT INTO grupo_alumnos(idciclo,idgrupo,idalumno,idemp,ip,host,creado_por,creado_el)VALUES($idciclo,$ar[1],$item[$i],$idemp,'$ip','$host',$iduser,NOW())";
+									$vRet = $this->guardarDatos($query);
 								}
-								break;		
-							case 20:
+							}
+							break;		
+						case 20:
 
-			          			$ar = explode("|",$arg);
-								foreach($ar as $i=>$valor){
-									if ((int)($ar[$i])>0){
-										$query = "Delete from grupo_alumnos where idgrualu = ".$ar[$i];
-										$result = mysql_query($query);
-										$vRet = $result!=1?"Error-- ".$ar[$i]:"OK";
-									}
+		          			$ar = explode("|",$arg);
+							foreach($ar AS $i=>$valor){
+								if ((int)($ar[$i])>0){
+									$query = "DELETE FROM grupo_alumnos WHERE idgrualu = ".$ar[$i];
+									$vRet = $this->guardarDatos($query);
 								}
-								break;		
-							case 30:
-			          			$ar = parse_str($otros);
-								$iduser = $this->getIdUserFromAlias($u);
-								$idemp = $this->getIdEmpFromAlias($u);
-								$idciclo = $this->getCicloFromIdEmp($idemp);
-								$idcicloant = $this->getCicloAntFromIdEmp($idemp);
+							}
+							break;		
+						case 30:
+		          			$ar = parse_str($otros);
+							$iduser = $this->getIdUserFromAlias($u);
+							$idemp = $this->getIdEmpFromAlias($u);
+							$idciclo = $this->getCicloFromIdEmp($idemp);
+							$idcicloant = $this->getCicloAntFromIdEmp($idemp);
+							$query = "SET @X = Copiar_Alumnos_de_Grupo_a_Grupo(".$idgrupoorigen.",".$idgrupodestino.",".$idciclo.",".$iduser.",".$idemp.",'".$ip."','".$host."',".$idcicloant.")";
+							$vRet = $this->execQuery($query);
+							break;		
 
-								//$query = "update grupo_alumnos set idgrupo = ".$idgrupo." where idgrualu = ".$idgrualu;
+					}
+					break;
 
-								$query = "Set @X = Copiar_Alumnos_de_Grupo_a_Grupo(".$idgrupoorigen.",".$idgrupodestino.",".$idciclo.",".$iduser.",".$idemp.",'".$ip."','".$host."',".$idcicloant.")";
-								
-								$result = mysql_query($query);
-								$vRet = $result!=1?"Error-- ":"OK";
-								break;		
+				case 2:
+					switch($var2){
+						case 10:
+							parse_str($otros);
+							$iduser = $this->getIdUserFromAlias($u);
+							$idemp = $this->getIdEmpFromAlias($u);
 
-						}
-						break;
-
-					case 2:
-						switch($var2){
-							case 10:
-								parse_str($otros);
-								$iduser = $this->getIdUserFromAlias($u);
-								$idemp = $this->getIdEmpFromAlias($u);
-
-			          			$ar = explode(".",$arg);
-			          			$item = explode("|",$ar[0]);
-								foreach($item as $i=>$valor){
-									if ((int)($item[$i])>0){
-										$query = "Insert Into nivel_observaciones(idnivel,idobservacion,idemp,ip,host,creado_por,creado_el)
-													value($ar[1],$item[$i],$idemp,'$ip','$host',$iduser,NOW())";
-										$result = mysql_query($query);
-										$vRet = $result!=1?"Error.":"OK";
-									}
+		          			$ar = explode(".",$arg);
+		          			$item = explode("|",$ar[0]);
+							foreach($item AS $i=>$valor){
+								if ((int)($item[$i])>0){
+									$query = "INSERT INTO nivel_observaciones(idnivel,idobservacion,idemp,ip,host,creado_por,creado_el)
+												VALUES($ar[1],$item[$i],$idemp,'$ip','$host',$iduser,NOW())";
+									$vRet = $this->guardarDatos($query);
 								}
-								break;		
-							case 20:
+							}
+							break;		
+						case 20:
 
-			          			$ar = explode("|",$arg);
-								foreach($ar as $i=>$valor){
-									if ((int)($ar[$i])>0){
-										$query = "Delete from nivel_observaciones where idnivobs = ".$ar[$i];
-										$result = mysql_query($query);
-										$vRet = $result!=1?"Error-- ".$ar[$i]:"OK";
-									}
+		          			$ar = explode("|",$arg);
+							foreach($ar AS $i=>$valor){
+								if ((int)($ar[$i])>0){
+									$query = "DELETE FROM nivel_observaciones WHERE idnivobs = ".$ar[$i];
+									$vRet = $this->guardarDatos($query);
 								}
-								break;		
-						}
-						break;
+							}
+							break;		
+					}
+					break;
 
-					case 3:
-						switch($var2){
-							case 10:
-								parse_str($otros);
-								$iduser = $this->getIdUserFromAlias($u);
-								$idemp = $this->getIdEmpFromAlias($u);
-								$idciclo = $this->getCicloFromIdEmp($idemp);
+				case 3:
+					switch($var2){
+						case 10:
+							parse_str($otros);
+							$iduser = $this->getIdUserFromAlias($u);
+							$idemp = $this->getIdEmpFromAlias($u);
+							$idciclo = $this->getCicloFromIdEmp($idemp);
 
-			          			$ar = explode(".",$arg);
-			          			$item = explode("|",$ar[0]);
-								foreach($item as $i=>$valor){
-									if ((int)($item[$i])>0){
-										$query = "Insert Into director_profesores(iddirector,idprofesor,idemp,ip,host,creado_por,creado_el)value($ar[1],$item[$i],$idemp,'$ip','$host',$iduser,NOW())";
-										$result = mysql_query($query);
-										$vRet = $result!=1?"Error.":"OK";
-									}
+		          			$ar = explode(".",$arg);
+		          			$item = explode("|",$ar[0]);
+							foreach($item AS $i=>$valor){
+								if ((int)($item[$i])>0){
+									$query = "INSERT INTO director_profesores(iddirector,idprofesor,idemp,ip,host,creado_por,creado_el)VALUES($ar[1],$item[$i],$idemp,'$ip','$host',$iduser,NOW())";
+									$vRet = $this->guardarDatos($query);
 								}
-								break;		
-							case 20:
+							}
+							break;		
+						case 20:
 
-			          			$ar = explode("|",$arg);
-								foreach($ar as $i=>$valor){
-									if ((int)($ar[$i])>0){
-										$query = "Delete from director_profesores where iddirprof = ".$ar[$i];
-										$result = mysql_query($query);
-										$vRet = $result!=1?"Error-- ".$ar[$i]:"OK";
-									}
+		          			$ar = explode("|",$arg);
+							foreach($ar AS $i=>$valor){
+								if ((int)($ar[$i])>0){
+									$query = "DELETE FROM director_profesores WHERE iddirprof = ".$ar[$i];
+									$vRet = $this->guardarDatos($query);
 								}
-								break;		
+							}
+							break;		
 
-						}
-						break; // 3
+					}
+					break; // 3
 
-					case 4:
-						switch($var2){
-							case 10:
-								parse_str($otros);
-								$iduser = $this->getIdUserFromAlias($u);
-								$idemp = $this->getIdEmpFromAlias($u);
-								$idciclo = $this->getCicloFromIdEmp($idemp);
+				case 4:
+					switch($var2){
+						case 10:
+							parse_str($otros);
+							$iduser = $this->getIdUserFromAlias($u);
+							$idemp = $this->getIdEmpFromAlias($u);
+							$idciclo = $this->getCicloFromIdEmp($idemp);
 
-			          			$ar = explode(".",$arg);
-			          			$item = explode("|",$ar[0]);
-								foreach($item as $i=>$valor){
-									if ((int)($item[$i])>0){
-										$query = "Insert Into solicitantes_vs_autorizantes(idautoriza,idsolicita,idemp,ip,host,creado_por,creado_el)value($ar[1],$item[$i],$idemp,'$ip','$host',$iduser,NOW())";
-										$result = mysql_query($query);
-										$vRet = $result!=1?"Error.":"OK";
-									}
+		          			$ar = explode(".",$arg);
+		          			$item = explode("|",$ar[0]);
+							foreach($item AS $i=>$valor){
+								if ((int)($item[$i])>0){
+									$query = "INSERT INTO solicitantes_vs_autorizantes(idautoriza,idsolicita,idemp,ip,host,creado_por,creado_el)VALUES($ar[1],$item[$i],$idemp,'$ip','$host',$iduser,NOW())";
+									$vRet = $this->guardarDatos($query);
 								}
-								break;		
-							case 20:
+							}
+							break;		
+						case 20:
 
-			          			$ar = explode("|",$arg);
-								foreach($ar as $i=>$valor){
-									if ((int)($ar[$i])>0){
-										$query = "Delete from solicitantes_vs_autorizantes where idsolicitanteautorizante = ".$ar[$i];
-										$result = mysql_query($query);
-										$vRet = $result!=1?"Error-- ".$ar[$i]:"OK";
-									}
+		          			$ar = explode("|",$arg);
+							foreach($ar AS $i=>$valor){
+								if ((int)($ar[$i])>0){
+									$query = "DELETE FROM solicitantes_vs_autorizantes WHERE idsolicitanteautorizante = ".$ar[$i];
+									$vRet = $this->guardarDatos($query);
 								}
-								break;		
+							}
+							break;		
 
-						}
-						break; // 4
+					}
+					break; // 4
 
 
-					case 41:
-						switch($var2){
-							case 10:
-								parse_str($otros);
-								$iduser = $this->getIdUserFromAlias($u);
-								$idemp = $this->getIdEmpFromAlias($u);
-								$idciclo = $this->getCicloFromIdEmp($idemp);
+				case 41:
+					switch($var2){
+						case 10:
+							parse_str($otros);
+							$iduser = $this->getIdUserFromAlias($u);
+							$idemp = $this->getIdEmpFromAlias($u);
+							$idciclo = $this->getCicloFromIdEmp($idemp);
 
-			          			$item = explode("|",$bols);
-								foreach($item as $i=>$valor){
-									if ((int)($item[$i])>0){
-										$query = "Insert Into com_usuarios_asoc_grupos(idcomgrupo,iduser,idemp,ip,host,creado_por,creado_el)value($idcomgrupo,$item[$i],$idemp,'$ip','$host',$iduser,NOW())";
-										$result = mysql_query($query);
-										$vRet = $result!=1?"Error: ".mysql_error():"OK";
-									}
+		          			$item = explode("|",$bols);
+							foreach($item AS $i=>$valor){
+								if ((int)($item[$i])>0){
+									$query = "INSERT INTO com_usuarios_asoc_grupos(idcomgrupo,iduser,idemp,ip,host,creado_por,creado_el)VALUES($idcomgrupo,$item[$i],$idemp,'$ip','$host',$iduser,NOW())";
+									$vRet = $this->guardarDatos($query);
 								}
-								break;	
+							}
+							break;	
 
-							case 20:
-								parse_str($otros);
-			          			$ar = explode("|",$dests);
-								foreach($ar as $i=>$valor){
-									if ((int)($ar[$i])>0){
-										$query = "Delete from com_usuarios_asoc_grupos where idcomuserasocgpo = ".$ar[$i];
-										$result = mysql_query($query);
-										$vRet = $result!=1?"Error: ".$ar[$i]:"OK";
-									}
+						case 20:
+							parse_str($otros);
+		          			$ar = explode("|",$dests);
+							foreach($ar AS $i=>$valor){
+								if ((int)($ar[$i])>0){
+									$query = "DELETE FROM com_usuarios_asoc_grupos WHERE idcomuserasocgpo = ".$ar[$i];
+									$vRet = $this->guardarDatos($query);
 								}
-								break;		
+							}
+							break;		
 
-						}
-						break; // 41
+					}
+					break; // 41
 
+	  		}
 
-
-
-		  		}
-		  
-			mysql_close($mysql);
-
-		  return  $vRet;
+	  	return  $vRet;
 	}
 
 
-     public function setSaveData($index=0,$arg="",$pag=0,$limite=0,$tipo=0,$cadena2=""){
+    public function setSaveData($index=0,$arg="",$pag=0,$limite=0,$tipo=0,$cadena2=""){
 		  	$query="";
 
 		  	$ip=$_SERVER['REMOTE_ADDR']; 
-		  	$host=gethostbyaddr($_SERVER['REMOTE_ADDR']);//$_SERVER["REMOTE_HOST"]; 
+		  	$host=gethostbyaddr($_SERVER['REMOTE_ADDR']);
 	
 		  	$vRet = "Error";
-		  	$Conn = voConn::getInstance();
-		  	$mysql = mysql_connect($Conn->server, $Conn->user, $Conn->pass);
-		  	mysql_select_db($Conn->db);
-		  	mysql_query("SET NAMES 'utf8'");	
 		  	$ar = array();
 		 
             	switch ($index){
@@ -1269,122 +1255,85 @@ class oCentura {
 									$pass = md5($password1);
 									$idusr = $this->getIdUserFromAlias($user);
 									$idemp = $this->getIdEmpFromAlias($user);
-									$query = "Insert Into usuarios(username,password,apellidos,nombres,
+									$query = "INSERT INTO usuarios(username,password,apellidos,nombres,
 																	correoelectronico,idusernivelacceso,
 																	status_usuario,
 																	idemp,ip,host,creado_por,creado_el)
-												value( '$username','$pass','$apellidos','$nombres',
+												VALUES( '$username','$pass','$apellidos','$nombres',
 														'$correoelectronico',$idusernivelacceso,
 														$status_usuario,
 													    $idemp,'$ip','$host',$idusr,NOW())";
-									$result = mysql_query($query); 
-									$vRet = $result!=1? mysql_error():"OK";
+									$vRet = $this->guardarDatos($query);
 								}else{
 									$vRet = "Error: No puede usar ese prefijo en el Nombre de Usuario";
 								}
 								break;		
 							case 1:
 								parse_str($arg);
-								// if ($username !== $username2){
-								// 	$arr = array("alu","pro","per","adm");
-								// 	if ( (!in_array(substr($username, 0,3), $arr)) ){
-										$idusr = $this->getIdUserFromAlias($user);
-										$idemp = $this->getIdEmpFromAlias($user);
-										if ( isset($idusernivelacceso) ){
-											$idnivacc = " idusernivelacceso = $idusernivelacceso, ";	
-										}else{
-												$idnivacc = "";
-										}
-										//$query = "update usuarios set username = '$username',
-										$query = "update usuarios set apellidos = '$apellidos',
-																		nombres = '$nombres',
-																		correoelectronico = '$correoelectronico',
-																		".$idnivacc."
-																		status_usuario = $status_usuario,
-																		ip = '$ip', 
-																		host = '$host',
-																		modi_por = $idusr, 
-																		modi_el = NOW()
-												Where iduser = $iduser";
-										$result = mysql_query($query);
-										$vRet = $result!=1? mysql_error():"OK";
-								// 	}else{
-								// 		$vRet = "Error: No puede usar ese prefijo en el Nombre de Usuario";
-								// 	}
+								$idusr = $this->getIdUserFromAlias($user);
+								$idemp = $this->getIdEmpFromAlias($user);
+								if ( isset($idusernivelacceso) ){
+									$idnivacc = " idusernivelacceso = $idusernivelacceso, ";	
+								}else{
+										$idnivacc = "";
+								}
+								$query = "UPDATE usuarios SET apellidos = '$apellidos',
+																nombres = '$nombres',
+																correoelectronico = '$correoelectronico',
+																".$idnivacc."
+																status_usuario = $status_usuario,
+																ip = '$ip', 
+																host = '$host',
+																modi_por = $idusr, 
+																modi_el = NOW()
+										WHERE iduser = $iduser";
 
-								// }
+								$vRet = $this->guardarDatos($query);
 
 								break;		
 							case 2:
-								$query = "delete from usuarios Where iduser = ".$arg;
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+								$query = "DELETE FROM usuarios WHERE iduser = ".$arg;
+								$vRet = $this->guardarDatos($query);
+
 								break;		
 							case 3:
 								parse_str($arg);
 								$pass = md5($password1);
-								$query = "update usuarios set password = '$pass',
+								$query = "UPDATE usuarios SET password = '$pass',
 																ip = '$ip', 
 																host = '$host',
 																modi_por = $iduser2, 
 																modi_el = NOW()
-										Where iduser = $iduser";
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error().$iduser:"OK";
+										WHERE iduser = $iduser";
+								$vRet = $this->guardarDatos($query);
+
 								break;		
 							case 100:
 							     
 								parse_str($arg);
 								$tel = trim(utf8_decode($celular));
 								$pass = md5($password);
-								$query = "Insert Into usuarios(username,password,nombres,celular,idF,latitud,longitud,ip,host,creado_el)
-													value('$username','$pass','$nombre','$tel','$idF','$latitud','$longitud','$ip','$host',NOW())";
-								$result = mysql_query($query); 
-								
-								if ($result!=1){
-									$vRet = "CMHR ".mysql_error();
-								}else{
-									//$cfolio = $this->getIDFromDenuncias();
-									$vRet = "OK";
-								}
+								$query = "INSERT INTO usuarios(username,password,nombres,celular,idF,latitud,longitud,ip,host,creado_el)
+													VALUES('$username','$pass','$nombre','$tel','$idF','$latitud','$longitud','$ip','$host',NOW())";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 101:
 							     
 								parse_str($arg);
-								$query = "update usuarios set valid = 1 where username='$username'";
-								$result = mysql_query($query); 
-								
-								if ($result!=1){
-									$vRet = "CMHR ".mysql_error();
-								}else{
-									//$cfolio = $this->getIDFromDenuncias();
-									$vRet = "OK";
-								}
+								$query = "UPDATE usuarios SET valid = 1 WHERE username='$username'";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 200:
 							     
 								parse_str($arg);
 								$pass = md5($password);
-								$query = "Insert Into usuarios(username,password,ip,host,creado_el)
-													value('$username','$pass','$ip','$host',NOW())";
-								$result = mysql_query($query); 
-								
-								if ($result!=1){
-									$vRet = "CMHR ".mysql_error();
-								}else{
-									//$cfolio = $this->getIDFromDenuncias();
-									$vRet = "OK";
-								}
+								$query = "INSERT INTO usuarios(username,password,ip,host,creado_el)
+													VALUES('$username','$pass','$ip','$host',NOW())";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 203:
 							     
 								parse_str($arg);
-								//$pass = md5($password);
-								/*	
-								if (!isset($idusernivelacceso)){
-									$idusernivelacceso = 1;
-								}
-								*/
 								if ( isset($idusernivelacceso) ){
 									$idnivacc = " idusernivelacceso = $idusernivelacceso, ";	
 								}else{
@@ -1394,7 +1343,7 @@ class oCentura {
 								$token_validated = $token == $token_source ? 1 : 0;
 								$token = intval($token_validated) == 1? $token :"";
 
-								$query = "update usuarios set 
+								$query = "UPDATE usuarios SET 
 															 apellidos = '$apellidos', 
 															 nombres = '$nombres', 
 															 correoelectronico = '$correoelectronico',
@@ -1407,31 +1356,18 @@ class oCentura {
 															 param1 = '$param1',
 															 ip = '$ip',
 															 host = '$host'
-														where username LIKE ('$username2%')";
-								$result = mysql_query($query); 
-								
-								if ($result!=1){
-									$vRet = "CMHR ".mysql_error();
-								}else{
-									//$cfolio = $this->getIDFromDenuncias();
-									$vRet = "OK";
-								}
+														WHERE username LIKE ('$username2%')";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 204:
 							     
 								parse_str($arg);
-								$query = "update usuarios set foto = '$foto',
+								$query = "UPDATE usuarios SET foto = '$foto',
 															 ip = '$ip',
 															 host = '$host'
-															 where username LIKE ('$username%')";
-								$result = mysql_query($query); 
-								
-								if ($result!=1){
-									$vRet = "CMHR ".mysql_error();
-								}else{
-									//$cfolio = $this->getIDFromDenuncias();
-									$vRet = "OK";
-								}
+															 WHERE username LIKE ('$username%')";
+								$vRet = $this->guardarDatos($query);
+
 								break;		
 
 							case 205:
@@ -1439,21 +1375,13 @@ class oCentura {
 								parse_str($arg);
 								$pass = md5($password);
 
-								$query = "update usuarios set 
+								$query = "UPDATE usuarios SET 
 															 password = '$pass', 
 															 ip = '$ip',
 															 host = '$host'
-														where username LIKE ('$username2%')";
-								$result = mysql_query($query); 
-								
-								if ($result!=1){
-									$vRet = "CMHR ".mysql_error();
-								}else{
-									//$cfolio = $this->getIDFromDenuncias();
-									$vRet = "OK";
-								}
+														WHERE username LIKE ('$username2%')";
+								$vRet = $this->guardarDatos($query);
 								break;		
-
 						}
 						break;
 					case 1:
@@ -1462,31 +1390,27 @@ class oCentura {
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
 								$idemp = $this->getIdEmpFromAlias($user);
-								$query = "Insert Into cat_estados(clave,estado,status_estado,idemp,ip,host,creado_por,creado_el)
-											value( '$clave','$estado',
+								$query = "INSERT INTO cat_estados(clave,estado,status_estado,idemp,ip,host,creado_por,creado_el)
+											VALUES( '$clave','$estado',
 												    $status_estado,$idemp,'$ip','$host',$idusr,NOW())";
-								$result = mysql_query($query); 
-								$vRet = $result!=1? mysql_error():"OK";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 1:
-							     //$ar = $this->unserialice_force($arg);
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
-								$query = "update cat_estados set 	clave = '$clave',
+								$query = "UPDATE cat_estados SET 	clave = '$clave',
 															  	estado = '$estado',
 															  	status_estado = $status_estado,
 																ip = '$ip', 
 																host = '$host',
 																modi_por = $idusr, 
 																modi_el = NOW()
-										Where idestado = $idestado";
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+										WHERE idestado = $idestado";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 2:
-								$query = "delete from cat_estados Where idestado = ".$arg;
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+								$query = "DELETE FROM cat_estados WHERE idestado = ".$arg;
+								$vRet = $this->guardarDatos($query);
 								break;		
 						}
 						break;
@@ -1496,17 +1420,15 @@ class oCentura {
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
 								$idemp = $this->getIdEmpFromAlias($user);
-								$query = "Insert Into cat_municipios(idestado,clave,municipio,status_municipio,idemp,ip,host,creado_por,creado_el)
-											value( $idestado, '$clave','$municipio',
+								$query = "INSERT INTO cat_municipios(idestado,clave,municipio,status_municipio,idemp,ip,host,creado_por,creado_el)
+											VALUES( $idestado, '$clave','$municipio',
 												    $status_municipio,$idemp,'$ip','$host',$idusr,NOW())";
-								$result = mysql_query($query); 
-								$vRet = $result!=1? mysql_error():"OK";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 1:
-							     //$ar = $this->unserialice_force($arg);
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
-								$query = "update cat_municipios set idestado = $idestado,
+								$query = "UPDATE cat_municipios SET idestado = $idestado,
 																clave = '$clave',
 															  	municipio = '$municipio',
 															  	status_municipio = $status_municipio,
@@ -1514,14 +1436,12 @@ class oCentura {
 																host = '$host',
 																modi_por = $idusr, 
 																modi_el = NOW()
-										Where idmunicipio = $idmunicipio";
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+										WHERE idmunicipio = $idmunicipio";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 2:
-								$query = "delete from cat_municipios Where idmunicipio = ".$arg;
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+								$query = "DELETE FROM cat_municipios WHERE idmunicipio = ".$arg;
+								$vRet = $this->guardarDatos($query);
 								break;		
 						}
 						break;
@@ -1532,20 +1452,18 @@ class oCentura {
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
 								$idemp = $this->getIdEmpFromAlias($user);
-								$query = "Insert Into cat_niveles(nivel,clave_nivel,nivel_oficial,nivel_fiscal,clave_registro_nivel,status_nivel,
+								$query = "INSERT INTO cat_niveles(nivel,clave_nivel,nivel_oficial,nivel_fiscal,clave_registro_nivel,status_nivel,
 																	fecha_actas,		
 																	idemp,ip,host,creado_por,creado_el)
-											value('$nivel','$clave_nivel','$nivel_oficial','$nivel_fiscal','$clave_registro_nivel',$status_nivel,
+											VALUES('$nivel','$clave_nivel','$nivel_oficial','$nivel_fiscal','$clave_registro_nivel',$status_nivel,
 													'$fecha_actas',	
 													$idemp,'$ip','$host',$idusr,NOW())";
-								$result = mysql_query($query); 
-								$vRet = $result!=1? mysql_error():"OK";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 1:
-							     //$ar = $this->unserialice_force($arg);
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
-								$query = "update cat_niveles set 	
+								$query = "UPDATE cat_niveles SET 	
 															  	nivel = '$nivel',
 															  	clave_nivel = '$clave_nivel',
 															  	nivel_oficial = '$nivel_oficial',
@@ -1557,14 +1475,13 @@ class oCentura {
 																host = '$host',
 																modi_por = $idusr, 
 																modi_el = NOW()
-										Where idnivel = $idnivel";
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+										WHERE idnivel = $idnivel";
+								$vRet = $this->guardarDatos($query);
+
 								break;		
 							case 2:
-								$query = "delete from cat_niveles Where idnivel = ".$arg;
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+								$query = "DELETE FROM cat_niveles WHERE idnivel = ".$arg;
+								$vRet = $this->guardarDatos($query);
 								break;		
 						}
 						break;
@@ -1580,7 +1497,7 @@ class oCentura {
 								$ver_boleta_interna = isset($ver_boleta_interna)?1:0;
 								$ver_boleta_oficial = isset($ver_boleta_oficial)?1:0;
 								$ispai_grupo = isset($ispai_grupo)?1:0;
-								$query = "Insert Into cat_grupos(
+								$query = "INSERT INTO cat_grupos(
 																grupo,
 																grado,
 																clave,
@@ -1595,7 +1512,7 @@ class oCentura {
 																grado_pai,
 																status_grupo,
 																idemp,ip,host,creado_por,creado_el)
-															value(
+															VALUES(
 																'$grupo',
 																$grado,
 																'$clave',
@@ -1610,11 +1527,9 @@ class oCentura {
 																$grado_pai,
 																$status_grupo,
 																	$idemp,'$ip','$host',$idusr,NOW())";
-								$result = mysql_query($query); 
-								$vRet = $result!=1? mysql_error():"OK";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 1:
-							     //$ar = $this->unserialice_force($arg);
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
 								$isbloqueado = isset($bloqueado)?1:0;
@@ -1623,7 +1538,7 @@ class oCentura {
 								$ver_boleta_oficial = isset($ver_boleta_oficial)?1:0;
 								$isvisible = isset($visible)?1:0;
 								$ispai_grupo = isset($ispai_grupo)?1:0;
-								$query = "update cat_grupos set 	
+								$query = "UPDATE cat_grupos SET 	
 															  	clave = '$clave',
 															  	grupo = '$grupo',
 															  	grado = $grado,
@@ -1641,19 +1556,16 @@ class oCentura {
 																host = '$host',
 																modi_por = $idusr, 
 																modi_el = NOW()
-										Where idgrupo = $idgrupo";
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+										WHERE idgrupo = $idgrupo";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 2:
-								$query = "delete from cat_grupos Where idgrupo = ".$arg;
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+								$query = "DELETE FROM cat_grupos WHERE idgrupo = ".$arg;
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 3:
-								$query = "update nivel_grupos set visible = 0 Where idgponiv = ".$arg;
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+								$query = "UPDATE nivel_grupos SET visible = 0 WHERE idgponiv = ".$arg;
+								$vRet = $this->guardarDatos($query);
 								break;		
 						}
 						break;
@@ -1673,8 +1585,7 @@ class oCentura {
 								$activo_en_ciclo = !isset($activo_en_ciclo)?0:1;
 								$valid_for_admin = !isset($valid_for_admin)?0:1;
 
-
-								$query = "Insert Into cat_alumnos(
+								$query = "INSERT INTO cat_alumnos(
 																ap_paterno,
 																ap_materno,
 																nombre,
@@ -1698,7 +1609,7 @@ class oCentura {
 																activo_en_ciclo,
 																valid_for_admin,
 																idemp,ip,host,creado_por,creado_el)
-											value(
+											VALUES(
 																'$ap_paterno',
 																'$ap_materno',
 																'$nombre',
@@ -1722,11 +1633,9 @@ class oCentura {
 																$activo_en_ciclo,
 																$valid_for_admin,
 													$idemp,'$ip','$host',$idusr,NOW())";
-								$result = mysql_query($query); 
-								$vRet = $result!=1? mysql_error():"OK";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 1:
-							     //$ar = $this->unserialice_force($arg);
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
 
@@ -1739,7 +1648,7 @@ class oCentura {
 								$activo_en_ciclo = !isset($activo_en_ciclo)?0:1;
 								$valid_for_admin = !isset($valid_for_admin)?0:1;
 
-								$query = "update cat_alumnos set 	
+								$query = "UPDATE cat_alumnos SET 	
 																ap_paterno = '$ap_paterno',
 																ap_materno = '$ap_materno',
 																nombre = '$nombre',
@@ -1766,22 +1675,18 @@ class oCentura {
 																host = '$host',
 																modi_por = $idusr, 
 																modi_el = NOW()
-										Where idalumno = $idalumno";
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+										WHERE idalumno = $idalumno";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 2:
-								$query = "delete from cat_alumnos Where idalumno = ".$arg;
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+								$query = "DELETE FROM cat_alumnos WHERE idalumno = ".$arg;
+								$vRet = $this->guardarDatos($query);
 								break;		
 							
 							case 3:
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
-
-
-								$query = "update cat_alumnos set 	
+								$query = "UPDATE cat_alumnos SET 	
 																beca_sep = $beca_sep,
 																beca_arji = $beca_arji,
 																beca_sp = $beca_sp,
@@ -1790,9 +1695,8 @@ class oCentura {
 																host = '$host',
 																modi_por = $idusr, 
 																modi_el = NOW()
-										Where idalumno = $idalumno";
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+										WHERE idalumno = $idalumno";
+								$vRet = $this->guardarDatos($query);
 								break;								}
 						break;
 
@@ -1809,7 +1713,7 @@ class oCentura {
 								$fi = explode('-',$fecha_ingreso);
 								$fi = $fi[2].'-'.$fi[1].'-'.$fi[0];
 
-								$query = "Insert Into cat_profesores(
+								$query = "INSERT INTO cat_profesores(
 																ap_paterno,
 																ap_materno,
 																nombre,
@@ -1821,7 +1725,7 @@ class oCentura {
 																fecha_ingreso,
 																status_profesor,
 																idemp,ip,host,creado_por,creado_el)
-											value(
+											VALUES(
 																'$ap_paterno',
 																'$ap_materno',
 																'$nombre',
@@ -1833,11 +1737,9 @@ class oCentura {
 																'$fi',
 													$status_profesor,
 													$idemp,'$ip','$host',$idusr,NOW())";
-								$result = mysql_query($query); 
-								$vRet = $result!=1? mysql_error():"OK";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 1:
-							     //$ar = $this->unserialice_force($arg);
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
 
@@ -1847,7 +1749,7 @@ class oCentura {
 								$fi = explode('-',$fecha_ingreso);
 								$fi = $fi[2].'-'.$fi[1].'-'.$fi[0];
 
-								$query = "update cat_profesores set 	
+								$query = "UPDATE cat_profesores SET 	
 																ap_paterno = '$ap_paterno',
 																ap_materno = '$ap_materno',
 																nombre = '$nombre',
@@ -1862,14 +1764,13 @@ class oCentura {
 																host = '$host',
 																modi_por = $idusr, 
 																modi_el = NOW()
-										Where idprofesor = $idprofesor";
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+										WHERE idprofesor = $idprofesor";
+								$vRet = $this->guardarDatos($query);
+
 								break;		
 							case 2:
-								$query = "delete from cat_profesores Where idprofesor = ".$arg;
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+								$query = "DELETE FROM cat_profesores WHERE idprofesor = ".$arg;
+								$vRet = $this->guardarDatos($query);
 								break;		
 						}
 						break;
@@ -1888,7 +1789,7 @@ class oCentura {
 								$isagrupadora = !isset($isagrupadora)?0:1;
 								$status_materia = !isset($status_materia)?0:1;
 
-								$query = "Insert Into cat_materias(
+								$query = "INSERT INTO cat_materias(
 																materia,
 																abreviatura,
 																materia_oficial,
@@ -1907,7 +1808,7 @@ class oCentura {
 																idpaiareadisciplinaria,
 																status_materia,
 																idemp,ip,host,creado_por,creado_el)
-											value(
+											VALUES(
 																'$materia',
 																'$abreviatura',
 																'$materia_oficial',
@@ -1926,11 +1827,9 @@ class oCentura {
 																$idpaiareadisciplinaria,
 																$status_materia,
 																$idemp,'$ip','$host',$idusr,NOW())";
-								$result = mysql_query($query); 
-								$vRet = $result!=1? mysql_error():"OK";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 1:
-							     //$ar = $this->unserialice_force($arg);
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
 
@@ -1941,7 +1840,7 @@ class oCentura {
 								$isagrupadora = !isset($isagrupadora)?0:1;
 								$ispai_materia = !isset($ispai_materia)?0:1;
 
-								$query = "update cat_materias set 	
+								$query = "UPDATE cat_materias SET 	
 																materia = '$materia',
 																abreviatura = '$abreviatura',
 																materia_oficial = '$materia_oficial',
@@ -1963,18 +1862,15 @@ class oCentura {
 																host = '$host',
 																modi_por = $idusr, 
 																modi_el = NOW()
-										Where idmateria = $idmateria";
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+										WHERE idmateria = $idmateria";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 2:
-								$query = "delete from cat_materias Where idmateria = ".$arg;
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+								$query = "DELETE FROM cat_materias WHERE idmateria = ".$arg;
+								$vRet = $this->guardarDatos($query);
 								break;		
 						}
 						break;
-
 
 					case 8:
 						switch($tipo){
@@ -1985,14 +1881,14 @@ class oCentura {
 
 								$status_materia_clasificacion = !isset($status_materia_clasificacion)?0:1;								
 
-								$query = "Insert Into cat_materias_clasificacion(clasificacion,
+								$query = "INSERT INTO cat_materias_clasificacion(clasificacion,
 																				status_materia_clasificacion,
 																				idemp,
 																				ip,
 																				host,
 																				creado_por,
 																				creado_el
-																			)value(
+																			)VALUES(
 																				'$clasificacion',
 																				$status_materia_clasificacion,
 																				$idemp,
@@ -2001,32 +1897,27 @@ class oCentura {
 																				$idusr,
 																				NOW()
 																				)";
-								$result = mysql_query($query); 
-								$vRet = $result!=1? mysql_error():"OK";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 1:
-							     //$ar = $this->unserialice_force($arg);
 								parse_str($arg);
-
 								$idusr = $this->getIdUserFromAlias($user);
-
 								$status_materia_clasificacion = !isset($status_materia_clasificacion)?0:1;
-
-								$query = "update cat_materias_clasificacion set 	
+								$query = "UPDATE cat_materias_clasificacion SET 	
 															  	clasificacion = '$clasificacion',
 															  	status_materia_clasificacion = $status_materia_clasificacion,
 																ip = '$ip', 
 																host = '$host',
 																modi_por = $idusr, 
 																modi_el = NOW()
-										Where idmatclas = $idmatclas";
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+										WHERE idmatclas = $idmatclas";
+								$vRet = $this->guardarDatos($query);
+
 								break;		
 							case 2:
-								$query = "delete from cat_materias_clasificacion Where idmatclas = ".$arg;
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+								$query = "DELETE FROM cat_materias_clasificacion WHERE idmatclas = ".$arg;
+								$vRet = $this->guardarDatos($query);
+
 								break;		
 						}
 						break;
@@ -2037,32 +1928,29 @@ class oCentura {
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
 								$idemp = $this->getIdEmpFromAlias($user);
-								$query = "Insert Into cat_parentezcos(parentezco,status_parentezco,
+								$query = "INSERT INTO cat_parentezcos(parentezco,status_parentezco,
 																	idemp,ip,host,creado_por,creado_el)
-											value('$parentezco',$status_parentezco,
+											VALUES('$parentezco',$status_parentezco,
 													$idemp,'$ip','$host',$idusr,NOW())";
-								$result = mysql_query($query); 
-								$vRet = $result!=1? mysql_error():"OK";
+								$vRet = $this->guardarDatos($query);
+
 								break;		
 							case 1:
-							     //$ar = $this->unserialice_force($arg);
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
-								$query = "update cat_parentezcos set 	
+								$query = "UPDATE cat_parentezcos SET 	
 															  	parentezco = '$parentezco',
 															  	status_parentezco = $status_parentezco,
 																ip = '$ip', 
 																host = '$host',
 																modi_por = $idusr, 
 																modi_el = NOW()
-										Where idparentezco = $idparentezco";
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+										WHERE idparentezco = $idparentezco";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 2:
-								$query = "delete from cat_parentezcos Where idparentezco = ".$arg;
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+								$query = "DELETE FROM cat_parentezcos WHERE idparentezco = ".$arg;
+								$vRet = $this->guardarDatos($query);
 								break;		
 						}
 						break;
@@ -2077,7 +1965,7 @@ class oCentura {
 								$fn = explode('-',$fecha_nacimiento);
 								$fn = $fn[2].'-'.$fn[1].'-'.$fn[0];
 
-								$query = "Insert Into cat_personas(
+								$query = "INSERT INTO cat_personas(
 																	ap_paterno,
 																	ap_materno,
 																	nombre,
@@ -2105,7 +1993,7 @@ class oCentura {
 																	lugar_trabajo,
 																	status_persona,
 																	idemp,ip,host,creado_por,creado_el)
-											value(
+											VALUES(
 																	'$ap_paterno',
 																	'$ap_materno',
 																	'$nombre',
@@ -2133,18 +2021,16 @@ class oCentura {
 																	'".mb_strtoupper($lugar_trabajo,'UTF-8')."',
 																	$status_persona,
 																	$idemp,'$ip','$host',$idusr,NOW())";
-								$result = mysql_query($query); 
-								$vRet = $result!=1? mysql_error():"OK";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 1:
-							     //$ar = $this->unserialice_force($arg);
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
 
 								$fn = explode('-',$fecha_nacimiento);
 								$fn = $fn[2].'-'.$fn[1].'-'.$fn[0];
 
-								$query = "update cat_personas set 	
+								$query = "UPDATE cat_personas SET 	
 																ap_paterno = '$ap_paterno',
 																ap_materno = '$ap_materno',
 																nombre = '$nombre',
@@ -2175,18 +2061,15 @@ class oCentura {
 																host = '$host',
 																modi_por = $idusr, 
 																modi_el = NOW()
-										Where idpersona = $idpersona";
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+										WHERE idpersona = $idpersona";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 2:
-								$query = "delete from cat_personas Where idpersona = ".$arg;
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+								$query = "DELETE FROM cat_personas WHERE idpersona = ".$arg;
+								$vRet = $this->guardarDatos($query);
 								break;		
 						}
 						break;
-
 
 					case 11:
 						switch($tipo){
@@ -2195,28 +2078,22 @@ class oCentura {
 								$idusr = $this->getIdUserFromAlias($user);
 								$idemp = $this->getIdEmpFromAlias($user);
 
-								$query = "Insert Into cat_familias(
+								$query = "INSERT INTO cat_familias(
 																	familia,
 																	email,
 																	status_familia,
 																	idemp,ip,host,creado_por,creado_el)
-											value(
+											VALUES(
 																	'$familia',
 																	'$email',
 																	$status_familia,
 																	$idemp,'$ip','$host',$idusr,NOW())";
-								$result = mysql_query($query); 
-								$vRet = $result!=1? mysql_error():"OK";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 1:
-							     //$ar = $this->unserialice_force($arg);
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
-
-								// $fn = explode('-',$fecha_nacimiento);
-								// $fn = $fn[2].'-'.$fn[1].'-'.$fn[0];
-
-								$query = "update cat_familias set 	
+								$query = "UPDATE cat_familias SET 	
 																	familia = '$familia',
 																	email = '$email',
 															  	status_familia = $status_familia,
@@ -2224,18 +2101,15 @@ class oCentura {
 																host = '$host',
 																modi_por = $idusr, 
 																modi_el = NOW()
-										Where idfamilia = $idfamilia";
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+										WHERE idfamilia = $idfamilia";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 2:
-								$query = "delete from cat_familias Where idfamilia = ".$arg;
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+								$query = "DELETE FROM cat_familias WHERE idfamilia = ".$arg;
+								$vRet = $this->guardarDatos($query);
 								break;		
 						}
 						break;
-
 
 					case 12:
 						switch($tipo){
@@ -2245,33 +2119,30 @@ class oCentura {
 								$idemp = $this->getIdEmpFromAlias($user);
 								$is_email = !isset($is_email)?0:1;	
 								$status_famper = !isset($status_famper)?0:1;	
-								$query = "Insert Into familia_personas(
+								$query = "INSERT INTO familia_personas(
 																	idpersona,
 																	idfamilia,
 																	idparentezco,
 																	is_email,
 																	status_famper,
 																	idemp,ip,host,creado_por,creado_el)
-											value(
+											VALUES(
 																	$idpersona,
 																	$idfamilia,
 																	$idparentezco,
 																	$is_email,
 																	$status_famper,
 																	$idemp,'$ip','$host',$idusr,NOW())";
-
-								$result = mysql_query($query); 
-								$vRet = $result!=1? mysql_error():"OK";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 1:
-							     //$ar = $this->unserialice_force($arg);
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
 
 								$is_email = !isset($is_email)?0:1;	
 								$status_famper = !isset($status_famper)?0:1;	
 
-								$query = "update familia_personas set 	
+								$query = "UPDATE familia_personas SET 	
 																idpersona = $idpersona,
 																idfamilia = $idfamilia,
 																idparentezco = $idparentezco,
@@ -2281,19 +2152,15 @@ class oCentura {
 																host = '$host',
 																modi_por = $idusr, 
 																modi_el = NOW()
-										Where idfamper = $idfamper";
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+										WHERE idfamper = $idfamper";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 2:
-								$query = "delete from familia_personas Where idfamper = ".$arg;
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+								$query = "DELETE FROM familia_personas WHERE idfamper = ".$arg;
+								$vRet = $this->guardarDatos($query);
 								break;		
 						}
 						break;
-
-
 
 					case 13:
 						switch($tipo){
@@ -2303,7 +2170,7 @@ class oCentura {
 								$idemp = $this->getIdEmpFromAlias($user);
 								$is_minor = !isset($is_minor)?0:1;	
 								$status_famalu = !isset($status_famalu)?0:1;	
-								$query = "Insert Into familia_alumnos(
+								$query = "INSERT INTO familia_alumnos(
 																	idalumno,
 																	idfamilia,
 																	idtutor,
@@ -2311,7 +2178,7 @@ class oCentura {
 																	vive_con,
 																	status_famalu,
 																	idemp,ip,host,creado_por,creado_el)
-											value(
+											VALUES(
 																	$idalumno,
 																	$idfamilia,
 																	$idtutor,
@@ -2319,19 +2186,16 @@ class oCentura {
 																	$vive_con,
 																	$status_famalu,
 																	$idemp,'$ip','$host',$idusr,NOW())";
-
-								$result = mysql_query($query); 
-								$vRet = $result!=1? mysql_error():"OK";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 1:
-							     //$ar = $this->unserialice_force($arg);
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
 
 								$is_minor = !isset($is_minor)?0:1;	
 								$status_famalu = !isset($status_famalu)?0:1;	
 
-								$query = "update familia_alumnos set 	
+								$query = "UPDATE familia_alumnos SET 	
 																idalumno = $idalumno,
 																idfamilia = $idfamilia,
 																idtutor = $idtutor,
@@ -2342,14 +2206,13 @@ class oCentura {
 																host = '$host',
 																modi_por = $idusr, 
 																modi_el = NOW()
-										Where idfamalu = $idfamalu";
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+										WHERE idfamalu = $idfamalu";
+								$vRet = $this->guardarDatos($query);
+
 								break;		
 							case 2:
-								$query = "delete from familia_alumnos Where idfamalu = ".$arg;
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+								$query = "DELETE FROM familia_alumnos WHERE idfamalu = ".$arg;
+								$vRet = $this->guardarDatos($query);
 								break;		
 						}
 						break;
@@ -2366,7 +2229,7 @@ class oCentura {
 								$is_extranjero = !isset($is_extranjero)?0:1;	
 								$status_regfis = !isset($status_regfis)?0:1;
 								$idfammig = intval($idfammig);	
-								$query = "Insert Into cat_registros_fiscales(
+								$query = "INSERT INTO cat_registros_fiscales(
 																	rfc,
 																	curp,
 																	razon_social,
@@ -2386,7 +2249,7 @@ class oCentura {
 																	referencia,
 																	status_regfis,
 																	idemp,ip,host,creado_por,creado_el)
-											value(
+											VALUES(
 																	'".strtoupper($rfc)."',
 																	'".strtoupper($curp)."',
 																	'".strtoupper($razon_social)."',
@@ -2406,12 +2269,9 @@ class oCentura {
 																	'$referencia',
 																	$status_regfis,
 																	$idemp,'$ip','$host',$idusr,NOW())";
-
-								$result = mysql_query($query); 
-								$vRet = $result!=1? mysql_error():"OK";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 1:
-							     //$ar = $this->unserialice_force($arg);
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
 
@@ -2420,7 +2280,7 @@ class oCentura {
 								$status_regfis = !isset($status_regfis)?0:1;	
 								$idfammig = intval($idfammig);	
 
-								$query = "update cat_registros_fiscales set 	
+								$query = "UPDATE cat_registros_fiscales SET 	
 																rfc = '".strtoupper($rfc)."',
 																curp = '".strtoupper($curp)."',
 																razon_social = '".strtoupper($razon_social)."',
@@ -2443,14 +2303,13 @@ class oCentura {
 																host = '$host',
 																modi_por = $idusr, 
 																modi_el = NOW()
-										Where idregfis = $idregfis";
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+										WHERE idregfis = $idregfis";
+								$vRet = $this->guardarDatos($query);
+
 								break;		
 							case 2:
-								$query = "delete from cat_registros_fiscales Where idregfis = ".$arg;
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+								$query = "DELETE FROM cat_registros_fiscales WHERE idregfis = ".$arg;
+								$vRet = $this->guardarDatos($query);
 								break;		
 						}
 						break;
@@ -2463,32 +2322,26 @@ class oCentura {
 								$idemp = $this->getIdEmpFromAlias($user);
 								$status_famregfis = !isset($status_famregfis)?0:1;	
 								$predeterminado = !isset($predeterminado)?0:1;	
-								$query = "Insert Into familia_reg_fis(
+								$query = "INSERT INTO familia_reg_fis(
 																	idfamilia,
 																	idregfis,
 																	predeterminado,
 																	status_famregfis,
 																	idemp,ip,host,creado_por,creado_el)
-											value(
+											VALUES(
 																	$idfamilia,
 																	$idregfis,
 																	$predeterminado,
 																	$status_famregfis,
 																	$idemp,'$ip','$host',$idusr,NOW())";
-
-								$result = mysql_query($query); 
-								$vRet = $result!=1? mysql_error():"OK";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 1:
-							     //$ar = $this->unserialice_force($arg);
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
-
 								$status_famregfis = !isset($status_famregfis)?0:1;	
-
 								$predeterminado = !isset($predeterminado)?0:1;	
-
-								$query = "update familia_reg_fis set 	
+								$query = "UPDATE familia_reg_fis SET 	
 																idfamilia = $idfamilia,
 																idregfis = $idregfis,
 																predeterminado = $predeterminado,
@@ -2497,14 +2350,12 @@ class oCentura {
 																host = '$host',
 																modi_por = $idusr, 
 																modi_el = NOW()
-										Where idfamregfis = $idfamregfis";
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+										WHERE idfamregfis = $idfamregfis";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 2:
-								$query = "delete from familia_reg_fis Where idfamregfis = ".$arg;
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+								$query = "DELETE FROM familia_reg_fis WHERE idfamregfis = ".$arg;
+								$vRet = $this->guardarDatos($query);
 								break;		
 						}
 						break;
@@ -2526,7 +2377,7 @@ class oCentura {
 								$orden_historial = intval($orden_historial); 
 								$ispai_materia = !isset($ispai_materia)?0:1;
 
-								$query = "Insert Into grupo_materias(
+								$query = "INSERT INTO grupo_materias(
 																	idciclo,
 																	idgrupo,
 																	idprofesor,
@@ -2547,7 +2398,7 @@ class oCentura {
 																	eval_mod,
 																	status_grumat,
 																	idemp,ip,host,creado_por,creado_el)
-											value(
+											VALUES(
 																	$idciclo,
 																	$idgrupo,
 																	$idprofesor,
@@ -2568,27 +2419,20 @@ class oCentura {
 																	$eval_mod,
 																	$status_grumat,
 																	$idemp,'$ip','$host',$idusr,NOW())";
-
-								$result = mysql_query($query); 
-								$vRet = $result!=1? mysql_error():"OK";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 1:
-							     //$ar = $this->unserialice_force($arg);
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
-
 								$status_grumat = !isset($status_grumat)?0:1;	
 								$idemp = $this->getIdEmpFromAlias($user);
-								//$idciclo = $this->getCicloFromIdEmp($idemp);
-
 								$isoficial = !isset($isoficial)?0:1;	
-
 								$orden_impresion = intval($orden_impresion); 
 								$orden_historial = intval($orden_historial); 
 								$bloqueado = !isset($bloqueado)?0:1;	
 								$ispai_materia = !isset($ispai_materia)?0:1;
 
-								$query = "update grupo_materias set 	
+								$query = "UPDATE grupo_materias SET 	
 																idciclo = $idciclo,
 																idgrupo = $idgrupo,
 																idprofesor = $idprofesor,
@@ -2612,72 +2456,57 @@ class oCentura {
 																host = '$host',
 																modi_por = $idusr, 
 																modi_el = NOW()
-										Where idgrumat = $idgrumat";
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+										WHERE idgrumat = $idgrumat";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 2:
-								$query = "delete from grupo_materias Where idgrumat = ".$arg;
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+								$query = "DELETE FROM grupo_materias WHERE idgrumat = ".$arg;
+								$vRet = $this->guardarDatos($query);
 								break;	
 
 							case 3:
-							     //$ar = $this->unserialice_force($arg);
 								parse_str($cadena2);
 								$idusr = $this->getIdUserFromAlias($u);
 								$idemp = $this->getIdEmpFromAlias($u);
 								parse_str($arg);
-
 			          			$ar = explode(".",$arg);
 			          			$item = explode("|",$ar[0]);
-								foreach($item as $i=>$valor){
+								foreach($item AS $i=>$valor){
 									if ( intval($item[$i]) > 0 ){
 
-										$query = "update grupo_materias set 	
+										$query = "UPDATE grupo_materias SET 	
 																		padre = ".$ar[1].",
 																		ip = '$ip', 
 																		host = '$host',
 																		modi_por = $idusr, 
 																		modi_el = NOW()
-												Where idgrumat = ".$item[$i];
-										$result = mysql_query($query);
-
+												WHERE idgrumat = ".$item[$i];
+										$vRet = $this->guardarDatos($query);
 									}
 								}
-
-								$vRet = $result!=1? mysql_error():"OK";
 								break;
 
 							case 4:
-							     //$ar = $this->unserialice_force($arg);
 								parse_str($cadena2);
 								$idusr = $this->getIdUserFromAlias($u);
 								$idemp = $this->getIdEmpFromAlias($u);
 								parse_str($arg);
 
 			          			$item = explode("|",$arg);
-								foreach($item as $i=>$valor){
+								foreach($item AS $i=>$valor){
 									if ( intval($item[$i]) > 0 ){
 
-										$query = "update grupo_materias set 	
+										$query = "UPDATE grupo_materias SET 	
 																		padre = 0,
 																		ip = '$ip', 
 																		host = '$host',
 																		modi_por = $idusr, 
 																		modi_el = NOW()
-												Where idgrumat = ".$item[$i];
-										$result = mysql_query($query);
-
+												WHERE idgrumat = ".$item[$i];
+										$vRet = $this->guardarDatos($query);
 									}
 								}
-
-								$vRet = $result!=1? mysql_error():"OK";
 								break;		
-
-
-
-
 
 						}
 						break;
@@ -2685,25 +2514,22 @@ class oCentura {
 					case 17:
 						switch($tipo){
 							case 4:
-								$query = "delete from boletas Where idboleta IN ($arg)";
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+								$query = "DELETE FROM boletas WHERE idboleta IN ($arg)";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 5:
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($u);
 								$idemp = $this->getIdEmpFromAlias($u);
-								$query = "Insert Into boletas(
+								$query = "INSERT INTO boletas(
 																	idgrumat,
 																	idgrualu,
 																	idemp,ip,host,creado_por,creado_el)
-											value(
+											VALUES(
 																	$idgrumat,
 																	$idgrualu,
 																	$idemp,'$ip','$host',$idusr,NOW())";
-
-								$result = mysql_query($query); 
-								$vRet = $result!=1? mysql_error():"OK";
+								$vRet = $this->guardarDatos($query);
 								break;		
 						}
 						break;
@@ -2713,56 +2539,51 @@ class oCentura {
 							case 0:
 								parse_str($arg);
 								if (intval($num_eval_matcon)>0){
-								$idusr = $this->getIdUserFromAlias($user);
-								$idemp = $this->getIdEmpFromAlias($user);
-								$query = "Insert Into grupo_materia_config(
-																	idgrumat,
-																	num_eval,
-																	descripcion,
-																	porcentaje,
-																	idalutipoactividad,
-																	idemp,ip,host,creado_por,creado_el)
-											value(
-																	$idgrumat,
-																	$num_eval_matcon,
-																	'$descripcion',
-																	$porcentaje,
-																	$idalutipoactividad,
-																	$idemp,'$ip','$host',$idusr,NOW())";
-
-								$result = mysql_query($query); 
-								$vRet = $result!=1? mysql_error():"OK";
+									$idusr = $this->getIdUserFromAlias($user);
+									$idemp = $this->getIdEmpFromAlias($user);
+									$query = "INSERT INTO grupo_materia_config(
+																		idgrumat,
+																		num_eval,
+																		descripcion,
+																		porcentaje,
+																		idalutipoactividad,
+																		idemp,ip,host,creado_por,creado_el)
+												VALUES(
+																		$idgrumat,
+																		$num_eval_matcon,
+																		'$descripcion',
+																		$porcentaje,
+																		$idalutipoactividad,
+																		$idemp,'$ip','$host',$idusr,NOW())";
+									$vRet = $this->guardarDatos($query);
 								}else{
 									$vRet = "Error: No se permite un Núnmero de Evaluación <= 0"; 
 								}
 								break;		
 							case 1:
-							     //$ar = $this->unserialice_force($arg);
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
 
 								if (intval($num_eval_matcon)>0){
-								$query = "update grupo_materia_config set 	
-																idgrumat = $idgrumat,
-																num_eval = $num_eval_matcon,
-															  	descripcion = '$descripcion',
-																porcentaje = $porcentaje,
-																idalutipoactividad = $idalutipoactividad,
-																ip = '$ip', 
-																host = '$host',
-																modi_por = $idusr, 
-																modi_el = NOW()
-										Where idgrumatcon = $idgrumatcon";
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+									$query = "UPDATE grupo_materia_config SET 	
+																	idgrumat = $idgrumat,
+																	num_eval = $num_eval_matcon,
+																  	descripcion = '$descripcion',
+																	porcentaje = $porcentaje,
+																	idalutipoactividad = $idalutipoactividad,
+																	ip = '$ip', 
+																	host = '$host',
+																	modi_por = $idusr, 
+																	modi_el = NOW()
+											WHERE idgrumatcon = $idgrumatcon";
+									$vRet = $this->guardarDatos($query);
 								}else{
 									$vRet = "Error: No se permite un Núnmero de Evaluación <= 0"; 
 								}
 								break;		
 							case 2:
-								$query = "delete from grupo_materia_config Where idgrumatcon = ".$arg;
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+								$query = "DELETE FROM grupo_materia_config WHERE idgrumatcon = ".$arg;
+								$vRet = $this->guardarDatos($query);
 								break;		
 						}
 						break;
@@ -2770,7 +2591,6 @@ class oCentura {
 					case 19:
 						switch($tipo){
 							case 1:
-							     //$ar = $this->unserialice_force($arg);
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
 
@@ -2789,42 +2609,43 @@ class oCentura {
 
 								for ($i=0; $i < count($arrBolCon); $i++) {
 									$con = "con".$num_eval;		 
-									$query = "update boletas set 	
+									$query = "UPDATE boletas SET 	
 																	".$con." = ".$arrBolConCal[$i].",
 																	ip = '$ip', 
 																	host = '$host',
 																	modi_por = $idusr, 
 																	modi_el = NOW()
-											Where idboleta = ".$arrBolCon[$i];
-											$result = mysql_query($query);
+											WHERE idboleta = ".$arrBolCon[$i];
+											$vRet = $this->guardarDatos($query);
+
 									}					
 									
 								for ($i=0; $i < count($arrBolIna); $i++) {
 									$ina = "ina".$num_eval;		 
-									$query = "update boletas set 	
+									$query = "UPDATE boletas SET 	
 																	".$ina." = ".$arrBolInaCal[$i].",
 																	ip = '$ip', 
 																	host = '$host',
 																	modi_por = $idusr, 
 																	modi_el = NOW()
-											Where idboleta = ".$arrBolIna[$i];
-											$result = mysql_query($query);
+											WHERE idboleta = ".$arrBolIna[$i];
+											$vRet = $this->guardarDatos($query);
+
 									}					
 
 								for ($i=0; $i < count($arrBolObs); $i++) {
 									$obs = "obs".$num_eval;		 
-									$query = "update boletas set 	
+									$query = "UPDATE boletas SET 	
 																	".$obs." = ".$arrBolObsCal[$i].",
 																	ip = '$ip', 
 																	host = '$host',
 																	modi_por = $idusr, 
 																	modi_el = NOW()
-											Where idboleta = ".$arrBolObs[$i];
-											$result = mysql_query($query);
-									}			
-								
-								$vRet = $result!=1? mysql_error():"OK";
+											WHERE idboleta = ".$arrBolObs[$i];
 
+											$vRet = $this->guardarDatos($query);
+
+									}			
 								break;		
 						}
 						break;
@@ -2837,18 +2658,17 @@ class oCentura {
 								$idemp = $this->getIdEmpFromAlias($user);
 								$idioma = !isset($idioma)?1:0;
 
-								$query = "Insert Into cat_observaciones(
+								$query = "INSERT INTO cat_observaciones(
 																	observacion,
 																	idioma,
 																	status_observacion,
 																	idemp,ip,host,creado_por,creado_el)
-											value(
+											VALUES(
 												'$observacion',
 												$idioma,
 												$status_observacion,
 												$idemp,'$ip','$host',$idusr,NOW())";
-								$result = mysql_query($query); 
-								$vRet = $result!=1? mysql_error():"OK";
+								$vRet = $this->guardarDatos($query);
 								break;
 
 							case 1:
@@ -2856,7 +2676,7 @@ class oCentura {
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
 								$idioma = !isset($idioma)?1:0;
-								$query = "update cat_observaciones set 	
+								$query = "UPDATE cat_observaciones SET 	
 															  	observacion = '$observacion',
 															  	idioma = $idioma,
 															  	status_observacion = $status_observacion,
@@ -2864,60 +2684,53 @@ class oCentura {
 																host = '$host',
 																modi_por = $idusr, 
 																modi_el = NOW()
-										Where idobservacion = $idobservacion";
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+										WHERE idobservacion = $idobservacion";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 2:
-								$query = "delete from cat_observaciones Where idobservacion = ".$arg;
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+								$query = "DELETE FROM cat_observaciones WHERE idobservacion = ".$arg;
+								$vRet = $this->guardarDatos($query);
 								break;		
 						}
 						break;
 
-					case 21:
-
-// evalpred=1&evalmod=1&clavenivelacceso=11&user=lcecilia&hevalpred=eds&hevalmod=ems					
+					case 21:		
 						switch($tipo){
 							case 1:
-							     //$ar = $this->unserialice_force($arg);
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
 								$idemp = $this->getIdEmpFromAlias($user);
 								$idciclo = $this->getCicloFromIdEmp($idemp);
 
-								$query = "update config set valor = $evalpred,
+								$query = "UPDATE config SET valor = $evalpred,
 															modi_por = $idusr, 
 															modi_el = NOW()
-										Where llave = '$hevalpred' and idemp = $idemp ";
-								$result = mysql_query($query);
+										WHERE llave = '$hevalpred' AND idemp = $idemp ";
+								$vRet = $this->guardarDatos($query);
 
-								$query = "update config set valor = $evalmod,
+								$query = "UPDATE config SET valor = $evalmod,
 															modi_por = $idusr, 
 															modi_el = NOW()
-										Where llave = '$hevalmod' and idemp = $idemp ";
-								$result = mysql_query($query);
+										WHERE llave = '$hevalmod' AND idemp = $idemp ";
+								$vRet = $this->guardarDatos($query);
 
-								$query = "update config set valor = $epai,
+								$query = "UPDATE config SET valor = $epai,
 															modi_por = $idusr, 
 															modi_el = NOW()
-										Where llave = '$hepai' and idemp = $idemp ";
-								$result = mysql_query($query);
+										WHERE llave = '$hepai' AND idemp = $idemp ";
+								$vRet = $this->guardarDatos($query);
 
 								$arrParam = explode(',',$param1);
 
 								if ( count($arrParam) > 1){
 									for( $i=0; $i<count($arrParam); ++$i ){
-										$query = "set @X = Fijar_Predeterminada_y_Modificable_Eval(".$arrParam[$i].",".$idciclo.",".$idemp.",".$idusr.",'".$ip."','".$host."',".$evalpred.",".$evalmod.")";
-										$result = mysql_query($query);
+										$query = "SET @X = Fijar_Predeterminada_y_Modificable_Eval(".$arrParam[$i].",".$idciclo.",".$idemp.",".$idusr.",'".$ip."','".$host."',".$evalpred.",".$evalmod.")";
+										$vRet = $this->execQuery($query);
 									}
 								}else{
-									$query = "set @X = Fijar_Predeterminada_y_Modificable_Eval(".$param1.",".$idciclo.",".$idemp.",".$idusr.",'".$ip."','".$host."',".$evalpred.",".$evalmod.")";
-									$result = mysql_query($query);
+									$query = "SET @X = Fijar_Predeterminada_y_Modificable_Eval(".$param1.",".$idciclo.",".$idemp.",".$idusr.",'".$ip."','".$host."',".$evalpred.",".$evalmod.")";
+									$vRet = $this->execQuery($query);
 								}
-
-								$vRet = $result!=1? mysql_error():"OK";
 								break;		
 						}
 						break;
@@ -2926,7 +2739,6 @@ class oCentura {
 						switch($tipo){
 
 							case 3:
-							     //$ar = $this->unserialice_force($arg);
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
 								$idemp = $this->getIdEmpFromAlias($user);
@@ -2936,17 +2748,16 @@ class oCentura {
 								$arrGruAluVal = explode('|', $idgrualuval);
 
 								for ($i=0; $i < count($arrGruAlu); $i++) { 
-									$query = "update grupo_alumnos set 	
+									$query = "UPDATE grupo_alumnos SET 	
 																	num_lista = ".$arrGruAluVal[$i].",
 																	ip = '$ip', 
 																	host = '$host',
 																	modi_por = $idusr, 
 																	modi_el = NOW()
-											Where idgrualu = ".$arrGruAlu[$i];
-											$result = mysql_query($query);
-									}					
+											WHERE idgrualu = ".$arrGruAlu[$i];
+											$vRet = $this->guardarDatos($query);
 
-								$vRet = $result!=1? mysql_error():"OK";
+								}					
 						}
 						break;
 
@@ -2956,18 +2767,16 @@ class oCentura {
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
 								$idemp = $this->getIdEmpFromAlias($user);
-								$query = "Insert Into cat_directores(idnivel,idprofesor,status_director,
+								$query = "INSERT INTO cat_directores(idnivel,idprofesor,status_director,
 																	idemp,ip,host,creado_por,creado_el)
-											value($idnivel,$idprofesor,$status_director,
+											VALUES($idnivel,$idprofesor,$status_director,
 													$idemp,'$ip','$host',$idusr,NOW())";
-								$result = mysql_query($query); 
-								$vRet = $result!=1? mysql_error():"OK";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 1:
-							     //$ar = $this->unserialice_force($arg);
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
-								$query = "update cat_directores set 	
+								$query = "UPDATE cat_directores SET 	
 															  	idnivel = $idnivel,
 															  	idprofesor = $idprofesor,
 															  	status_director = $status_director,
@@ -2975,14 +2784,12 @@ class oCentura {
 																host = '$host',
 																modi_por = $idusr, 
 																modi_el = NOW()
-										Where iddirector = $iddirector";
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+										WHERE iddirector = $iddirector";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 2:
-								$query = "delete from cat_directores Where iddirector = ".$arg;
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+								$query = "DELETE FROM cat_directores WHERE iddirector = ".$arg;
+								$vRet = $this->guardarDatos($query);
 								break;		
 						}
 						break;
@@ -2993,32 +2800,28 @@ class oCentura {
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
 								$idemp = $this->getIdEmpFromAlias($user);
-								$query = "Insert Into cat_conceptos(concepto,status_concepto,
+								$query = "INSERT INTO cat_conceptos(concepto,status_concepto,
 																	idemp,ip,host,creado_por,creado_el)
-											value('$concepto',$status_concepto,
+											VALUES('$concepto',$status_concepto,
 													$idemp,'$ip','$host',$idusr,NOW())";
-								$result = mysql_query($query); 
-								$vRet = $result!=1? mysql_error():"OK";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 1:
-							     //$ar = $this->unserialice_force($arg);
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
-								$query = "update cat_conceptos set 	
+								$query = "UPDATE cat_conceptos SET 	
 															  	concepto = '$concepto',
 															  	status_concepto = $status_concepto,
 																ip = '$ip', 
 																host = '$host',
 																modi_por = $idusr, 
 																modi_el = NOW()
-										Where idconcepto = $idconcepto";
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+										WHERE idconcepto = $idconcepto";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 2:
-								$query = "delete from cat_conceptos Where idconcepto = ".$arg;
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+								$query = "DELETE FROM cat_conceptos WHERE idconcepto = ".$arg;
+								$vRet = $this->guardarDatos($query);
 								break;		
 						}
 						break;
@@ -3032,7 +2835,7 @@ class oCentura {
 								$status_emisor_fiscal = !isset($status_emisor_fiscal)?0:1;
 								$is_iva = !isset($is_iva)?0:1;
 								
-								$query = "Insert Into cat_emisores_fiscales(
+								$query = "INSERT INTO cat_emisores_fiscales(
 																	rfc,
 																	razon_social,
 																	calle,
@@ -3048,7 +2851,7 @@ class oCentura {
 																	status_emisor_fiscal,
 																	is_iva,
 																	idemp,ip,host,creado_por,creado_el)
-											value(
+											VALUES(
 																	'".strtoupper($rfc)."',
 																	'".strtoupper($razon_social)."',
 																	'".strtoupper($calle)."',
@@ -3064,18 +2867,15 @@ class oCentura {
 																	$status_emisor_fiscal,
 																	$is_iva,
 																	$idemp,'$ip','$host',$idusr,NOW())";
-
-								$result = mysql_query($query); 
-								$vRet = $result!=1? mysql_error():"OK";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 1:
-							     //$ar = $this->unserialice_force($arg);
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
 								$status_emisor_fiscal = !isset($status_emisor_fiscal)?0:1;
 								$is_iva = !isset($is_iva)?0:1;
 
-								$query = "update cat_emisores_fiscales set 	
+								$query = "UPDATE cat_emisores_fiscales SET 	
 																rfc = '".strtoupper($rfc)."',
 																razon_social = '".strtoupper($razon_social)."',
 																calle = '".strtoupper($calle)."',
@@ -3093,14 +2893,13 @@ class oCentura {
 																host = '$host',
 																modi_por = $idusr, 
 																modi_el = NOW()
-										Where idemisorfiscal = $idemisorfiscal";
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+										WHERE idemisorfiscal = $idemisorfiscal";
+								$vRet = $this->guardarDatos($query);
+
 								break;		
 							case 2:
-								$query = "delete from cat_emisores_fiscales Where idemisorfiscal = ".$arg;
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+								$query = "DELETE FROM cat_emisores_fiscales WHERE idemisorfiscal = ".$arg;
+								$vRet = $this->guardarDatos($query);
 								break;		
 						}
 						break;
@@ -3121,7 +2920,7 @@ class oCentura {
 								$status_pago = !isset($status_pago)?0:1;
 								$ef = explode("-",$idemisorfiscal);
 								
-								$query = "Insert Into cat_pagos(
+								$query = "INSERT INTO cat_pagos(
 																	clave_nivel,
 																	idemisorfiscal,
 																	idconcepto,
@@ -3140,7 +2939,7 @@ class oCentura {
 																	idlistavencimiento,
 																	status_pago,
 																	idemp,ip,host,creado_por,creado_el)
-											value(
+											VALUES(
 
 																	$clave_nivel,
 																	$ef[0],
@@ -3160,12 +2959,9 @@ class oCentura {
 																	$idlistavencimiento,
 																	$status_pago,
 																	$idemp,'$ip','$host',$idusr,NOW())";
-
-								$result = mysql_query($query); 
-								$vRet = $result!=1? mysql_error():"OK";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 1:
-							     //$ar = $this->unserialice_force($arg);
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
 								$is_descto_beca = !isset($is_descto_beca)?0:1;
@@ -3178,7 +2974,7 @@ class oCentura {
 								$status_pago = !isset($status_pago)?0:1;
 								$ef = explode("-",$idemisorfiscal);
 
-								$query = "update cat_pagos set 	
+								$query = "UPDATE cat_pagos SET 	
 																clave_nivel = $clave_nivel,
 																idemisorfiscal = $ef[0],
 																idconcepto = $idconcepto,
@@ -3200,14 +2996,12 @@ class oCentura {
 																host = '$host',
 																modi_por = $idusr, 
 																modi_el = NOW()
-										Where idpago = $idpago";
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+										WHERE idpago = $idpago";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 2:
-								$query = "delete from cat_pagos Where idpago = ".$arg;
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+								$query = "DELETE FROM cat_pagos WHERE idpago = ".$arg;
+								$vRet = $this->guardarDatos($query);
 								break;		
 						}
 						break;
@@ -3217,13 +3011,10 @@ class oCentura {
 
 							case 2:
 								parse_str($arg);
-								$query = "delete from facturas_encabezado Where idfactura = $idfactura and isfe = 0";
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+								$query = "DELETE FROM facturas_encabezado WHERE idfactura = $idfactura AND isfe = 0";
+								$vRet = $this->guardarDatos($query);
 								break;		
-							
 							case 5:
-							     //$ar = $this->unserialice_force($arg);
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
 								$idemp = $this->getIdEmpFromAlias($user);
@@ -3231,21 +3022,15 @@ class oCentura {
 								$idcicloant = $this->getCicloAntFromIdEmp($idemp);
 								$omitir_descto_beca = !isset($omitir_descto_beca)?0:1;
 
-								$query = "update estados_de_cuenta set 	
+								$query = "UPDATE estados_de_cuenta SET 	
 																porcdescto = $porcentaje,
 																omitir_descto_beca = $omitir_descto_beca,
 																modi_por = $idusr, 
 																modi_el = NOW()
-										Where idedocta = $idedocta";
-								$result = mysql_query($query);
-
-								//$query = "set @X = Generar_Estado_de_Cuenta_por_Familia(".$idfamilia.",".$idciclo.",".$idemp.",".$idusr.",'".$ip."','".$host."')";
-								$result = mysql_query($query);
-
-								$vRet = $result!=1? mysql_error():"OK";
+										WHERE idedocta = $idedocta";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 6:
-							     //$ar = $this->unserialice_force($arg);
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
 								$idemp = $this->getIdEmpFromAlias($user);
@@ -3256,30 +3041,24 @@ class oCentura {
 									$recargo = ($basadoen * 100) / $subtotal;
 								}
 
-								$query = "update estados_de_cuenta set 	
+								$query = "UPDATE estados_de_cuenta SET 	
 																porcrecargo = $recargo,
 																modi_por = $idusr, 
 																modi_el = NOW()
-										Where idedocta = $idedocta";
-								$result = mysql_query($query);
-
-								//$query = "set @X = Generar_Estado_de_Cuenta_por_Familia(".$idfamilia.",".$idciclo.",".$idemp.",".$idusr.",'".$ip."','".$host."')";
-								$result = mysql_query($query);
-
-								$vRet = $result!=1? mysql_error():"OK";
+										WHERE idedocta = $idedocta";
+								$vRet = $this->guardarDatos($query);
 								break;		
 
 							case 7:
-							     //$ar = $this->unserialice_force($arg);
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
 								$idemp = $this->getIdEmpFromAlias($user);
 								$idciclo = $this->getCicloFromIdEmp($idemp);
 
 								$arrPago = explode('-',$idconcepto);
-								$query = "set @X = Generar_Estado_de_Cuenta_por_Concepto(".$arrPago[0].",".$idciclo.",".$idfamilia.",".$idalumno.",".$clave_nivel.",".$beca_sep.",".$beca_arji.",".$beca_sp.",".$beca_bach.",".$idusr.",".$idemp.",'".$ip."','".$host."',".$num_pagos.",".$descuento.",".$recargo.")";
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+								$query = "SET @X = Generar_Estado_de_Cuenta_por_Concepto(".$arrPago[0].",".$idciclo.",".$idfamilia.",".$idalumno.",".$clave_nivel.",".$beca_sep.",".$beca_arji.",".$beca_sp.",".$beca_bach.",".$idusr.",".$idemp.",'".$ip."','".$host."',".$num_pagos.",".$descuento.",".$recargo.")";
+								$vRet = $this->execQuery($query);
+
 								break;		
 
 							case 8:
@@ -3288,9 +3067,9 @@ class oCentura {
 								$idemp = $this->getIdEmpFromAlias($user);
 								$idciclo = $this->getCicloFromIdEmp($idemp);
 
-								$query = "set @X = Quitar_Concepto_de_Pago_de_Alumno(".$idfamilia.",".$idalumno.",".$idedocta.",".$idpago.",".$idusr.",".$idciclo.")";
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+								$query = "SET @X = Quitar_Concepto_de_Pago_de_Alumno(".$idfamilia.",".$idalumno.",".$idedocta.",".$idpago.",".$idusr.",".$idciclo.")";
+								$vRet = $this->execQuery($query);
+
 								break;		
 
 							case 9:
@@ -3315,29 +3094,28 @@ class oCentura {
 								$aTotal = explode('|', $arrTotal);
 								
 								$descto_becas = !isset($descto_becas) ? 0 : $descto_becas;
-
-							    $facEnc = mysql_query("INSERT INTO facturas_encabezado(idcliente,idmetododepago,referencia,fecha,subtotal,descto_becas,importe,descto,recargo,total,idemp,ip,host,creado_por,creado_el)
-							    					VALUES(".$IdFs[0].",$idmetododepago,'$referencia',NOW(),$subtotal,$descto_becas,$importe,$descto,$recargo,$total,$idemp,'$ip','$host',$idusr,NOW())");
-
-							    $result = mysql_query("SELECT MAX(idfactura) as IDs FROM facturas_encabezado");
-								$rFac=intval(mysql_result($result, 0,"IDs"));
-
+							    $query = "INSERT INTO facturas_encabezado(idcliente,idmetododepago,referencia,fecha,subtotal,descto_becas,importe,descto,recargo,total,idemp,ip,host,creado_por,creado_el)
+							    					VALUES(".$IdFs[0].",$idmetododepago,'$referencia',NOW(),$subtotal,$descto_becas,$importe,$descto,$recargo,$total,$idemp,'$ip','$host',$idusr,NOW())";
+								$vRet = $this->guardarDatos($query);
+							    $query = "SELECT MAX(idfactura) AS IDs FROM facturas_encabezado";
+							    $result = $this->getArray($query);
+							    $rFac = !$result ? 0 : intval($result[0]->IDs);
 
 								for ($i=0; $i < count($IdFs); $i++) { 
 									
 									$dBecas = !isset($aDesctoBecas[$i]) ? 0 : $aDesctoBecas[$i]; 
+							    	$query = "SELECT * FROM estados_de_cuenta WHERE idedocta = ".$IDs[$i];
+								    $fD = $this->getArray($query);
 
-							    	$fD = mysql_query("SELECT * FROM estados_de_cuenta WHERE idedocta = ".$IDs[$i]);
-									
-									$precio_venta = mysql_result($fD, 0,"subtotal");
-									$subtotal  	  = mysql_result($fD, 0,"subtotal");
-									$descto_becas = mysql_result($fD, 0,"descto_becas");
-									$importe  	  = mysql_result($fD, 0,"importe");
-									$descto  	  = mysql_result($fD, 0,"descto");
-									$recargo  	  = mysql_result($fD, 0,"recargo");
-									$total  	  = mysql_result($fD, 0,"total");
+									$precio_venta = $fD[0]->subtotal;
+									$subtotal  	  = $fD[0]->subtotal;
+									$descto_becas = $fD[0]->descto_becas;
+									$importe  	  = $fD[0]->importe;
+									$descto  	  = $fD[0]->descto;
+									$recargo  	  = $fD[0]->recargo;
+									$total  	  = $fD[0]->total;
 
-									$facDet = mysql_query("INSERT INTO facturas_detalle(
+									$qry = "INSERT INTO facturas_detalle(
 													idfactura,
 													idedocta,
 													idproducto,
@@ -3365,8 +3143,9 @@ class oCentura {
 													$descto, 
 													$recargo, 
 													$total, 
-													$idemp,'$ip','$host',$idusr,NOW())");
+													$idemp,'$ip','$host',$idusr,NOW())";
 
+									$vRet = $this->guardarDatos($qry);
 
 									$query = "UPDATE estados_de_cuenta SET 	
 																	idfactura = ".$rFac.",
@@ -3379,14 +3158,9 @@ class oCentura {
 																	modi_por = $idusr, 
 																	modi_el = NOW()
 											WHERE idedocta = ".$IDs[$i];
-											$result = mysql_query($query);
-									}					
-								
-								$vRet = $result!=1? mysql_error():"OK";
-
-
+									$vRet = $this->guardarDatos($query);
+								}					
 								break;		
-
 							case 10:
 								parse_str($arg);
 								$iduser = $this->getIdUserFromAlias($u);
@@ -3394,25 +3168,21 @@ class oCentura {
 								$idciclo = $this->getCicloFromIdEmp($idemp);
 								$idcicloant = $this->getCicloAntFromIdEmp($idemp);
 
-								$query = "set @X = Generar_Estado_de_Cuenta_por_Familia(".$idfamilia.",".$idciclo.",".$idemp.",".$iduser.",'".$ip."','".$host."',".$idcicloant.")";
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+								$query = "SET @X = Generar_Estado_de_Cuenta_por_Familia(".$idfamilia.",".$idciclo.",".$idemp.",".$iduser.",'".$ip."','".$host."',".$idcicloant.")";
+								$vRet = $this->execQuery($query);
 								break;		
-
 							case 11:
 
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($u);
 								$idemp = $this->getIdEmpFromAlias($u);
 								$idciclo = $this->getCicloFromIdEmp($idemp);
-
-							    $facEnc = mysql_query("INSERT INTO facturas_encabezado(idcliente,idemisorfiscal,idregfis,forma_de_pago,metodo_de_pago,referencia,fecha,subtotal,descto_becas,importe,descto,recargo,importe2,iva,total,padre,tipo_documento,idemp,ip,host,creado_por,creado_el)
-							    					VALUES($idcliente,$idemisorfiscal,$idregfis,0,$idmetododepago,'$referencia',NOW(),$subtotal,$descto_becas,$importe,$descto,$recargo,$importe2,$iva,$total,$padre,1,$idemp,'$ip','$host',$idusr,NOW())");
-							    
-							    $vRet = $facEnc!=1? mysql_error():"OK";
-
-							    $result = mysql_query("SELECT MAX(idfactura) as IDs FROM facturas_encabezado");
-								$rFac=intval(mysql_result($result, 0,"IDs"));
+							    $facEnc = "INSERT INTO facturas_encabezado(idcliente,idemisorfiscal,idregfis,forma_de_pago,metodo_de_pago,referencia,fecha,subtotal,descto_becas,importe,descto,recargo,importe2,iva,total,padre,tipo_documento,idemp,ip,host,creado_por,creado_el)
+							    					VALUES($idcliente,$idemisorfiscal,$idregfis,0,$idmetododepago,'$referencia',NOW(),$subtotal,$descto_becas,$importe,$descto,$recargo,$importe2,$iva,$total,$padre,1,$idemp,'$ip','$host',$idusr,NOW())";
+								$vRet = $this->guardarDatos($facEnc);
+							    $query = "SELECT MAX(idfactura) AS IDs FROM facturas_encabezado";
+							    $result = $this->getArray($query);
+							    $rFac = !$result ? 0 : intval($result[0]->IDs);
 
 								for ($i=0; $i < 100; $i++) { 
 								
@@ -3429,7 +3199,7 @@ class oCentura {
 										$recargo = "recargo_".$i;
 										$total = "total_".$i;
 
-										$facDet = mysql_query("INSERT INTO facturas_detalle(
+										$qry = "INSERT INTO facturas_detalle(
 														idfactura,
 														idedocta,
 														idproducto,
@@ -3461,29 +3231,20 @@ class oCentura {
 														".$$total.",
 														0, 
 														".$$total.",
-														$idemp,'$ip','$host',$idusr,NOW())");
+														$idemp,'$ip','$host',$idusr,NOW())";
 												
-												//$vRet = $result!=1? mysql_error():"OK";
-									
+										$vRet = $this->guardarDatos($qry);
 									}else{
 										break;
 									}
-
-									
 								}					
-
 								break; // 11;
-
 							case 12:
 
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($u);
-								
-								// $emifis = explode('-',$idemisorfiscal);
-
-							    $facEnc = mysql_query("
-							    	UPDATE facturas_encabezado 
-							    	set idcliente = $idcliente,
+							    $query = "UPDATE facturas_encabezado 
+							    	SET idcliente = $idcliente,
 							    		idemisorfiscal = $idemisorfiscal,
 							    		idregfis = $idregfis,
 							    		idmetododeidpago = $idmetododepagoNC,
@@ -3502,8 +3263,8 @@ class oCentura {
 							    		host = '$host',
 							    		modi_por = $idusr,
 							    		modi_el = NOW()
-							    	WHERE idfactura = $idfactura");
-
+							    	WHERE idfactura = $idfactura";
+								$vRet = $this->guardarDatos($query);
 
 								for ($i=0; $i < 100; $i++) { 
 								
@@ -3521,8 +3282,7 @@ class oCentura {
 										$recargo = "recargo_".$i;
 										$total = "total_".$i;
 
-										$facDet = mysql_query("
-											UPDATE facturas_detalle
+										$query = "UPDATE facturas_detalle
 													SET
 														idedocta = ".$$idedocta0.",
 														idproducto = ".$$idpro0.",
@@ -3539,34 +3299,27 @@ class oCentura {
 											    		host = '".$host."',
 											    		modi_por = ".$idusr.",
 											    		modi_el = NOW()
-											    	WHERE idfacdet = ".$$idfacdet0 );
-												
-												$vRet = "OK";
-									
+											    	WHERE idfacdet = ".$$idfacdet0;
+
+										$vRet = $this->guardarDatos($query);
 									}else{
 										break;
 									}
-
-									
 								}					
-
-								break; // 12
-
-
-							case 13: // 13 FACTURA MANUAL
+								break; 
+							case 13: 
 
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($u);
 								$idemp = $this->getIdEmpFromAlias($u);
 								$idciclo = $this->getCicloFromIdEmp($idemp);
 								$ief = explode('-',$idemisorfiscal);
-							    $facEnc = mysql_query("Insert Into facturas_encabezado(idcliente,idemisorfiscal,idregfis,forma_de_pago,metodo_de_pago,referencia,fecha,subtotal,descto_becas,importe,descto,recargo,importe2,iva,total,padre,tipo_documento,idemp,ip,host,creado_por,creado_el)
-							    					value($idcliente,$ief[0],$idregfis,0,$idmetododepago,'$referencia',NOW(),$subtotal,$descto_becas,$importe,$descto,$recargo,$importe2,$iva,$total,$padre,2,$idemp,'$ip','$host',$idusr,NOW())");
-							    
-							    $vRet = $facEnc!=1? mysql_error():"OK";
-
-							    $result = mysql_query("SELECT MAX(idfactura) as IDs from facturas_encabezado");
-								$rFac=intval(mysql_result($result, 0,"IDs"));
+							    $query = "INSERT INTO facturas_encabezado(idcliente,idemisorfiscal,idregfis,forma_de_pago,metodo_de_pago,referencia,fecha,subtotal,descto_becas,importe,descto,recargo,importe2,iva,total,padre,tipo_documento,idemp,ip,host,creado_por,creado_el)
+							    					VALUES($idcliente,$ief[0],$idregfis,0,$idmetododepago,'$referencia',NOW(),$subtotal,$descto_becas,$importe,$descto,$recargo,$importe2,$iva,$total,$padre,2,$idemp,'$ip','$host',$idusr,NOW())";								
+								$vRet = $this->guardarDatos($query);
+							    $query = "SELECT MAX(idfactura) AS IDs FROM facturas_encabezado";
+							    $result = $this->getArray($query);
+							    $rFac = !$result ? 0 : intval($result[0]->IDs);
 
 								for ($i=0; $i < 100; $i++) { 
 								
@@ -3583,7 +3336,7 @@ class oCentura {
 										$recargo = "recargo_".$i;
 										$total = "total_".$i;
 
-										$facDet = mysql_query("Insert Into facturas_detalle(
+										$query = "INSERT INTO facturas_detalle(
 														idfactura,
 														idedocta,
 														idproducto,
@@ -3600,7 +3353,7 @@ class oCentura {
 														iva, 
 														total, 
 														idemp,ip,host,creado_por,creado_el)
-												value(".$rFac.",
+												VALUES(".$rFac.",
 														".$$idedocta0.",
 														".$$idpro0.",
 														'".$$pro0."',
@@ -3615,29 +3368,19 @@ class oCentura {
 														".$$total.",
 														0, 
 														".$$total.",
-														$idemp,'$ip','$host',$idusr,NOW())");
+														$idemp,'$ip','$host',$idusr,NOW())";
 												
-												//$vRet = $result!=1? mysql_error():"OK";
-									
-									}else{
-										//break;
+										$vRet = $this->guardarDatos($query);									
 									}
-
-									
 								}					
-
 								break; // 13;
-
 							case 14: // Factura Manual
-
 								parse_str($arg);
-								$idusr = $this->getIdUserFromAlias($u);
-								
+								$idusr = $this->getIdUserFromAlias($u);								
 								$ief = explode('-',$idemisorfiscal);
 
-							    $facEnc = mysql_query("
-							    	update facturas_encabezado 
-							    	set idcliente = $idcliente,
+							    $query = "UPDATE facturas_encabezado 
+							    	SET idcliente = $idcliente,
 							    		idemisorfiscal = $ief[0],
 							    		idregfis = $idregfis,
 							    		idmetododepago = $idmetododepago,
@@ -3656,9 +3399,8 @@ class oCentura {
 							    		host = '$host',
 							    		modi_por = $idusr,
 							    		modi_el = NOW()
-							    	Where idfactura = $idfactura");
-							    $vRet = $facEnc!=1? mysql_error():"OK";
-
+							    	WHERE idfactura = $idfactura";
+								$vRet = $this->guardarDatos($query);
 
 								for ($i=0; $i < 100; $i++) { 
 								
@@ -3676,9 +3418,8 @@ class oCentura {
 										$recargo = "recargo_".$i;
 										$total = "total_".$i;
 
-										$facDet = mysql_query("
-											update facturas_detalle
-													set
+										$query = "UPDATE facturas_detalle
+													SET
 														idedocta = ".$$idedocta0.",
 														idproducto = ".$$idpro0.",
 														descrip_prod = '".$$pro0."', 
@@ -3694,27 +3435,15 @@ class oCentura {
 											    		host = '".$host."',
 											    		modi_por = ".$idusr.",
 											    		modi_el = NOW()
-											    	Where idfacdet = ".$$idfacdet0 );
-												
-													$vRet = $facDet!=1? mysql_error():"OK";
-
-									
+											    	WHERE idfacdet = ".$$idfacdet0;
+										$vRet = $this->guardarDatos($query);									
 									}else{
 										break;
-									}
-
-									
+									}									
 								}					
-
 								break; // 14
-
-
-
-
-
 						}
 						break; // 28
-
 					case 29:
 
 						switch($tipo){
@@ -3722,18 +3451,16 @@ class oCentura {
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
 								$idemp = $this->getIdEmpFromAlias($user);
-								$query = "Insert Into cat_metodos_de_pago(metodo_de_pago,metodo_de_pago_predeterminado,status_metodo_de_pago,
+								$query = "INSERT INTO cat_metodos_de_pago(metodo_de_pago,metodo_de_pago_predeterminado,status_metodo_de_pago,
 																	idemp,ip,host,creado_por,creado_el)
-											value('$metodo_de_pago',0,$status_metodo_de_pago,
+											VALUES('$metodo_de_pago',0,$status_metodo_de_pago,
 													$idemp,'$ip','$host',$idusr,NOW())";
-								$result = mysql_query($query); 
-								$vRet = $result!=1? mysql_error():"OK";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 1:
-							     //$ar = $this->unserialice_force($arg);
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
-								$query = "update cat_metodos_de_pago set 	
+								$query = "UPDATE cat_metodos_de_pago SET 	
 															  	metodo_de_pago = '$metodo_de_pago',
 															  	metodo_de_pago_predeterminado = $,metodo_de_pago_predeterminado
 															  	status_metodo_de_pago = $status_metodo_de_pago,
@@ -3741,57 +3468,48 @@ class oCentura {
 																host = '$host',
 																modi_por = $idusr, 
 																modi_el = NOW()
-										Where idmetododepago = $idmetododepago";
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+										WHERE idmetododepago = $idmetododepago";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 2:
-								$query = "delete from cat_metodos_de_pago Where idmetododepago = ".$arg;
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+								$query = "DELETE FROM cat_metodos_de_pago WHERE idmetododepago = ".$arg;
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 3:
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($u);
 								$idemp = $this->getIdEmpFromAlias($u);
-								$query = "update cat_metodos_de_pago set 	
-															  	metodo_de_pago_predeterminado = 0
-										Where idemp = $idemp";
-								$result = mysql_query($query);
+								$query = "UPDATE cat_metodos_de_pago SET metodo_de_pago_predeterminado = 0
+										  WHERE idemp = $idemp";
+								$vRet = $this->guardarDatos($query);
 
-								$query = "update cat_metodos_de_pago set 	
+								$query = "UPDATE cat_metodos_de_pago SET 	
 															  	metodo_de_pago_predeterminado = 1,
 																ip = '$ip', 
 																host = '$host',
 																modi_por = $idusr, 
 																modi_el = NOW()
-										Where idmetododepago = $idmetododepago";
-								$result = mysql_query($query);
-
-								$vRet = $result!=1? mysql_error():"OK";
+										WHERE idmetododepago = $idmetododepago";
+								$vRet = $this->guardarDatos($query);
 								break;		
 						}
 						break; // 29
-
-
 					case 30:
 						switch($tipo){
 							case 0:
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
 								$idemp = $this->getIdEmpFromAlias($user);
-								$query = "Insert Into cat_colores(color,codigo_color_hex,status_color,
+								$query = "INSERT INTO cat_colores(color,codigo_color_hex,status_color,
 																	idemp,ip,host,creado_por,creado_el)
-											value('$color','$codigo_color_hex',$status_color,
+											VALUES('$color','$codigo_color_hex',$status_color,
 													$idemp,'$ip','$host',$idusr,NOW())";
-								$result = mysql_query($query); 
-								$vRet = $result!=1? mysql_error():"OK";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 1:
-							     //$ar = $this->unserialice_force($arg);
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
-								$query = "update cat_colores set 	
+								$query = "UPDATE cat_colores SET 	
 															  	color = '$color',
 															  	codigo_color_hex = '$codigo_color_hex',
 															  	status_color = $status_color,
@@ -3799,14 +3517,12 @@ class oCentura {
 																host = '$host',
 																modi_por = $idusr, 
 																modi_el = NOW()
-										Where idcolor = $idcolor";
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+										WHERE idcolor = $idcolor";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 2:
-								$query = "delete from cat_colores Where idcolor = ".$arg;
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+								$query = "DELETE FROM cat_colores WHERE idcolor = ".$arg;
+								$vRet = $this->guardarDatos($query);
 								break;		
 						}
 						break; // 30
@@ -3820,21 +3536,19 @@ class oCentura {
 								$iscolor = !isset($iscolor)?0:1;	
 								$status_producto = !isset($status_producto)?0:1;
 
-								$query = "Insert Into cat_productos(idproveedor,producto,idmedida,idcolor,costo_unitario,iscolor,status_producto,
+								$query = "INSERT INTO cat_productos(idproveedor,producto,idmedida,idcolor,costo_unitario,iscolor,status_producto,
 																	idemp,ip,host,creado_por,creado_el)
-											value($idproveedor,'$producto',$idmedida,$idcolor,$costo_unitario,$iscolor,$status_producto,
+											VALUES($idproveedor,'$producto',$idmedida,$idcolor,$costo_unitario,$iscolor,$status_producto,
 													$idemp,'$ip','$host',$idusr,NOW())";
-								$result = mysql_query($query); 
-								$vRet = $result!=1? mysql_error():"OK";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 1:
-							     //$ar = $this->unserialice_force($arg);
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
 								$iscolor = !isset($iscolor)?0:1;	
 								$status_producto = !isset($status_producto)?0:1;
 
-								$query = "update cat_productos set 	
+								$query = "UPDATE cat_productos SET 	
 															  	producto = '$producto',
 															  	idproveedor = $idproveedor,
 															  	idmedida = $idmedida,
@@ -3846,14 +3560,12 @@ class oCentura {
 																host = '$host',
 																modi_por = $idusr, 
 																modi_el = NOW()
-										Where idproducto = $idproducto";
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+										WHERE idproducto = $idproducto";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 2:
-								$query = "delete from cat_productos Where idproducto = ".$arg;
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+								$query = "DELETE FROM cat_productos WHERE idproducto = ".$arg;
+								$vRet = $this->guardarDatos($query);
 								break;		
 						}
 						break; // 31
@@ -3864,18 +3576,16 @@ class oCentura {
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
 								$idemp = $this->getIdEmpFromAlias($user);
-								$query = "Insert Into cat_medidas(medida1,medida2,clave,status_medida,
+								$query = "INSERT INTO cat_medidas(medida1,medida2,clave,status_medida,
 																	idemp,ip,host,creado_por,creado_el)
-											value('$medida1','$medida2','$clave',$status_medida,
+											VALUES('$medida1','$medida2','$clave',$status_medida,
 													$idemp,'$ip','$host',$idusr,NOW())";
-								$result = mysql_query($query); 
-								$vRet = $result!=1? mysql_error():"OK";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 1:
-							     //$ar = $this->unserialice_force($arg);
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
-								$query = "update cat_medidas set 	
+								$query = "UPDATE cat_medidas SET 	
 															  	medida1 = '$medida1',
 															  	medida2 = '$medida2',
 															  	clave = '$clave',
@@ -3884,14 +3594,12 @@ class oCentura {
 																host = '$host',
 																modi_por = $idusr, 
 																modi_el = NOW()
-										Where idmedida = $idmedida";
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+										WHERE idmedida = $idmedida";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 2:
-								$query = "delete from cat_medidas Where idmedida = ".$arg;
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+								$query = "DELETE FROM cat_medidas WHERE idmedida = ".$arg;
+								$vRet = $this->guardarDatos($query);
 								break;		
 						}
 						break; // 32
@@ -3903,7 +3611,7 @@ class oCentura {
 								$idusr = $this->getIdUserFromAlias($user);
 								$idemp = $this->getIdEmpFromAlias($user);
 								$status_proveedor = !isset($status_proveedor)?0:1;
-								$query = "Insert Into cat_proveedores(
+								$query = "INSERT INTO cat_proveedores(
 																	rfc,
 																	contacto,
 																	proveedor,
@@ -3919,7 +3627,7 @@ class oCentura {
 																	tel2,
 																	status_proveedor,
 																	idemp,ip,host,creado_por,creado_el)
-											value(
+											VALUES(
 																	'".strtoupper($rfc)."',
 																	'".strtoupper($contacto)."',
 																	'".strtoupper($proveedor)."',
@@ -3935,18 +3643,14 @@ class oCentura {
 																	'$tel2',
 																	$status_proveedor,
 																	$idemp,'$ip','$host',$idusr,NOW())";
-
-								$result = mysql_query($query); 
-								$vRet = $result!=1? mysql_error():"OK";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 1:
-							     //$ar = $this->unserialice_force($arg);
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
-
 								$status_proveedor = !isset($status_proveedor)?0:1;	
 
-								$query = "update cat_proveedores set 	
+								$query = "UPDATE cat_proveedores SET 	
 																rfc = '".strtoupper($rfc)."',
 																contacto = '".strtoupper($contacto)."',
 																proveedor = '".strtoupper($proveedor)."',
@@ -3965,96 +3669,74 @@ class oCentura {
 																host = '$host',
 																modi_por = $idusr, 
 																modi_el = NOW()
-										Where idproveedor = $idproveedor";
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+										WHERE idproveedor = $idproveedor";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 2:
-								$query = "delete from cat_proveedores Where idproveedor = ".$arg;
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+								$query = "DELETE FROM cat_proveedores WHERE idproveedor = ".$arg;
+								$vRet = $this->guardarDatos($query);
 								break;		
 						}
 						break; // 33
-
-
-
-
-
-
-
 					case 34:
 						switch($tipo){
 							case 0:
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
 								$idemp = $this->getIdEmpFromAlias($user);
-								$query = "Insert Into solicitudes_de_material(idsolicita,status_solicitud_de_material,
+								$query = "INSERT INTO solicitudes_de_material(idsolicita,status_solicitud_de_material,
 																	idemp,ip,host,creado_por,creado_el)
-											value($idsolicita,$status_solicitud_de_material,
+											VALUES($idsolicita,$status_solicitud_de_material,
 													$idemp,'$ip','$host',$idusr,NOW())";
-								$result = mysql_query($query); 
-								$vRet = $result!=1? mysql_error():"OK";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 1:
-							     //$ar = $this->unserialice_force($arg);
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
-								$query = "update solicitudes_de_material set 	
+								$query = "UPDATE solicitudes_de_material SET 	
 															  	idsolicita = $idsolicita,
 															  	status_solicitud_de_material = $status_solicitud_de_material,
 																ip = '$ip', 
 																host = '$host',
 																modi_por = $idusr, 
 																modi_el = NOW()
-										Where idsolicituddematerial = $idsolicituddematerial";
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+										WHERE idsolicituddematerial = $idsolicituddematerial";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 2:
-								$query = "delete from solicitudes_de_material Where idsolicituddematerial = ".$arg;
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+								$query = "DELETE FROM solicitudes_de_material WHERE idsolicituddematerial = ".$arg;
+								$vRet = $this->guardarDatos($query);
 								break;		
 						}
 						break; // 34
-
-
-
-
-
 					case 35:
 						switch($tipo){
 							case 0:
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
 								$idemp = $this->getIdEmpFromAlias($user);
-								$query = "Insert Into cat_supervisores_caja(idusersupervisor,status_supervisor_caja,
+								$query = "INSERT INTO cat_supervisores_caja(idusersupervisor,status_supervisor_caja,
 																	idemp,ip,host,creado_por,creado_el)
-											value($idusersupervisor,$status_supervisor_caja,
+											VALUES($idusersupervisor,$status_supervisor_caja,
 													$idemp,'$ip','$host',$idusr,NOW())";
-								$result = mysql_query($query); 
-								$vRet = $result!=1? mysql_error():"OK";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 1:
-							     //$ar = $this->unserialice_force($arg);
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
-								$query = "update cat_supervisores_caja set 	
+								$query = "UPDATE cat_supervisores_caja SET 	
 															  	idusersupervisor = $idusersupervisor,
 															  	status_supervisor_caja = $status_supervisor_caja,
 																ip = '$ip', 
 																host = '$host',
 																modi_por = $idusr, 
 																modi_el = NOW()
-										Where idsupervisorcaja = $idsupervisorcaja";
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+										WHERE idsupervisorcaja = $idsupervisorcaja";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 2:
-								$query = "delete from cat_supervisores_caja Where idsupervisorcaja = ".$arg;
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+								$query = "DELETE FROM cat_supervisores_caja WHERE idsupervisorcaja = ".$arg;
+								$vRet = $this->guardarDatos($query);
 								break;		
 						}
 						break; // 35
@@ -4066,86 +3748,74 @@ class oCentura {
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
 								$idemp = $this->getIdEmpFromAlias($user);
-								$query = "Insert Into cat_supervisores_sol_mat(idusersupervisorsolmat,status_supervisor_sol_mat,
+								$query = "INSERT INTO cat_supervisores_sol_mat(idusersupervisorsolmat,status_supervisor_sol_mat,
 																	idemp,ip,host,creado_por,creado_el)
-											value($idusersupervisorsolmat,$status_supervisor_sol_mat,
+											VALUES($idusersupervisorsolmat,$status_supervisor_sol_mat,
 													$idemp,'$ip','$host',$idusr,NOW())";
-								$result = mysql_query($query); 
-								$vRet = $result!=1? mysql_error():"OK";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 1:
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
-								$query = "update cat_supervisores_sol_mat set 	
+								$query = "UPDATE cat_supervisores_sol_mat SET 	
 															  	idusersupervisorsolmat = $idusersupervisorsolmat,
 															  	status_supervisor_sol_mat = $status_supervisor_sol_mat,
 																ip = '$ip', 
 																host = '$host',
 																modi_por = $idusr, 
 																modi_el = NOW()
-										Where idsupervisorsolmat = $idsupervisorsolmat";
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+										WHERE idsupervisorsolmat = $idsupervisorsolmat";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 2:
-								$query = "delete from cat_supervisores_sol_mat Where idsupervisorsolmat = ".$arg;
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+								$query = "DELETE FROM cat_supervisores_sol_mat WHERE idsupervisorsolmat = ".$arg;
+								$vRet = $this->guardarDatos($query);
 								break;		
 						}
 						break; // 36
-
-
 					case 37:
 						switch($tipo){
 							case 0:
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
 								$idemp = $this->getIdEmpFromAlias($user);
-								$query = "Insert Into cat_supervisores_entrega(idusersupervisorentrega,status_supervisor_entrega,
+								$query = "INSERT INTO cat_supervisores_entrega(idusersupervisorentrega,status_supervisor_entrega,
 																	idemp,ip,host,creado_por,creado_el)
-											value($idusersupervisorentrega,$status_supervisor_entrega,
+											VALUES($idusersupervisorentrega,$status_supervisor_entrega,
 													$idemp,'$ip','$host',$idusr,NOW())";
-								$result = mysql_query($query); 
-								$vRet = $result!=1? mysql_error():"OK";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 1:
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
-								$query = "update cat_supervisores_entrega set 	
+								$query = "UPDATE cat_supervisores_entrega SET 	
 															  	idusersupervisorentrega = $idusersupervisorentrega,
 															  	status_supervisor_entrega = $status_supervisor_entrega,
 																ip = '$ip', 
 																host = '$host',
 																modi_por = $idusr, 
 																modi_el = NOW()
-										Where idsupervisorentrega = $idsupervisorentrega";
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+										WHERE idsupervisorentrega = $idsupervisorentrega";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 2:
-								$query = "delete from cat_supervisores_entrega Where idsupervisorentrega = ".$arg;
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+								$query = "DELETE FROM cat_supervisores_entrega WHERE idsupervisorentrega = ".$arg;
+								$vRet = $this->guardarDatos($query);
 								break;		
 						}
 						break; // 37
-
-
 					case 38:
 						switch($tipo){
 							case 0:
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
 								$idemp = $this->getIdEmpFromAlias($user);
-								//$status_solicitud_de_material = !isset($status_solicitud_de_material)?0:1;	
-
-								$query = "Insert Into solicitudes_de_material(
+								$query = "INSERT INTO solicitudes_de_material(
 														idsolicita,
 														observaciones,
 														fecha_solicitud,
 														idemp,ip,host,creado_por,creado_el)
-												values($idusr,
+												VALUES($idusr,
 														'$observaciones',
 														NOW(),
 														$idemp,
@@ -4153,64 +3823,53 @@ class oCentura {
 														'$host',
 														$idusr,
 														NOW()
-												)";
-								
-								$result = mysql_query($query); 
-								$vRet = $result!=1? mysql_error():"OK";
+												)";								
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 1:
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
-								//$status_solicitud_de_material = !isset($status_solicitud_de_material)?0:1;	
-								$query = "update solicitudes_de_material set 	
+								$query = "UPDATE solicitudes_de_material SET 	
 																observaciones = '$observaciones',
 																ip = '$ip', 
 																host = '$host',
 																modi_por = $idusr, 
 																modi_el = NOW()
-										Where idsolicituddematerial = $idsolicituddematerial";
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+										WHERE idsolicituddematerial = $idsolicituddematerial";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 2:
-								$query = "delete from solicitudes_de_material Where idsolicituddematerial = ".$arg;
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+								$query = "DELETE FROM solicitudes_de_material WHERE idsolicituddematerial = ".$arg;
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 3:
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
-								$query = "update solicitudes_de_material set 	
+								$query = "UPDATE solicitudes_de_material SET 	
 															  	status_solicitud_de_material = $val,
 															  	fecha_autorizacion = NOW(),
 																ip = '$ip', 
 																host = '$host',
 																modi_por = $idusr, 
 																modi_el = NOW()
-										Where idsolicituddematerial = $id";
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+										WHERE idsolicituddematerial = $id";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 4:
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
-								$query = "update solicitudes_de_material set 	
+								$query = "UPDATE solicitudes_de_material SET 	
 															  	status_solicitud_de_material = $val,
 															  	fecha_entrega = NOW(),
 																ip = '$ip', 
 																host = '$host',
 																modi_por = $idusr, 
 																modi_el = NOW()
-										Where idsolicituddematerial = $id";
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+										WHERE idsolicituddematerial = $id";
+								$vRet = $this->guardarDatos($query);
 								break;		
 						}
 						break; // 38
-
-
-
-
 					case 39:
 						switch($tipo){
 							case 0:
@@ -4218,7 +3877,7 @@ class oCentura {
 								$idusr = $this->getIdUserFromAlias($user);
 								$idemp = $this->getIdEmpFromAlias($user);
 
-								$query = "Insert Into solicitudes_de_material_detalles(
+								$query = "INSERT INTO solicitudes_de_material_detalles(
 														idsolicituddematerial,
 														idproducto,
 														idcolor,
@@ -4231,7 +3890,7 @@ class oCentura {
 														observaciones_solicitud,
 														status_solicitud_de_materiales,
 														idemp,ip,host,creado_por,creado_el)
-											value(
+											VALUES(
 														$idsolicituddematerial,
 														$idprod,
 														$idcolor,
@@ -4249,13 +3908,12 @@ class oCentura {
 														$idusr,
 														NOW()
 														)";
-								$result = mysql_query($query); 
-								$vRet = $result!=1? mysql_error():"OK";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 1:
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
-								$query = "update solicitudes_de_material_detalles set 	
+								$query = "UPDATE solicitudes_de_material_detalles SET 	
 															  	idsolicituddematerial = $idsolicituddematerial,
 																idproducto = $idprod,
 																idcolor = $idcolor,
@@ -4271,19 +3929,17 @@ class oCentura {
 																host = '$host',
 																modi_por = $idusr, 
 																modi_el = NOW()
-										Where idsolicituddematerialdetalle = $idsolicituddematerialdetalle";
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+										WHERE idsolicituddematerialdetalle = $idsolicituddematerialdetalle";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 2:
-								$query = "delete from solicitudes_de_material_detalles Where idsolicituddematerialdetalle = ".$arg;
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+								$query = "DELETE FROM solicitudes_de_material_detalles WHERE idsolicituddematerialdetalle = ".$arg;
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 3:
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
-								$query = "update solicitudes_de_material_detalles set 	
+								$query = "UPDATE solicitudes_de_material_detalles SET 	
 															  	status_solicitud_de_materiales = $val,
 															  	fecha_autorizacion = NOW(),
 															  	idautoriza = $idusr,
@@ -4291,15 +3947,13 @@ class oCentura {
 																host = '$host',
 																modi_por = $idusr, 
 																modi_el = NOW()
-										Where idsolicituddematerialdetalle = $id";
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+										WHERE idsolicituddematerialdetalle = $id";
+								$vRet = $this->guardarDatos($query);
 								break;		
-
 							case 4:
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
-								$query = "update solicitudes_de_material_detalles set 	
+								$query = "UPDATE solicitudes_de_material_detalles SET 	
 																cantidad_autorizada = $cantidad_autorizada,
 																importe_autorizado = $cantidad_autorizada*costo_unitario,
 																observaciones_autorizacion = '$observaciones_autorizacion',
@@ -4310,15 +3964,13 @@ class oCentura {
 																host = '$host',
 																modi_por = $idusr, 
 																modi_el = NOW()
-										Where idsolicituddematerialdetalle = $idsolicituddematerialdetalle";
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+										WHERE idsolicituddematerialdetalle = $idsolicituddematerialdetalle";
+								$vRet = $this->guardarDatos($query);
 								break;	
-
 							case 5:
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
-								$query = "update solicitudes_de_material_detalles set 	
+								$query = "UPDATE solicitudes_de_material_detalles SET 	
 															  	status_solicitud_de_materiales = $val,
 															  	fecha_entrega = NOW(),
 															  	identrega = $idusr,
@@ -4326,15 +3978,14 @@ class oCentura {
 																host = '$host',
 																modi_por = $idusr, 
 																modi_el = NOW()
-										Where idsolicituddematerialdetalle = $id";
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+										WHERE idsolicituddematerialdetalle = $id";
+								$vRet = $this->guardarDatos($query);
 								break;	
 
 							case 6:
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
-								$query = "update solicitudes_de_material_detalles set 	
+								$query = "UPDATE solicitudes_de_material_detalles SET 	
 																cantidad_entregado = $cantidad_entregado,
 																importe_entregado = $cantidad_entregado*costo_unitario,
 																observaciones_entrega = '$observaciones_entrega',
@@ -4342,16 +3993,11 @@ class oCentura {
 																host = '$host',
 																modi_por = $idusr, 
 																modi_el = NOW()
-										Where idsolicituddematerialdetalle = $idsolicituddematerialdetalle";
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+										WHERE idsolicituddematerialdetalle = $idsolicituddematerialdetalle";
+								$vRet = $this->guardarDatos($query);
 								break;	
-
 						}
 						break; // 39
-
-
-
 					case 40: // 40
 						switch($tipo){
 							case 0:
@@ -4367,7 +4013,7 @@ class oCentura {
 
 								$idtareaexistente = $idtarea;
 
-								$query = "Insert Into tareas(
+								$query = "INSERT INTO tareas(
 															titulo_tarea,
 															tarea,
 															fecha_inicio,
@@ -4378,7 +4024,7 @@ class oCentura {
 															host,
 															creado_por,
 															creado_el
-														)value( 
+														)VALUES( 
 															'$titulo',
 															'$tarea',
 															'".$fecha_inicio."',
@@ -4390,9 +4036,7 @@ class oCentura {
 												    		$idusr,
 												    		NOW()
 												    		)";
-
-								$result = mysql_query($query); 
-								$vRet = $result!=1? mysql_error():"OK";
+								$vRet = $this->guardarDatos($query);
 								break;
 
 							case 1:
@@ -4408,7 +4052,7 @@ class oCentura {
 
 								$idtareaexistente = $idtarea;
 
-								$query = "update tareas set titulo_tarea = '$titulo',
+								$query = "UPDATE tareas SET titulo_tarea = '$titulo',
 															tarea = '$tarea',
 															fecha_inicio = '".$fecha_inicio."',
 															fecha_fin = '".$fecha_fin."',
@@ -4416,27 +4060,22 @@ class oCentura {
 															host = '$host',
 															modi_por = $idusr,
 															modi_el = NOW()
-											Where idtarea = ".$idtarea;
-
-								$result = mysql_query($query); 
-								$vRet = $result!=1? mysql_error():"OK";
+											WHERE idtarea = ".$idtarea;
+								$vRet = $this->guardarDatos($query);
 								break;		
-
 							case 2:
-								$query = "delete from tareas Where idtarea = ".$arg;
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+								$query = "DELETE FROM tareas WHERE idtarea = ".$arg;
+								$vRet = $this->guardarDatos($query);
 								break;		
-
 							case 3:
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
 								$idemp = $this->getIdEmpFromAlias($user);
 								$bols  = explode('|',$bols);
 								$dests = explode('|',$dests);
-								foreach ($bols as $i => $value) {
+								foreach ($bols AS $i => $VALUE) {
 									if ( intval($bols[$i]) > 0 && intval($dests[$i]) > 0 ){
-										$query = "Insert Into tareas_dest(
+										$query = "INSERT INTO tareas_dest(
 																	idtarea,
 																	idboleta,
 																	idremitente,
@@ -4446,7 +4085,7 @@ class oCentura {
 																	host,
 																	creado_por,
 																	creado_el
-																)value( 
+																)VALUES( 
 																	$idtarea,
 																	".$bols[$i].",
 																	$idusr,
@@ -4457,21 +4096,18 @@ class oCentura {
 														    		$idusr,
 														    		NOW()
 														    		)";
-										$result = mysql_query($query);
-										$vRet = $result!=1? mysql_error():"OK";
+										$vRet = $this->guardarDatos($query);
 									}
 								}
 								break;
-
 							case 4:
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
 								$idemp = $this->getIdEmpFromAlias($user);
 								$dests = explode('|',$dests);
-								foreach ($dests as $i => $value) {
-									$query = "delete from tareas_dest Where idtareadestinatario = ".$dests[$i];
-									$result = mysql_query($query);
-									$vRet = $result!=1? mysql_error():"OK";
+								foreach ($dests AS $i => $VALUE) {
+									$query = "DELETE FROM tareas_dest WHERE idtareadestinatario = ".$dests[$i];
+									$vRet = $this->guardarDatos($query);
 								}
 								break;
 
@@ -4480,10 +4116,8 @@ class oCentura {
 								$idusr = $this->getIdUserFromAlias($user);
 								$idemp = $this->getIdEmpFromAlias($user);
 
-								$query = "delete from tareas_dest Where idtareadestinatario = ".$idtareadestinatario;
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
-
+								$query = "DELETE FROM tareas_dest WHERE idtareadestinatario = ".$idtareadestinatario;
+								$vRet = $this->guardarDatos($query);
 								break;
 
 							case 6:
@@ -4491,7 +4125,7 @@ class oCentura {
 								$idusr = $this->getIdUserFromAlias($user);
 								$idemp = $this->getIdEmpFromAlias($user);
 
-								$query = "Insert Into tareas_dest_respuestas(
+								$query = "INSERT INTO tareas_dest_respuestas(
 															idtareadestinatario,
 															respuesta,
 															fecha_respuesta,
@@ -4502,7 +4136,7 @@ class oCentura {
 															host,
 															creado_por,
 															creado_el
-														)value( 
+														)VALUES( 
 															$idtareadestinatario,
 															'$respuesta',
 															NOW(),
@@ -4514,9 +4148,7 @@ class oCentura {
 												    		$idusr,
 												    		NOW()
 												    		)";
-
-								$result = mysql_query($query); 
-								$vRet = $result!=1? mysql_error():"OK";
+								$vRet = $this->guardarDatos($query);
 								break;
 
 							case 7:
@@ -4524,8 +4156,8 @@ class oCentura {
 								$idusr = $this->getIdUserFromAlias($user);
 								$idemp = $this->getIdEmpFromAlias($user);
 
-								$query = "update tareas_dest_respuestas 
-														set 
+								$query = "UPDATE tareas_dest_respuestas 
+														SET 
 															idtareadestinatario = $idtareadestinatario,	
 															respuesta = '$respuesta',
 															fecha_respuesta = NOW(),
@@ -4534,42 +4166,32 @@ class oCentura {
 															host = '$host',
 															modi_por = $idusr,
 															modi_el = NOW()
-											Where idtareadestinatariorespuesta = ".$idtareadestinatariorespuesta;
-
-								$result = mysql_query($query); 
-								$vRet = $result!=1? mysql_error():"OK";
+											WHERE idtareadestinatariorespuesta = ".$idtareadestinatariorespuesta;
+								$vRet = $this->guardarDatos($query);
 								break;		
-
 							case 8:
-								$query = "delete from tareas_dest_respuestas Where idtareadestinatariorespuesta = ".$arg;
+								$query = "DELETE FROM tareas_dest_respuestas WHERE idtareadestinatariorespuesta = ".$arg;
 								$result = mysql_query($query);
 								$vRet = $result!=1? mysql_error():"OK";
 								break;		
-
-
 							case 9:
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
 								$idemp = $this->getIdEmpFromAlias($user);
 
-								$query = "update tareas_dest 
-														set 
+								$query = "UPDATE tareas_dest 
+														SET 
 															isleida = 1,	
 															fecha_leida = NOW(),
 															ip = '$ip',
 															host = '$host',
 															modi_por = $idusr,
 															modi_el = NOW()
-											Where idtareadestinatario = ".$idtareadestinatario;
-
-								$result = mysql_query($query); 
-								$vRet = $result!=1? mysql_error():"OK";
+											WHERE idtareadestinatario = ".$idtareadestinatario;
+								$vRet = $this->guardarDatos($query);
 								break;		
-
-
 						}
 						break; // 40
-
 					case 41: // 41
 						switch($tipo){
 							case 0:
@@ -4577,7 +4199,7 @@ class oCentura {
 								$idusr = $this->getIdUserFromAlias($user);
 								$idemp = $this->getIdEmpFromAlias($user);
 
-								$query = "Insert Into com_grupos(
+								$query = "INSERT INTO com_grupos(
 															iduserpropietario,
 															grupo,
 															status_com_grupo,
@@ -4586,7 +4208,7 @@ class oCentura {
 															host,
 															creado_por,
 															creado_el
-														)value( 
+														)VALUES( 
 															$idusr,
 															'$grupo',
 															$status_com_grupo,
@@ -4596,42 +4218,31 @@ class oCentura {
 												    		$idusr,
 												    		NOW()
 												    		)";
-
-								$result = mysql_query($query); 
-								$vRet = $result!=1? mysql_error():"OK";
+								$vRet = $this->guardarDatos($query);
 								break;
-
 							case 1:
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
 
-								$query = "update com_grupos set 
+								$query = "UPDATE com_grupos SET 
 															grupo = '$grupo',
 															ip = '$ip',
 															host = '$host',
 															modi_por = $idusr,
 															modi_el = NOW()
-											Where idcomgrupo = ".$idcomgrupo;
-
-								$result = mysql_query($query); 
-								$vRet = $result!=1? mysql_error():"OK";
+											WHERE idcomgrupo = ".$idcomgrupo;
+								$vRet = $this->guardarDatos($query);
 								break;		
-
 							case 2:
-								$query = "delete from com_grupos Where idcomgrupo = ".$arg;
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+								$query = "DELETE FROM com_grupos WHERE idcomgrupo = ".$arg;
+								$vRet = $this->guardarDatos($query);
 								break;		
-
 							case 3:
-								$query = "delete from com_usuarios_asoc_grupos Where idcomuserasocgpo = ".$arg;
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+								$query = "DELETE FROM com_usuarios_asoc_grupos WHERE idcomuserasocgpo = ".$arg;
+								$vRet = $this->guardarDatos($query);
 								break;		
-
 						}
 						break; // 41
-
 					case 42: // 42
 						switch($tipo){
 							case 0:
@@ -4641,14 +4252,13 @@ class oCentura {
 								$idciclo = $this->getCicloFromIdEmp($idemp);
 
 								$f0 = explode('-',$fecha);
-								// $fecha = $f0[2].'-'.$f0[1].'-'.$f0[0].' '.$hora0.':'.$min0.':'.$seg0;
 								
 								if ( isset($hora0) ){
 									$fecha = $f0[2].'-'.$f0[1].'-'.$f0[0].' '.$hora0.':'.$min0.':'.$seg0;
 								}else{
 									$fecha = $f0[2].'-'.$f0[1].'-'.$f0[0];
 								}
-								$query = "Insert Into com_mensajes(
+								$query = "INSERT INTO com_mensajes(
 															iduserpropietario,
 															titulo_mensaje,
 															mensaje,
@@ -4660,7 +4270,7 @@ class oCentura {
 															host,
 															creado_por,
 															creado_el
-														)value( 
+														)VALUES( 
 															$idusr,
 															'$titulo',
 															'$mensaje',
@@ -4673,11 +4283,8 @@ class oCentura {
 												    		$idusr,
 												    		NOW()
 												    		)";
-
-								$result = mysql_query($query); 
-								$vRet = $result!=1? mysql_error():"OK";
+								$vRet = $this->guardarDatos($query);
 								break;
-
 							case 1:
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
@@ -4686,24 +4293,21 @@ class oCentura {
 								$f0 = explode('-',$fecha);
 								$fecha = $f0[2].'-'.$f0[1].'-'.$f0[0].' '.$hora0.':'.$min0.':'.$seg0;
 
-								$query = "update com_mensajes 
-														set titulo_mensaje = '$titulo',
+								$query = "UPDATE com_mensajes 
+														SET titulo_mensaje = '$titulo',
 															mensaje = '$mensaje',
 															fecha = '".$fecha."',
 															ip = '$ip',
 															host = '$host',
 															modi_por = $idusr,
 															modi_el = NOW()
-											Where idcommensaje = ".$idcommensaje;
-
-								$result = mysql_query($query); 
-								$vRet = $result!=1? mysql_error():"OK";
+											WHERE idcommensaje = ".$idcommensaje;
+								$vRet = $this->guardarDatos($query);
 								break;		
 
 							case 2:
-								$query = "delete from com_mensajes Where idcommensaje = ".$arg;
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+								$query = "DELETE FROM com_mensajes WHERE idcommensaje = ".$arg;
+								$vRet = $this->guardarDatos($query);
 								break;		
 
 							case 3:
@@ -4711,9 +4315,9 @@ class oCentura {
 								$idusr = $this->getIdUserFromAlias($user);
 								$idemp = $this->getIdEmpFromAlias($user);
 								$dests = explode('|',$dests);
-								foreach ($dests as $i => $value) {
+								foreach ($dests AS $i => $VALUE) {
 									if ( intval($dests[$i]) > 0 ){
-										$query = "Insert Into com_mensaje_dest(
+										$query = "INSERT INTO com_mensaje_dest(
 																	idcomgrupo,
 																	idcommensaje,
 																	idremitente,
@@ -4723,7 +4327,7 @@ class oCentura {
 																	host,
 																	creado_por,
 																	creado_el
-																)value( 
+																)VALUES( 
 																	$idcomgrupo,
 																	$idcommensaje,
 																	$idusr,
@@ -4734,8 +4338,7 @@ class oCentura {
 														    		$idusr,
 														    		NOW()
 														    		)";
-										$result = mysql_query($query);
-										$vRet = $result!=1? mysql_error():"OK";
+										$vRet = $this->guardarDatos($query);
 									}
 								}
 								break;
@@ -4745,30 +4348,25 @@ class oCentura {
 								$idusr = $this->getIdUserFromAlias($user);
 								$idemp = $this->getIdEmpFromAlias($user);
 								$dests = explode('|',$dests);
-								foreach ($dests as $i => $value) {
-									$query = "delete from com_mensaje_dest Where idcommensajedestinatario = ".$dests[$i];
-									$result = mysql_query($query);
-									$vRet = $result!=1? mysql_error():"OK";
+								foreach ($dests AS $i => $VALUE) {
+									$query = "DELETE FROM com_mensaje_dest WHERE idcommensajedestinatario = ".$dests[$i];
+									$vRet = $this->guardarDatos($query);
 								}
 								break;
-
 							case 5:
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
 								$idemp = $this->getIdEmpFromAlias($user);
 
-								$query = "delete from com_mensaje_dest Where idcommensajedestinatario = ".$idcommensajedestinatario;
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
-
+								$query = "DELETE FROM com_mensaje_dest WHERE idcommensajedestinatario = ".$idcommensajedestinatario;
+								$vRet = $this->guardarDatos($query);
 								break;
-
 							case 6:
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
 								$idemp = $this->getIdEmpFromAlias($user);
 
-								$query = "Insert Into com_mensaje_dest_respuestas(
+								$query = "INSERT INTO com_mensaje_dest_respuestas(
 															idcommensajedestinatario,
 															respuesta,
 															fecha_respuesta,
@@ -4779,7 +4377,7 @@ class oCentura {
 															host,
 															creado_por,
 															creado_el
-														)value( 
+														)VALUES( 
 															$idcommensajedestinatario,
 															'$respuesta',
 															NOW(),
@@ -4791,18 +4389,15 @@ class oCentura {
 												    		$idusr,
 												    		NOW()
 												    		)";
-
-								$result = mysql_query($query); 
-								$vRet = $result!=1? mysql_error():"OK";
+								$vRet = $this->guardarDatos($query);
 								break;
-
 							case 7:
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
 								$idemp = $this->getIdEmpFromAlias($user);
 
-								$query = "update com_mensaje_dest_respuestas 
-														set 
+								$query = "UPDATE com_mensaje_dest_respuestas 
+														SET 
 															idcommensajedestinatario = $idcommensajedestinatario,	
 															respuesta = '$respuesta',
 															fecha_respuesta = NOW(),
@@ -4811,54 +4406,37 @@ class oCentura {
 															host = '$host',
 															modi_por = $idusr,
 															modi_el = NOW()
-											Where idcommensajedestinatariorespuesta = ".$idcommensajedestinatariorespuesta;
-
-								$result = mysql_query($query); 
-								$vRet = $result!=1? mysql_error():"OK";
+											WHERE idcommensajedestinatariorespuesta = ".$idcommensajedestinatariorespuesta;
+								$vRet = $this->guardarDatos($query);
 								break;		
-
-
-
 							case 8:
-								$query = "delete from com_mensaje_dest_respuestas Where idcommensajedestinatariorespuesta = ".$arg;
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+								$query = "DELETE FROM com_mensaje_dest_respuestas WHERE idcommensajedestinatariorespuesta = ".$arg;
+								$vRet = $this->guardarDatos($query);
 								break;		
-
-
 							case 9:
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
 								$idemp = $this->getIdEmpFromAlias($user);
 
-								$query = "update com_mensaje_dest 
-														set 
+								$query = "UPDATE com_mensaje_dest 
+														SET 
 															isleida = 1,	
 															fecha_leida = NOW(),
 															ip = '$ip',
 															host = '$host',
 															modi_por = $idusr,
 															modi_el = NOW()
-											Where idcommensajedestinatario = ".$idcommensajedestinatario;
-
-								$result = mysql_query($query); 
-								$vRet = $result!=1? mysql_error():"OK";
+											WHERE idcommensajedestinatario = ".$idcommensajedestinatario;
+								$vRet = $this->guardarDatos($query);
 								break;		
-
-
-
 						}
 						break; // 42
-
-
 					case 43:  // 43
 						switch($tipo){
 							case 0:
 							case 1:
-							     //$ar = $this->unserialice_force($arg);
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
-
 								$alumnos = explode('|', $alumnos);
 
 								for ($i=0; $i<count($alumnos); ++$i) {
@@ -4877,14 +4455,14 @@ class oCentura {
 				    				$prom44 = floatval($$prom4);
 				    				$prom55 = floatval($$prom5);
 
+								    $query = "SELECT idalumno FROM cat_alu_refer_oficiales WHERE idalumno = ".$alumnos[$i]." AND idnivel = $idnivel AND idemp = $idemp";
+								    $result = $this->getArray($query);
+								    $rrd = !$result ? 0 : floatval($result[0]->idalumno);
 
-								    $result = mysql_query("select idalumno from cat_alu_refer_oficiales where idalumno = ".$alumnos[$i]." and idnivel = $idnivel and idemp = $idemp");
-								    $rrd=floatval(mysql_result($result, 0,"idalumno"));
-	
 									if ($rrd<=0) {
 						    				
 
-											$query = "Insert Into cat_alu_refer_oficiales(
+											$query = "INSERT INTO cat_alu_refer_oficiales(
 												idalumno,
 												idnivel,
 												prom0,
@@ -4898,7 +4476,7 @@ class oCentura {
 												host,
 												creado_por,
 												creado_el
-											)values(
+											)VALUES(
 												".$alumnos[$i].",
 												$idnivel,
 												".$prom00.", 
@@ -4913,11 +4491,9 @@ class oCentura {
 												 $idusr,
 												 NOW()
 												)";
-											
-											$result = mysql_query($query);
-
+											$vRet = $this->guardarDatos($query);
 									}else{
-											$query = "Update cat_alu_refer_oficiales Set 
+											$query = "UPDATE cat_alu_refer_oficiales SET 
 															prom0 = ".$prom00.",
 															prom1 = ".$prom11.",
 															prom2 = ".$prom22.",
@@ -4928,24 +4504,18 @@ class oCentura {
 															host = '$host',
 															modi_por = $idusr,
 															modi_el = NOW()
-														Where idalumno = ".$alumnos[$i]." and idnivel = $idnivel and idemp = $idemp";
-											
-											$result = mysql_query($query);
-						    				
+														WHERE idalumno = ".$alumnos[$i]." AND idnivel = $idnivel AND idemp = $idemp";
+											$vRet = $this->guardarDatos($query);					    				
 									}
-
-									$vRet = $result!=1? mysql_error():"OK";
-
 								} // 1
 								break;
-
 							case 2:
 
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
 
-								$query = "Update cat_alu_refer_oficiales 
-											Set ispromovido = $ispromovido,
+								$query = "UPDATE cat_alu_refer_oficiales 
+											SET ispromovido = $ispromovido,
 												escritura = '$escritura',
 												escritura_eval = $escritura_eval,
 												lectura = '$lectura',
@@ -4977,28 +4547,23 @@ class oCentura {
 												host = '$host',
 												modi_por = $idusr,
 												modi_el = NOW()
-											Where idalumno = $idalumno and idnivel = $idnivel and idemp = $idemp";
-											
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
-
+											WHERE idalumno = $idalumno AND idnivel = $idnivel AND idemp = $idemp";
+								$vRet = $this->guardarDatos($query);
 								break; // 2
-
 							case 3:
-							     //$ar = $this->unserialice_force($arg);
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
 
 								$f0 = explode('-',$fecha);
 								$fecha = $f0[2].'-'.$f0[1].'-'.$f0[0];
-
-							    $result = mysql_query("select clave_nivel from pos_lectura_sep where clave_nivel = $idnivel and grado = $grado and idemp = $idemp");
-							    $rrd=floatval(mysql_result($result, 0,"clave_nivel"));
+							    $query = "SELECT clave_nivel FROM pos_lectura_sep WHERE clave_nivel = $idnivel AND grado = $grado AND idemp = $idemp";
+							    $result = $this->getArray($query);
+							    $rrd = !$result ? 0 : floatval($result[0]->clave_nivel);
 
 								if ($rrd<=0) {
 					    				
 
-										$query = "Insert Into pos_lectura_sep(
+										$query = "INSERT INTO pos_lectura_sep(
 											clave_nivel,
 											grado,
 											mr0,er00,er01,er02,er03,
@@ -5056,7 +4621,7 @@ class oCentura {
 											host,
 											creado_por,
 											creado_el
-										)values(
+										)VALUES(
 											$idnivel,
 											$grado,
 											'$mr0','$er00','$er01','$er02','$er03',
@@ -5115,11 +4680,9 @@ class oCentura {
 											 $idusr,
 											 NOW()
 											)";
-										
-										$result = mysql_query($query);
-
+										$vRet = $this->guardarDatos($query);
 								}else{
-										$query = "Update pos_lectura_sep Set 
+										$query = "UPDATE pos_lectura_sep SET 
 														mr0 = '$mr0', er00 = '$er00', er01 = '$er01', er02 = '$er02', er03 = '$er03',
 														mr1 = '$mr1', er10 = '$er10', er11 = '$er11', er12 = '$er12', er13 = '$er13',
 														mr2 = '$mr2', er20 = '$er20', er21 = '$er21', er22 = '$er22', er23 = '$er23',
@@ -5174,16 +4737,10 @@ class oCentura {
 														host = '$host',
 														modi_por = $idusr,
 														modi_el = NOW()
-													Where clave_nivel = $idnivel and grado = $grado and idemp = $idemp";
-										
-										$result = mysql_query($query);
-					    				
+													WHERE clave_nivel = $idnivel AND grado = $grado AND idemp = $idemp";
+										$vRet = $this->guardarDatos($query);					    				
 								}
-
-								$vRet = $result!=1? mysql_error():"OK";
-
-								break;
-								
+								break;								
 							case 4:
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
@@ -5191,7 +4748,7 @@ class oCentura {
 								$f0 = explode('-',$fecha);
 								$fecha = $f0[2].'-'.$f0[1].'-'.$f0[0];
 
-								$query = "Update pos_lectura_sep Set 
+								$query = "UPDATE pos_lectura_sep SET 
 												0x0 = '$0x0', 0x1 = '$0x1', 0x2 = '$0x2', 0x3='$0x3',
 												1x0 = '$1x0', 1x1 = '$1x1', 1x2 = '$1x2', 1x3='$1x3',
 												2x0 = '$2x0', 2x1 = '$2x1', 2x2 = '$2x2', 2x3='$2x3',
@@ -5210,14 +4767,9 @@ class oCentura {
 												host = '$host',
 												modi_por = $idusr,
 												modi_el = NOW()
-											Where clave_nivel = $idnivel and grado = $grado and idemp = $idemp";
-								
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
-
+											WHERE clave_nivel = $idnivel AND grado = $grado AND idemp = $idemp";
+								$vRet = $this->guardarDatos($query);
 								break;
-
-
 							case 5:
 
 								parse_str($arg);
@@ -5244,8 +4796,8 @@ class oCentura {
 								$evalrep42 = floatval($evalrep42);
 								$evalrep43 = floatval($evalrep43);
 
-								$query = "Update cat_alu_refer_oficiales 
-											Set 
+								$query = "UPDATE cat_alu_refer_oficiales 
+											SET 
 												asigrep0 = '$asigrep0',
 												evalrep00 = $evalrep00,
 												evalrep01 = $evalrep01,
@@ -5275,48 +4827,40 @@ class oCentura {
 												host = '$host',
 												modi_por = $idusr,
 												modi_el = NOW()
-											Where idalumno = $idalumno and idnivel = $idnivel and idemp = $idemp";
-											
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
-
+											WHERE idalumno = $idalumno AND idnivel = $idnivel AND idemp = $idemp";
+								$vRet = $this->guardarDatos($query);
 								break; // 2
-
-
-
 						}
 						break; // 43
-
 					case 44:  // 44
 						switch($tipo){
 							case 0:
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
 								$idemp = $this->getIdEmpFromAlias($user);
-								$query = "Insert Into cat_alu_tipo_actividad(tipo_actividad,status_tipo_actividad,idemp,ip,host,creado_por,creado_el)
-											value( '$tipo_actividad',
+								$query = "INSERT INTO cat_alu_tipo_actividad(tipo_actividad,status_tipo_actividad,idemp,ip,host,creado_por,creado_el)
+											VALUES( '$tipo_actividad',
 												    $status_tipo_actividad,$idemp,'$ip','$host',$idusr,NOW())";
-								$result = mysql_query($query); 
-								$vRet = $result!=1? mysql_error():"OK";
+								// $result = mysql_query($query); 
+								// $vRet = $result!=1? mysql_error():"OK";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 1:
 							     //$ar = $this->unserialice_force($arg);
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
-								$query = "update cat_alu_tipo_actividad set tipo_actividad = '$tipo_actividad',
+								$query = "UPDATE cat_alu_tipo_actividad SET tipo_actividad = '$tipo_actividad',
 															  	status_tipo_actividad = $status_tipo_actividad,
 																ip = '$ip', 
 																host = '$host',
 																modi_por = $idusr, 
 																modi_el = NOW()
-										Where idalutipoactividad = $idalutipoactividad";
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+										WHERE idalutipoactividad = $idalutipoactividad";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 2:
-								$query = "delete from cat_alu_tipo_actividad Where idalutipoactividad = ".$arg;
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+								$query = "DELETE FROM cat_alu_tipo_actividad WHERE idalutipoactividad = ".$arg;
+								$vRet = $this->guardarDatos($query);
 								break;		
 						}
 						break;  // 44
@@ -5327,43 +4871,38 @@ class oCentura {
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
 								$idemp = $this->getIdEmpFromAlias($user);
-								$query = "Insert Into grupo_materia_config_markbook(
+								$query = "INSERT INTO grupo_materia_config_markbook(
 																					descripcion_breve,
 																					descripcion_avanzada,
 																					idgrumatcon,
 																					status_grumatconmkb,idemp,ip,host,creado_por,creado_el)
-											value( 
+											VALUES( 
 													'$descripcion_breve',
 													'$descripcion_avanzada',
 													$idgrumatcon,
 												    $status_grumatconmkb,$idemp,'$ip','$host',$idusr,NOW())";
-								$result = mysql_query($query); 
-								$vRet = $result!=1? mysql_error():"OK";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 1:
-							     //$ar = $this->unserialice_force($arg);
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
-								$query = "update grupo_materia_config_markbook 
-															set descripcion_breve = '$descripcion_breve',
+								$query = "UPDATE grupo_materia_config_markbook 
+															SET descripcion_breve = '$descripcion_breve',
 																descripcion_avanzada = '$descripcion_avanzada',
 															  	status_grumatconmkb = $status_grumatconmkb,
 																ip = '$ip', 
 																host = '$host',
 																modi_por = $idusr, 
 																modi_el = NOW()
-										Where idgrumatconmkb = $idgrumatconmkb";
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+										WHERE idgrumatconmkb = $idgrumatconmkb";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 2:
-								$query = "delete from grupo_materia_config_markbook Where idgrumatconmkb = ".$arg;
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+								$query = "DELETE FROM grupo_materia_config_markbook WHERE idgrumatconmkb = ".$arg;
+								$vRet = $this->guardarDatos($query);
 								break;		
 						}
 						break;  // 45
-
 					case 48: // 48
 						switch($tipo){
 							case 0:
@@ -5372,7 +4911,7 @@ class oCentura {
 								$idemp = $this->getIdEmpFromAlias($user);
 								$status_medico = !isset($status_medico)?0:1;	
 
-								$query = "Insert Into cat_medicos(
+								$query = "INSERT INTO cat_medicos(
 																app_medico,
 																apm_medico,
 																nombre_medico,
@@ -5383,7 +4922,7 @@ class oCentura {
 																email2,
 																status_medico,
 																idemp,ip,host,creado_por,creado_el)
-											value(
+											VALUES(
 																'".mb_strtoupper($app_medico,'UTF-8')."',
 																'".mb_strtoupper($apm_medico,'UTF-8')."',
 																'".mb_strtoupper($nombre_medico,'UTF-8')."',
@@ -5394,17 +4933,14 @@ class oCentura {
 																'$email2',
 																$status_medico,
 													$idemp,'$ip','$host',$idusr,NOW())";
-								$result = mysql_query($query); 
-								$vRet = $result!=1? mysql_error():"OK";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 1:
-							     //$ar = $this->unserialice_force($arg);
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
-
 								$status_medico = !isset($status_medico)?0:1;	
 
-								$query = "update cat_medicos set 	
+								$query = "UPDATE cat_medicos SET 	
 																app_medico = '".mb_strtoupper($app_medico,'UTF-8')."',
 																apm_medico = '".mb_strtoupper($apm_medico,'UTF-8')."',
 																nombre_medico = '".mb_strtoupper($nombre_medico,'UTF-8')."',
@@ -5418,43 +4954,36 @@ class oCentura {
 																host = '$host',
 																modi_por = $idusr, 
 																modi_el = NOW()
-										Where idmedico = $idmedico";
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+										WHERE idmedico = $idmedico";
+								$vRet = $this->guardarDatos($query);
 								break;		
-
 							case 2:
-								$query = "delete from cat_medicos Where idmedico = ".$arg;
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+								$query = "DELETE FROM cat_medicos WHERE idmedico = ".$arg;
+								$vRet = $this->guardarDatos($query);
 								break;
-
 							case 3:
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
 								$idemp = $this->getIdEmpFromAlias($user);
 								$predeterminado = !isset($predeterminado)?0:1;	
-								$query = "Insert Into medicos_alumno(
+								$query = "INSERT INTO medicos_alumno(
 																idmedico,
 																idalumno,
 																predeterminado,
 																idemp,ip,host,creado_por,creado_el)
-															value(
+															VALUES(
 																$idmedico,
 																$idalumno,
 																$predeterminado,
 													$idemp,'$ip','$host',$idusr,NOW())";
-								$result = mysql_query($query); 
-								$vRet = $result!=1? mysql_error():"OK";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 4:
-							     //$ar = $this->unserialice_force($arg);
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
-
 								$predeterminado = !isset($predeterminado)?0:1;	
 
-								$query = "update medicos_alumno set 	
+								$query = "UPDATE medicos_alumno SET 	
 																idmedico = $idmedico,
 																idalumno = $idalumno,
 																predeterminado = $predeterminado,
@@ -5462,955 +4991,914 @@ class oCentura {
 																host = '$host',
 																modi_por = $idusr, 
 																modi_el = NOW()
-										Where idmedalu = $idmedalu";
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+										WHERE idmedalu = $idmedalu";
+								$vRet = $this->guardarDatos($query);
 								break;		
-
 							case 5:
-								$query = "delete from medicos_alumno Where idmedalu = ".$arg;
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+								$query = "DELETE FROM medicos_alumno WHERE idmedalu = ".$arg;
+								$vRet = $this->guardarDatos($query);
 								break;										
 						}
 						break; // 48
-
-
-
 		  		}
-		  
-			mysql_close($mysql);
-
 		  return  $vRet;
 	}
-
 
 	public function getQuerys($tipo=0,$cad="",$type=0,$from=0,$cant=0,$ar=array(),$otros="",$withPag=1) {
 		  	$arr = array('voEmpty');
 		  	$ret = array();
-
-		  	$Conn = voConn::getInstance();
-		  	$mysql = mysql_connect($Conn->server, $Conn->user, $Conn->pass);
-		  	mysql_select_db($Conn->db);
-			
-		  	mysql_query("SET NAMES 'utf8'");	
 			$index = 0;		
 		  
-            	switch ($tipo){
-				case -5:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$query = "SELECT *
-								FROM empresa
-								where idemp = $idemp ";
-					break;
-				case -4:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$query = "SELECT llave,valor
+        	switch ($tipo){
+			case -5:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT *
+							FROM empresa
+							WHERE idemp = $idemp ";
+				break;
+			case -4:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT llave,valor
+							FROM config
+							WHERE idemp = $idemp AND llave = '$llave' ";
+				break;
+			case -3:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT llave,valor
 								FROM config
-								where idemp = $idemp and llave = '$llave' ";
-					break;
-				case -3:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$query = "SELECT llave,valor
-									FROM config
-								where idemp = $idemp";
-					break;
-				case -2:
-					$query = "SELECT *
-									FROM _viUsuarios
-								where iduser = $cad  and status_usuario = 1  and idusernivelacceso <= 100";
-					break;
-				case -1:
-					parse_str($cad);
-					$iduser = $this->getIdUserFromAlias($u);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					
-					$query = "SELECT iduser, username, apellidos, nombres, foto
-								FROM _viUsuarios 
-								WHERE  idemp = $idemp and status_usuario = 1  and idusernivelacceso <= 100 
-								Order by iduser desc";
-					break;
-				case 0:
-						$query="SELECT *
-								from _viUsuarios 
-								where username LIKE ('$cad%')  and status_usuario = 1  and idusernivelacceso <= 1000 ";	
-						break;	   
-				case 1:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$query = "SELECT *
-									FROM cat_estados
-								Where idemp = $idemp order by idestado desc";
-					break;
-				case 2:
-					$query = "SELECT  *
-									FROM cat_estados 
-								where idestado = $cad ";
-					break;
-				case 3:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$query = "SELECT *
-									FROM _viMunicipios
-								Where idemp = $idemp and status_municipio = 1 order by idmunicipio desc";
-					break;
-				case 4:
-					$query = "SELECT  *
-									FROM _viMunicipios
-								where idmunicipio = $cad ";
-					break;
-				case 5:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$query = "SELECT *
-									FROM cat_niveles
-								Where idemp = $idemp order by idnivel desc";
-					break;
-				case 6:
-					$query = "SELECT *
-									FROM cat_niveles
-								where idnivel = $cad ";
-					break;
+							WHERE idemp = $idemp";
+				break;
+			case -2:
+				$query = "SELECT *
+								FROM _viUsuarios
+							WHERE iduser = $cad  AND status_usuario = 1  AND idusernivelacceso <= 100";
+				break;
+			case -1:
+				parse_str($cad);
+				$iduser = $this->getIdUserFromAlias($u);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				
+				$query = "SELECT iduser, username, apellidos, nombres, foto
+							FROM _viUsuarios 
+							WHERE  idemp = $idemp AND status_usuario = 1  AND idusernivelacceso <= 100 
+							ORDER BY iduser DESC";
+				break;
+			case 0:
+					$query="SELECT *
+							FROM _viUsuarios 
+							WHERE username LIKE ('$cad%')  AND status_usuario = 1  AND idusernivelacceso <= 1000 ";	
+					break;	   
+			case 1:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT *
+								FROM cat_estados
+							WHERE idemp = $idemp ORDER BY idestado DESC";
+				break;
+			case 2:
+				$query = "SELECT  *
+								FROM cat_estados 
+							WHERE idestado = $cad ";
+				break;
+			case 3:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT *
+								FROM _viMunicipios
+							WHERE idemp = $idemp AND status_municipio = 1 ORDER BY idmunicipio DESC";
+				break;
+			case 4:
+				$query = "SELECT  *
+								FROM _viMunicipios
+							WHERE idmunicipio = $cad ";
+				break;
+			case 5:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT *
+								FROM cat_niveles
+							WHERE idemp = $idemp ORDER BY idnivel DESC";
+				break;
+			case 6:
+				$query = "SELECT *
+								FROM cat_niveles
+							WHERE idnivel = $cad ";
+				break;
 
-				case 7:
-					parse_str($cad);
-					
-					$idemp = $this->getIdEmpFromAlias($u);
-					$arr0 = array(8,9,10,11,12,22);
-					$cve = intval($clavenivelacceso);
-					$pos = array_search($cve, $arr0);
-					$arr1 = array(1,2,3,4,5);
+			case 7:
+				parse_str($cad);
+				
+				$idemp = $this->getIdEmpFromAlias($u);
+				$arr0 = array(8,9,10,11,12,22);
+				$cve = intval($clavenivelacceso);
+				$pos = array_search($cve, $arr0);
+				$arr1 = array(1,2,3,4,5);
 
-									// Where idemp = $idemp and grupo_ciclo_nivel_visible = 1 and clave_nivel IN ($otros) order by clave_nivel asc";
+				if (    in_array( $cve, $arr0 )     ) {
+						$query = "SELECT idgponiv, idgrupo, grupo_visible, grupo_ciclo_nivel_visible, bloqueado, clave, grupo, 
+										ciclo, clave_nivel, grado, idciclo
+								FROM _viNivel_Grupos
+								WHERE idemp = $idemp AND grupo_ciclo_nivel_visible = 1 AND clave_nivel IN ($otros) ORDER BY clave_nivel ASC";
+				}else{
+						$query = "SELECT *
+										FROM _viNivel_Grupos
+									WHERE idemp = $idemp AND grupo_ciclo_nivel_visible = 1 ORDER BY clave_nivel ASC";
+				}
+				break;
+				
+			case 8:
+				$query = "SELECT *
+								FROM cat_grupos
+							WHERE idgrupo = $cad AND visible = 1 ";
+				break;
+
+			case 9:
+				parse_str($cad);
+				$idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT idalumno, nombre_alumno, username, genero, valid_for_admin, idusuario AS idusername
+								FROM _viAlumnos
+							WHERE idemp = $idemp ORDER BY idalumno DESC";
+				break;
+			case 10:
+				$query = "SELECT * 
+								FROM _viAlumnos 
+							WHERE idalumno = $cad "; 
+				break;
+
+			case 11:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT idprofesor, nombre_profesor, username, cel1, cel2, direccion
+								FROM _viProfesores
+							WHERE idemp = $idemp ORDER BY idprofesor DESC";
+				break;
+			case 12:
+				$query = "SELECT *
+								FROM _viProfesores
+							WHERE idprofesor = $cad ";
+				break;
+
+			case 13:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT *
+								FROM _viMaterias
+							WHERE idemp = $idemp ORDER BY idmateria DESC";
+				break;
+			case 14:
+				$query = "SELECT *
+								FROM _viMaterias
+							WHERE idmateria = $cad ";
+				break;
+
+			case 15:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT *
+								FROM cat_materias_clasificacion
+							WHERE idemp = $idemp ORDER BY idmatclas DESC";
+				break;
+			case 16:
+				$query = "SELECT *
+								FROM cat_materias_clasificacion
+							WHERE idmatclas = $cad ";
+				break;
+
+			case 17:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT *
+								FROM cat_parentezcos
+							WHERE idemp = $idemp ORDER BY idparentezco DESC";
+				break;
+			case 18:
+				$query = "SELECT *
+								FROM cat_parentezcos
+							WHERE idparentezco = $cad ";
+				break;
+
+			case 19:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT idpersona, nombre_persona, username
+								FROM _viPersonas
+							WHERE idemp = $idemp ORDER BY idpersona DESC";
+				break;
+			case 20:
+				$query = "SELECT *
+								FROM _viPersonas
+							WHERE idpersona = $cad ";
+				break;
+
+			case 21:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT idfamilia, familia
+								FROM cat_familias
+							WHERE idemp = $idemp ORDER BY $otros DESC";
+				break;
+			case 22:
+				$query = "SELECT *
+								FROM cat_familias
+							WHERE idfamilia = $cad ";
+				break;
+
+			case 23:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT *
+								FROM _viFamPer
+							WHERE idfamilia = $idfamilia AND idemp = $idemp ORDER BY $otros DESC";
+				break;
+			case 24:
+				$query = "SELECT *
+								FROM _viFamPer
+							WHERE idfamper = $cad ";
+				break;
+
+			case 25:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT *
+								FROM _viFamAlu
+							WHERE idfamilia = $idfamilia AND idemp = $idemp ORDER BY $otros DESC";
+				break;
+			case 26:
+				$query = "SELECT *
+								FROM _viFamAlu
+							WHERE idfamalu = $cad ";
+				break;
+
+			case 27:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT idregfis, rfc, cp, razon_social, is_email
+								FROM _viRegFis
+							WHERE idemp = $idemp ORDER BY $otros DESC";
+				break;
+			case 28:
+				$query = "SELECT *
+								FROM _viRegFis
+							WHERE idregfis = $cad ";
+				break;
+
+			case 29:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT *
+								FROM _viFamRegFis
+							WHERE idfamilia = $idfamilia AND idemp = $idemp ORDER BY $otros DESC";
+				break;
+			case 30:
+				$query = "SELECT *
+								FROM _viFamRegFis
+							WHERE idfamregfis = $cad ";
+				break;
+
+			case 31:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+		        // $idciclo = $this->getCicloFromIdEmp($idemp);
+				$query = "SELECT *
+								FROM _viGrupo_Materias
+							WHERE  idciclo = $idciclo AND idgrupo = $idgrupo AND idemp = $idemp ORDER BY $otros DESC";
+				break;
+
+			case 32:
+				$query = "SELECT *
+								FROM _viGrupo_Materias
+							WHERE idgrumat = $cad ";
+				break;
+
+			case 33:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+
+		        $numval = intval($numval)-1;
+		        $ncal = "cal".$numval;
+		        $ncon = "con".$numval;
+		        $nina = "ina".$numval;
+		        $nobs = "obs".$numval;
+				$query = "SELECT idboleta, num_lista, alumno, ".$ncal." AS cal, ".$ncon." AS con, ".$nina." AS ina, ".$nobs." AS obs 
+							FROM _viBoletas
+							WHERE idemp = $idemp AND idgrumat = $idgrumat ORDER BY num_lista ASC";
+				break;
+
+			case 34:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT idgrumatcon, descripcion, porcentaje, idalutipoactividad
+								FROM grupo_materia_config
+							WHERE idemp = $idemp AND idgrumat = $idgrumat AND num_eval = $numval ORDER BY idgrumatcon ASC ";
+				break;
+
+			case 35:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT idbolpar, idgrumatcon, idboleta, calificacion
+								FROM boleta_partes
+							WHERE idemp = $idemp AND idgrumatcon = $idgrumatcon  ORDER BY idboleta ";
+				break;
+
+			case 36:
+				parse_str($cad);
+				$query = "SELECT idbolpar, idgrumatcon, idboleta, calificacion
+								FROM boleta_partes
+							WHERE idgrumatcon = $idgrumatcon ";
+				break;
+
+			case 37: // get Evaluaciones
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$idciclo = $this->getCicloFromIdEmp($idemp);
+
+				$query = "SELECT idgponiv, idciclo, idnivel, idgrupo, clave_nivel
+								FROM _viNivel_Grupos
+							WHERE idgrupo = $idgrupo AND idemp = $idemp AND idciclo = $idciclo  AND grupo_ciclo_nivel_visible = 1  LIMIT 1 ";
+				break;
+			case 38:
+				parse_str($cad);
+		        // $idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT idgrumatcon, idgrumat, descripcion, porcentaje, num_eval, idalutipoactividad, tipo_actividad, elementos
+								FROM _viGruMatConf
+							WHERE idgrumat = $idgrumat AND num_eval = $numval $otros ";
+				break;
+
+			case 39:
+				parse_str($cad);
+				$query = "SELECT idgrumatcon, descripcion, porcentaje, num_eval, idalutipoactividad, tipo_actividad, elementos
+								FROM _viGruMatConf
+							WHERE idgrumatcon = $cad ";
+				break;
+
+			case 40: // ARJI
+				parse_str($cad);
+				$query = "SELECT idboleta, idgrualu, idgrumat, idciclo, ciclo, num_lista, materia, abreviatura, 
+									idgrupo, clave_grupo,grupo, profesor, alumno, 
+									cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, 
+									cal2, con2, ina2, obs2, cal3, con3, ina3, obs3, 
+									cal4, con4, ina4, obs4, cal5, con5, ina5, obs5, 
+									cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
+									promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo
+								FROM _viBoletas
+							WHERE idgrualu = $idgrualu $otros ";
+				break;
+
+			case 41: // ARJI
+				parse_str($cad);
+				$query = "SELECT cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, cal2, con2, ina2, obs2, 
+								cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, cal5, con5, ina5, obs5, 
+								cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
+								promcal, promcon, sumina,
+								promcalgpo, promcongpo, suminagpo,
+								modi_el
+								FROM grupo_alumno_promedio
+							WHERE idgrualu = $idgrualu $otros ";
+				break;
+
+			case 42: // ARJI
+				parse_str($cad);
+		        // $idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, cal2, con2, ina2, obs2, 
+								cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, cal5, con5, ina5, obs5, 
+								cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
+								promcal, promcon, sumina,
+								promcalgpo, promcongpo, suminagpo
+								FROM grupo_promedios
+							WHERE idgrupo = $idgrupo AND idciclo = $idciclo $otros ";
+				break;
+
+			case 43: // ARJI
+				parse_str($cad);
+				$query = "SELECT idboleta, idgrualu, idgrumat, idciclo, ciclo, num_lista, materia,abreviatura, idgrupo, grupo, 
+									profesor, idalumno, idnivel, clave_nivel, grado, alumno, cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, 
+									cal2, con2, ina2, obs2, cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, 
+									cal5, con5, ina5, obs5, cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
+									promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo
+								FROM _viBoletas
+							WHERE idgrualu = $idgrualu AND padre <= 0 AND (idmatclas in (1,2,3,4,5) ) $otros ";
+				break;
+
+			case 44: // ARJI
+				parse_str($cad);
+				$query = "SELECT idboleta, idgrualu, idgrumat, idciclo, ciclo, num_lista, materia,abreviatura, idgrupo, grupo, 
+									profesor, alumno, cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, 
+									cal2, con2, ina2, obs2, cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, 
+									cal5, con5, ina5, obs5, cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
+									promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo
+								FROM _viBoletas
+							WHERE idgrualu = $idgrualu AND padre > 0 AND (idmatclas in (1,2,3,4,5) ) AND orden_impresion <= 100 $otros ";
+				break;
+			case 45: // ARJI
+				parse_str($cad);
+				$query = "SELECT idboleta, idgrualu, idgrumat, idciclo, ciclo, num_lista, materia,abreviatura, idgrupo, grupo, 
+									profesor, idalumno, idnivel, clave_nivel, grado, alumno, cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, 
+									cal2, con2, ina2, obs2, cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, 
+									cal5, con5, ina5, obs5, cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
+									promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo,
+									promcalof
+								FROM _viBoletas
+							WHERE (idgrualu = $idgrualu) AND (padre <= 0) AND (idioma = 0) AND (idmatclas <= 5) $otros ";
+				break;
+			case 46: // ARJI - MATERIAS HIJAS ESPAÑOL
+				parse_str($cad);
+				$query = "SELECT idboleta, idgrualu, idgrumat, idciclo, ciclo, num_lista, materia,abreviatura, idgrupo, grupo, 
+									profesor, idalumno, idnivel, clave_nivel, grado, alumno, cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, 
+									cal2, con2, ina2, obs2, cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, 
+									cal5, con5, ina5, obs5, cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
+									promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo,
+									promcalof
+								FROM _viBoletas
+							WHERE (idgrualu = $idgrualu) AND (padre > 0) AND (idioma = 0) AND ( idmatclas in (1,2,3,4,5) ) $otros ";
+				break;
+			case 47: // ARJI
+				parse_str($cad);
+				$query = "SELECT idboleta, idgrualu, idgrumat, idciclo, ciclo, num_lista, materia, idgrupo, grupo, 
+									profesor, alumno, cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, 
+									cal2, con2, ina2, obs2, cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, 
+									cal5, con5, ina5, obs5, cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
+									promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo
+								FROM _viBoletas 
+							WHERE (idgrualu = $idgrualu) AND (padre <= 0) AND (idioma = 1) AND (idmatclas <= 5) $otros ";
+				break;
+			case 48: // ARJI - MATERIAS HIJAS INGLES
+				parse_str($cad);
+				$query = "SELECT idboleta, idgrualu, idgrumat, idciclo, ciclo, num_lista, materia, abreviatura, idgrupo, grupo, 
+									profesor, alumno, cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, 
+									cal2, con2, ina2, obs2, cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, 
+									cal5, con5, ina5, obs5, cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
+									promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo
+								FROM _viBoletas
+							WHERE (idgrualu = $idgrualu) AND (padre > 0) AND (idioma = 1) AND ( idmatclas in (1,2,3,4,5) ) $otros ";
+				break;
+			case 49: // ARJI
+				parse_str($cad);
+				$query = "SELECT cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, cal2, con2, ina2, obs2, 
+								cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, cal5, con5, ina5, obs5, 
+								cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
+								promcal, promcon, sumina, modi_el,
+								promcalgpo, promcongpo, suminagpo
+								FROM grupo_alumno_promedio_idioma
+							WHERE idgrualu = $idgrualu AND idioma = $idioma  $otros ";
+				break;
+
+			case 50: // ARJI
+				parse_str($cad);
+				$query = "SELECT cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, cal2, con2, ina2, obs2, 
+								cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, cal5, con5, ina5, obs5, 
+								cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
+								promcal, promcon, sumina,
+								promcalgpo, promcongpo, suminagpo
+								FROM grupo_promedios_idiomas
+							WHERE idgrupo = $idgrupo AND idciclo = $idciclo AND idioma = $idioma $otros ";
+				break;
+
+			case 51: // ARJI - MATERIAS INASISTENCIAS ESPAÑOL
+				parse_str($cad);
+				$query = "SELECT idboleta, idgrualu, idgrumat, idciclo, ciclo, num_lista, materia, 
+									abreviatura, idgrupo, grupo, idmatclas, 
+									profesor, alumno, cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, 
+									cal2, con2, ina2, obs2, cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, 
+									cal5, con5, ina5, obs5, cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
+									promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo
+								FROM _viBoletas
+							WHERE (idgrualu = $idgrualu) AND (idioma = 0) AND ( idmatclas in (7) ) $otros ";
+				break;
+			case 52: // ARJI - MATERIAS INASISTENCIAS INGLES
+				parse_str($cad);
+				$query = "SELECT idboleta, idgrualu, idgrumat, idciclo, ciclo, num_lista, materia, 
+									abreviatura, idgrupo, grupo, idmatclas, 
+									profesor, alumno, cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, 
+									cal2, con2, ina2, obs2, cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, 
+									cal5, con5, ina5, obs5, cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
+									promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo
+								FROM _viBoletas
+							WHERE (idgrualu = $idgrualu) AND (idioma = 1) AND ( idmatclas in (7) ) $otros ";
+				break;
+			
+			case 53: // ARJI
+				parse_str($cad);
+				$query = "SELECT idboleta, idgrualu, idgrumat, idciclo, ciclo, num_lista, materia, abreviatura, idgrupo, grupo, 
+									profesor, alumno, matricula_interna, cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, 
+									cal2, con2, ina2, obs2, cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, 
+									cal5, con5, ina5, obs5, cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
+									promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo
+								FROM _viBoletas
+							WHERE (idgrualu = $idgrualu) AND (padre > 0) AND (idioma = $idioma) AND (idmatclas <= 5) $otros ";
+							// WHERE (idgrualu = $idgrualu) AND (padre <= 0) AND (idioma = 0) AND (idmatclas <= 5) $otros ";
+				break;
+
+			case 54: // ARJI
+				parse_str($cad);
+				$query = "SELECT idboleta, idgrualu, idgrumat, idciclo, ciclo, num_lista, materia, abreviatura, idgrupo, grupo, 
+									profesor, alumno, cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, 
+									cal2, con2, ina2, obs2, cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, 
+									cal5, con5, ina5, obs5, cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
+									promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo
+								FROM _viBoletas
+							WHERE idgrualu = $idgrualu AND idioma = $idioma AND isagrupadora_grumat = 1 AND (idmatclas in (1,2,3,4,5) ) $otros ";
+				break;
 	
-					if (    in_array( $cve, $arr0 )     ) {
-							$query = "SELECT idgponiv, idgrupo, grupo_visible, grupo_ciclo_nivel_visible, bloqueado, clave, grupo, 
-											ciclo, clave_nivel, grado, idciclo
-									FROM _viNivel_Grupos
-									Where idemp = $idemp and grupo_ciclo_nivel_visible = 1 and clave_nivel IN ($otros) order by clave_nivel asc";
-					}else{
-							$query = "SELECT *
-											FROM _viNivel_Grupos
-										Where idemp = $idemp and grupo_ciclo_nivel_visible = 1 order by clave_nivel asc";
-					}
-					break;
+			case 55: // ARJI
+				parse_str($cad);
+				$query = "SELECT idboleta, idgrualu, idgrumat, idciclo, ciclo, num_lista, materia, abreviatura, idgrupo, grupo, 
+									profesor, alumno, cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, 
+									cal2, con2, ina2, obs2, cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, 
+									cal5, con5, ina5, obs5, cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
+									promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo
+								FROM _viBoletas
+							WHERE idgrualu = $idgrualu AND idioma = $idioma AND padre > 0 AND (idmatclas in (1,2,3,4,5) ) AND ( orden_impresion between $rango ) $otros ";
+				break;
+
+			case 56:  // Get Eval for IdGruAlu
+				parse_str($cad);
+		        if ( $numval == 9 ){
+			        $ncal = "promcal";
+			        $ncon = "promcon";
+			        $nina = "sumina";
+		        }elseif ( $numval == 10 ){
+			        $ncal = "promcalgpo";
+			        $ncon = "promcongpo";
+			        $nina = "suminagpo";
+		        }else{
+			        $numval = intval($numval)-1;
+			        $ncal = "bol.cal".$numval;
+			        $ncon = "bol.con".$numval;
+			        $nina = "bol.ina".$numval;
+			        $nobs = "bol.obs".$numval;
+		        }
+		        
+		        if ( $numval == 9 ){
+					$query = "SELECT ".$ncal." AS cal, ".$ncon." AS con, ".$nina." AS ina, idmatclas, padre
+									FROM _viBoletas
+								WHERE idgrualu = $idgrualu AND idgrumat = $idgrumat $otros ";
+		        }elseif ( $numval == 10 ){
+					$query = "SELECT ".$ncal." AS cal, ".$ncon." AS con, ".$nina." AS ina, idmatclas, padre
+									FROM _viBoletas
+								WHERE idgrualu = $idgrualu AND idgrumat = $idgrumat $otros ";
+				}else{
 					
-				case 8:
-					$query = "SELECT *
-									FROM cat_grupos
-								where idgrupo = $cad and visible = 1 ";
-					break;
+					$qrytemp = "SELECT ".$ncal." AS cal, ".$ncon." AS con, ".$nina." AS ina, ".$nobs." AS obs, bol.idmatclas, bol.padre
+									FROM _viBoletas bol
+								WHERE bol.idgrumat = $idgrumat AND bol.idgrualu = $idgrualu $otros";
 
-				case 9:
-					parse_str($cad);
-					$idemp = $this->getIdEmpFromAlias($u);
-					$query = "SELECT idalumno, nombre_alumno, username, genero, valid_for_admin, idusuario as idusername
-									FROM _viAlumnos
-								Where idemp = $idemp order by idalumno desc";
-					break;
-				case 10:
-					$query = "SELECT * 
-									FROM _viAlumnos 
-								where idalumno = $cad "; 
-					break;
+					$query = "SELECT ".$ncal." AS cal, ".$ncon." AS con, ".$nina." AS ina, ".$nobs." AS obs, bol.idmatclas, bol.padre
+									FROM _viBoletas bol
+								WHERE bol.idgrumat = $idgrumat AND bol.idgrualu = $idgrualu $otros";
+				}
 
-				case 11:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$query = "SELECT idprofesor, nombre_profesor, username, cel1, cel2, direccion
-									FROM _viProfesores
-								Where idemp = $idemp order by idprofesor desc";
-					break;
-				case 12:
-					$query = "SELECT *
-									FROM _viProfesores
-								where idprofesor = $cad ";
-					break;
+				break;
 
-				case 13:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$query = "SELECT *
-									FROM _viMaterias
-								Where idemp = $idemp order by idmateria desc";
-					break;
-				case 14:
-					$query = "SELECT *
-									FROM _viMaterias
-								where idmateria = $cad ";
-					break;
-
-				case 15:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$query = "SELECT *
-									FROM cat_materias_clasificacion
-								Where idemp = $idemp order by idmatclas desc";
-					break;
-				case 16:
-					$query = "SELECT *
-									FROM cat_materias_clasificacion
-								where idmatclas = $cad ";
-					break;
-
-				case 17:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$query = "SELECT *
-									FROM cat_parentezcos
-								Where idemp = $idemp order by idparentezco desc";
-					break;
-				case 18:
-					$query = "SELECT *
-									FROM cat_parentezcos
-								where idparentezco = $cad ";
-					break;
-
-				case 19:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$query = "SELECT idpersona, nombre_persona, username
-									FROM _viPersonas
-								Where idemp = $idemp order by idpersona desc";
-					break;
-				case 20:
-					$query = "SELECT *
-									FROM _viPersonas
-								where idpersona = $cad ";
-					break;
-
-				case 21:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$query = "SELECT idfamilia, familia
-									FROM cat_familias
-								Where idemp = $idemp order by $otros desc";
-					break;
-				case 22:
-					$query = "SELECT *
-									FROM cat_familias
-								where idfamilia = $cad ";
-					break;
-
-				case 23:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$query = "SELECT *
-									FROM _viFamPer
-								Where idfamilia = $idfamilia and idemp = $idemp order by $otros desc";
-					break;
-				case 24:
-					$query = "SELECT *
-									FROM _viFamPer
-								where idfamper = $cad ";
-					break;
-
-				case 25:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$query = "SELECT *
-									FROM _viFamAlu
-								Where idfamilia = $idfamilia and idemp = $idemp order by $otros desc";
-					break;
-				case 26:
-					$query = "SELECT *
-									FROM _viFamAlu
-								where idfamalu = $cad ";
-					break;
-
-				case 27:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$query = "SELECT idregfis, rfc, cp, razon_social, is_email
-									FROM _viRegFis
-								Where idemp = $idemp order by $otros desc";
-					break;
-				case 28:
-					$query = "SELECT *
-									FROM _viRegFis
-								where idregfis = $cad ";
-					break;
-
-				case 29:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$query = "SELECT *
-									FROM _viFamRegFis
-								Where idfamilia = $idfamilia and idemp = $idemp order by $otros desc";
-					break;
-				case 30:
-					$query = "SELECT *
-									FROM _viFamRegFis
-								where idfamregfis = $cad ";
-					break;
-
-				case 31:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-			        // $idciclo = $this->getCicloFromIdEmp($idemp);
-					$query = "SELECT *
-									FROM _viGrupo_Materias
-								Where  idciclo = $idciclo and idgrupo = $idgrupo and idemp = $idemp order by $otros desc";
-					break;
-
-				case 32:
-					$query = "SELECT *
-									FROM _viGrupo_Materias
-								where idgrumat = $cad ";
-					break;
-
-				case 33:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-
+			case 57:  // Get Eval for IdGruAlu
+				parse_str($cad);
+		        if ( $numval == 9 ){
+			        $ncal = "promcal";
+			        $ncon = "promcon";
+			        $nina = "sumina";
+		        }elseif ( $numval == 10 ){
+			        $ncal = "promcalgpo";
+			        $ncon = "promcongpo";
+			        $nina = "suminagpo";
+		        }else{
 			        $numval = intval($numval)-1;
 			        $ncal = "cal".$numval;
 			        $ncon = "con".$numval;
 			        $nina = "ina".$numval;
 			        $nobs = "obs".$numval;
-					$query = "SELECT idboleta, num_lista, alumno, ".$ncal." as cal, ".$ncon." as con, ".$nina." as ina, ".$nobs." as obs 
-								FROM _viBoletas
-								Where idemp = $idemp and idgrumat = $idgrumat order by num_lista asc";
-
-
-					break;
-
-				case 34:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$query = "SELECT idgrumatcon, descripcion, porcentaje, idalutipoactividad
-									FROM grupo_materia_config
-								Where idemp = $idemp and idgrumat = $idgrumat and num_eval = $numval order by idgrumatcon asc ";
-					break;
-
-				case 35:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$query = "SELECT idbolpar, idgrumatcon, idboleta, calificacion
-									FROM boleta_partes
-								Where idemp = $idemp and idgrumatcon = $idgrumatcon  order by idboleta ";
-					break;
-
-				case 36:
-					parse_str($cad);
-			        // $idemp = $this->getIdEmpFromAlias($user);
-					$query = "SELECT idbolpar, idgrumatcon, idboleta, calificacion
-									FROM boleta_partes
-								Where idgrumatcon = $idgrumatcon ";
-					break;
-
-				case 37: // get Evaluaciones
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$idciclo = $this->getCicloFromIdEmp($idemp);
-
-					$query = "SELECT idgponiv, idciclo, idnivel, idgrupo, clave_nivel
-									FROM _viNivel_Grupos
-								Where idgrupo = $idgrupo and idemp = $idemp and idciclo = $idciclo  and grupo_ciclo_nivel_visible = 1  limit 1 ";
-					break;
-				case 38:
-					parse_str($cad);
-			        // $idemp = $this->getIdEmpFromAlias($u);
-					$query = "SELECT idgrumatcon, idgrumat, descripcion, porcentaje, num_eval, idalutipoactividad, tipo_actividad, elementos
-									FROM _viGruMatConf
-								Where idgrumat = $idgrumat and num_eval = $numval $otros ";
-					break;
-
-				case 39:
-					parse_str($cad);
-			        //$idemp = $this->getIdEmpFromAlias($u);
-					$query = "SELECT idgrumatcon, descripcion, porcentaje, num_eval, idalutipoactividad, tipo_actividad, elementos
-									FROM _viGruMatConf
-								Where idgrumatcon = $cad ";
-					break;
-
-				case 40: // ARJI
-					parse_str($cad);
-					$query = "SELECT idboleta, idgrualu, idgrumat, idciclo, ciclo, num_lista, materia, abreviatura, 
-										idgrupo, clave_grupo,grupo, profesor, alumno, 
-										cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, 
-										cal2, con2, ina2, obs2, cal3, con3, ina3, obs3, 
-										cal4, con4, ina4, obs4, cal5, con5, ina5, obs5, 
-										cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
-										promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo
-									FROM _viBoletas
-								Where idgrualu = $idgrualu $otros ";
-					break;
-
-				case 41: // ARJI
-					parse_str($cad);
-					$query = "SELECT cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, cal2, con2, ina2, obs2, 
-									cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, cal5, con5, ina5, obs5, 
-									cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
-									promcal, promcon, sumina,
-									promcalgpo, promcongpo, suminagpo,
-									modi_el
+		        }
+		        
+		        if ( $numval == 9 ){
+					$query = "SELECT ".$ncal." AS cal, ".$ncon." AS con, ".$nina." AS ina
 									FROM grupo_alumno_promedio
-								Where idgrualu = $idgrualu $otros ";
-					break;
+								WHERE idgrualu = $idgrualu $otros ";
+		        }elseif ( $numval == 10 ){
+						$query = "SELECT ".$ncal." AS cal, ".$ncon." AS con, ".$nina." AS ina
+										FROM grupo_alumno_promedio
+									WHERE idgrualu = $idgrualu $otros ";
+				}else{
+					$query = "SELECT ".$ncal." AS cal, ".$ncon." AS con, ".$nina." AS ina, ".$nobs." AS obs
+									FROM grupo_alumno_promedio
+								WHERE idgrualu = $idgrualu $otros ";
+				}
+				break;
 
-				case 42: // ARJI
-					parse_str($cad);
-			        // $idemp = $this->getIdEmpFromAlias($u);
-					$query = "SELECT cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, cal2, con2, ina2, obs2, 
-									cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, cal5, con5, ina5, obs5, 
-									cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
-									promcal, promcon, sumina,
-									promcalgpo, promcongpo, suminagpo
-									FROM grupo_promedios
-								Where idgrupo = $idgrupo and idciclo = $idciclo $otros ";
-					break;
-
-				case 43: // ARJI
-					parse_str($cad);
-					$query = "SELECT idboleta, idgrualu, idgrumat, idciclo, ciclo, num_lista, materia,abreviatura, idgrupo, grupo, 
-										profesor, idalumno, idnivel, clave_nivel, grado, alumno, cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, 
-										cal2, con2, ina2, obs2, cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, 
-										cal5, con5, ina5, obs5, cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
-										promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo
-									FROM _viBoletas
-								Where idgrualu = $idgrualu and padre <= 0 and (idmatclas in (1,2,3,4,5) ) $otros ";
-					break;
-
-				case 44: // ARJI
-					parse_str($cad);
-					$query = "SELECT idboleta, idgrualu, idgrumat, idciclo, ciclo, num_lista, materia,abreviatura, idgrupo, grupo, 
-										profesor, alumno, cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, 
-										cal2, con2, ina2, obs2, cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, 
-										cal5, con5, ina5, obs5, cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
-										promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo
-									FROM _viBoletas
-								Where idgrualu = $idgrualu and padre > 0 and (idmatclas in (1,2,3,4,5) ) and orden_impresion <= 100 $otros ";
-					break;
-				case 45: // ARJI
-					parse_str($cad);
-					$query = "SELECT idboleta, idgrualu, idgrumat, idciclo, ciclo, num_lista, materia,abreviatura, idgrupo, grupo, 
-										profesor, idalumno, idnivel, clave_nivel, grado, alumno, cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, 
-										cal2, con2, ina2, obs2, cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, 
-										cal5, con5, ina5, obs5, cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
-										promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo,
-										promcalof
-									FROM _viBoletas
-								Where (idgrualu = $idgrualu) and (padre <= 0) and (idioma = 0) and (idmatclas <= 5) $otros ";
-					break;
-				case 46: // ARJI - MATERIAS HIJAS ESPAÑOL
-					parse_str($cad);
-					$query = "SELECT idboleta, idgrualu, idgrumat, idciclo, ciclo, num_lista, materia,abreviatura, idgrupo, grupo, 
-										profesor, idalumno, idnivel, clave_nivel, grado, alumno, cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, 
-										cal2, con2, ina2, obs2, cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, 
-										cal5, con5, ina5, obs5, cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
-										promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo,
-										promcalof
-									FROM _viBoletas
-								Where (idgrualu = $idgrualu) and (padre > 0) and (idioma = 0) and ( idmatclas in (1,2,3,4,5) ) $otros ";
-					break;
-				case 47: // ARJI
-					parse_str($cad);
-					$query = "SELECT idboleta, idgrualu, idgrumat, idciclo, ciclo, num_lista, materia, idgrupo, grupo, 
-										profesor, alumno, cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, 
-										cal2, con2, ina2, obs2, cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, 
-										cal5, con5, ina5, obs5, cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
-										promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo
-									FROM _viBoletas 
-								Where (idgrualu = $idgrualu) and (padre <= 0) and (idioma = 1) and (idmatclas <= 5) $otros ";
-					break;
-				case 48: // ARJI - MATERIAS HIJAS INGLES
-					parse_str($cad);
-					$query = "SELECT idboleta, idgrualu, idgrumat, idciclo, ciclo, num_lista, materia, abreviatura, idgrupo, grupo, 
-										profesor, alumno, cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, 
-										cal2, con2, ina2, obs2, cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, 
-										cal5, con5, ina5, obs5, cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
-										promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo
-									FROM _viBoletas
-								Where (idgrualu = $idgrualu) and (padre > 0) and (idioma = 1) and ( idmatclas in (1,2,3,4,5) ) $otros ";
-					break;
-				case 49: // ARJI
-					parse_str($cad);
-					$query = "SELECT cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, cal2, con2, ina2, obs2, 
-									cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, cal5, con5, ina5, obs5, 
-									cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
-									promcal, promcon, sumina, modi_el,
-									promcalgpo, promcongpo, suminagpo
+			case 58:  // Get Eval for IdGruAlu
+				parse_str($cad);
+		        //$idemp = $this->getIdEmpFromAlias($u);
+		        if ( $numval == 9 ){
+			        $ncal = "promcal";
+			        $ncon = "promcon";
+			        $nina = "sumina";
+		        }elseif ( $numval == 10 ){
+			        $ncal = "promcalgpo";
+			        $ncon = "promcongpo";
+			        $nina = "suminagpo";
+		        }else{
+			        $numval = intval($numval)-1;
+			        $ncal = "cal".$numval;
+			        $ncon = "con".$numval;
+			        $nina = "ina".$numval;
+			        $nobs = "obs".$numval;
+		        }
+		        
+		        if ( $numval == 9 ){
+					$query = "SELECT ".$ncal." AS cal, ".$ncon." AS con, ".$nina." AS ina
 									FROM grupo_alumno_promedio_idioma
-								Where idgrualu = $idgrualu and idioma = $idioma  $otros ";
-					break;
-
-				case 50: // ARJI
-					parse_str($cad);
-					$query = "SELECT cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, cal2, con2, ina2, obs2, 
-									cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, cal5, con5, ina5, obs5, 
-									cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
-									promcal, promcon, sumina,
-									promcalgpo, promcongpo, suminagpo
-									FROM grupo_promedios_idiomas
-								Where idgrupo = $idgrupo and idciclo = $idciclo and idioma = $idioma $otros ";
-					break;
-
-				case 51: // ARJI - MATERIAS INASISTENCIAS ESPAÑOL
-					parse_str($cad);
-					$query = "SELECT idboleta, idgrualu, idgrumat, idciclo, ciclo, num_lista, materia, 
-										abreviatura, idgrupo, grupo, idmatclas, 
-										profesor, alumno, cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, 
-										cal2, con2, ina2, obs2, cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, 
-										cal5, con5, ina5, obs5, cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
-										promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo
-									FROM _viBoletas
-								Where (idgrualu = $idgrualu) and (idioma = 0) and ( idmatclas in (7) ) $otros ";
-					break;
-				case 52: // ARJI - MATERIAS INASISTENCIAS INGLES
-					parse_str($cad);
-					$query = "SELECT idboleta, idgrualu, idgrumat, idciclo, ciclo, num_lista, materia, 
-										abreviatura, idgrupo, grupo, idmatclas, 
-										profesor, alumno, cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, 
-										cal2, con2, ina2, obs2, cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, 
-										cal5, con5, ina5, obs5, cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
-										promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo
-									FROM _viBoletas
-								Where (idgrualu = $idgrualu) and (idioma = 1) and ( idmatclas in (7) ) $otros ";
-					break;
-				
-				case 53: // ARJI
-					parse_str($cad);
-					$query = "SELECT idboleta, idgrualu, idgrumat, idciclo, ciclo, num_lista, materia, abreviatura, idgrupo, grupo, 
-										profesor, alumno, matricula_interna, cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, 
-										cal2, con2, ina2, obs2, cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, 
-										cal5, con5, ina5, obs5, cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
-										promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo
-									FROM _viBoletas
-								Where (idgrualu = $idgrualu) and (padre > 0) and (idioma = $idioma) and (idmatclas <= 5) $otros ";
-								// Where (idgrualu = $idgrualu) and (padre <= 0) and (idioma = 0) and (idmatclas <= 5) $otros ";
-					break;
-
-				case 54: // ARJI
-					parse_str($cad);
-					$query = "SELECT idboleta, idgrualu, idgrumat, idciclo, ciclo, num_lista, materia, abreviatura, idgrupo, grupo, 
-										profesor, alumno, cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, 
-										cal2, con2, ina2, obs2, cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, 
-										cal5, con5, ina5, obs5, cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
-										promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo
-									FROM _viBoletas
-								Where idgrualu = $idgrualu and idioma = $idioma and isagrupadora_grumat = 1 and (idmatclas in (1,2,3,4,5) ) $otros ";
-					break;
-		
-				case 55: // ARJI
-					parse_str($cad);
-					$query = "SELECT idboleta, idgrualu, idgrumat, idciclo, ciclo, num_lista, materia, abreviatura, idgrupo, grupo, 
-										profesor, alumno, cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, 
-										cal2, con2, ina2, obs2, cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, 
-										cal5, con5, ina5, obs5, cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
-										promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo
-									FROM _viBoletas
-								Where idgrualu = $idgrualu and idioma = $idioma and padre > 0 and (idmatclas in (1,2,3,4,5) ) and ( orden_impresion between $rango ) $otros ";
-					break;
-
-				case 56:  // Get Eval for IdGruAlu
-					parse_str($cad);
-			        //$idemp = $this->getIdEmpFromAlias($u);
-			        if ( $numval == 9 ){
-				        $ncal = "promcal";
-				        $ncon = "promcon";
-				        $nina = "sumina";
-			        }elseif ( $numval == 10 ){
-				        $ncal = "promcalgpo";
-				        $ncon = "promcongpo";
-				        $nina = "suminagpo";
-			        }else{
-				        $numval = intval($numval)-1;
-				        $ncal = "bol.cal".$numval;
-				        $ncon = "bol.con".$numval;
-				        $nina = "bol.ina".$numval;
-				        $nobs = "bol.obs".$numval;
-			        }
-			        
-			        if ( $numval == 9 ){
-						$query = "SELECT ".$ncal." as cal, ".$ncon." as con, ".$nina." as ina, idmatclas, padre
-										FROM _viBoletas
-									Where idgrualu = $idgrualu and idgrumat = $idgrumat $otros ";
-			        }elseif ( $numval == 10 ){
-						$query = "SELECT ".$ncal." as cal, ".$ncon." as con, ".$nina." as ina, idmatclas, padre
-										FROM _viBoletas
-									Where idgrualu = $idgrualu and idgrumat = $idgrumat $otros ";
-					}else{
-						
-						$qrytemp = "SELECT ".$ncal." as cal, ".$ncon." as con, ".$nina." as ina, ".$nobs." as obs, bol.idmatclas, bol.padre
-										FROM _viBoletas bol
-									Where bol.idgrumat = $idgrumat and bol.idgrualu = $idgrualu $otros";
-
-						$query = "SELECT ".$ncal." as cal, ".$ncon." as con, ".$nina." as ina, ".$nobs." as obs, bol.idmatclas, bol.padre
-										FROM _viBoletas bol
-									Where bol.idgrumat = $idgrumat and bol.idgrualu = $idgrualu $otros";
-					}
-
-					break;
-
-				case 57:  // Get Eval for IdGruAlu
-					parse_str($cad);
-			        //$idemp = $this->getIdEmpFromAlias($u);
-			        if ( $numval == 9 ){
-				        $ncal = "promcal";
-				        $ncon = "promcon";
-				        $nina = "sumina";
-			        }elseif ( $numval == 10 ){
-				        $ncal = "promcalgpo";
-				        $ncon = "promcongpo";
-				        $nina = "suminagpo";
-			        }else{
-				        $numval = intval($numval)-1;
-				        $ncal = "cal".$numval;
-				        $ncon = "con".$numval;
-				        $nina = "ina".$numval;
-				        $nobs = "obs".$numval;
-			        }
-			        
-			        if ( $numval == 9 ){
-						$query = "SELECT ".$ncal." as cal, ".$ncon." as con, ".$nina." as ina
-										FROM grupo_alumno_promedio
-									Where idgrualu = $idgrualu $otros ";
-			        }elseif ( $numval == 10 ){
-							$query = "SELECT ".$ncal." as cal, ".$ncon." as con, ".$nina." as ina
-											FROM grupo_alumno_promedio
-										Where idgrualu = $idgrualu $otros ";
-					}else{
-						$query = "SELECT ".$ncal." as cal, ".$ncon." as con, ".$nina." as ina, ".$nobs." as obs
-										FROM grupo_alumno_promedio
-									Where idgrualu = $idgrualu $otros ";
-					}
-					break;
-
-				case 58:  // Get Eval for IdGruAlu
-					parse_str($cad);
-			        //$idemp = $this->getIdEmpFromAlias($u);
-			        if ( $numval == 9 ){
-				        $ncal = "promcal";
-				        $ncon = "promcon";
-				        $nina = "sumina";
-			        }elseif ( $numval == 10 ){
-				        $ncal = "promcalgpo";
-				        $ncon = "promcongpo";
-				        $nina = "suminagpo";
-			        }else{
-				        $numval = intval($numval)-1;
-				        $ncal = "cal".$numval;
-				        $ncon = "con".$numval;
-				        $nina = "ina".$numval;
-				        $nobs = "obs".$numval;
-			        }
-			        
-			        if ( $numval == 9 ){
-						$query = "SELECT ".$ncal." as cal, ".$ncon." as con, ".$nina." as ina
+								WHERE idgrualu = $idgrualu $otros ";
+		        }elseif ( $numval == 10 ){
+						$query = "SELECT ".$ncal." AS cal, ".$ncon." AS con, ".$nina." AS ina
 										FROM grupo_alumno_promedio_idioma
-									Where idgrualu = $idgrualu $otros ";
-			        }elseif ( $numval == 10 ){
-							$query = "SELECT ".$ncal." as cal, ".$ncon." as con, ".$nina." as ina
-											FROM grupo_alumno_promedio_idioma
-										Where idgrualu = $idgrualu $otros ";
-					}else{
-						$query = "SELECT ".$ncal." as cal, ".$ncon." as con, ".$nina." as ina, ".$nobs." as obs
-										FROM grupo_alumno_promedio_idioma
-									Where idgrualu = $idgrualu $otros ";
-					}
-					break;
+									WHERE idgrualu = $idgrualu $otros ";
+				}else{
+					$query = "SELECT ".$ncal." AS cal, ".$ncon." AS con, ".$nina." AS ina, ".$nobs." AS obs
+									FROM grupo_alumno_promedio_idioma
+								WHERE idgrualu = $idgrualu $otros ";
+				}
+				break;
 
-				case 59: // ARJI
-					parse_str($cad);
-					$query = "SELECT idboleta, idgrualu, idciclo, ciclo, num_lista, materia, abreviatura, 
-										idgrupo, clave_grupo,grupo, profesor, alumno, 
-										cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, 
-										cal2, con2, ina2, obs2, cal3, con3, ina3, obs3, 
-										cal4, con4, ina4, obs4, cal5, con5, ina5, obs5, 
-										cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
-										promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo
-									FROM _viBoletas
-								Where idgrupo = $idgrupo and idgrumat = $idgrumat $otros ";
-					break;
-
-				case 60:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$query = "SELECT *
-									FROM _viFamAlu
-								Where idfamilia = $idfamilia and idalumno = $idalumno and idemp = $idemp limit 1";
-					break;
-
-				case 70: // ARJI
-					parse_str($cad);
-					$query = "SELECT idboleta, idgrualu, idgrumat, idciclo, ciclo, num_lista, 
-										grupo_oficial, grupo_periodo, grupo_periodo_ciclo,
-										materia_oficial, abreviatura_oficial, matricula_oficial,
-										matricula_interna, clave, creditos, idmatclas,
-										idgrupo, clave_grupo,grupo, profesor, alumno, 
-										cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, 
-										cal2, con2, ina2, obs2, cal3, con3, ina3, obs3, 
-										cal4, con4, ina4, obs4, cal5, con5, ina5, obs5, 
-										cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
-										promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo,
-										bim0,bim1,bim2,bim3,bim4,promcalof, 
-										materia, abreviatura 
-									FROM _viBoletas
-								Where idgrualu = $idgrualu and isoficial = 1 $otros ";
-					break;
-				case 71: // ARJI
-					parse_str($cad);
-					$query = "SELECT cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, cal2, con2, ina2, obs2, 
-									cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, cal5, con5, ina5, obs5, 
+			case 59: // ARJI
+				parse_str($cad);
+				$query = "SELECT idboleta, idgrualu, idciclo, ciclo, num_lista, materia, abreviatura, 
+									idgrupo, clave_grupo,grupo, profesor, alumno, 
+									cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, 
+									cal2, con2, ina2, obs2, cal3, con3, ina3, obs3, 
+									cal4, con4, ina4, obs4, cal5, con5, ina5, obs5, 
 									cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
-									promcalof, promconof, suminaof,bim0,bim1,bim2,bim3,bim4,
-									modi_el
-									FROM grupo_alumno_promedio
-								Where idgrualu = $idgrualu $otros ";
-					break;
-				
-				case 72:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$query = "SELECT distinct materia_oficial
-									FROM _viGrupo_Materias
-								Where idgrupo = $idgrupo and isoficial = 1 and idemp = $idemp";
-					break;
+									promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo
+								FROM _viBoletas
+							WHERE idgrupo = $idgrupo AND idgrumat = $idgrumat $otros ";
+				break;
 
-				case 73: // ARJI
-					//parse_str($cad);
-					$query = "SELECT idboleta, idgrualu, idgrumat, idciclo, ciclo, num_lista, 
-										grupo_oficial, grupo_periodo, grupo_periodo_ciclo,
-										materia_oficial, abreviatura_oficial, matricula_oficial,
-										matricula_interna, clave, creditos, idmatclas,
-										idgrupo, clave_grupo,grupo, profesor, alumno, 
-										cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, 
-										cal2, con2, ina2, obs2, cal3, con3, ina3, obs3, 
-										cal4, con4, ina4, obs4, cal5, con5, ina5, obs5, 
-										cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
-										promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo,
-										bim0,bim1,bim2,bim3,bim4,promcalof, 
-										materia, abreviatura, idnivel 
-									FROM _viBoletas
-								Where $cad $otros ";
-					break;
+			case 60:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT *
+								FROM _viFamAlu
+							WHERE idfamilia = $idfamilia AND idalumno = $idalumno AND idemp = $idemp LIMIT 1";
+				break;
 
-				case 74:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$query = "SELECT *
-									FROM cat_metodos_de_pago
-								Where idemp = $idemp order by idmetododepago asc";
-					break;
-				case 75:
-					$query = "SELECT *
-									FROM cat_metodos_de_pago
-								where idmetododepago = $cad ";
-					break;
-
-				case 76:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$query = "SELECT *
-									FROM cat_colores
-								Where idemp = $idemp order by idcolor asc";
-					break;
-				case 77:
-					$query = "SELECT *
-									FROM cat_colores
-								where idcolor = $cad ";
-					break;
-
-				case 78:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$query = "SELECT idproducto, idmedida, medida1, producto, proveedor, 
-									costo_unitario, codigo_color_hex, color
-									FROM _viProductos
-								Where idemp = $idemp order by idproducto asc";
-					break;
-				case 79:
-					$query = "SELECT *
-									FROM _viProductos
-								where idproducto = $cad ";
-					break;
-
-				case 80:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$query = "SELECT *
-									FROM cat_medidas
-								Where idemp = $idemp order by idmedida asc";
-					break;
-				case 81:
-					$query = "SELECT *
-									FROM cat_medidas
-								where idmedida = $cad ";
-					break;
-
-				case 82:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$query = "SELECT *
-									FROM cat_proveedores
-								Where idemp = $idemp order by idproveedor asc";
-					break;
-				case 83:
-					$query = "SELECT *
-									FROM cat_proveedores
-								where idproveedor = $cad ";
-					break;
-
-				case 84:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$idusr = $this->getIdUserFromAlias($u);
-					$query = "SELECT distinct idsolicituddematerial, solicitante, fecha_solicitud, observaciones, cEstatus, status_solicitud_de_material
-									FROM _viSolMatEnc
-								Where idemp = $idemp and idsolicita = $idusr order by idsolicita desc";
-					break;
-
-				case 85:
-					parse_str($cad);
-					$query = "SELECT *
-									FROM _viSolMatDet
-								where idsolicituddematerial = $idsolicituddematerial $otros ";
-					break;
-
-				case 86:
-					$query = "SELECT *
-									FROM _viSolMatDet
-								where idsolicituddematerialdetalle = $cad ";
-					break;
-
-				case 87:
-					parse_str($cad);
-					$query = "SELECT *
-									FROM _viSolMatEnc
-								Where idsolicituddematerial = $cad";
-					break;
-
-				case 88:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$idusr = $this->getIdUserFromAlias($u);
-					$query = "SELECT *
-									FROM _viSolMatEnc
-								Where idemp = $idemp and idautoriza = $idusr and status_solicitud_de_material = $sts order by fecha_solicitud desc";
-					break;
-
-				case 89:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$idusr = $this->getIdUserFromAlias($u);
-					$query = "SELECT distinct idsolicituddematerial, solicitante, fecha_entrega, observaciones, cEstatus, fecha_autorizacion
-									FROM _viSolMatEnc
-								Where idemp = $idemp and status_solicitud_de_material = $sts order by fecha_solicitud desc";
-					break;
-
-				case 90:
-					parse_str($cad);
-					$query = "SELECT idboleta, idgrualu, idgrumat, num_lista, alumno, grupo, materia, profesor, 
-								CASE WHEN iduseralu IS NOT NULL THEN iduseralu ELSE 0 END AS iduseralu
-									FROM _viBoletas
-								Where idgrumat = $idgrumat order by alumno asc";
-					break;
-
-				case 91:
-					parse_str($cad);
-					$query = "SELECT *
-									FROM  cat_alu_refer_oficiales
-								Where idalumno = $idalumno and idnivel = $idnivel and idemp = $idemp limit 1 ";
-					break;
-
-				case 92: // ARJI
-					parse_str($cad);
-			        if ( $numval == 6 ){
-				        $ncal = "promcalof";
-			        }else{
-				        $numval = intval($numval)-1;
-				        $ncal = "bim".$numval;
-			        }
-					$query = "SELECT cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, cal2, con2, ina2, obs2, 
-									cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, cal5, con5, ina5, obs5, 
+			case 70: // ARJI
+				parse_str($cad);
+				$query = "SELECT idboleta, idgrualu, idgrumat, idciclo, ciclo, num_lista, 
+									grupo_oficial, grupo_periodo, grupo_periodo_ciclo,
+									materia_oficial, abreviatura_oficial, matricula_oficial,
+									matricula_interna, clave, creditos, idmatclas,
+									idgrupo, clave_grupo,grupo, profesor, alumno, 
+									cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, 
+									cal2, con2, ina2, obs2, cal3, con3, ina3, obs3, 
+									cal4, con4, ina4, obs4, cal5, con5, ina5, obs5, 
 									cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
-									promcalof, promconof, suminaof,bim0,bim1,bim2,bim3,bim4,
-									modi_el,".$ncal." as cal
-									FROM grupo_alumno_promedio
-								Where idgrualu = $idgrualu $otros ";
-					break;
-				
+									promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo,
+									bim0,bim1,bim2,bim3,bim4,promcalof, 
+									materia, abreviatura 
+								FROM _viBoletas
+							WHERE idgrualu = $idgrualu AND isoficial = 1 $otros ";
+				break;
+			case 71: // ARJI
+				parse_str($cad);
+				$query = "SELECT cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, cal2, con2, ina2, obs2, 
+								cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, cal5, con5, ina5, obs5, 
+								cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
+								promcalof, promconof, suminaof,bim0,bim1,bim2,bim3,bim4,
+								modi_el
+								FROM grupo_alumno_promedio
+							WHERE idgrualu = $idgrualu $otros ";
+				break;
+			
+			case 72:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT DISTINCT materia_oficial
+								FROM _viGrupo_Materias
+							WHERE idgrupo = $idgrupo AND isoficial = 1 AND idemp = $idemp";
+				break;
 
-				case 93:  // Get Eval for IdGruAlu
-					parse_str($cad);
-			        //$idemp = $this->getIdEmpFromAlias($u);
-			        if ( $numval == 6 ){
-				        $ncal = "promcalof";
-			        }else{
-				        $numval = intval($numval)-1;
-				        $ncal = "bim".$numval;
-			        }
-			        
-						$query = "SELECT ".$ncal." as cal, idmatclas, padre
-										FROM _viBolOf
-									Where idgrualu = $idgrualu and idgrumat = $idgrumat $otros ";
+			case 73: // ARJI
+				$query = "SELECT idboleta, idgrualu, idgrumat, idciclo, ciclo, num_lista, 
+									grupo_oficial, grupo_periodo, grupo_periodo_ciclo,
+									materia_oficial, abreviatura_oficial, matricula_oficial,
+									matricula_interna, clave, creditos, idmatclas,
+									idgrupo, clave_grupo,grupo, profesor, alumno, 
+									cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, 
+									cal2, con2, ina2, obs2, cal3, con3, ina3, obs3, 
+									cal4, con4, ina4, obs4, cal5, con5, ina5, obs5, 
+									cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
+									promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo,
+									bim0,bim1,bim2,bim3,bim4,promcalof, 
+									materia, abreviatura, idnivel 
+								FROM _viBoletas
+							WHERE $cad $otros ";
+				break;
 
-					break;
+			case 74:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT *
+								FROM cat_metodos_de_pago
+							WHERE idemp = $idemp ORDER BY idmetododepago ASC";
+				break;
+			case 75:
+				$query = "SELECT *
+								FROM cat_metodos_de_pago
+							WHERE idmetododepago = $cad ";
+				break;
 
-				case 94:
-					parse_str($cad);
-					$query = "SELECT idboleta
-									FROM _viBoletas
-								Where idgrualu = $idgrualu and idioma = 0 and idmatclas = 6";
-					break;
+			case 76:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT *
+								FROM cat_colores
+							WHERE idemp = $idemp ORDER BY idcolor ASC";
+				break;
+			case 77:
+				$query = "SELECT *
+								FROM cat_colores
+							WHERE idcolor = $cad ";
+				break;
 
-				case 95:
-					parse_str($cad);
-					$query = "SELECT calificacion 
-									FROM _viGruMatBol 
-									WHERE idboleta = $idboleta and num_eval = $numeval order by idgrumatcon asc limit 3 ";
-					break;
+			case 78:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT idproducto, idmedida, medida1, producto, proveedor, 
+								costo_unitario, codigo_color_hex, color
+								FROM _viProductos
+							WHERE idemp = $idemp ORDER BY idproducto ASC";
+				break;
+			case 79:
+				$query = "SELECT *
+								FROM _viProductos
+							WHERE idproducto = $cad ";
+				break;
 
-				case 96:
-					parse_str($cad);
-					$query = "SELECT *, DATE_FORMAT(fecha_boleta, '%d-%m-%Y') as cfecha_boleta
-									FROM  pos_lectura_sep
-								Where clave_nivel = $idnivel and grado = $grado and idemp = $idemp limit 1 ";
-					break;
+			case 80:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT *
+								FROM cat_medidas
+							WHERE idemp = $idemp ORDER BY idmedida ASC";
+				break;
+			case 81:
+				$query = "SELECT *
+								FROM cat_medidas
+							WHERE idmedida = $cad ";
+				break;
 
-				case 97:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$query = "SELECT *
-									FROM _viDirectores
-								where clave_nivel = $clavenivel and idemp = $idemp and status_director = 1 ";
-					break;
+			case 82:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT *
+								FROM cat_proveedores
+							WHERE idemp = $idemp ORDER BY idproveedor ASC";
+				break;
+			case 83:
+				$query = "SELECT *
+								FROM cat_proveedores
+							WHERE idproveedor = $cad ";
+				break;
 
-				case 98: // ARJI
-					parse_str($cad);
-					$query = "SELECT inabim0, inabim1, inabim2, inabim3, inabim4
-									FROM _viBoletas
-								Where idgrualu = $idgrualu $otros ";
-					break;
+			case 84:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$idusr = $this->getIdUserFromAlias($u);
+				$query = "SELECT DISTINCT idsolicituddematerial, solicitante, fecha_solicitud, observaciones, cEstatus, status_solicitud_de_material
+								FROM _viSolMatEnc
+							WHERE idemp = $idemp AND idsolicita = $idusr ORDER BY idsolicita DESC";
+				break;
 
-				case 99:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$query = "SELECT materia, idgrumat
-									FROM _viGrupo_Materias
-								Where idgrupo = $idgrupo and isoficial = 1 and idemp = $idemp order by orden_oficial asc";
-					break;
+			case 85:
+				parse_str($cad);
+				$query = "SELECT *
+								FROM _viSolMatDet
+							WHERE idsolicituddematerial = $idsolicituddematerial $otros ";
+				break;
 
-				case 100: // ARJI
-					//parse_str($cad);
-					$query = "SELECT idboleta, idgrualu, idgrumat, idciclo, ciclo, num_lista, curp,
-										grupo_oficial, grupo_periodo, grupo_periodo_ciclo, materia,
-										materia_oficial, abreviatura_oficial, matricula_oficial,
-										matricula_interna, clave, creditos, idmatclas,
-										idgrupo, clave_grupo,grupo, profesor, alumno, 
-										bim0,bim1,bim2,bim3,bim4,promcalof, 
-										materia, abreviatura 
+			case 86:
+				$query = "SELECT *
+								FROM _viSolMatDet
+							WHERE idsolicituddematerialdetalle = $cad ";
+				break;
+
+			case 87:
+				parse_str($cad);
+				$query = "SELECT *
+								FROM _viSolMatEnc
+							WHERE idsolicituddematerial = $cad";
+				break;
+
+			case 88:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$idusr = $this->getIdUserFromAlias($u);
+				$query = "SELECT *
+								FROM _viSolMatEnc
+							WHERE idemp = $idemp AND idautoriza = $idusr AND status_solicitud_de_material = $sts ORDER BY fecha_solicitud DESC";
+				break;
+
+			case 89:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$idusr = $this->getIdUserFromAlias($u);
+				$query = "SELECT DISTINCT idsolicituddematerial, solicitante, fecha_entrega, observaciones, cEstatus, fecha_autorizacion
+								FROM _viSolMatEnc
+							WHERE idemp = $idemp AND status_solicitud_de_material = $sts ORDER BY fecha_solicitud DESC";
+				break;
+
+			case 90:
+				parse_str($cad);
+				$query = "SELECT idboleta, idgrualu, idgrumat, num_lista, alumno, grupo, materia, profesor, 
+							CASE WHEN iduseralu IS NOT NULL THEN iduseralu ELSE 0 END AS iduseralu
+								FROM _viBoletas
+							WHERE idgrumat = $idgrumat ORDER BY alumno ASC";
+				break;
+
+			case 91:
+				parse_str($cad);
+				$query = "SELECT *
+								FROM  cat_alu_refer_oficiales
+							WHERE idalumno = $idalumno AND idnivel = $idnivel AND idemp = $idemp LIMIT 1 ";
+				break;
+
+			case 92: // ARJI
+				parse_str($cad);
+		        if ( $numval == 6 ){
+			        $ncal = "promcalof";
+		        }else{
+			        $numval = intval($numval)-1;
+			        $ncal = "bim".$numval;
+		        }
+				$query = "SELECT cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, cal2, con2, ina2, obs2, 
+								cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, cal5, con5, ina5, obs5, 
+								cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
+								promcalof, promconof, suminaof,bim0,bim1,bim2,bim3,bim4,
+								modi_el,".$ncal." AS cal
+								FROM grupo_alumno_promedio
+							WHERE idgrualu = $idgrualu $otros ";
+				break;
+
+			case 93:  // Get Eval for IdGruAlu
+				parse_str($cad);
+		        if ( $numval == 6 ){
+			        $ncal = "promcalof";
+		        }else{
+			        $numval = intval($numval)-1;
+			        $ncal = "bim".$numval;
+		        }
+		        
+					$query = "SELECT ".$ncal." AS cal, idmatclas, padre
 									FROM _viBolOf
-								Where $cad $otros ";
-					break;
+								WHERE idgrualu = $idgrualu AND idgrumat = $idgrumat $otros ";
+				break;
 
-				case 101: // ARJI
-					parse_str($cad);
-					$query = "SELECT idboleta, idgrualu, idgrumat, idciclo, ciclo, num_lista, curp,
+			case 94:
+				parse_str($cad);
+				$query = "SELECT idboleta
+								FROM _viBoletas
+							WHERE idgrualu = $idgrualu AND idioma = 0 AND idmatclas = 6";
+				break;
+
+			case 95:
+				parse_str($cad);
+				$query = "SELECT calificacion 
+								FROM _viGruMatBol 
+								WHERE idboleta = $idboleta AND num_eval = $numeval ORDER BY idgrumatcon ASC LIMIT 3 ";
+				break;
+
+			case 96:
+				parse_str($cad);
+				$query = "SELECT *, DATE_FORMAT(fecha_boleta, '%d-%m-%Y') AS cfecha_boleta
+								FROM  pos_lectura_sep
+							WHERE clave_nivel = $idnivel AND grado = $grado AND idemp = $idemp LIMIT 1 ";
+				break;
+
+			case 97:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT *
+								FROM _viDirectores
+							WHERE clave_nivel = $clavenivel AND idemp = $idemp AND status_director = 1 ";
+				break;
+
+			case 98: // ARJI
+				parse_str($cad);
+				$query = "SELECT inabim0, inabim1, inabim2, inabim3, inabim4
+								FROM _viBoletas
+							WHERE idgrualu = $idgrualu $otros ";
+				break;
+
+			case 99:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT materia, idgrumat
+								FROM _viGrupo_Materias
+							WHERE idgrupo = $idgrupo AND isoficial = 1 AND idemp = $idemp ORDER BY orden_oficial ASC";
+				break;
+
+			case 100: // ARJI
+				//parse_str($cad);
+				$query = "SELECT idboleta, idgrualu, idgrumat, idciclo, ciclo, num_lista, curp,
 									grupo_oficial, grupo_periodo, grupo_periodo_ciclo, materia,
 									materia_oficial, abreviatura_oficial, matricula_oficial,
 									matricula_interna, clave, creditos, idmatclas,
@@ -6418,906 +5906,894 @@ class oCentura {
 									bim0,bim1,bim2,bim3,bim4,promcalof, 
 									materia, abreviatura 
 								FROM _viBolOf
-								Where idboleta = $idboleta $otros ";
-							// Where idgrualu = $idgrualu $otros ";
-					break;
+							WHERE $cad $otros ";
+				break;
 
-				case 102:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$query = "SELECT *
-									FROM cat_alu_tipo_actividad
-								Where idemp = $idemp order by idalutipoactividad desc";
-					break;
-				case 103:
-					$query = "SELECT  *
-									FROM cat_alu_tipo_actividad 
-								where idalutipoactividad = $cad ";
-					break;
+			case 101: // ARJI
+				parse_str($cad);
+				$query = "SELECT idboleta, idgrualu, idgrumat, idciclo, ciclo, num_lista, curp,
+								grupo_oficial, grupo_periodo, grupo_periodo_ciclo, materia,
+								materia_oficial, abreviatura_oficial, matricula_oficial,
+								matricula_interna, clave, creditos, idmatclas,
+								idgrupo, clave_grupo,grupo, profesor, alumno, 
+								bim0,bim1,bim2,bim3,bim4,promcalof, 
+								materia, abreviatura 
+							FROM _viBolOf
+							WHERE idboleta = $idboleta $otros ";
+				break;
 
-				case 104:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$query = "SELECT *
-									FROM grupo_materia_config_markbook
-								Where idgrumatcon = $idgrumatcon $otros ";
-					break;
+			case 102:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT *
+								FROM cat_alu_tipo_actividad
+							WHERE idemp = $idemp ORDER BY idalutipoactividad DESC";
+				break;
+			case 103:
+				$query = "SELECT  *
+								FROM cat_alu_tipo_actividad 
+							WHERE idalutipoactividad = $cad ";
+				break;
 
-				case 105:
-					$query = "SELECT  *
-									FROM grupo_materia_config_markbook 
-								where idgrumatconmkb = $cad ";
-					break;
+			case 104:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT *
+								FROM grupo_materia_config_markbook
+							WHERE idgrumatcon = $idgrumatcon $otros ";
+				break;
 
-				case 106:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$query = "SELECT *
-									FROM boleta_partes_markbook
-								Where idgrumatconmkb = $idgrumatconmkb order by idgrumatconmkb desc";
-					break;
+			case 105:
+				$query = "SELECT  *
+								FROM grupo_materia_config_markbook 
+							WHERE idgrumatconmkb = $cad ";
+				break;
 
-				case 107:
-					$query = "SELECT *
-									FROM _viMedAlu
-								where idmedalu = $cad ";
-					break;
+			case 106:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT *
+								FROM boleta_partes_markbook
+							WHERE idgrumatconmkb = $idgrumatconmkb ORDER BY idgrumatconmkb DESC";
+				break;
 
-				case 108:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$query = "SELECT *
-									FROM _viMedAlu
-								Where idalumno = $idalumno and idemp = $idemp ";
-					break;
+			case 107:
+				$query = "SELECT *
+								FROM _viMedAlu
+							WHERE idmedalu = $cad ";
+				break;
 
-				case 109:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$query = "SELECT *
-									FROM cat_medicos
-								Where idemp = $idemp order by idmedico desc";
-					break;
-					
-				case 110:
-					$query = "SELECT *
-									FROM cat_medicos
-								where idmedico = $cad ";
-					break;
+			case 108:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT *
+								FROM _viMedAlu
+							WHERE idalumno = $idalumno AND idemp = $idemp ";
+				break;
 
-				case 111:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$query = "SELECT *
-									FROM _viFamPer
-								Where idfamilia = $idfamilia and clave_parentezco = '$otros' and idemp = $idemp limit 1";
-					break;
-
-				case 112:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$query = "SELECT *
-									FROM _viFamPer
-								Where idpersona = $idpersona  and idemp = $idemp limit 1";
-					break;
-
-				case 113: // ARJI
-					parse_str($cad);
-			        if ( $numval == 6 ){
-				        $ncal = "promcalof";
-			        }else{
-				        $numval = intval($numval)-1;
-				        $ncal = "bim".$numval;
-			        }
-					$query = "SELECT cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, cal2, con2, ina2, obs2, 
-									cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, cal5, con5, ina5, obs5, 
-									cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
-									promcalof, promconof, suminaof,bim0,bim1,bim2,bim3,bim4,
-									modi_el,".$ncal." as cal
-									FROM grupo_alumno_promedio_idioma
-								Where idgrualu = $idgrualu $otros ";
-					break;
-
-				case 114: // ARJI
-					
-					parse_str($cad);
-
-					$query = "SELECT idboleta, idgrualu, idgrumat, idciclo, ciclo, num_lista, 
-										grupo_oficial, grupo_periodo, grupo_periodo_ciclo,
-										materia_oficial, abreviatura_oficial, matricula_oficial,
-										matricula_interna, clave, creditos, idmatclas,
-										idgrupo, clave_grupo,grupo, profesor, alumno, curp,
-										ap_paterno, ap_materno, nombre, idalumno, idnivel,
-										bim0,bim1,bim2,bim3,bim4,promcalof, promconof, suminaof, 
-										orden_oficial, clave_nivel, 
-										inabim0,inabim1,inabim2,inabim3,inabim4,
-										materia, abreviatura
-									FROM _viBolOf
-								Where idgrualu = $idgrualu and isoficial = 1 $otros ";
-					break;
-					
-				case 115:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$query = "SELECT *
-									FROM _viEmerAlu
-								Where idalumno = $idalumno and idemp = $idemp ";
-					break;
-
-				case 116:
-					parse_str($cad);
-
-					$query = "SELECT DISTINCT idpaicriterio, criterio, descripcion_criterio 
-								FROM _viPAIConceptos 
-								WHERE idpaiareadisciplinaria = $idpaiareadisciplinaria 
-									AND grado_pai = $grado_pai ";
-					break;
-
-				case 117:
-					parse_str($cad);
-
-					$query = "SELECT idboleta, num_lista, alumno, profesor 
-								FROM _viBolForPAI
-								Where idgrumat = $idgrumat order by num_lista asc";
-					break;
-
-				case 118:
-					parse_str($cad);
-
-			        $numval = intval($numval);
-
-			        $e11 = "eval_".$numval."_1_idcriterio";
-			        $e1 = "eval_".$numval."_1";
-			        $e12 = "eval_".$numval."_1_rc";
-
-			        $e21 = "eval_".$numval."_2_idcriterio";
-			        $e2 = "eval_".$numval."_2";
-			        $e22 = "eval_".$numval."_2_rc";
-
-			        $e31 = "eval_".$numval."_3_idcriterio";
-			        $e3 = "eval_".$numval."_3";
-			        $e32 = "eval_".$numval."_3_rc";
-
-			        $e41 = "eval_".$numval."_4_idcriterio";
-			        $e4 = "eval_".$numval."_4";
-			        $e42 = "eval_".$numval."_4_rc";
-
-					$query = "SELECT idboletapaibi, idboleta, "
-									.$e11." as e11, ".$e1." as e1, ".$e12." as e12," 
-									.$e21." as e21, ".$e2." as e2, ".$e22." as e22,"
-									.$e31." as e31, ".$e3." as e3, ".$e32." as e32," 
-									.$e41." as e41, ".$e4." as e4, ".$e42." as e42 
-									FROM boleta_paibi 
-								WHERE idboleta = $idboleta limit 1";
-
-					break;
-
-				case 119:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($user);
-					$idciclo = $this->getCicloFromIdEmp($idemp);
-
-					$query = "SELECT DISTINCT idprofesor
-								FROM _viGrupo_Materias
-								Where idciclo = $idciclo and idemp = $idemp order by profesor asc";
-					break;
-
-				case 120:
-					parse_str($cad);
-
-					$query = "SELECT *
-								FROM _viProfesores
-								Where idprofesor = $idprofesor and  status_profesor = 1 Limit 1";
-					break;
-
-
-				case 500:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$query = "SELECT *
-									FROM _viDirectores
-								Where idemp = $idemp order by iddirector desc";
-					break;
-
-				case 501:
-					$query = "SELECT *
-									FROM _viDirectores
-								where iddirector = $cad ";
-					break;
-
-				case 502:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$query = "SELECT *
-									FROM _viSupervisorCaja
-								Where idemp = $idemp order by idsupervisorcaja asc";
-					break;
-				case 503:
-					$query = "SELECT *
-									FROM _viSupervisorCaja
-								where idsupervisorcaja = $cad ";
-					break;
-
-				case 504:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$query = "SELECT *
-									FROM _viSupervisorSolMat
-								Where idemp = $idemp order by idsupervisorsolmat asc";
-					break;
-				case 505:
-					$query = "SELECT *
-									FROM _viSupervisorSolMat
-								where idsupervisorsolmat = $cad ";
-					break;
-
-
-				case 506:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$query = "SELECT *
-									FROM _viSupervisorEntrega
-								Where idemp = $idemp order by idsupervisorentrega asc";
-					break;
-
-				case 507:
-					$query = "SELECT *
-									FROM _viSupervisorEntrega
-								where idsupervisorentrega = $cad ";
-					break;
-
-				case 508:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$idusr = $this->getIdUserFromAlias($u);
-					$query = "SELECT *
-									FROM _viSolAut
-								where idemp = $idemp and idsolicita = $idusr ";
-					break;
-
-				case 509:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$idusr = $this->getIdUserFromAlias($u);
-					$query = "SELECT *
-									FROM _viSupervisorSolMat
-								where idemp = $idemp and idusersupervisorsolmat = $idusr ";
-					break;
-
-				case 510:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$idusr = $this->getIdUserFromAlias($u);
-					$query = "SELECT *
-									FROM _viSupervisorEntrega
-								where idemp = $idemp and idusersupervisorentrega= $idusr ";
-					break;
+			case 109:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT *
+								FROM cat_medicos
+							WHERE idemp = $idemp ORDER BY idmedico DESC";
+				break;
 				
-				case 511:
-					$query = "SELECT distinct idsolicita, solicitante
-									FROM _viSolMatDet
-								where idproveedor = $cad and status_solicitud_de_material = 1 and status_solicitud_de_materiales = 1 ";
-					break;
+			case 110:
+				$query = "SELECT *
+								FROM cat_medicos
+							WHERE idmedico = $cad ";
+				break;
 
-				case 512:
-					parse_str($cad);
-					$query = "SELECT  *
-									FROM _viSolMatDet
-								where idproveedor = $idproveedor and idsolicita = $idsolicita and status_solicitud_de_material = 1 and status_solicitud_de_materiales = 1 ";
-					break;
+			case 111:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT *
+								FROM _viFamPer
+							WHERE idfamilia = $idfamilia AND clave_parentezco = '$otros' AND idemp = $idemp LIMIT 1";
+				break;
 
-				case 513:
-					$query = "SELECT distinct idsolicita, solicitante
-									FROM _viSolMatDet
-								where idautoriza = $cad and status_solicitud_de_material = 1 ";
-					break;
+			case 112:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT *
+								FROM _viFamPer
+							WHERE idpersona = $idpersona  AND idemp = $idemp LIMIT 1";
+				break;
 
-				case 514:
-					parse_str($cad);
-					$query = "SELECT  *
-									FROM _viSolMatDet
-								where idautoriza = $idautoriza and idsolicita = $idsolicita and status_solicitud_de_materiales = 1 ";
-					break;
+			case 113: // ARJI
+				parse_str($cad);
+		        if ( $numval == 6 ){
+			        $ncal = "promcalof";
+		        }else{
+			        $numval = intval($numval)-1;
+			        $ncal = "bim".$numval;
+		        }
+				$query = "SELECT cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, cal2, con2, ina2, obs2, 
+								cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, cal5, con5, ina5, obs5, 
+								cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
+								promcalof, promconof, suminaof,bim0,bim1,bim2,bim3,bim4,
+								modi_el,".$ncal." AS cal
+								FROM grupo_alumno_promedio_idioma
+							WHERE idgrualu = $idgrualu $otros ";
+				break;
 
-				case 515:
-					$query = "SELECT *
-									FROM _viSolMatDet
-								where idsolicita = $cad and status_solicitud_de_material = 1 ";
-					break;
+			case 114: // ARJI
+				
+				parse_str($cad);
 
-				case 516:
-					$query = "SELECT *
-									FROM _viDirectores
-								where idusuariodirector = $cad ";
-					break;
+				$query = "SELECT idboleta, idgrualu, idgrumat, idciclo, ciclo, num_lista, 
+									grupo_oficial, grupo_periodo, grupo_periodo_ciclo,
+									materia_oficial, abreviatura_oficial, matricula_oficial,
+									matricula_interna, clave, creditos, idmatclas,
+									idgrupo, clave_grupo,grupo, profesor, alumno, curp,
+									ap_paterno, ap_materno, nombre, idalumno, idnivel,
+									bim0,bim1,bim2,bim3,bim4,promcalof, promconof, suminaof, 
+									orden_oficial, clave_nivel, 
+									inabim0,inabim1,inabim2,inabim3,inabim4,
+									materia, abreviatura
+								FROM _viBolOf
+							WHERE idgrualu = $idgrualu AND isoficial = 1 $otros ";
+				break;
+				
+			case 115:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT *
+								FROM _viEmerAlu
+							WHERE idalumno = $idalumno AND idemp = $idemp ";
+				break;
 
-				case 517:
-					parse_str($cad);
-			        $f0 = explode('-',$fi);
-			        $f1 = explode('-',$ff);
-			        $fi = $f0[2].'-'.$f0[1].'-'.$f0[0].' 00:00:00';
-			        $ff = $f1[2].'-'.$f1[1].'-'.$f1[0].' 23:59:59';
+			case 116:
+				parse_str($cad);
 
-					$query = "SELECT
-									sum(cantidad_autorizada) as cantidad, 
-									producto, 
-									medida1,
-									idcolor,
-									color,
-									costo_unitario, 
-									sum(importe_solicitado) as suma
+				$query = "SELECT DISTINCT idpaicriterio, criterio, descripcion_criterio 
+							FROM _viPAIConceptos 
+							WHERE idpaiareadisciplinaria = $idpaiareadisciplinaria 
+								AND grado_pai = $grado_pai ";
+				break;
+
+			case 117:
+				parse_str($cad);
+
+				$query = "SELECT idboleta, num_lista, alumno, profesor 
+							FROM _viBolForPAI
+							WHERE idgrumat = $idgrumat ORDER BY num_lista ASC";
+				break;
+
+			case 118:
+				parse_str($cad);
+
+		        $numval = intval($numval);
+
+		        $e11 = "eval_".$numval."_1_idcriterio";
+		        $e1 = "eval_".$numval."_1";
+		        $e12 = "eval_".$numval."_1_rc";
+
+		        $e21 = "eval_".$numval."_2_idcriterio";
+		        $e2 = "eval_".$numval."_2";
+		        $e22 = "eval_".$numval."_2_rc";
+
+		        $e31 = "eval_".$numval."_3_idcriterio";
+		        $e3 = "eval_".$numval."_3";
+		        $e32 = "eval_".$numval."_3_rc";
+
+		        $e41 = "eval_".$numval."_4_idcriterio";
+		        $e4 = "eval_".$numval."_4";
+		        $e42 = "eval_".$numval."_4_rc";
+
+				$query = "SELECT idboletapaibi, idboleta, "
+								.$e11." AS e11, ".$e1." AS e1, ".$e12." AS e12," 
+								.$e21." AS e21, ".$e2." AS e2, ".$e22." AS e22,"
+								.$e31." AS e31, ".$e3." AS e3, ".$e32." AS e32," 
+								.$e41." AS e41, ".$e4." AS e4, ".$e42." AS e42 
+								FROM boleta_paibi 
+							WHERE idboleta = $idboleta LIMIT 1";
+				break;
+
+			case 119:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($user);
+				$idciclo = $this->getCicloFromIdEmp($idemp);
+
+				$query = "SELECT DISTINCT idprofesor
+							FROM _viGrupo_Materias
+							WHERE idciclo = $idciclo AND idemp = $idemp ORDER BY profesor ASC";
+				break;
+
+			case 120:
+				parse_str($cad);
+
+				$query = "SELECT *
+							FROM _viProfesores
+							WHERE idprofesor = $idprofesor AND  status_profesor = 1 Limit 1";
+				break;
+
+
+			case 500:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT *
+								FROM _viDirectores
+							WHERE idemp = $idemp ORDER BY iddirector DESC";
+				break;
+
+			case 501:
+				$query = "SELECT *
+								FROM _viDirectores
+							WHERE iddirector = $cad ";
+				break;
+
+			case 502:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT *
+								FROM _viSupervisorCaja
+							WHERE idemp = $idemp ORDER BY idsupervisorcaja ASC";
+				break;
+			case 503:
+				$query = "SELECT *
+								FROM _viSupervisorCaja
+							WHERE idsupervisorcaja = $cad ";
+				break;
+
+			case 504:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT *
+								FROM _viSupervisorSolMat
+							WHERE idemp = $idemp ORDER BY idsupervisorsolmat ASC";
+				break;
+			case 505:
+				$query = "SELECT *
+								FROM _viSupervisorSolMat
+							WHERE idsupervisorsolmat = $cad ";
+				break;
+
+
+			case 506:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT *
+								FROM _viSupervisorEntrega
+							WHERE idemp = $idemp ORDER BY idsupervisorentrega ASC";
+				break;
+
+			case 507:
+				$query = "SELECT *
+								FROM _viSupervisorEntrega
+							WHERE idsupervisorentrega = $cad ";
+				break;
+
+			case 508:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$idusr = $this->getIdUserFromAlias($u);
+				$query = "SELECT *
+								FROM _viSolAut
+							WHERE idemp = $idemp AND idsolicita = $idusr ";
+				break;
+
+			case 509:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$idusr = $this->getIdUserFromAlias($u);
+				$query = "SELECT *
+								FROM _viSupervisorSolMat
+							WHERE idemp = $idemp AND idusersupervisorsolmat = $idusr ";
+				break;
+
+			case 510:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$idusr = $this->getIdUserFromAlias($u);
+				$query = "SELECT *
+								FROM _viSupervisorEntrega
+							WHERE idemp = $idemp AND idusersupervisorentrega= $idusr ";
+				break;
+			
+			case 511:
+				$query = "SELECT DISTINCT idsolicita, solicitante
 								FROM _viSolMatDet
-								where idsolicita = $lstProfDir and 
-										status_solicitud_de_materiales = $cmbStatus and 
-										( ( DATE(fecha_solicitud) >= '$fi') or (DATE(fecha_solicitud) <= '$ff') ) 
-								Group by idproducto 
-								Order by cantidad desc";
-					break;
+							WHERE idproveedor = $cad AND status_solicitud_de_material = 1 AND status_solicitud_de_materiales = 1 ";
+				break;
 
-				case 10000:
-					parse_str($cad);
-					$idemp = $this->getIdEmpFromAlias($u);
-					$query = "SELECT idobservacion, observacion, idioma, status_observacion
-							FROM cat_observaciones where idemp = $idemp and status_observacion = 1
-							Order By idobservacion asc ";
-					break;		
+			case 512:
+				parse_str($cad);
+				$query = "SELECT  *
+								FROM _viSolMatDet
+							WHERE idproveedor = $idproveedor AND idsolicita = $idsolicita AND status_solicitud_de_material = 1 AND status_solicitud_de_materiales = 1 ";
+				break;
 
-				case 10001:
-					$query = "SELECT idobservacion, observacion, idioma, status_observacion
-									FROM cat_observaciones
-								where idobservacion = $cad ";
-					break;
+			case 513:
+				$query = "SELECT DISTINCT idsolicita, solicitante
+								FROM _viSolMatDet
+							WHERE idautoriza = $cad AND status_solicitud_de_material = 1 ";
+				break;
 
-				case 10002:
-					$query = "SELECT idnivobs, observacion, clave_nivel, nivel, idioma
-									FROM _viNivel_Observaciones
-								where idnivobs = $cad ";
-					break;
+			case 514:
+				parse_str($cad);
+				$query = "SELECT  *
+								FROM _viSolMatDet
+							WHERE idautoriza = $idautoriza AND idsolicita = $idsolicita AND status_solicitud_de_materiales = 1 ";
+				break;
 
-				case 10003:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$query = "SELECT idconcepto,concepto,status_concepto
-									FROM cat_conceptos
-								Where idemp = $idemp order by idconcepto desc";
-					break;
-				case 10004:
-					$query = "SELECT idconcepto,concepto,status_concepto
-									FROM cat_conceptos
-								where idconcepto = $cad ";
-					break;
+			case 515:
+				$query = "SELECT *
+								FROM _viSolMatDet
+							WHERE idsolicita = $cad AND status_solicitud_de_material = 1 ";
+				break;
 
-				case 10005:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$query = "SELECT *
-									FROM _viEmiFis
-								Where idemp = $idemp order by $otros desc";
-					break;
-				case 10006:
-					$query = "SELECT *
-									FROM _viEmiFis
-								where idemisorfiscal = $cad ";
-					break;
+			case 516:
+				$query = "SELECT *
+								FROM _viDirectores
+							WHERE idusuariodirector = $cad ";
+				break;
 
-				case 10007:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$query = "SELECT *
-									FROM _viPagos
-								Where idemp = $idemp order by $otros desc";
-					break;
-				case 10008:
-					$query = "SELECT *
-									FROM _viPagos
-								where idpago = $cad ";
-					break;
+			case 517:
+				parse_str($cad);
+		        $f0 = explode('-',$fi);
+		        $f1 = explode('-',$ff);
+		        $fi = $f0[2].'-'.$f0[1].'-'.$f0[0].' 00:00:00';
+		        $ff = $f1[2].'-'.$f1[1].'-'.$f1[0].' 23:59:59';
 
-				case 10009:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$idciclo = $this->getCicloFromIdEmp($idemp);
+				$query = "SELECT
+								sum(cantidad_autorizada) AS cantidad, 
+								producto, 
+								medida1,
+								idcolor,
+								color,
+								costo_unitario, 
+								sum(importe_solicitado) AS suma
+							FROM _viSolMatDet
+							WHERE idsolicita = $lstProfDir AND 
+									status_solicitud_de_materiales = $cmbStatus AND 
+									( ( DATE(fecha_solicitud) >= '$fi') OR (DATE(fecha_solicitud) <= '$ff') ) 
+							GROUP BY idproducto 
+							ORDER BY cantidad DESC ";
+				break;
 
-					// $query = "SELECT distinct idalumno, alumno, clave_nivel, nivel, genero, idciclo, 
-					// 							beca_sep, beca_arji, beca_sp, beca_bach
-					// 				FROM _viEdosCta
-					// 			Where idfamilia = $idfamilia and idciclo = $idciclo and idemp = $idemp order by $otros desc";
+			case 10000:
+				parse_str($cad);
+				$idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT idobservacion, observacion, idioma, status_observacion
+						FROM cat_observaciones WHERE idemp = $idemp AND status_observacion = 1
+						ORDER BY idobservacion ASC ";
+				break;		
 
-					$query = "SELECT distinct idalumno, alumno, genero, idciclo
-									FROM _viEdosCta
-								Where idfamilia = $idfamilia and idciclo = $idciclo and idemp = $idemp order by $otros asc";
-					break;
+			case 10001:
+				$query = "SELECT idobservacion, observacion, idioma, status_observacion
+								FROM cat_observaciones
+							WHERE idobservacion = $cad ";
+				break;
 
-				case 10010:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);		
-			        $idciclo = $this->getCicloFromIdEmp($idemp);		
-			        //	and ( ( isfe = 0) or (isfe IS NULL) )
-					$query = "SELECT *
-									FROM _viEdosCta
-								where idfamilia = $idfamilia and idalumno = $idalumno and idciclo = $idciclo and idemp = $idemp $otros ";
-					break;
+			case 10002:
+				$query = "SELECT idnivobs, observacion, clave_nivel, nivel, idioma
+								FROM _viNivel_Observaciones
+							WHERE idnivobs = $cad ";
+				break;
 
-				case 10011:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$query = "SELECT *
-									FROM _viPagos
-								Where idemp = $idemp and idemisorfiscal = $idemisorfiscal and clave_nivel = $clave_nivel order by $otros asc";
-					break;
+			case 10003:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT idconcepto,concepto,status_concepto
+								FROM cat_conceptos
+							WHERE idemp = $idemp ORDER BY idconcepto DESC";
+				break;
+			case 10004:
+				$query = "SELECT idconcepto,concepto,status_concepto
+								FROM cat_conceptos
+							WHERE idconcepto = $cad ";
+				break;
 
-				case 10012:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);				
-					$query = "SELECT *
-									FROM _viEdosCta
-								where idfamilia = $idfamilia and idemp = $idemp ";
-					break;
+			case 10005:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT *
+								FROM _viEmiFis
+							WHERE idemp = $idemp ORDER BY $otros DESC";
+				break;
+			case 10006:
+				$query = "SELECT *
+								FROM _viEmiFis
+							WHERE idemisorfiscal = $cad ";
+				break;
 
-				case 10013:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);				
-					$query = " SELECT *
-									FROM _viFacEnc
-								where idfactura = $idfactura and idemp = $idemp order by idfactura asc ";
-					break;
+			case 10007:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT *
+								FROM _viPagos
+							WHERE idemp = $idemp ORDER BY $otros DESC";
+				break;
+			case 10008:
+				$query = "SELECT *
+								FROM _viPagos
+							WHERE idpago = $cad ";
+				break;
 
-				case 10014:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);				
-					$query = " SELECT *
-									FROM _viFacDet
-								where idfactura = $idfactura and idemp = $idemp order by idfacdet asc ";
-					break;
-
-				case 10015:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);	
-			        
-			        $f0 = explode('-',$fi);
-			        $f1 = explode('-',$ff);
-			        $fi = $f0[2].'-'.$f0[1].'-'.$f0[0].' 00:00:00';
-			        $ff = $f1[2].'-'.$f1[1].'-'.$f1[0].' 23:59:59';
-
-					$query = "SELECT idconcepto, concepto, 
-									SUM( IF ( clave_nivel = 1, total, 0 ) ) as 'cero', 
-									SUM( IF ( clave_nivel = 2, total, 0 ) ) as 'uno', 
-									SUM( IF ( clave_nivel = 3, total, 0 ) ) as 'dos', 
-									SUM( IF ( clave_nivel = 4, total, 0 ) ) as 'tres', 
-									SUM( IF ( clave_nivel = 5, total, 0 ) ) as 'cuatro' 
+			case 10009:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$idciclo = $this->getCicloFromIdEmp($idemp);
+				$query = "SELECT DISTINCT idalumno, alumno, genero, idciclo
 								FROM _viEdosCta
-								WHERE idemp = $idemp And 
-										status_movto = 1 And 
-										idemisorfiscal = $emisor And 
-										(fecha_de_pago >= '$fi' and fecha_de_pago <= '$ff')
-								GROUP BY idconcepto ";
-					break;
+							WHERE idfamilia = $idfamilia AND idciclo = $idciclo AND idemp = $idemp ORDER BY $otros ASC";
+				break;
 
-				case 10016:
-
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);	
-			        
-			        $f0 = explode('-',$fi);
-			        $f1 = explode('-',$ff);
-			        $fi = $f0[2].'-'.$f0[1].'-'.$f0[0].' 00:00:00';
-			        $ff = $f1[2].'-'.$f1[1].'-'.$f1[0].' 23:59:00';
-
-					if ( $tiporeporte==3 || $tiporeporte==4 ){
-				        $conce =  intval($vconcepto) > 0 ? ' idconcepto = '.$vconcepto.' and ':'';		        
-					}else{
-			        	$conce =  intval($conceptos) > 0 ? ' idconcepto = '.$conceptos.' and ':'';
-					}
-
-					if ( $tiporeporte==3 || $tiporeporte==4 ){
-				        $pagado =  " status_movto = 0 ";
-					}else{
-				        $pagado =  " status_movto = 1 And ( fecha_de_pago >= '".$fi."' and fecha_de_pago <= '".$ff."' )";
-					}
-
-					$query = "SELECT idedocta, idconcepto, concepto, familia, alumno, mes, directorio, 
-									is_pagos_diversos, fecha_de_pago, cfolio, idfamilia, pdf, xml,
-									subtotal, descto_becas, descto, importe, recargo, total,
-									idalumno,
-									IF ( clave_nivel = 1, total, 0 ) as 'cero', 
-									IF ( clave_nivel = 2, total, 0 ) as 'uno', 
-									IF ( clave_nivel = 3, total, 0 ) as 'dos', 
-									IF ( clave_nivel = 4, total, 0 ) as 'tres', 
-									IF ( clave_nivel = 5, total, 0 ) as 'cuatro' 
+			case 10010:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);		
+		        $idciclo = $this->getCicloFromIdEmp($idemp);		
+				$query = "SELECT *
 								FROM _viEdosCta
-								WHERE idemp = $idemp And 
-										idemisorfiscal = $emisor And 
-										$conce
-										$pagado 
-								ORDER BY fecha_de_pago asc";
-					break;
+							WHERE idfamilia = $idfamilia AND idalumno = $idalumno AND idciclo = $idciclo AND idemp = $idemp $otros ";
+				break;
 
-				case 10017:
-				
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);				
-					$query = " SELECT *
-									FROM _viFacEnc
-								where idcliente = $idfamilia and (isfe = 1 or padre > 0) and idemp = $idemp order by idfactura desc ";
-					break;
+			case 10011:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT *
+								FROM _viPagos
+							WHERE idemp = $idemp AND idemisorfiscal = $idemisorfiscal AND clave_nivel = $clave_nivel ORDER BY $otros ASC";
+				break;
 
-				case 10018:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
+			case 10012:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);				
+				$query = "SELECT *
+								FROM _viEdosCta
+							WHERE idfamilia = $idfamilia AND idemp = $idemp ";
+				break;
 
-					$query = "SELECT distinct idalumno, alumno, genero, 
-												beca_sep, beca_arji, beca_sp, beca_bach
-									FROM _viFamAlu
-								Where idfamilia = $idfamilia and idemp = $idemp order by $otros desc";
-					break;
+			case 10013:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);				
+				$query = " SELECT *
+								FROM _viFacEnc
+							WHERE idfactura = $idfactura AND idemp = $idemp ORDER BY idfactura ASC ";
+				break;
 
-				case 10019:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
+			case 10014:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);				
+				$query = " SELECT *
+								FROM _viFacDet
+							WHERE idfactura = $idfactura AND idemp = $idemp ORDER BY idfacdet ASC ";
+				break;
 
-					$query = "SELECT *
-									FROM _viFamAlu
-								Where idalumno = $idalumno and idemp = $idemp limit 1";
-					break;
+			case 10015:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);	
+		        
+		        $f0 = explode('-',$fi);
+		        $f1 = explode('-',$ff);
+		        $fi = $f0[2].'-'.$f0[1].'-'.$f0[0].' 00:00:00';
+		        $ff = $f1[2].'-'.$f1[1].'-'.$f1[0].' 23:59:59';
 
-				case 10020:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$query = "SELECT distinct idconcepto, concepto
-									FROM _viPagos
-								Where idemp = $idemp and idemisorfiscal = $idemisorfiscal order by $otros asc";
-					break;
+				$query = "SELECT idconcepto, concepto, 
+								SUM( IF ( clave_nivel = 1, total, 0 ) ) AS 'cero', 
+								SUM( IF ( clave_nivel = 2, total, 0 ) ) AS 'uno', 
+								SUM( IF ( clave_nivel = 3, total, 0 ) ) AS 'dos', 
+								SUM( IF ( clave_nivel = 4, total, 0 ) ) AS 'tres', 
+								SUM( IF ( clave_nivel = 5, total, 0 ) ) AS 'cuatro' 
+							FROM _viEdosCta
+							WHERE idemp = $idemp And 
+									status_movto = 1 And 
+									idemisorfiscal = $emisor And 
+									(fecha_de_pago >= '$fi' AND fecha_de_pago <= '$ff')
+							GROUP BY idconcepto ";
+				break;
 
-				case 10021:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);				
-					$idciclo = $this->getCicloFromIdEmp($idemp);
+			case 10016:
 
-					$query = "SELECT distinct idalumno, nombre_completo_alumno
-									FROM _viEdosCta
-								where idfamilia = $idfamilia and idciclo = $idciclo and ( ( isfe = 0) or (isfe IS NULL) ) and idemp = $idemp $otros";
-					break;
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);	
+		        
+		        $f0 = explode('-',$fi);
+		        $f1 = explode('-',$ff);
+		        $fi = $f0[2].'-'.$f0[1].'-'.$f0[0].' 00:00:00';
+		        $ff = $f1[2].'-'.$f1[1].'-'.$f1[0].' 23:59:00';
 
-
-				case 10022:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);				
-					$idciclo = $this->getCicloFromIdEmp($idemp);
-					$query = "SELECT *
-									FROM _viEdosCta
-								where idfamilia = $idfamilia and idalumno = $idalumno and idconcepto = $idconcepto and idciclo = $idciclo and idemp = $idemp ";
-					break;
-
-				case 10023:
-						parse_str($cad);
-						$idemp = $this->getIdEmpFromAlias($u);
-						$query = "SELECT * 
-								FROM _viGrupo_Alumnos where idciclo = $idciclo and idemp = $idemp and idfamilia = $idfamilia and idalumno = $idalumno and status_grualu = 1 limit 1";
-					break;	
-
-				case 10024:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$query = "SELECT distinct idconcepto, concepto
-									FROM _viPagos
-								Where idemp = $idemp and idemisorfiscal = $idemisorfiscal and is_pagos_diversos = 1 order by $otros asc";
-					break;
-
-				case 10025:
-						parse_str($cad);
-						$idemp = $this->getIdEmpFromAlias($u);
-						$idciclo = $this->getCicloFromIdEmp($idemp);
-						$query = "SELECT * 
-								FROM _viGrupo_Alumnos where idciclo = $idciclo and idemp = $idemp and idfamilia = $idfamilia and idalumno = $idalumno and status_grualu = 1 limit 1";
-					break;	
-
-				case 20000:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-			        $idprofesor = $this->getIdUserFromAlias($u);			
-			        if ( intval($sts) == 0 ){
-			        	$cfg = " AND ( NOW() >= fecha_inicio AND NOW() <= fecha_fin ) ";
-			        }else{
-			        	$cfg = " AND NOT ( fecha_inicio < NOW() AND fecha_fin > NOW()  ) ";
-			        }
-					$query = " SELECT idtarea, titulo_tarea, tarea, fecha_inicio, fecha_fin, lecturas, respuestas, archivos, destinatarios, status_tarea 
-									FROM _viTareas
-								where creado_por = $idprofesor and idemp = $idemp $cfg order by idtarea desc ";
-					break;
-
-				case 20001:
-					parse_str($cad);
-					$query = " SELECT * 
-									FROM _viTareas
-								where idtarea = $idtarea ";
-					break;
-
-				case 20002:
-					parse_str($cad);
-					$query = " SELECT idtareaarchivo, directorio, archivo, descripcion_archivo, creado_el
-									FROM tareas_archivos
-								where idtarea = $idtarea and status_tarea_archivo = 1 order by idtareaarchivo desc";
-					break;
-
-				case 20003:
-					parse_str($cad);
-					$idemp = $this->getIdEmpFromAlias($u);
-
-					$query = " SELECT idtareadestinatario, alumno, materia, abreviatura, grupo, isrespuesta, isleida, iddestinatario, idtarea, iteracciones, profesor, profesor_tarea, archivos
-									FROM _viTareasDestinatarios
-								where idemp = $idemp and idtarea = $idtarea and status_tarea = 1 order by alumno asc ";
-					break;
-
-				case 20004:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-			        $iduseralu = $this->getIdUserFromAlias($u);				
-			        $sts = intval($sts);
-					if (intval($sts) <= 0){
-						$sts = $sts * -1;
-						$query = " SELECT idtareadestinatario, idtarea, materia, grupo, profesor, titulo_tarea, fecha_inicio, fecha_fin, isleida, isrespuesta, profesor_tarea, archivos, respuestas, iteracciones
-										FROM _viTareasDestinatarios
-									where idemp = $idemp and iduseralu = $iduseralu and isleida = $sts order by alumno asc ";
-					}else{
-						$query = " SELECT idtareadestinatario, idtarea, materia, grupo, profesor, titulo_tarea, fecha_inicio, fecha_fin, isleida, isrespuesta, profesor_tarea, archivos, respuestas, iteracciones
-										FROM _viTareasDestinatarios
-									where idemp = $idemp and iduseralu = $iduseralu and idboleta = $sts order by alumno asc ";
-
-					}			
-					break;
-
-				case 20005:
-					parse_str($cad);
-					$query = " SELECT * 
-									FROM _viTareasDest_Resp
-								where idtareadestinatario = $idtareadestinatario ";
-					break;
-
-				case 20006:
-					//parse_str($cad);
-					$query = " SELECT * 
-									FROM _viTareasDest_Resp
-								where idtareadestinatariorespuesta = $cad ";
-					break;
-
-				case 20007:
-					parse_str($cad);
-					$query = " SELECT idtareaarchivorespuesta, directorio, archivo, descripcion_archivo, idtareadestinatario, creado_por, creado_el
-									FROM tareas_dest_resp_archivos
-								where idtareadestinatario = $idtareadestinatario and status_tarea_archivo_respuesta = 1 order by idtareaarchivorespuesta desc ";
-					break;
-
-				case 20008:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-			        
-					if (intval($sts) <= 0){
-						$sts = $sts * -1;
-						$query = " SELECT idtareadestinatario, idtarea, materia, grupo, profesor, titulo_tarea, fecha_inicio, fecha_fin, isleida, isrespuesta, profesor_tarea, respuestas, iteracciones, archivos
-										FROM _viTareasDestinatarios
-									where idemp = $idemp and iduseralu = $iduseralu and isleida = $sts order by alumno asc ";
-					}else{
-						$query = " SELECT idtareadestinatario, idtarea, materia, grupo, profesor, titulo_tarea, fecha_inicio, fecha_fin, isleida, isrespuesta, profesor_tarea, respuestas, iteracciones, archivos
-										FROM _viTareasDestinatarios
-									where idemp = $idemp and iduseralu = $iduseralu and idboleta = $sts order by alumno asc ";
-
-					}			
-					break;
-
-				case 20009:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-			        $sts = intval($sts);
-			        $loSts = "";
-					switch ($sts) {
-						case 0:
-							$loSts = " and isleida = 0 "; 
-							break;						
-						case 1:
-							$loSts = " and isleida = 1 "; 
-							break;
-						default:
-							$loSts = "  "; 
-							break;
-					}
-			        
-					$query = " SELECT idtareadestinatario, idtarea, materia, grupo, profesor, titulo_tarea, fecha_inicio, fecha_fin, isleida, isrespuesta, profesor_tarea, respuestas, iteracciones, archivos
-									FROM _viTareasDestinatarios
-								where idemp = $idemp and iduseralu = $iduseralu ".$loSts." order by idtareadestinatario desc ";
-					break;
-
-				case 20010:
-					parse_str($cad);
-						$query = " SELECT * 
-										FROM _viTareasDestinatarios
-									where idtareadestinatario = $idtareadestinatario ";
-					break;
-
-				case 20011:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-			        if ( intval($idprofesor) > 0 ){
-						$query = " SELECT idtarea, titulo_tarea, tarea, fecha_inicio, fecha_fin, lecturas, respuestas, archivos, destinatarios, status_tarea 
-										FROM _viTareas
-									where creado_por = $idprofesor and idemp = $idemp order by idtarea desc ";
-					} else {
-						$query = " SELECT distinct idtarea, profesor, titulo_tarea, materia, grupo 
-										FROM _viTareasDestinatarios
-									WHERE creado_por IN ($profesores) AND 
-										idemp = $idemp 
-									GROUP BY idtarea 	
-									ORDER BY idtarea DESC";
-
-					}
-					break;
-
-				case 30001:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-			        $iduserpropietario = $this->getIdUserFromAlias($u);				
-
-					$query = " SELECT *
-									FROM com_grupos
-								where iduserpropietario = $iduserpropietario and idemp = $idemp and status_com_grupo = 1 order by idcomgrupo asc ";
-					break;
-
-				case 30002:
-					$query = " SELECT *
-									FROM com_grupos
-								where idcomgrupo = $cad and status_com_grupo = 1 order by idcomgrupo asc ";
-					break;
-
-				case 30003:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-					$query = " SELECT *
-									FROM _viComGpoUser
-								where idcomgrupo = $idcomgrupo and idemp = $idemp and status_com_usuario_asoc_grupo = 1 order by idcomgrupo asc ";
-					break;
-
-				case 31000:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-			        $iduserpropietario = $this->getIdUserFromAlias($u);				
-					$query = " SELECT idcommensaje, titulo_mensaje, mensaje, cfecha, lecturas, respuestas, archivos, destinatarios, status_mensaje 
-									FROM _viComMensajes
-								where iduserpropietario = $iduserpropietario and idemp = $idemp order by idcommensaje desc ";
-					break;
-
-				case 31001:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-			        $iduserpropietario = $this->getIdUserFromAlias($u);				
-					$query = " SELECT idcommensaje, titulo_mensaje, mensaje, cfecha, lecturas, respuestas, archivos, destinatarios, status_mensaje
-									FROM _viComMensajes
-								where iduserpropietario = $iduserpropietario and idcommensaje = $idcommensaje order by idcommensaje desc ";
-					break;
-
-				case 31002:
-					parse_str($cad);
-					$query = " SELECT idcommensajearchivo, directorio, archivo, descripcion_archivo, creado_el
-									FROM com_mensaje_archivos
-								where idcommensaje = $idcommensaje and status_mensaje_archivo = 1 order by idcommensajearchivo desc ";
-					break;
-
-				case 31003:
-					parse_str($cad);
-					$query = " SELECT idcommensajedestinatario, nombre_destinatario, nombre_remitente, grupo, isrespuesta, isleida, iddestinatario, idcommensaje, iteracciones, archivos
-									FROM _viComMensajeDestinatarios
-								where idcommensaje = $idcommensaje and status_mensaje_destinatario = 1 order by nombre_destinatario asc ";
-					break;
-
-				case 31004:
-					parse_str($cad);
-					$query = " SELECT * 
-									FROM _viComMensajes
-								where idcommensaje = $idcommensaje ";
-					break;
-
-				case 31005:
-					parse_str($cad);
-					$query = " SELECT idcommensajearchivo, directorio, archivo, descripcion_archivo, creado_el
-									FROM com_mensaje_archivos
-								where idcommensaje = $idcommensaje and status_mensaje_archivo = 1 order by idcommensajearchivo desc";
-					break;
-
-				case 31006:
-					parse_str($cad);
-					$query = " SELECT * 
-									FROM _viComMenDestResp
-								where idcommensajedestinatario = $idcommensajedestinatario ";
-					break;
-
-				case 31007:
-					parse_str($cad);
-					$query = " SELECT idcommensajearchivorespuesta, directorio, archivo, descripcion_archivo, idcommensajedestinatario, creado_por, creado_el
-									FROM com_mensaje_dest_resp_archivos
-								where idcommensajedestinatario = $idcommensajedestinatario and status_mensaje_archivo_respuesta = 1 order by idcommensajearchivorespuesta desc ";
-					break;
-
-				case 31008:
-					//parse_str($cad);
-					$query = " SELECT * 
-									FROM _viComMenDestResp
-								where idcommensajedestinatariorespuesta = $cad ";
-					break;
-
-				case 31009:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-			        $iddestinatario = $this->getIdUserFromAlias($u);				
-			        $sts = intval($sts);
-			        $loSts = "";
-					//$sts = $sts * -1;
-					switch ($sts) {
-						case 0:
-							$loSts = " and isleida = 0 AND (titulo_mensaje IS NOT NULL) "; 
-							break;						
-						case 1:
-							$loSts = " and isleida = 1  AND (titulo_mensaje IS NOT NULL) "; 
-							break;
-						default:
-							$loSts = "   AND (titulo_mensaje IS NOT NULL) "; 
-							break;
-					}
-					$query = " SELECT idcommensajedestinatario, idcommensaje, grupo, titulo_mensaje, fecha, isleida, isrespuesta, nombre_remitente, lecturas, respuestas, iteracciones, archivos
-									FROM _viComMensajeDestinatarios
-								where idemp = $idemp and iddestinatario = $iddestinatario ".$loSts." order by idcommensajedestinatario desc ";
-
-					break;
-
-				case 31010:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);		
-			        $idciclo = $this->getCicloFromIdEmp($idemp);		
-			        //	and ( ( isfe = 0) or (isfe IS NULL) )
-					$query = "SELECT *
-									FROM _viEdosCta
-								where idfamilia = $idfamilia and idalumno = $idalumno and idciclo = $idciclo and idemp = $idemp and is_pagos_diversos = 1 $otros";
-					break;
-
-				case 31011:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($u);
-			        $idciclo = $this->getCicloFromIdEmp($idemp);		
-			        $iddestinatario = $this->getIdUserFromAlias($u);				
-					$query = " SELECT *
-									FROM _viComMensajes
-								where idemp = $idemp and idciclo = $idciclo and idcommensaje = $idcommensaje order by idcommensaje desc ";
-
-					break;
-
-				case 31012:
-					parse_str($cad);
-			        $idemp = $this->getIdEmpFromAlias($user);		
-			        $idciclo = $this->getCicloFromIdEmp($idemp);		
-					$query = "SELECT *
-									FROM _viEdosCta
-								where idedocta = $idedocta and idciclo = $idciclo and idemp = $idemp and is_pagos_diversos = 1 ";
-					break;
-
-								
+				if ( $tiporeporte==3 || $tiporeporte==4 ){
+			        $conce =  intval($vconcepto) > 0 ? ' idconcepto = '.$vconcepto.' AND ':'';		        
+				}else{
+		        	$conce =  intval($conceptos) > 0 ? ' idconcepto = '.$conceptos.' AND ':'';
 				}
 
-			$result = mysql_query($query);
+				if ( $tiporeporte==3 || $tiporeporte==4 ){
+			        $pagado =  " status_movto = 0 ";
+				}else{
+			        $pagado =  " status_movto = 1 And ( fecha_de_pago >= '".$fi."' AND fecha_de_pago <= '".$ff."' )";
+				}
 
-			while ($obj = mysql_fetch_object($result, $arr[$index])) {
-						$ret[] = $obj;
+				$query = "SELECT idedocta, idconcepto, concepto, familia, alumno, mes, directorio, 
+								is_pagos_diversos, fecha_de_pago, cfolio, idfamilia, pdf, xml,
+								subtotal, descto_becas, descto, importe, recargo, total,
+								idalumno,
+								IF ( clave_nivel = 1, total, 0 ) AS 'cero', 
+								IF ( clave_nivel = 2, total, 0 ) AS 'uno', 
+								IF ( clave_nivel = 3, total, 0 ) AS 'dos', 
+								IF ( clave_nivel = 4, total, 0 ) AS 'tres', 
+								IF ( clave_nivel = 5, total, 0 ) AS 'cuatro' 
+							FROM _viEdosCta
+							WHERE idemp = $idemp And 
+									idemisorfiscal = $emisor And 
+									$conce
+									$pagado 
+							ORDER BY fecha_de_pago ASC";
+				break;
+
+			case 10017:
+			
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);				
+				$query = " SELECT *
+								FROM _viFacEnc
+							WHERE idcliente = $idfamilia AND (isfe = 1 OR padre > 0) AND idemp = $idemp ORDER BY idfactura DESC ";
+				break;
+
+			case 10018:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+
+				$query = "SELECT DISTINCT idalumno, alumno, genero, 
+											beca_sep, beca_arji, beca_sp, beca_bach
+								FROM _viFamAlu
+							WHERE idfamilia = $idfamilia AND idemp = $idemp ORDER BY $otros DESC";
+				break;
+
+			case 10019:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+
+				$query = "SELECT *
+								FROM _viFamAlu
+							WHERE idalumno = $idalumno AND idemp = $idemp LIMIT 1";
+				break;
+
+			case 10020:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT DISTINCT idconcepto, concepto
+								FROM _viPagos
+							WHERE idemp = $idemp AND idemisorfiscal = $idemisorfiscal ORDER BY $otros ASC";
+				break;
+
+			case 10021:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);				
+				$idciclo = $this->getCicloFromIdEmp($idemp);
+
+				$query = "SELECT DISTINCT idalumno, nombre_completo_alumno
+								FROM _viEdosCta
+							WHERE idfamilia = $idfamilia AND idciclo = $idciclo AND ( ( isfe = 0) OR (isfe IS NULL) ) AND idemp = $idemp $otros";
+				break;
+
+
+			case 10022:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);				
+				$idciclo = $this->getCicloFromIdEmp($idemp);
+				$query = "SELECT *
+								FROM _viEdosCta
+							WHERE idfamilia = $idfamilia AND idalumno = $idalumno AND idconcepto = $idconcepto AND idciclo = $idciclo AND idemp = $idemp ";
+				break;
+
+			case 10023:
+					parse_str($cad);
+					$idemp = $this->getIdEmpFromAlias($u);
+					$query = "SELECT * 
+							FROM _viGrupo_Alumnos WHERE idciclo = $idciclo AND idemp = $idemp AND idfamilia = $idfamilia AND idalumno = $idalumno AND status_grualu = 1 LIMIT 1";
+				break;	
+
+			case 10024:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT DISTINCT idconcepto, concepto
+								FROM _viPagos
+							WHERE idemp = $idemp AND idemisorfiscal = $idemisorfiscal AND is_pagos_diversos = 1 ORDER BY $otros ASC";
+				break;
+
+			case 10025:
+					parse_str($cad);
+					$idemp = $this->getIdEmpFromAlias($u);
+					$idciclo = $this->getCicloFromIdEmp($idemp);
+					$query = "SELECT * 
+							FROM _viGrupo_Alumnos WHERE idciclo = $idciclo AND idemp = $idemp AND idfamilia = $idfamilia AND idalumno = $idalumno AND status_grualu = 1 LIMIT 1";
+				break;	
+
+			case 20000:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+		        $idprofesor = $this->getIdUserFromAlias($u);			
+		        if ( intval($sts) == 0 ){
+		        	$cfg = " AND ( NOW() >= fecha_inicio AND NOW() <= fecha_fin ) ";
+		        }else{
+		        	$cfg = " AND NOT ( fecha_inicio < NOW() AND fecha_fin > NOW()  ) ";
+		        }
+				$query = " SELECT idtarea, titulo_tarea, tarea, fecha_inicio, fecha_fin, lecturas, respuestas, archivos, destinatarios, status_tarea 
+								FROM _viTareas
+							WHERE creado_por = $idprofesor AND idemp = $idemp $cfg ORDER BY idtarea DESC ";
+				break;
+
+			case 20001:
+				parse_str($cad);
+				$query = " SELECT * 
+								FROM _viTareas
+							WHERE idtarea = $idtarea ";
+				break;
+
+			case 20002:
+				parse_str($cad);
+				$query = " SELECT idtareaarchivo, directorio, archivo, descripcion_archivo, creado_el
+								FROM tareas_archivos
+							WHERE idtarea = $idtarea AND status_tarea_archivo = 1 ORDER BY idtareaarchivo DESC";
+				break;
+
+			case 20003:
+				parse_str($cad);
+				$idemp = $this->getIdEmpFromAlias($u);
+
+				$query = " SELECT idtareadestinatario, alumno, materia, abreviatura, grupo, isrespuesta, isleida, iddestinatario, idtarea, iteracciones, profesor, profesor_tarea, archivos
+								FROM _viTareasDestinatarios
+							WHERE idemp = $idemp AND idtarea = $idtarea AND status_tarea = 1 ORDER BY alumno ASC ";
+				break;
+
+			case 20004:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+		        $iduseralu = $this->getIdUserFromAlias($u);				
+		        $sts = intval($sts);
+				if (intval($sts) <= 0){
+					$sts = $sts * -1;
+					$query = " SELECT idtareadestinatario, idtarea, materia, grupo, profesor, titulo_tarea, fecha_inicio, fecha_fin, isleida, isrespuesta, profesor_tarea, archivos, respuestas, iteracciones
+									FROM _viTareasDestinatarios
+								WHERE idemp = $idemp AND iduseralu = $iduseralu AND isleida = $sts ORDER BY alumno ASC ";
+				}else{
+					$query = " SELECT idtareadestinatario, idtarea, materia, grupo, profesor, titulo_tarea, fecha_inicio, fecha_fin, isleida, isrespuesta, profesor_tarea, archivos, respuestas, iteracciones
+									FROM _viTareasDestinatarios
+								WHERE idemp = $idemp AND iduseralu = $iduseralu AND idboleta = $sts ORDER BY alumno ASC ";
+
+				}			
+				break;
+
+			case 20005:
+				parse_str($cad);
+				$query = " SELECT * 
+								FROM _viTareasDest_Resp
+							WHERE idtareadestinatario = $idtareadestinatario ";
+				break;
+
+			case 20006:
+				//parse_str($cad);
+				$query = " SELECT * 
+								FROM _viTareasDest_Resp
+							WHERE idtareadestinatariorespuesta = $cad ";
+				break;
+
+			case 20007:
+				parse_str($cad);
+				$query = " SELECT idtareaarchivorespuesta, directorio, archivo, descripcion_archivo, idtareadestinatario, creado_por, creado_el
+								FROM tareas_dest_resp_archivos
+							WHERE idtareadestinatario = $idtareadestinatario AND status_tarea_archivo_respuesta = 1 ORDER BY idtareaarchivorespuesta DESC ";
+				break;
+
+			case 20008:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+		        
+				if (intval($sts) <= 0){
+					$sts = $sts * -1;
+					$query = " SELECT idtareadestinatario, idtarea, materia, grupo, profesor, titulo_tarea, fecha_inicio, fecha_fin, isleida, isrespuesta, profesor_tarea, respuestas, iteracciones, archivos
+									FROM _viTareasDestinatarios
+								WHERE idemp = $idemp AND iduseralu = $iduseralu AND isleida = $sts ORDER BY alumno ASC ";
+				}else{
+					$query = " SELECT idtareadestinatario, idtarea, materia, grupo, profesor, titulo_tarea, fecha_inicio, fecha_fin, isleida, isrespuesta, profesor_tarea, respuestas, iteracciones, archivos
+									FROM _viTareasDestinatarios
+								WHERE idemp = $idemp AND iduseralu = $iduseralu AND idboleta = $sts ORDER BY alumno ASC ";
+
+				}			
+				break;
+
+			case 20009:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+		        $sts = intval($sts);
+		        $loSts = "";
+				switch ($sts) {
+					case 0:
+						$loSts = " AND isleida = 0 "; 
+						break;						
+					case 1:
+						$loSts = " AND isleida = 1 "; 
+						break;
+					default:
+						$loSts = "  "; 
+						break;
+				}
+		        
+				$query = " SELECT idtareadestinatario, idtarea, materia, grupo, profesor, titulo_tarea, fecha_inicio, fecha_fin, isleida, isrespuesta, profesor_tarea, respuestas, iteracciones, archivos
+								FROM _viTareasDestinatarios
+							WHERE idemp = $idemp AND iduseralu = $iduseralu ".$loSts." ORDER BY idtareadestinatario DESC ";
+				break;
+
+			case 20010:
+				parse_str($cad);
+					$query = " SELECT * 
+									FROM _viTareasDestinatarios
+								WHERE idtareadestinatario = $idtareadestinatario ";
+				break;
+
+			case 20011:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+		        if ( intval($idprofesor) > 0 ){
+					$query = " SELECT idtarea, titulo_tarea, tarea, fecha_inicio, fecha_fin, lecturas, respuestas, archivos, destinatarios, status_tarea 
+									FROM _viTareas
+								WHERE creado_por = $idprofesor AND idemp = $idemp ORDER BY idtarea DESC ";
+				} else {
+					$query = " SELECT DISTINCT idtarea, profesor, titulo_tarea, materia, grupo 
+									FROM _viTareasDestinatarios
+								WHERE creado_por IN ($profesores) AND 
+									idemp = $idemp 
+								GROUP BY idtarea 	
+								ORDER BY idtarea DESC";
+
+				}
+				break;
+
+			case 30001:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+		        $iduserpropietario = $this->getIdUserFromAlias($u);				
+
+				$query = " SELECT *
+								FROM com_grupos
+							WHERE iduserpropietario = $iduserpropietario AND idemp = $idemp AND status_com_grupo = 1 ORDER BY idcomgrupo ASC ";
+				break;
+
+			case 30002:
+				$query = " SELECT *
+								FROM com_grupos
+							WHERE idcomgrupo = $cad AND status_com_grupo = 1 ORDER BY idcomgrupo ASC ";
+				break;
+
+			case 30003:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$query = " SELECT *
+								FROM _viComGpoUser
+							WHERE idcomgrupo = $idcomgrupo AND idemp = $idemp AND status_com_usuario_asoc_grupo = 1 ORDER BY idcomgrupo ASC ";
+				break;
+
+			case 31000:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+		        $iduserpropietario = $this->getIdUserFromAlias($u);				
+				$query = " SELECT idcommensaje, titulo_mensaje, mensaje, cfecha, lecturas, respuestas, archivos, destinatarios, status_mensaje 
+								FROM _viComMensajes
+							WHERE iduserpropietario = $iduserpropietario AND idemp = $idemp ORDER BY idcommensaje DESC ";
+				break;
+
+			case 31001:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+		        $iduserpropietario = $this->getIdUserFromAlias($u);				
+				$query = " SELECT idcommensaje, titulo_mensaje, mensaje, cfecha, lecturas, respuestas, archivos, destinatarios, status_mensaje
+								FROM _viComMensajes
+							WHERE iduserpropietario = $iduserpropietario AND idcommensaje = $idcommensaje ORDER BY idcommensaje DESC ";
+				break;
+
+			case 31002:
+				parse_str($cad);
+				$query = " SELECT idcommensajearchivo, directorio, archivo, descripcion_archivo, creado_el
+								FROM com_mensaje_archivos
+							WHERE idcommensaje = $idcommensaje AND status_mensaje_archivo = 1 ORDER BY idcommensajearchivo DESC ";
+				break;
+
+			case 31003:
+				parse_str($cad);
+				$query = " SELECT idcommensajedestinatario, nombre_destinatario, nombre_remitente, grupo, isrespuesta, isleida, iddestinatario, idcommensaje, iteracciones, archivos
+								FROM _viComMensajeDestinatarios
+							WHERE idcommensaje = $idcommensaje AND status_mensaje_destinatario = 1 ORDER BY nombre_destinatario ASC ";
+				break;
+
+			case 31004:
+				parse_str($cad);
+				$query = " SELECT * 
+								FROM _viComMensajes
+							WHERE idcommensaje = $idcommensaje ";
+				break;
+
+			case 31005:
+				parse_str($cad);
+				$query = " SELECT idcommensajearchivo, directorio, archivo, descripcion_archivo, creado_el
+								FROM com_mensaje_archivos
+							WHERE idcommensaje = $idcommensaje AND status_mensaje_archivo = 1 ORDER BY idcommensajearchivo DESC";
+				break;
+
+			case 31006:
+				parse_str($cad);
+				$query = " SELECT * 
+								FROM _viComMenDestResp
+							WHERE idcommensajedestinatario = $idcommensajedestinatario ";
+				break;
+
+			case 31007:
+				parse_str($cad);
+				$query = " SELECT idcommensajearchivorespuesta, directorio, archivo, descripcion_archivo, idcommensajedestinatario, creado_por, creado_el
+								FROM com_mensaje_dest_resp_archivos
+							WHERE idcommensajedestinatario = $idcommensajedestinatario AND status_mensaje_archivo_respuesta = 1 ORDER BY idcommensajearchivorespuesta DESC ";
+				break;
+
+			case 31008:
+				//parse_str($cad);
+				$query = " SELECT * 
+								FROM _viComMenDestResp
+							WHERE idcommensajedestinatariorespuesta = $cad ";
+				break;
+
+			case 31009:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+		        $iddestinatario = $this->getIdUserFromAlias($u);				
+		        $sts = intval($sts);
+		        $loSts = "";
+				//$sts = $sts * -1;
+				switch ($sts) {
+					case 0:
+						$loSts = " AND isleida = 0 AND (titulo_mensaje IS NOT NULL) "; 
+						break;						
+					case 1:
+						$loSts = " AND isleida = 1  AND (titulo_mensaje IS NOT NULL) "; 
+						break;
+					default:
+						$loSts = "   AND (titulo_mensaje IS NOT NULL) "; 
+						break;
+				}
+				$query = " SELECT idcommensajedestinatario, idcommensaje, grupo, titulo_mensaje, fecha, isleida, isrespuesta, nombre_remitente, lecturas, respuestas, iteracciones, archivos
+								FROM _viComMensajeDestinatarios
+							WHERE idemp = $idemp AND iddestinatario = $iddestinatario ".$loSts." ORDER BY idcommensajedestinatario DESC ";
+
+				break;
+
+			case 31010:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);		
+		        $idciclo = $this->getCicloFromIdEmp($idemp);		
+				$query = "SELECT *
+								FROM _viEdosCta
+							WHERE idfamilia = $idfamilia AND idalumno = $idalumno AND idciclo = $idciclo AND idemp = $idemp AND is_pagos_diversos = 1 $otros";
+				break;
+
+			case 31011:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+		        $idciclo = $this->getCicloFromIdEmp($idemp);		
+		        $iddestinatario = $this->getIdUserFromAlias($u);				
+				$query = " SELECT *
+								FROM _viComMensajes
+							WHERE idemp = $idemp AND idciclo = $idciclo AND idcommensaje = $idcommensaje ORDER BY idcommensaje DESC ";
+				break;
+
+			case 31012:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($user);		
+		        $idciclo = $this->getCicloFromIdEmp($idemp);		
+				$query = "SELECT *
+								FROM _viEdosCta
+							WHERE idedocta = $idedocta AND idciclo = $idciclo AND idemp = $idemp AND is_pagos_diversos = 1 ";
+				break;
+
+							
 			}
-			mysql_free_result($result);
-		    mysql_close($mysql);
-			  
-			return $ret;
-	
+		$result = $this->getArray($query);
+		return $result;
 	}
 
 
 	public function genUserFromCat($iddato=0,$idcat=0) {
-		  	$Conn = voConn::getInstance();
-		  	$mysql = mysql_connect($Conn->server, $Conn->user, $Conn->pass);
-		  	mysql_select_db($Conn->db);
-			
-		  	mysql_query("SET NAMES 'utf8'");	
 		  	switch ($idcat) {
 		  		case 5:
 					$query = "SET @X = Generar_Usuario_from_Alumno(".$iddato.")";
@@ -7332,21 +6808,11 @@ class oCentura {
 					$query = "SET @X = Generar_Usuario_from_Ex_Alumno(".$iddato.")";
 		  			break;
 		  	}
-
-			$result = mysql_query($query);
-			$ret = $result;
-			//mysql_free_result($result);
-		    mysql_close($mysql);
-			  
-			return $ret;
-
+			$vRet = $this->execQuery($query);
+			return $vRet;
 	}
 
 	public function genNumListaPorGrupo($cad="") {
-		  	$Conn = voConn::getInstance();
-		  	$mysql = mysql_connect($Conn->server, $Conn->user, $Conn->pass);
-		  	mysql_select_db($Conn->db);
-
 			$ip=$_SERVER['REMOTE_ADDR']; 
 			$host=gethostbyaddr($_SERVER['REMOTE_ADDR']);//$_SERVER["REMOTE_HOST"]; 
 			parse_str($cad);
@@ -7354,127 +6820,61 @@ class oCentura {
 			$idusr = $this->getIdUserFromAlias($user);
 			$idciclo = $this->getCicloFromIdEmp($idemp);
 			
-		  	mysql_query("SET NAMES 'utf8'");	
 			$query = "SET @X = Generar_Numero_de_Lista_Por_Grupo(".$idgrupo.",0,".$idusr.",".$idemp.",'".$ip."','".$host."',".$idciclo.")";
-
-			$result = mysql_query($query);
-			$ret = $result==false ? mysql_error():"OK";
-			//mysql_free_result($result);
-		    mysql_close($mysql);
-			  
-			return $ret;
+			$vRet = $this->execQuery($query);			  
+			return $vRet;
 
 	}
 
 	public function cloneNumEvalFromGruMatConAnterior($cad="") {
-		  	$Conn = voConn::getInstance();
-		  	$mysql = mysql_connect($Conn->server, $Conn->user, $Conn->pass);
-		  	mysql_select_db($Conn->db);
-
 			$ip=$_SERVER['REMOTE_ADDR']; 
 			$host=gethostbyaddr($_SERVER['REMOTE_ADDR']);//$_SERVER["REMOTE_HOST"]; 
 			parse_str($cad);
 			$idemp = $this->getIdEmpFromAlias($user);
 			$idusr = $this->getIdUserFromAlias($user);
 			
-		  	mysql_query("SET NAMES 'utf8'");
 		  	$numval = intval($numval);
 			$query = "SET @X = Clonar_Config_Eval_Anterior_Gru_Mat_Prof(".$idgrumat.",".$numval.",".$idusr.",".$idemp.",'".$ip."','".$host."')";
-
-			$result = mysql_query($query);
-			$ret = $result==false ? mysql_error():"OK";
-			//mysql_free_result($result);
-		    mysql_close($mysql);
-			  
-			return $ret;
-
+			$vRet = $this->execQuery($query);
+			return $vRet;
 	}
 
 	public function getPubIdEmp($user="") {
-		  	$Conn = voConn::getInstance();
-		  	$mysql = mysql_connect($Conn->server, $Conn->user, $Conn->pass);
-		  	mysql_select_db($Conn->db);
-
-			$idemp = $this->getIdEmpFromAlias($user);
-						  
+			$idemp = $this->getIdEmpFromAlias($user);						  
 			return $idemp;
-
 	}
 
 	public function getPubIdUser($user="") {
-		  	$Conn = voConn::getInstance();
-		  	$mysql = mysql_connect($Conn->server, $Conn->user, $Conn->pass);
-		  	mysql_select_db($Conn->db);
-
 			$idusr = $this->getIdUserFromAlias($user);
-
-		    mysql_close($mysql);
-						  
 			return $idusr;
-
 	}
 
 
 	public function getCountTable($field="",$table="", $where=""){
-		  	$Conn = voConn::getInstance();
-		  	$mysql = mysql_connect($Conn->server, $Conn->user, $Conn->pass);
-		  	mysql_select_db($Conn->db);
-		    mysql_query("SET NAMES UTF8");
-		  
-		    $result = mysql_query("select count($field) as ntotal from $table where $where limit 1");
-
-			if (!$result) {
-					$ret=0;
-			}else{
-					$ret=intval(mysql_result($result, 0,"ntotal"));
-			}
-			mysql_free_result($result);
-		    mysql_close($mysql);
-		    return $ret;
+		    $query = "SELECT count($field) AS ntotal FROM $table WHERE $where LIMIT 1";
+		    $result = $this->getArray($query);
+		    $ret = !$result ? 0 : intval($result[0]->ntotal);
+		    return $ret;	
 	}
 
 
 
 	public function BuscarMarkbookdeAlumno($cad) {
-		  	$Conn = voConn::getInstance();
-		  	$mysql = mysql_connect($Conn->server, $Conn->user, $Conn->pass);
-		  	mysql_select_db($Conn->db);
-
 			$ip=$_SERVER['REMOTE_ADDR']; 
 			$host=gethostbyaddr($_SERVER['REMOTE_ADDR']);//$_SERVER["REMOTE_HOST"]; 
 			parse_str($cad);
 			$idemp = $this->getIdEmpFromAlias($user);
 			$idusr = $this->getIdUserFromAlias($user);
-
-
-		  	mysql_query("SET NAMES 'utf8'");
 		  	$numval = intval($numval);
 			$query = "SET @X = Buscar_Markbook_de_Alumno(".$idgrumatcon.",".$idemp.",".$idusr.",'".$ip."','".$host."')";
-
-			$result = mysql_query($query);
-			$ret = $result==false ? mysql_error():"OK";
-		    mysql_close($mysql);
-			  
-			return $ret;
-
+			$vRet = $this->execQuery($query);			  
+			return $vRet;
 	}
 
 
 	public function getIdFamFromIdUserAlu($iduseralu=0, $type=0) {
-		  	$Conn = voConn::getInstance();
-		  	$mysql = mysql_connect($Conn->server, $Conn->user, $Conn->pass);
-		  	mysql_select_db($Conn->db);
-
 			$idusr = $this->getIdFamFromIdUser($iduseralu,1);
-
-		    mysql_close($mysql);
-
 			return $idusr;
-
 	}
-
-
  }  // OF CLASS
-
-
 ?>

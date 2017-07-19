@@ -4,20 +4,20 @@
 $data = $_POST['data'];
 parse_str($data);
 
-require_once("../vo/voConn.php");
+// require_once("../vo/voConn.php");
 require_once("../oCentura.php");
 require_once("../oCenturaPDO.php");
 $F = oCenturaPDO::getInstance();
 $f = oCentura::getInstance();
 
-$Conn = voConn::getInstance();
-$mysql = mysql_connect($Conn->server, $Conn->user, $Conn->pass);
-mysql_select_db($Conn->db);
-mysql_query("SET NAMES 'utf8'");	
+// $Conn = voConn::getInstance();
+// $mysql = mysql_connect($Conn->server, $Conn->user, $Conn->pass);
+// mysql_select_db($Conn->db);
+// mysql_query("SET NAMES 'utf8'");	
 
 $isExistUser = $f->isExistUserFromEmp($user);
 
-mysql_close($mysql);
+// mysql_close($mysql);
 
 $arr = array();
 $arr['status'] = 'OK';
