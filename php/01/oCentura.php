@@ -900,6 +900,14 @@ class oCentura {
 										FROM _viGrupo_Materias WHERE idciclo = $idciclo AND idprofesor = $idprofesor AND idgrupo = $idgrupo AND grado_pai = $grado_pai AND isagrupadora = 0 AND idemp = $idemp $otros ";
 								break;	
 
+							case 68:
+								parse_str($arg);
+								$idprofesor = $this->getIdProfFromAlias($u);
+						        $idemp = $this->getIdEmpFromAlias($u);
+								$query = "SELECT descripcion_claveprodserv AS label, idclaveprodservsat AS data
+										FROM cat_cveprodserv_sat WHERE idemp = $idemp and status_claveprodserv = 1 ";
+								break;	
+
 
 
 
@@ -2937,6 +2945,7 @@ class oCentura {
 																	orden_prioridad,
 																	aplica_a,
 																	idlistavencimiento,
+																	idclaveprodservsat,
 																	status_pago,
 																	idemp,ip,host,creado_por,creado_el)
 											VALUES(
@@ -2957,6 +2966,7 @@ class oCentura {
 																	$orden_prioridad,
 																	$aplica_a,
 																	$idlistavencimiento,
+																	$idclaveprodservsat,
 																	$status_pago,
 																	$idemp,'$ip','$host',$idusr,NOW())";
 								$vRet = $this->guardarDatos($query);
@@ -2991,6 +3001,7 @@ class oCentura {
 																orden_prioridad = $orden_prioridad,
 																aplica_a = $aplica_a,
 																idlistavencimiento = $idlistavencimiento,
+																idclaveprodservsat = $idclaveprodservsat,
 															  	status_pago = $status_pago,
 																ip = '$ip', 
 																host = '$host',

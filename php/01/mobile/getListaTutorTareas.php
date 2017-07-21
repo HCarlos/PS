@@ -92,7 +92,8 @@ if (count($r)>0){
             }
 
 }else{
-    $r[0]->msg="empty";
+    // $r[0]->msg="empty";
+    $r[0]  = array("msg" => "empty");
 }
 
 $m = json_encode($r);

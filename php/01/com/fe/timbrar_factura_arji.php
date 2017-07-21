@@ -420,7 +420,7 @@ foreach ($xml->xpath('//t:TimbreFiscalDigital') as $tfd) {
 		
 		if ( $result != "OK" ){
 			include("crear_PDF_Arji.php");
-			print "ERROR: ".mysql_error();
+			// print "ERROR: ".mysql_error();
 		} else{
 
 			include("crear_PDF_Arji.php");

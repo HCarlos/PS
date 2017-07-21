@@ -22,7 +22,8 @@ if (count($res)>0){
 			$res[$i]->msg = "OK";
 	}
 }else{
-	$res[0]->msg = "Error";	
+	// $res[0]->msg = "Error";	
+    $res[0]  = array("msg" => "Error");
 }
 
 $m = json_encode($res);

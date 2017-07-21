@@ -226,11 +226,10 @@ class PDF extends FPDF
 	$pdf->Ln(1);
 	$pdf->SetFont('Arial','B',8);
 	$pdf->Cell(42,3,"",0,0,'C');
-	$pdf->MultiCell(0,3,utf8_decode('Este documento es una representación impresa de un CFDi'),0,'L');
+	$pdf->MultiCell(0,3,utf8_decode('Este documento es una representación impresa de un CFDi 3.3'),0,'L');
 
 	$pdf->Output($pdf_file,"F");  //guardo en disco
-	$pdf->Output();//muestro el pdf
-
-
+	unset($pdf);
+	header('location:'.$dir_upload.$filePDF);
 
 ?>

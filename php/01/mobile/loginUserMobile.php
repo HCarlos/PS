@@ -47,7 +47,8 @@ if (count($res)>0){
 	}
 	
 }else{
-	$respuesta[0]->msg = "Username o Password incorrectos.";
+	// $respuesta[0]->msg = "Username o Password incorrectos.";
+    $respuesta[0]  = array("msg" => "Username o Password incorrectos.");
 }
 
 $m = json_encode($respuesta);

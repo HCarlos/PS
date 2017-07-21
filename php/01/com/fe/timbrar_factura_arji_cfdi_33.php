@@ -1,5 +1,5 @@
 <?php 
-ob_end_clean();
+// ob_end_clean();
 
 ini_set('display_errors', '0');     # don't show any errors...
 error_reporting(E_ALL | E_STRICT);  # ...but do log them
@@ -8,11 +8,11 @@ error_reporting(E_ALL);
 ini_set('display_errors', TRUE);
 ini_set('display_startup_errors', TRUE);
 
+
 header("html/text; charset=utf-8");  
 header("Cache-Control: no-cache");
 
 require_once('../../oCentura.php');
-
 $f = oCentura::getInstance();
 
 $arg   = $_POST["data"];
@@ -78,18 +78,22 @@ switch ($serie){
 			break;
 	case "B":
 			
-			// $num_certificado   = "00001000000404757365";
-			// $file_cer          = "00001000000404757365_comercializadora_arji/00001000000404757365.txt";
-			// $file_key          = "00001000000404757365_comercializadora_arji/CSD_UNIDAD_CAR930816FH0_20170109_103815.pem";
-			$num_certificado   = "20001000000300005693";
-			$file_cer          = "00001000000404757365_comercializadora_arji/20001000000300005693.txt";
-			$file_key          = "00001000000404757365_comercializadora_arji/CSD_Unidad_1_ACO560518KW7_20141124_183636.pem";
-			// $file_user         = "caja_arji@hotmail.com";
-			// $file_rfc          = "CAR930816FH0";
-			// $file_pass         = "CAR930816FH0";
-			$file_user         = "prueba1@factorum.com.mx";
-			$file_rfc          = "ACO560518KW7";
-			$file_pass         = "prueba2011";
+			$num_certificado   = "00001000000404757365";
+			$file_cer          = "00001000000404757365_comercializadora_arji/00001000000404757365.txt";
+			$file_key          = "00001000000404757365_comercializadora_arji/CSD_UNIDAD_CAR930816FH0_20170109_103815.pem";
+
+			// $num_certificado   = "20001000000300005693";
+			// $file_cer          = "00001000000404757365_comercializadora_arji/20001000000300005693.txt";
+			// $file_key          = "00001000000404757365_comercializadora_arji/CSD_Unidad_1_ACO560518KW7_20141124_183636.pem";
+
+			$file_user         = "caja_arji@hotmail.com";
+			$file_rfc          = "CAR930816FH0";
+			$file_pass         = "CAR930816FH0";
+			
+			// $file_user         = "prueba1@factorum.com.mx";
+			// $file_rfc          = "ACO560518KW7";
+			// $file_pass         = "prueba2011";
+			
 			$cadena_original   = "00001000000404757365_comercializadora_arji/cadenaoriginal_3_3.xslt";
 			$dir_imgs          = "arji_Imgs/";
 			$dir_upload        = "../../../../uw_fe/";
@@ -135,9 +139,9 @@ $codigo_postal = $result[0]->cp;
 $referencia    = $referenciaFE;
 
 
-$tot = $total; //$_GET["total"];	
-$iva    = $iva; //0;
-$ivaRet = $total; //0;
+$tot = $total;	
+$iva    = $iva;
+$ivaRet = $total;
 
 $tasaIVA = 16.00;
 
@@ -166,7 +170,7 @@ include("crear_XML_Arji_cfdi_33_".$serie.".php");
 
 $cfdi = $cadena_xml; //simplexml_load_file("facturas/Factura-".$serie."-".$folio.".xml");
 
-echo $cadena_xml;
+// echo $cadena_xml;
 
 $xml = new DOMDocument();
 $xml->loadXML($cadena_xml) or die("\n\n\nXML no válido..");
@@ -195,7 +199,7 @@ $priv_key = fread($fp, 8192);
 
 fclose($fp);		
 $pkeyid = openssl_get_privatekey($priv_key);
-openssl_sign($cadena,$cadenafirmada,$pkeyid,OPENSSL_ALGO_SHA1);
+openssl_sign($cadena,$cadenafirmada,$pkeyid,OPENSSL_ALGO_SHA256);
 $sello = base64_encode($cadenafirmada);
 
 $folfis="";
@@ -210,11 +214,7 @@ $new_xml = fopen ($myXML, "w");
 fwrite($new_xml,$cadena_xml);
 fclose($new_xml);
 
-// Ahora Timbramos la Factura
-
-// https://www.factorumweb.com/FactorumWSV32/FactorumCFDiService.asmx 
 // $servicio = "https://www.factorumweb.com/FactorumWSv33/FactorumCFDiService.asmx?wsdl";
-
 $servicio = "http://qav33.factorumweb.com/factorumwsv32/FactorumCFDiService.asmx?wsdl";
 
 $parametros=array();
@@ -222,13 +222,13 @@ $data = file_get_contents($myXML);
 $parametros['usuario']  = $file_user;
 $parametros['rfc']      = $file_rfc;
 $parametros['password'] = $file_pass;
-$parametros['xml']=$data; //string, pero se maneja String aqui
+$parametros['xml']=$data;
 set_time_limit(600);
 ini_set("default_socket_timeout", 600);
 try {
 	$client = new SoapClient($servicio, $parametros);
-	// $result = $client->FactorumGenYaSelladoConArchivo($parametros);
-	$result = $client->FactorumGenYaSelladoConArchivoTest($parametros);
+	$result = $client->FactorumGenYaSelladoConArchivo($parametros);
+	// $result = $client->FactorumGenYaSelladoConArchivoTest($parametros);
 } catch (SoapFault $E) {  
     echo $E->faultstring; 
     return false;
@@ -299,8 +299,8 @@ foreach ($xml->xpath('//t:TimbreFiscalDigital') as $tfd) {
 		$fpdf = "Fac-".$folSer.".pdf";
 
 		$query = "
-			update facturas_encabezado 
-				set isfe = 1, 
+			UPDATE facturas_encabezado 
+				SET isfe = 1, 
 					idemisorfiscal = ".$efxi[0].", 
 					idregfis = $idregfis,
 					metodo_de_pago = $idmetododepagoFE,
@@ -313,26 +313,32 @@ foreach ($xml->xpath('//t:TimbreFiscalDigital') as $tfd) {
 					fecha_timbrado = NOW(), 
 					directorio = '$directorio',
 					email_enviado = '$email1'  
-				where idfactura = $idfactura";
+				WHERE idfactura = $idfactura";
 		$result = $f->guardarDatos($query);
 
 		unlink($folSer2);
 		
-		if ( $result != 1 ){
-			include("crear_PDF_Arji_cfdi_33.php");
-			print "ERROR: ".mysql_error();
-		} else{
+		if ( $result == "OK" ){
+
+			$dir_upload = $f->URL."uw_fe/".$directorio;
+			$filePDF = $fpdf;
 
 			include("crear_PDF_Arji_cfdi_33.php");
 
-			$dir_upload = "http://platsource.mx/uw_fe/".$directorio;
+			$dir_upload = $f->URL."uw_fe/".$directorio;
 			$pdf = $fpdf;
 			$xml = $fxml;
 			$emailto = $email1;
 
 			include("send_Mail_Arji.php");
 
+		} else{
+
+			include("crear_PDF_Arji_cfdi_33.php");
+			print "ERROR: ".$result;
+
 		}
+
 	}
 }
 

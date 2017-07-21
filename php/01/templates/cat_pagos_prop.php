@@ -36,6 +36,13 @@ $idpago  = $_POST['idpago'];
                 </a>
             </li>
 
+            <li >
+                <a data-toggle="tab" href="#sat">
+                    <i class="blue icon-book bigger-110"></i>
+                    SAT
+                </a>
+            </li>
+
         </ul>
 
         <div class="tab-content">
@@ -133,6 +140,8 @@ $idpago  = $_POST['idpago'];
 
                 </table>
             </div>
+
+
             <div id="especificos" class="tab-pane">
 
                 <table>
@@ -209,9 +218,25 @@ $idpago  = $_POST['idpago'];
                         <td colspan="4"></td>
                     </tr>
 
+                </table>
+            </div>
+
+            <div id="sat" class="tab-pane">
+
+                <table>
+
+                    <tr>
+                        <td class="wd25prc"><label for="idclaveprodservsat" class="textRight">Cve Prod Serv SAT</label></td>
+                        <td>
+                            <span class="add-on"><i class="icon-asterisk red"></i></span>
+                            <select name="idclaveprodservsat" id="idclaveprodservsat" size="1" style="width:80% !important;" > </select>
+                        </td>
+                        <td colspan="4"></td>
+                    </tr>
 
                 </table>
             </div>
+
         </div>    
 
     <input type="hidden" name="idpago" id="idpago" value="<?php echo $idpago; ?>">
@@ -425,9 +450,22 @@ jQuery(function($) {
 	}
 
 
+    function getCveProdServSAT(){
+        var nc = "u="+localStorage.nc;
+        $("#idclaveprodservsat").empty();
+        $.post(obj.getValue(0)+"data/", { o:1, t:68, p:0,c:nc,from:0,cantidad:0, s:"" },
+            function(json){
+               $.each(json, function(i, item) {
+                    $("#idclaveprodservsat").append('<option value="'+item.data+'"> '+item.label+'</option>');
+                });
+                getNiveles();    
+            }, "json"
+        );  
+    }
 
 
-    getNiveles();
+
+    getCveProdServSAT();
 
 	var stream = io.connect(obj.getValue(4));
 

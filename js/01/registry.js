@@ -73,6 +73,8 @@ $("#frmLogin").on("submit", function(event) {
 			
 			trackOutboundLink(localStorage.IdUser+'-'+localStorage.nc);
 
+			// alert(obj.getValue(0));
+
             $.post(obj.getValue(0) + "data/", {o:49, t:0, p:52, c:"u=" + localStorage.nc, from: 0, cantidad: 0, s: ""},
             function(json) {
             	if ( parseInt(localStorage.IdEmpresaHome) > 0  ){

@@ -77,7 +77,8 @@ if (count($res)>0){
 		}
 	}
 }else{
-	$res[0]->msg = "OK";	
+	// $res[0]->msg = "OK";	
+    $res[0]  = array("msg" => "OK");
 }
 
 
