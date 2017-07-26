@@ -236,8 +236,12 @@ class oCentura {
 	}
 
 	public function execQuery($query){
+			$vRet = "OK";
 			$Conn = new voConnPDO();
-			$vRet = $Conn->query($query);
+			$result = $Conn->query($query);
+			$query="SELECT @X AS outvar;";
+			$rt = $Conn->query($query);
+			foreach ($rt AS $x){$vRet= is_null($x['outvar']) ? 'Operación no permitida, contacte al administrador' : $x['outvar']; }
 			$Conn = null;
 			return $vRet;
 	}
@@ -905,12 +909,19 @@ class oCentura {
 								$idprofesor = $this->getIdProfFromAlias($u);
 						        $idemp = $this->getIdEmpFromAlias($u);
 								$query = "SELECT descripcion_claveprodserv AS label, idclaveprodservsat AS data
-										FROM cat_cveprodserv_sat WHERE idemp = $idemp and status_claveprodserv = 1 ";
+										FROM cat_cveprodserv_sat WHERE idemp = $idemp and status_claveprodserv = 1
+										ORDER BY label ASC ";
 								break;	
 
-
-
-
+							case 69:
+								parse_str($arg);
+								$idprofesor = $this->getIdProfFromAlias($u);
+						        $idemp = $this->getIdEmpFromAlias($u);
+								$query = "SELECT concat(claveunidadmedida,' - ',claveunidadmedida_descripcion) AS label, idclaveunidadmedida AS data
+										FROM cat_claveunidadmedida_sat WHERE idemp = $idemp and status_claveunidadmedida = 1
+										ORDER BY label ASC ";
+								break;	
+								
 						}
 						break;
 					case 2:  // Asociaciones
@@ -2946,6 +2957,7 @@ class oCentura {
 																	aplica_a,
 																	idlistavencimiento,
 																	idclaveprodservsat,
+																	idclaveunidadmedida,
 																	status_pago,
 																	idemp,ip,host,creado_por,creado_el)
 											VALUES(
@@ -2967,6 +2979,7 @@ class oCentura {
 																	$aplica_a,
 																	$idlistavencimiento,
 																	$idclaveprodservsat,
+																	$idclaveunidadmedida,
 																	$status_pago,
 																	$idemp,'$ip','$host',$idusr,NOW())";
 								$vRet = $this->guardarDatos($query);
@@ -3002,6 +3015,7 @@ class oCentura {
 																aplica_a = $aplica_a,
 																idlistavencimiento = $idlistavencimiento,
 																idclaveprodservsat = $idclaveprodservsat,
+																idclaveunidadmedida = $idclaveunidadmedida,
 															  	status_pago = $status_pago,
 																ip = '$ip', 
 																host = '$host',
@@ -6329,16 +6343,17 @@ class oCentura {
 				$idciclo = $this->getCicloFromIdEmp($idemp);
 				$query = "SELECT DISTINCT idalumno, alumno, genero, idciclo
 								FROM _viEdosCta
-							WHERE idfamilia = $idfamilia AND idciclo = $idciclo AND idemp = $idemp ORDER BY $otros ASC";
+							WHERE idfamilia = $idfamilia AND idciclo = $idciclo AND idemp = $idemp  AND status_movto IN (0,1) ORDER BY $otros ASC";
 				break;
 
 			case 10010:
 				parse_str($cad);
+				// AQUI SI STATUS_MOVT
 		        $idemp = $this->getIdEmpFromAlias($u);		
 		        $idciclo = $this->getCicloFromIdEmp($idemp);		
 				$query = "SELECT *
 								FROM _viEdosCta
-							WHERE idfamilia = $idfamilia AND idalumno = $idalumno AND idciclo = $idciclo AND idemp = $idemp $otros ";
+							WHERE idfamilia = $idfamilia AND idalumno = $idalumno AND idciclo = $idciclo AND idemp = $idemp AND status_movto IN (0,1)  $otros ";
 				break;
 
 			case 10011:
@@ -6354,7 +6369,7 @@ class oCentura {
 		        $idemp = $this->getIdEmpFromAlias($u);				
 				$query = "SELECT *
 								FROM _viEdosCta
-							WHERE idfamilia = $idfamilia AND idemp = $idemp ";
+							WHERE idfamilia = $idfamilia AND idemp = $idemp AND status_movto IN (0,1) ";
 				break;
 
 			case 10013:
@@ -6488,7 +6503,7 @@ class oCentura {
 				$idciclo = $this->getCicloFromIdEmp($idemp);
 				$query = "SELECT *
 								FROM _viEdosCta
-							WHERE idfamilia = $idfamilia AND idalumno = $idalumno AND idconcepto = $idconcepto AND idciclo = $idciclo AND idemp = $idemp ";
+							WHERE idfamilia = $idfamilia AND idalumno = $idalumno AND idconcepto = $idconcepto AND idciclo = $idciclo AND idemp = $idemp  AND status_movto IN (0,1)  ";
 				break;
 
 			case 10023:
@@ -6510,8 +6525,9 @@ class oCentura {
 					parse_str($cad);
 					$idemp = $this->getIdEmpFromAlias($u);
 					$idciclo = $this->getCicloFromIdEmp($idemp);
+							// FROM _viGrupo_Alumnos WHERE idciclo = $idciclo AND idemp = $idemp AND idfamilia = $idfamilia AND idalumno = $idalumno AND status_grualu = 1 LIMIT 1";
 					$query = "SELECT * 
-							FROM _viGrupo_Alumnos WHERE idciclo = $idciclo AND idemp = $idemp AND idfamilia = $idfamilia AND idalumno = $idalumno AND status_grualu = 1 LIMIT 1";
+							FROM _viGrupo_Alumnos WHERE idemp = $idemp AND idfamilia = $idfamilia AND idalumno = $idalumno AND status_grualu = 1 LIMIT 1";
 				break;	
 
 			case 20000:
@@ -6775,7 +6791,7 @@ class oCentura {
 		        $idciclo = $this->getCicloFromIdEmp($idemp);		
 				$query = "SELECT *
 								FROM _viEdosCta
-							WHERE idfamilia = $idfamilia AND idalumno = $idalumno AND idciclo = $idciclo AND idemp = $idemp AND is_pagos_diversos = 1 $otros";
+							WHERE idfamilia = $idfamilia AND idalumno = $idalumno AND idciclo = $idciclo AND idemp = $idemp AND is_pagos_diversos = 1  AND status_movto IN (0,1) $otros";
 				break;
 
 			case 31011:
@@ -6794,7 +6810,7 @@ class oCentura {
 		        $idciclo = $this->getCicloFromIdEmp($idemp);		
 				$query = "SELECT *
 								FROM _viEdosCta
-							WHERE idedocta = $idedocta AND idciclo = $idciclo AND idemp = $idemp AND is_pagos_diversos = 1 ";
+							WHERE idedocta = $idedocta AND idciclo = $idciclo AND idemp = $idemp AND is_pagos_diversos = 1 AND status_movto IN (0,1) ";
 				break;
 
 							
@@ -6820,6 +6836,7 @@ class oCentura {
 		  			break;
 		  	}
 			$vRet = $this->execQuery($query);
+
 			return $vRet;
 	}
 

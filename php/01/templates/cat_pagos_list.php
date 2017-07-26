@@ -35,6 +35,7 @@ $de       = $_POST['user'];
 							<th aria-label="concepto: activate to sort column ascending" style="width: 200px;" colspan="1" rowspan="1" aria-controls="sample-table-2" tabindex="1" role="columnheader" class="sorting">CONCEPTO</th>
 							<th aria-label="emisor: activate to sort column ascending" style="width: 200px;" colspan="1" rowspan="1" aria-controls="sample-table-2" tabindex="1" role="columnheader" class="sorting">EMISOR</th>
 							<th aria-label="claveprodservsat: activate to sort column ascending" style="width: 80px;" colspan="1" rowspan="1" aria-controls="sample-table-2" tabindex="1" role="columnheader" class="sorting">CVEPRODSERVSAT</th>
+							<th aria-label="claveunidadmedida: activate to sort column ascending" style="width: 80px;" colspan="1" rowspan="1" aria-controls="sample-table-2" tabindex="1" role="columnheader" class="sorting">CVEUNIDMEDSAT</th>
 							<th aria-label="nivel: activate to sort column ascending" style="width: 80px;" colspan="1" rowspan="1" aria-controls="sample-table-2" tabindex="1" role="columnheader" class="sorting">NIVEL</th>
 							<th aria-label="importe: activate to sort column ascending" style="width: 80px;" colspan="1" rowspan="1" aria-controls="sample-table-2" tabindex="1" role="columnheader" class="sorting">IMPORTE</th>
 							<th aria-label="" style="width: 200px;" colspan="1" rowspan="1" role="columnheader" class="sorting_disabled"></th>
@@ -105,6 +106,7 @@ jQuery(function($) {
 						tB +='				<td class="tbl200W" >'+item.concepto+'</td>';
 						tB +='				<td class="tbl200W" >'+item.razon_social+'</td>';
 						tB +='				<td class="tbl80W" >'+item.claveprodserv+'</td>';
+						tB +='				<td class="tbl40W" >'+item.claveunidadmedida+'</td>';
 						tB +='				<td class="tbl80W" >'+item.nivel+'</td>';
 						tB +='				<td class="tbl80W" >'+item.importe+'</td>';
 						tB +='				<td >';

@@ -4,6 +4,7 @@ ini_set('display_errors', TRUE);
 ini_set('display_startup_errors', TRUE);
 ini_set('default_socket_timeout', 6000);
 mb_internal_encoding('UTF-8');
+date_default_timezone_set('America/Mexico_City');
 
 $o = $_POST['o'];
 $c = $_POST['c'];

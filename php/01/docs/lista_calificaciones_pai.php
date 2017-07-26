@@ -17,20 +17,32 @@ $f = oCentura::getInstance();
 parse_str($c);
 
 $arrHD 	  = array();
-$arrItems = array();
-
 
 $emp = $f->getQuerys(-5,$c,0,0,0,array(),"");
+
+// echo $c;
 
 $rs = $f->getQuerys(116,$c,0,0,0,array(),"");
 foreach ($rs as $i => $value) {
 	
-	$arrHD[$i]->idpaicriterio 		 = $rs[$i]->idpaicriterio;
-	$arrHD[$i]->criterio 			 = $rs[$i]->criterio;
-	$arrHD[$i]->descripcion_criterio = $rs[$i]->descripcion_criterio;
-	$arrHD[$i]->numCriterio 		 = $i+1; 
+	$arrHD[$i] = array(
+						"idpaicriterio" => $rs[$i]->idpaicriterio,
+						"criterio" => $rs[$i]->criterio,
+						"descripcion_criterio" => $rs[$i]->descripcion_criterio,
+						"numCriterio" => $i+1
+						);
+	
+
+	// $arrHD[$i] = array("ID"=>$i);		
+
+	// $arrHD[$i]->idpaicriterio 		 = $rs[$i]->idpaicriterio;
+	// $arrHD[$i]->criterio 			 = $rs[$i]->criterio;
+	// $arrHD[$i]->descripcion_criterio = $rs[$i]->descripcion_criterio;
+	// $arrHD[$i]->numCriterio 		 = $i+1; 
 
 }
+
+// var_dump($arrHD);
 
 $items = $f->getQuerys(117,$c,0,0,0,array(),"");
 foreach ($items as $i => $value) {
@@ -153,7 +165,7 @@ $pdf->Cell(95,$pdf->nFont,utf8_decode("NOMBRE DEL ALUMNO "),'L',0,'L');
 foreach ($rs as $i => $value) {
 	
 	$par = count($rs) == $i+1 ? 1 : 0;
-	$pdf->Cell(25,$pdf->nFont,"Criterio ".$arrHD[$i]->criterio,'L',$par,'C');
+	$pdf->Cell(25,$pdf->nFont,"Criterio ".$arrHD[$i]["criterio"],'L',$par,'C');
 
 }
 /*
@@ -204,9 +216,9 @@ foreach ($rs as $i => $value) {
 	
 	$pdf->setX(5);
 	$pdf->SetFont('Arial','B',7);
-	$pdf->Cell(20,4,"CRITERIO ".$arrHD[$i]->criterio.': ','',0,'L');
+	$pdf->Cell(20,4,"CRITERIO ".$arrHD[$i]["criterio"].': ','',0,'L');
 	$pdf->SetFont('Arial','',7);
-	$pdf->Cell(180,4,utf8_decode($arrHD[$i]->descripcion_criterio),'',1,'L');
+	$pdf->Cell(180,4,utf8_decode($arrHD[$i]["descripcion_criterio"]),'',1,'L');
 
 }
 

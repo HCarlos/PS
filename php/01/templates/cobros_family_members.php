@@ -156,17 +156,17 @@ if (count($arr)>0){
 						<td class="tbl50W">
 							
 							<?php
-							if (intval($arrAlu[$j]->status_movto)==0){ 
+							if (intval($arrAlu[$j]->status_movto)!=1){ 
+								$trashSmall = ' <a href="#" id="ch-'.$id.'" class="chEdoCta " ><i class="fa fa-trash red" aria-hidden="true"></i></a>';
 							?>
 
 								<input  id="<?php echo $lbl0; ?>" class="chkPago0 inline" type="checkbox"/> 
-								<label for="<?php echo $lbl0; ?>" class="inline inputDetFac"><?php echo $id; ?></label>
+								<label for="<?php echo $lbl0; ?>" class="inline inputDetFac"><?php echo $id.' '.$trashSmall; ?> </label>
 							
 							<?php
 								}else{
 							?>
-							
-								<?php echo $id; ?>
+								<?php echo $id; ?>							
 							
 							<?php
 								}
@@ -309,6 +309,50 @@ jQuery(function($){
 
 	});
 
+	
+
+	$(".chEdoCta").on("click",function(event){
+		event.preventDefault();
+		var item = this.id.split('-');
+		if (!confirm("Esta seguro que desea eliminar el registro de pago: "+item[1])  ){
+			return false;
+		}
+
+		// var x = prompt("Ingrese la Clave de Autorización");
+
+		var thePrompt = window.open("", "", "widht=500");
+	    var theHTML = "";
+
+	    theHTML += "Clave Autorización: <input type='password' id='thePass' placeholder=''/>";
+	    theHTML += "<br />";
+	    theHTML += "<input type='button' value='OK' id='authOK'/>";
+	    thePrompt.document.body.innerHTML = theHTML;		
+
+		thePrompt.document.getElementById("authOK").onclick = function () {
+
+		var thePass = thePrompt.document.getElementById("thePass").value;
+ 		var nc = "u="+localStorage.nc+"&claveAutorizacion="+thePass+"&idedocta="+item[1];
+ 		// alert(nc);
+       	$.post(obj.getValue(0) + "data/", {o:0, t:0, c:nc, p:61, from:0, cantidad:0, s:''},
+        function(json) {
+				$("#preloaderPrincipal").hide();
+        		if (json[0].msg=="OK"){
+        			alert("Registro CANCELADO con éxito.");
+    			}else{
+    				alert(json[0].msg);	
+    			}
+    	}, "json");
+
+    	thePrompt.close();
+    	// K4rl0sH;9602
+    	// R1v3dg7;
+
+    }
+
+
+	});
+
+
 	$(".clsrecargo0").on("click",function(event){
 		event.preventDefault();
 		var item = this.id.split('-');
@@ -327,29 +371,6 @@ jQuery(function($){
 				$("#divUploadImage").modal('toggle');
 		}, "html");
 	});
-
-	
-/*
-	$(".propAlu0").on("click",function(event){
-		event.preventDefault();
-		var item = this.id.split('-');
-		
-		var nc = localStorage.nc; 
-		$.post(obj.getValue(0) + "set-recargo-pago/", {
-				user: nc,
-				idfamilia: IdFamilia,
-				idedocta: item[1],
-				subtotal:item[2],
-				importe:item[3]
-			},
-			function(html) {
-				//alert(html);
-				$("#divUploadImage").html(html);
-				$("#divUploadImage").modal('toggle');
-		}, "html");
-	});
-*/	
-
 
 	$(".iddeledocta0").on("click",function(event){
 		event.preventDefault();

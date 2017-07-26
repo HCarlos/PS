@@ -15,7 +15,7 @@ foreach($arConc as $i=>$value){
   $Item = explode('|',$arConc[$i]);
   $sumaIva=0;
   if (intval($Item[0])>0) {
-      $cadena_xml.='    <cfdi:Concepto Cantidad="'.trim($Item[0]).'" Unidad="Pieza" Descripcion="'.trim($Item[1]).'" ValorUnitario="'.trim($Item[11]).'" Importe="'.trim($Item[11]).'" ClaveProdServ="01010101" ClaveUnidad="H87">'."\r\n";
+      $cadena_xml.='    <cfdi:Concepto Cantidad="'.trim($Item[0]).'" Unidad="'.trim($Item[16]).'" Descripcion="'.trim($Item[1]).'" ValorUnitario="'.trim($Item[11]).'" Importe="'.trim($Item[11]).'" ClaveProdServ="'.trim($Item[14]).'" ClaveUnidad="'.trim($Item[15]).'">'."\r\n";
       $cadena_xml.='      <cfdi:Impuestos>'."\r\n";
       $cadena_xml.='        <cfdi:Traslados>'."\r\n";
       $cadena_xml.='          <cfdi:Traslado Base="'.trim($Item[11]).'" Impuesto="002" TipoFactor="Tasa" TasaOCuota="'.$tasa.'" Importe="'.trim($Item[10]).'" />'."\r\n";

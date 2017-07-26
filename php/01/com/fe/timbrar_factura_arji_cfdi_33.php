@@ -214,7 +214,6 @@ $new_xml = fopen ($myXML, "w");
 fwrite($new_xml,$cadena_xml);
 fclose($new_xml);
 
-// $servicio = "https://www.factorumweb.com/FactorumWSv33/FactorumCFDiService.asmx?wsdl";
 $servicio = "http://qav33.factorumweb.com/factorumwsv32/FactorumCFDiService.asmx?wsdl";
 
 $parametros=array();

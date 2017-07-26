@@ -469,7 +469,7 @@ jQuery(function($) {
 
 	$("#emptybtnListCalPAI01").on("click",function(event){
 		event.preventDefault();
-		$("#preloaderPrincipal").show();
+		// $("#preloaderPrincipal").show();
 
 		// var nc = "u="+localStorage.nc+"&strgrualu="+strGruAlu+"&grado="+Gradox+"&idciclo="+IdCiclo+"&grupo="+Grupo;
 		var nc = "u="+localStorage.nc+

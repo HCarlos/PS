@@ -419,7 +419,10 @@ jQuery(function($) {
                				json[i].iva+"|"+
                				json[i].importe2+"|"+
                				json[i].total+"|"+
-               				json[i].subtotal;
+               				json[i].subtotal+"|"+
+               				json[i].claveprodserv+"|"+
+               				json[i].claveunidadmedida+"|"+
+               				json[i].claveunidadmedida_descripcion;
                				
 					$("#tblDelFac > tbody").append(cad0);
                 });

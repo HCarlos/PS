@@ -13,6 +13,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', TRUE);
 ini_set('display_startup_errors', TRUE);
 ini_set('default_socket_timeout', 6000);
+date_default_timezone_set('America/Mexico_City');
 
 $data = $_POST['c'];
 

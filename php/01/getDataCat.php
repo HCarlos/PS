@@ -125,7 +125,6 @@ switch($index){
 				break;
 			case 2:
                 $res = $f->setSaveData($index,$cad,0,0,$var2);
-				// $ret[0]->msg = $res;
 				$ret[0] = array("msg" => $res);
 				if (trim($res)!="OK"){
 					$pos = strpos($res, 'Duplicate');
@@ -135,7 +134,7 @@ switch($index){
 					}else{
 						//require_once('core/messages.php');
 						$res = str_replace("Table 'tecnoint_dbPlatSource.", "", $res);
-						$res = str_replace("' doesn't exist", "", $ret[0]->msg);
+						$res = str_replace("' doesn't exist", "", $res);
 						$ret[0] = array("msg" => $res);						
 					}
 				}
@@ -234,8 +233,8 @@ switch($index){
 			case 52:
 
                 $res = $fp->saveDataPDO($index,$cad,0,0,$var2);
-				// $ret[0]->msg = $res;
-				$ret[0] = array("msg" => "$res");
+
+				$ret[0] = array("msg" => $res);
 
 				if (trim($res)!=="OK"){
 					$pos = strpos($res, 'Duplicate');
@@ -245,7 +244,7 @@ switch($index){
 					}else{
 						//require_once('core/messages.php');
 						$res = str_replace("Table 'tecnoint_dbPlatSource.", "", $res);
-						$res = str_replace("' doesn't exist", "", $ret[0]->msg);						
+						$res = str_replace("' doesn't exist", "", $res);						
 						$ret[0] = array("msg" => $res);
 					}
 				}else{
@@ -327,6 +326,11 @@ switch($index){
 			case 60:
 				$res = $fp->revivePago($cad);
 				// $ret[0]->msg = $res;
+				$ret[0] = array("msg" => $res);
+				break;
+
+			case 61:
+				$res = $fp->IsAutorized($cad);
 				$ret[0] = array("msg" => $res);
 				break;
 				

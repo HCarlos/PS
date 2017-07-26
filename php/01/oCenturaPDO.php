@@ -311,10 +311,14 @@ class oCenturaPDO {
 	}
 
 	private function execQuery($query){
+			$vRet = "OK";
 			$Conn = new voConnPDO();
-			$rst = $Conn->query($query);
+			$result = $Conn->query($query);
+			$query="SELECT @X AS outvar;";
+			$rt = $Conn->query($query);
+			foreach ($rt AS $x){$vRet= is_null($x['outvar']) ? 'Operación no permitida, contacte al administrador' : $x['outvar']; }
 			$Conn = null;
-			return $rst;
+			return $vRet;
 	}
 
 	public function getComboPDO($index=0,$arg="",$pag=0,$limite=0,$tipo=0,$otros=""){
@@ -438,6 +442,7 @@ class oCenturaPDO {
 						FROM _viEdosCta 
 						WHERE idemp = $idemp 
 							  AND idciclo = $idciclo 
+							  AND status_movto IN (0,1) 
 						";
 
 				break;
@@ -3601,17 +3606,8 @@ class oCenturaPDO {
 	public function UPDATEVencimientoEdoCta($cad) {
 
 		parse_str($cad);
-
 		$query = "SET @X = Actualizar_Pagos_Metodo_B(".$idfamilia.",0,1)";
 		$ret = $this->execQuery($query);
-
-		$query="SELECT @X AS outvar;";
-		$result = $this->execQuery($query);
-		foreach ($result AS $x)
-		{
-		    $ret=$x['outvar'];
-		}
-
 	    return $ret;
 
 	}
@@ -3623,24 +3619,10 @@ class oCenturaPDO {
 		$query = "SET @X = Actualizar_Pagos_Metodo_B(".$idfamilia.",0,1)";
 		$ret = $this->execQuery($query);
 
-		$query="SELECT @X AS outvar;";
-		$result = $this->execQuery($query);
-		foreach ($result AS $x)
-		{
-		    $ret=$x['outvar'];
-		}
+		if ( $ret[0]->Respuesta == "OK" ) {
 
-		if ( $ret == "OK" ) {
-
-			$query = "SET @Y = Actualizar_Pagos_Metodo_A(".$idfamilia.",0,1)";
+			$query = "SET @X = Actualizar_Pagos_Metodo_A(".$idfamilia.",0,1)";
 			$ret = $this->execQuery($query);
-
-			$query="SELECT @Y AS outvar;";
-			$result = $this->execQuery($query);
-			foreach ($result AS $x)
-			{
-			    $ret=$x['outvar'];
-			}
 
 		}
 
@@ -3653,6 +3635,31 @@ class oCenturaPDO {
 		parse_str($cad);
 		$query = "SET @X = Revive_Pago(".$pIdEdoCta.",".$pIdUser.",'".$pUsuario."')";
 		$vRet = $this->execQuery($query);
+		return $vRet;
+
+	}
+
+	public function IsAutorized($cad='') {
+
+		parse_str($cad);
+		$clave = SHA1($claveAutorizacion);
+		$idusr = $this->getIdUserFromAlias($u);
+        $idemp = $this->getIdEmpFromAlias($u);
+		// iduser = $idusr AND 
+		$query = "SELECT iduser 
+					FROM cat_claves_autorizacion 
+					WHERE clave = '$clave' AND 
+							idemp = $idemp 
+					LIMIT 1 ";
+		$result = $this->getArray($query);
+		$vRet = count($result) > 0 ? "OK" : "No esta autorizado para realizar esta operación";
+
+		if ($vRet == "OK"){
+			$iduserauth = $result[0]->iduser;			
+			$query = "SET @X = Cancelar_Concepto_de_Pago_de_Alumno(".$idedocta.",".$idusr.",".$iduserauth.")";
+			$vRet = $this->execQuery($query);
+
+		}
 		return $vRet;
 
 	}
@@ -3745,13 +3752,6 @@ class oCenturaPDO {
 
 		$query = "SET @X = Actualizar_Boletas_PAIBI(".$idgrumat.")";
 		$ret = $this->execQuery($query);
-
-		$query="SELECT @X AS outvar;";
-		$result = $this->execQuery($query);
-		foreach ($result AS $x)
-		{
-		    $ret=$x['outvar'];
-		}
 
 	    return $ret;
 

@@ -234,6 +234,15 @@ $idpago  = $_POST['idpago'];
                         <td colspan="4"></td>
                     </tr>
 
+                    <tr>
+                        <td class="wd25prc"><label for="idclaveunidadmedida" class="textRight">Cve Unid Med SAT</label></td>
+                        <td>
+                            <span class="add-on"><i class="icon-asterisk red"></i></span>
+                            <select name="idclaveunidadmedida" id="idclaveunidadmedida" size="1" style="width:80% !important;" > </select>
+                        </td>
+                        <td colspan="4"></td>
+                    </tr>
+
                 </table>
             </div>
 
@@ -379,6 +388,8 @@ jQuery(function($) {
 
 
                     $("#idlistavencimiento").val(json[0].idlistavencimiento);
+                    $("#idclaveprodservsat").val(json[0].idclaveprodservsat);
+                    $("#idclaveunidadmedida").val(json[0].idclaveunidadmedida);
 
                     $("#is_descto_beca").prop("checked",json[0].is_descto_beca==1?true:false);
                     $("#is_descto").prop("checked",json[0].is_descto==1?true:false);
@@ -457,6 +468,19 @@ jQuery(function($) {
             function(json){
                $.each(json, function(i, item) {
                     $("#idclaveprodservsat").append('<option value="'+item.data+'"> '+item.label+'</option>');
+                });
+                getCveMedSAT();    
+            }, "json"
+        );  
+    }
+
+    function getCveMedSAT(){
+        var nc = "u="+localStorage.nc;
+        $("#idclaveunidadmedida").empty();
+        $.post(obj.getValue(0)+"data/", { o:1, t:69, p:0,c:nc,from:0,cantidad:0, s:"" },
+            function(json){
+               $.each(json, function(i, item) {
+                    $("#idclaveunidadmedida").append('<option value="'+item.data+'"> '+item.label+'</option>');
                 });
                 getNiveles();    
             }, "json"

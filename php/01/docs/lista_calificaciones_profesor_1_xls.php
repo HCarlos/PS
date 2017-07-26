@@ -24,6 +24,7 @@ if (!isset($c)){
 parse_str($c);
 
 ini_set('default_socket_timeout', 6000);
+date_default_timezone_set('America/Mexico_City');
 
 if (!isset($c)){
 	header('Location: http://platsource.mx/');
