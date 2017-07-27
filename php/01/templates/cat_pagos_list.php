@@ -31,14 +31,14 @@ $de       = $_POST['user'];
 									
 					<thead>
 						<tr role="row">
-							<th aria-label="idpago: activate to sort column ascending" style="width: 40px;" colspan="1" rowspan="1" aria-controls="sample-table-2" tabindex="0" role="columnheader" class="sorting" >ID</th>
-							<th aria-label="concepto: activate to sort column ascending" style="width: 200px;" colspan="1" rowspan="1" aria-controls="sample-table-2" tabindex="1" role="columnheader" class="sorting">CONCEPTO</th>
-							<th aria-label="emisor: activate to sort column ascending" style="width: 200px;" colspan="1" rowspan="1" aria-controls="sample-table-2" tabindex="1" role="columnheader" class="sorting">EMISOR</th>
-							<th aria-label="claveprodservsat: activate to sort column ascending" style="width: 80px;" colspan="1" rowspan="1" aria-controls="sample-table-2" tabindex="1" role="columnheader" class="sorting">CVEPRODSERVSAT</th>
-							<th aria-label="claveunidadmedida: activate to sort column ascending" style="width: 80px;" colspan="1" rowspan="1" aria-controls="sample-table-2" tabindex="1" role="columnheader" class="sorting">CVEUNIDMEDSAT</th>
-							<th aria-label="nivel: activate to sort column ascending" style="width: 80px;" colspan="1" rowspan="1" aria-controls="sample-table-2" tabindex="1" role="columnheader" class="sorting">NIVEL</th>
-							<th aria-label="importe: activate to sort column ascending" style="width: 80px;" colspan="1" rowspan="1" aria-controls="sample-table-2" tabindex="1" role="columnheader" class="sorting">IMPORTE</th>
-							<th aria-label="" style="width: 200px;" colspan="1" rowspan="1" role="columnheader" class="sorting_disabled"></th>
+							<th aria-label="idpago: activate to sort column ascending" style="width: 40px;" tabindex="0" role="columnheader" class="sorting" >ID</th>
+							<th aria-label="concepto: activate to sort column ascending" style="width: 200px;" tabindex="1" role="columnheader" class="sorting">CONCEPTO</th>
+							<th aria-label="emisor: activate to sort column ascending" style="width: 200px;" tabindex="2" role="columnheader" class="sorting">EMISOR</th>
+							<th aria-label="claveprodservsat: activate to sort column ascending" style="width: 80px;" tabindex="3" role="columnheader" class="sorting">CPS</th>
+							<th aria-label="claveunidadmedida: activate to sort column ascending" style="width: 80px;" tabindex="4" role="columnheader" class="sorting">CUM</th>
+							<th aria-label="nivel: activate to sort column ascending" style="width: 80px;" tabindex="5" role="columnheader" class="sorting">NIVEL</th>
+							<th aria-label="importe: activate to sort column ascending" style="width: 100px;" tabindex="6" role="columnheader" class="sorting">IMPORTE</th>
+							<th aria-label="" style="width: 200px;" role="columnheader" class="sorting_disabled"></th>
 						</tr>
 					</thead>
 									
@@ -80,7 +80,7 @@ jQuery(function($) {
 	            			"sInfoFiltered": "(De _MAX_ registros)"                                        
 	        			},	
 	        "aaSorting": [[ 0, "desc" ]],			
-			"aoColumns": [ null, null, null, null, null,  { "bSortable": false }],
+			"aoColumns": [ null, null, null, null, null, null, null,  { "bSortable": false }],
 			"aLengthMenu": [[10, 25, 50, -1], [10, 25, 50, "Todos"]],
 			"bRetrieve": true,
 			"bDestroy": false
