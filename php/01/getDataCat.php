@@ -236,11 +236,13 @@ switch($index){
 
 				$ret[0] = array("msg" => $res);
 
+				/*
+
 				if (trim($res)!=="OK"){
 					$pos = strpos($res, 'Duplicate');
 					if ($pos >= 0) {
-	     				$ret[0]->msg = "Valor DUPLICADO";
-						// $ret[0] = array("msg" => "Valor DUPLICADO");
+	     				// $ret[0]->msg = "Valor DUPLICADO";
+						$ret[0] = array("msg" => "Valor DUPLICADO");
 					}else{
 						//require_once('core/messages.php');
 						$res = str_replace("Table 'tecnoint_dbPlatSource.", "", $res);
@@ -250,7 +252,8 @@ switch($index){
 				}else{
 					// $ret[0]->msg = "OK";
 					$ret[0] = array("msg" => "OK");
-				}				
+				}			
+				*/	
 
 				break;
 
@@ -295,13 +298,11 @@ switch($index){
 
 			case 55:
 				$ret = $fp->getQueryPDO($var2,$cad,0,$from,$cantidad,array(),$otros,0);
-				// $ret[0]->msg = count($ret);
-				$ret[0] = array("msg" => count($ret));
+				$ret[0]->msg = count($ret);
 				break;
 
 			case 56:
 				$res = $fp->refreshVencimientos($cad);
-				// $ret[0]->msg = $res;
 				$ret[0] = array("msg" => $res);
 				break;
 
@@ -313,19 +314,18 @@ switch($index){
 
 			case 58:
 				$res = $fp->setCloneMatConSave($cad);
-				// $ret[0]->msg = $res;
+				$ret[0]->msg = $res;
 				$ret[0] = array("msg" => $res);
 				break;
 
 			case 59:
 				$res = $fp->refreshBoletaPAIBI($cad);
-				// $ret[0]->msg = $res;
 				$ret[0] = array("msg" => $res);
 				break;
 
 			case 60:
 				$res = $fp->revivePago($cad);
-				// $ret[0]->msg = $res;
+				$ret[0]->msg = $res;
 				$ret[0] = array("msg" => $res);
 				break;
 

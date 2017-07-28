@@ -215,14 +215,15 @@ class oCentura {
 	public function guardarDatos($query=""){
 
 			$Conn = new voConnPDO();
-			$ret = array();
 			$result = $Conn->exec($query);
 
-			if ($result != 1){
-				$ret = $result;
+			if (!$result){
+				$rt  = $Conn->errorInfo();
+				$ret = is_null($rt[2]) ? "OK" : $rt[2];
 			}else{
 				$ret = "OK";
 			}
+
 			$Conn = null;
 			return $ret;
 	}

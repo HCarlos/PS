@@ -157,7 +157,7 @@ if (count($arr)>0){
 							
 							<?php
 							if (intval($arrAlu[$j]->status_movto)!=1){ 
-								$trashSmall = ' <a href="#" id="ch-'.$id.'" class="chEdoCta " ><i class="fa fa-trash red" aria-hidden="true"></i></a>';
+								$trashSmall = ' <a href="#" id="ch-'.$id.'" class="chEdoCta "  title="Cancelar Concepto" ><i class="fa fa-ban red" aria-hidden="true"></i></a>';
 							?>
 
 								<input  id="<?php echo $lbl0; ?>" class="chkPago0 inline" type="checkbox"/> 
@@ -314,7 +314,7 @@ jQuery(function($){
 	$(".chEdoCta").on("click",function(event){
 		event.preventDefault();
 		var item = this.id.split('-');
-		if (!confirm("Esta seguro que desea eliminar el registro de pago: "+item[1])  ){
+		if (!confirm("Esta seguro que desea cancelar el registro de pago: "+item[1])  ){
 			return false;
 		}
 

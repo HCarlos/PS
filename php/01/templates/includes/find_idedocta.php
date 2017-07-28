@@ -107,10 +107,22 @@ $user = $_POST["user"];
 		var queryString = $("#frmFindIdEdoCta0").serialize();
        $.post(obj.getValue(0) + "data/", {o:32, t:32, c:queryString, p:55, from:0, cantidad:0, s:''},
         function(json) {
-
+        	var classColor = 'green';
+        	var statusMovto = parseInt(json[0].status_movto,0);
+        	switch( statusMovto ){
+        		case 0:
+        				classColor = 'blue';
+        				break;
+        		case 1:
+        				classColor = 'orange';
+        				break;
+        		case 2:
+        				classColor = 'red';
+        				break;
+        	}
         	$("#fndfamilia0").html("<strong class='blue'>"+json[0].idfamilia+"</strong> <strong class='green marginLeft2em'>"+json[0].familia+' ('+json[0].tutor+')'+"</strong>");
         	$("#fndalumno0").html("<strong class='blue'>"+json[0].idalumno+"</strong> <strong class='green marginLeft2em'>"+json[0].alumno+"</strong>");
-    		$("#fndconcepto0").html("<strong class='green'>"+json[0].concepto + ' ' + json[0].mes+ '  (' + json[0].cvencimiento+ ')  ' + json[0].statusmovto +"</strong>");
+    		$("#fndconcepto0").html("<strong class='green'>"+json[0].concepto + ' ' + json[0].mes+ '  (' + json[0].cvencimiento+ ')  <span class="'+classColor+'">' + json[0].statusmovto +"</span></strong>");
 
     		$("#fndsubtotal0").html("<strong class='green'>"+json[0].subtotal  +"</strong>");
     		$("#fnddesctobeca0").html("<strong class='green'>"+json[0].descto_becas  +"</strong>");
@@ -123,7 +135,7 @@ $user = $_POST["user"];
     		
     		var status_pago = parseInt(json[0].status_movto,0);
 
-    		if (status_pago > 0 && json[0].pdf == "" ){
+    		if ((status_pago == 1 || status_pago == 2) && json[0].pdf == "" ){
     			$("#reviveIdEdoCta").show();
     		}
 

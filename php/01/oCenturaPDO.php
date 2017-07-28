@@ -7,6 +7,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', TRUE);
 ini_set('display_startup_errors', TRUE);
 */
+
 date_default_timezone_set('America/Mexico_City');
 
 require_once('vo/voConnPDO.php');
@@ -287,11 +288,11 @@ class oCenturaPDO {
 	private function guardarDatos($query=""){
 
 			$Conn = new voConnPDO();
-			$ret = array();
 			$result = $Conn->exec($query);
 
-			if ($result != 1){
-				$ret = $result;
+			if (!$result){
+				$rt  = $Conn->errorInfo();
+				$ret = is_null($rt[2]) ? "OK" : $rt[2];
 			}else{
 				$ret = "OK";
 			}
@@ -3598,7 +3599,7 @@ class oCenturaPDO {
 		}
 
 		$result = $this->guardarDatos($query);
-		return $vRet;
+		return $result;
 
 	}
 
@@ -3739,7 +3740,7 @@ class oCenturaPDO {
 										'$db',
 										'$da',
 										$idemp,'$ip','$host',$idusr,NOW())";
-					$result = $f->guardarDatos($q2);
+					$vRet = $f->guardarDatos($q2);
 				}
 			}
 		}
