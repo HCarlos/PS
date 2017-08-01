@@ -163,6 +163,7 @@ jQuery(function($) {
             cfgBase0();
             var nc = localStorage.nc.split("@");
             $.post(obj.getValue(0) + "caja-report-panel/", {
+                    IdUserNivelAcceso: localStorage.IdUserNivelAcceso,
                     user: nc[0]
                 },
                 function(html) {

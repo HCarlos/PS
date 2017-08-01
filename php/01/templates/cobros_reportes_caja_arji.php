@@ -1,6 +1,8 @@
 <?php
 
 include("includes/metas.php");
+$user = $_POST["user"];
+$IdUserNivelAcceso = intval( $_POST["IdUserNivelAcceso"] );
 
 ?>
 
@@ -30,13 +32,18 @@ include("includes/metas.php");
 								<td><label for="tiporeporte">Tipo Reporte:</label></td>
 								<td colspan="3">
 									<select id="tiporeporte" name="tiporeporte">
-										<option value="0" selected>Pagos por Niveles y Conceptos</option>
-										<option value="1">Movimientos diarios en PDF</option>
-										<option value="2">Descuentos por Niveles y Conceptos</option>
-										<option value="3">Reporte de Vencimientos</option>
-										<option value="4">Recordatorios Vencimientos</option>
-										<option value="5">Recargos por Niveles y Conceptos</option>
-										<option value="6">Análisis por Concepto</option>
+										<?php if ( $IdUserNivelAcceso == 12 ) { ?>
+											<option value="-1" selected disabled>Seleccione un reporte</option>
+											<option value="6">Análisis por Concepto</option>
+										<?php } else { ?>
+											<option value="0" selected>Pagos por Niveles y Conceptos</option>
+											<option value="1">Movimientos diarios en PDF</option>
+											<option value="2">Descuentos por Niveles y Conceptos</option>
+											<option value="3">Reporte de Vencimientos</option>
+											<option value="4">Recordatorios Vencimientos</option>
+											<option value="5">Recargos por Niveles y Conceptos</option>
+											<option value="6">Análisis por Concepto</option>
+										<?php } ?>
 									</select>							
 								</td>
 							</tr>
@@ -182,6 +189,8 @@ jQuery(function($) {
 	$(".serviciosCobrados").hide(); 
 
 	$("#u").val( localStorage.nc );
+
+	var IdUserNivelAcceso = <?php echo $IdUserNivelAcceso; ?>;
 
     $("#frmPanelReports0").on("unsubmit");
     $("#frmPanelReports0").on("submit", function(event) {
