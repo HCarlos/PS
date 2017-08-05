@@ -640,8 +640,13 @@ class oCentura {
 								$idciclo = $this->getCicloFromIdEmp($idemp);
 
 								$query = "SELECT DISTINCT materia AS label, idboleta AS data 
-										FROM _viBoletas WHERE idciclo = $idciclo AND iduseralu = $iduseralu AND grupo_visible = 1 AND isagrupadora_grumat = 0 
-										$otros ";
+											FROM _viBoletas 
+											WHERE idciclo = $idciclo AND 
+												iduseralu = $iduseralu AND 
+												grupo_visible = 1 AND 
+												isagrupadora_grumat = 0 AND
+												grupo_bloqueado = 0 
+											$otros ";
 								break;		
 	
 							case 41:
@@ -3193,7 +3198,6 @@ class oCentura {
 								$idemp = $this->getIdEmpFromAlias($u);
 								$idciclo = $this->getCicloFromIdEmp($idemp);
 								$idcicloant = $this->getCicloAntFromIdEmp($idemp);
-
 								$query = "SET @X = Generar_Estado_de_Cuenta_por_Familia(".$idfamilia.",".$idciclo.",".$idemp.",".$iduser.",'".$ip."','".$host."',".$idcicloant.")";
 								$vRet = $this->execQuery($query);
 								break;		
@@ -4197,14 +4201,12 @@ class oCentura {
 								break;		
 							case 8:
 								$query = "DELETE FROM tareas_dest_respuestas WHERE idtareadestinatariorespuesta = ".$arg;
-								$result = mysql_query($query);
-								$vRet = $result!=1? mysql_error():"OK";
+								$vRet = $this->guardarDatos($query);
 								break;		
 							case 9:
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($user);
 								$idemp = $this->getIdEmpFromAlias($user);
-
 								$query = "UPDATE tareas_dest 
 														SET 
 															isleida = 1,	
@@ -4215,6 +4217,10 @@ class oCentura {
 															modi_el = NOW()
 											WHERE idtareadestinatario = ".$idtareadestinatario;
 								$vRet = $this->guardarDatos($query);
+								break;		
+							case 10:
+								$query = "SET @X = Actualizar_Archivos_y_Destinatarios_en_Tareas(".$arg.")";
+								$vRet = $this->execQuery($query);
 								break;		
 						}
 						break; // 40

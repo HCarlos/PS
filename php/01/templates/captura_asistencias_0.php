@@ -43,7 +43,7 @@ $profesor = $_POST['profesor'];
 			<div class="widget-toolbar pull-right black">
 			    <div class="control-group action-buttons" >
 					<a class="white" href="#"  id="btnPrintListaAsistencia01" title="Imprime todas las Asistencias de esta Materia.">
-						<i class="fa fa-print bigger-150 grey"></i>
+						<i class="fa fa-print bigger-150 cafe"></i>
 					</a>
 				</div>
 			</div>
@@ -164,11 +164,11 @@ jQuery(function($) {
 							tr += "					<span class='lbl'> A</span>";
 							tr += "				</label>";
 							It++;
-							tr += "				<label>";
-							tr += "					<input name='or-"+item.idboleta+"' id='or-"+item.idboleta+"-1' class='ace' type='radio' tabindex="+It+" value='2' title='Retardo'>";
-							tr += "					<span class='lbl'> R</span>";
-							tr += "				</label>";
-							It++;
+							// tr += "				<label>";
+							// tr += "					<input name='or-"+item.idboleta+"' id='or-"+item.idboleta+"-1' class='ace' type='radio' tabindex="+It+" value='2' title='Retardo'>";
+							// tr += "					<span class='lbl'> R</span>";
+							// tr += "				</label>";
+							// It++;
 							tr += "				<label>";
 							tr += "					<input name='or-"+item.idboleta+"' id='or-"+item.idboleta+"-2' class='ace' type='radio' tabindex="+It+" value='0' title='Falta'>";
 							tr += "					<span class='lbl'> F</span>";
@@ -215,11 +215,11 @@ jQuery(function($) {
 					tr += "					<span class='lbl'> A</span>";
 					tr += "				</label>";
 					It++;
-					tr += "				<label>";
-					tr += "					<input name='or-"+item.idbolasist+"' id='or-"+item.idbolasist+"-1' class='ace' type='radio' "+chk2+" tabindex="+It+" value='2' title='Retardo'>";
-					tr += "					<span class='lbl'> R</span>";
-					tr += "				</label>";
-					It++;
+					// tr += "				<label>";
+					// tr += "					<input name='or-"+item.idbolasist+"' id='or-"+item.idbolasist+"-1' class='ace' type='radio' "+chk2+" tabindex="+It+" value='2' title='Retardo'>";
+					// tr += "					<span class='lbl'> R</span>";
+					// tr += "				</label>";
+					// It++;
 					tr += "				<label>";
 					tr += "					<input name='or-"+item.idbolasist+"' id='or-"+item.idbolasist+"-2' class='ace' type='radio' "+chk0+" tabindex="+It+" value='0' title='Falta'>";
 					tr += "					<span class='lbl'> F</span>";

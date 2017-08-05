@@ -26,23 +26,14 @@ $mensaje   = $_POST['mensaje'];
 $res = array();
 
 $cad = "";
-$rt = $F->getQueryPDO(33,"user=$user",2);
-
+$rt = $F->getQueryPDO(33,"user=$user");
+$res = $rt;
 foreach ($rt as $i => $value) {
-
-	$x = strlen($rt[$i]->device_token) == 152 ? true : false;
-	
-	if ( $x ){
-		// $cad .= $i==(count($rt)-1) ? $rt[$i]->device_token : $rt[$i]->device_token . ",";
-		$cad = $C->sendNotification_Android($rt[$i]->device_token,$mensaje);
-	}
-
+	$cad = $C->sendNotification_Android($rt[$i]->device_token,$mensaje,$rt[$i]->type);
 }
 
 $res[0]->msg = "OK";
 $m = json_encode($res);
 echo $m;
-
-// echo $cad; // $C->sendNotification_Android($cad,$mensaje);
 
 ?>

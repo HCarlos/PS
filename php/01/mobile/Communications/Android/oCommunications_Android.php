@@ -15,15 +15,19 @@ class oCommunications_Android {
 				return self::$instancia;
 	 }
 
-	 public function sendNotification_Android($token,$mensaje){
+	 public function sendNotification_Android($token,$mensaje,$type){
 
 		$registrationIds = $token;
 		$body = $mensaje;
 
+		if ( $type == 1 ){
+			// iOS
+			$API_ACCESS_KEY = 'AIzaSyD6p5QiWIA9zrUlTBsgJJ8Pbg2225cec7E';
+		} else{
+			// Android
+			$API_ACCESS_KEY = 'AIzaSyDOffRahfHSX0fqoQ2FkQacpnP-AJg4NwM';
+		}	
 
-		$API_ACCESS_KEY = 'AIzaSyDOffRahfHSX0fqoQ2FkQacpnP-AJg4NwM';
-
-		// $registrationIds = "eLrEEuwYxqA:APA91bH2RaxbnSrDD2NVFB52wIzZ_9wfsqTLmIgQp_5lqsKSVHSQd_FE7dbb5Q4K8wwoo-7_X7jXhg1HPZ1H-Movp8jgy64tTGfdbQeXAbbyFQvE7gEJdH0VMK3u2S-AQtvvRRmDMy0T" ;
 
 		$msg = array
 		(

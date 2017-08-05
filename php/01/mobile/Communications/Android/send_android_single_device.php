@@ -9,12 +9,16 @@ ini_set('display_startup_errors', TRUE);
 
 $registrationIds = $_POST['token'];
 $body = $_POST['body'];
+$type = intval($_POST['type']);
 
 date_default_timezone_set('America/Mexico_City');
-
-define( 'API_ACCESS_KEY', 'AIzaSyDOffRahfHSX0fqoQ2FkQacpnP-AJg4NwM' );
-
-// $registrationIds = "cyLy-w9RtDA:APA91bFLV1nlTjRSr2cW4uJOaKBUN9822t9pjIkFp5OZGLP9arFCFvOG8CpYuGu8VPEvNJW4mN3P8j8BXdYWfVLuymeOTmCpjkODKku4dAzB26JnLb8Ct7XhZEZXFZ7TuQol6FUPEqmP" ;
+if ( $type == 1 ){
+	// iOS
+	define( 'API_ACCESS_KEY', 'AIzaSyD6p5QiWIA9zrUlTBsgJJ8Pbg2225cec7E' );
+}else{
+	// Android
+	define( 'API_ACCESS_KEY', 'AIzaSyDOffRahfHSX0fqoQ2FkQacpnP-AJg4NwM' );
+}
 
 $msg = array
 (

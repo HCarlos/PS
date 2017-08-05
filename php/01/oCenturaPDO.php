@@ -285,7 +285,7 @@ class oCenturaPDO {
 		return $rc1;	
 	 }
 
-	private function guardarDatos($query=""){
+	public function guardarDatos($query=""){
 
 			$Conn = new voConnPDO();
 			$result = $Conn->exec($query);
@@ -302,7 +302,7 @@ class oCenturaPDO {
 
 	}
 
-	private function getArray($query){
+	public function getArray($query){
 
 			$rs=0;
 		 	$Conn = new voConnPDO();
@@ -311,7 +311,7 @@ class oCenturaPDO {
 			return $rst;
 	}
 
-	private function execQuery($query){
+	public function execQuery($query){
 			$vRet = "OK";
 			$Conn = new voConnPDO();
 			$result = $Conn->query($query);
@@ -1040,15 +1040,14 @@ class oCenturaPDO {
 		        $iduser = $this->getIdUserFromAlias($user);
 		        $idciclo = $this->getCicloFromIdEmp($idemp);
 
-		        // AND iduser = $iduser 
+		        // AND iduser = $iduser AND type = $type
 		        
-				$query = "SELECT DISTINCT iddevice, iduser, device_token
+				$query = "SELECT DISTINCT iddevice, iduser, device_token, type
 							FROM cat_devices 
 							WHERE idemp = $idemp AND 
 									idciclo = $idciclo AND 
-									type = $type AND 
 									status_device = 1 AND 
-									device_token != '(null)' 
+									(device_token LIKE '%:%') 
 							ORDER BY iddevice DESC";
 				break;
 

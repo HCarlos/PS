@@ -217,24 +217,24 @@ foreach ($Alu as $k => $value) {
 			$Cal = intval($MCP[$j]->asistencia);//$fp->getQueryPDO(3,$nc,0,0,0,array(),"  ",1);
 			switch ($Cal) {
 				case 1:
-					$pdf->SetTextColor(192,192,192);
+					$pdf->SetTextColor(0,0,212);
 					$pdf->SetFont('Arial','B',10);
 					$calif = iconv('utf-8', 'cp1252//IGNORE', "•");
 					break;
-				case 2:
-					$pdf->SetFont('Arial','B',7);
-					$pdf->SetTextColor(0,0,192);
-					$calif = "R";
-					break;
+				// case 2:
+				// 	$pdf->SetFont('Arial','B',7);
+				// 	$pdf->SetTextColor(0,0,192);
+				// 	$calif = "R";
+				// 	break;
 				case 3:
 					$pdf->SetFont('Arial','B',7);
-					$pdf->SetTextColor(64,0,0);
-					$calif = "X";
+					$pdf->SetTextColor(212,0,0);
+					$calif = "XX";
 					$faltas = $faltas + 2;
 					break;
 				default:
 					$pdf->SetFont('Arial','B',7);
-					$pdf->SetTextColor(192,0,0);
+					$pdf->SetTextColor(212,0,0);
 					$calif = "X";
 					++$faltas;
 					break;
@@ -273,7 +273,7 @@ $pdf->Ln(5);
 $pdf->setX(5);
 
 $pdf->SetFont('Arial','B',10);
-$pdf->SetTextColor(192,192,192);
+$pdf->SetTextColor(0,0,212);
 $pdf->Cell(3,$pdf->nFont,iconv('utf-8', 'cp1252//IGNORE', "•"),'LTB',0,'L');
 
 $pdf->SetFont('Arial','',8);
@@ -284,7 +284,7 @@ $pdf->SetTextColor(0,0,0);
 $pdf->Cell(20,$pdf->nFont,'Asistencia','TB',0,'L');
 
 $pdf->SetFont('Arial','B',8);
-$pdf->SetTextColor(192,0,0);
+$pdf->SetTextColor(212,0,0);
 $pdf->Cell(3,$pdf->nFont,'X','TB',0,'L');
 
 $pdf->SetFont('Arial','',8);
@@ -295,27 +295,27 @@ $pdf->SetTextColor(0,0,0);
 $pdf->Cell(13,$pdf->nFont,'Falta','TB',0,'L');
 
 $pdf->SetFont('Arial','B',8);
-$pdf->SetTextColor(64,0,0);
-$pdf->Cell(3,$pdf->nFont,'X','TB',0,'L');
+$pdf->SetTextColor(212,0,0);
+$pdf->Cell(3,$pdf->nFont,'XX','TB',0,'L');
 
 $pdf->SetFont('Arial','',8);
 $pdf->SetTextColor(192,192,192);
 $pdf->Cell(3,$pdf->nFont,'=','TB',0,'L');
 
 $pdf->SetTextColor(0,0,0);
-$pdf->Cell(22,$pdf->nFont,'Doble Falta','TB',0,'L');
+$pdf->Cell(22,$pdf->nFont,'Doble Falta','TRB',1,'L');
 
-$pdf->SetFont('Arial','B',8);
-$pdf->SetTextColor(0,0,192);
-$pdf->Cell(3,$pdf->nFont,'R','TB',0,'L');
+// $pdf->SetFont('Arial','B',8);
+// $pdf->SetTextColor(0,0,192);
+// $pdf->Cell(3,$pdf->nFont,'R','TB',0,'L');
 
-$pdf->SetFont('Arial','',8);
-$pdf->SetTextColor(192,192,192);
-$pdf->Cell(3,$pdf->nFont,'=','TB',0,'L');
+// $pdf->SetFont('Arial','',8);
+// $pdf->SetTextColor(192,192,192);
+// $pdf->Cell(3,$pdf->nFont,'=','TB',0,'L');
 
-$pdf->SetFont('Arial','',8);
-$pdf->SetTextColor(0,0,0);
-$pdf->Cell(20,$pdf->nFont,'Retardo','TRB',1,'L');
+// $pdf->SetFont('Arial','',8);
+// $pdf->SetTextColor(0,0,0);
+// $pdf->Cell(20,$pdf->nFont,'Retardo','TRB',1,'L');
 
 $pdf->Output();
 

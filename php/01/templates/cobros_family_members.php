@@ -338,6 +338,7 @@ jQuery(function($){
 				$("#preloaderPrincipal").hide();
         		if (json[0].msg=="OK"){
         			alert("Registro CANCELADO con éxito.");
+					stream.emit("cliente", {mensaje: "PLATSOURCE|PAGO_CANCELADO|PROP|"+item[1]});
     			}else{
     				alert(json[0].msg);	
     			}

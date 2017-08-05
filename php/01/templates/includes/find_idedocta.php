@@ -93,6 +93,8 @@ $user = $_POST["user"];
 
 	$("#reviveIdEdoCta").hide();
 
+	var stream = io.connect(obj.getValue(4));
+
 	var pIdEdoCta = 0;
 	var pIdUser = localStorage.IdUser;
 	var pUsuario = localStorage.nc;
@@ -158,7 +160,8 @@ $user = $_POST["user"];
         function(json) {
 
         	if ( json[0].msg = "OK"){
-        		alert("Pago reactivado con éxito");
+                stream.emit("cliente", {mensaje: "PLATSOURCE-PAGO_REACTIVADO-PROP-"+pIdEdoCta});
+        		alert("Pago REACTIVADO con éxito");
 				goBack()
         	}else{
         		alert("No se pudo reactivar el pago");

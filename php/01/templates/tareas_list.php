@@ -59,21 +59,21 @@ $de       = $_POST['user'];
 
 				<div id="user-profile-1" class="user-profile row-fluid">
 
-					<div id="sample-table-2_wrapper" class="dataTables_wrapper" role="grid">
+					<div id="tblTarProf01_wrapper" class="dataTables_wrapper" role="grid">
 
-						<table aria-describedby="sample-table-2_info" id="sample-table-2" class="table table-striped table-bordered table-hover dataTable">
+						<table aria-describedby="tblTarProf01_info" id="tblTarProf01" class="table table-striped table-bordered table-hover dataTable">
 											
 							<thead>
 								<tr role="row">
-									<th aria-label="idtarea: to sort column ascending" style="width: 10px;" aria-controls="sample-table-2" tabindex="0" role="columnheader" class="sorting" >ID</th>
-									<th aria-label="titulo: to sort column ascending" style="width: 150px;" aria-controls="sample-table-2" tabindex="2" role="columnheader" class="sorting">TAREA</th>
-									<th aria-label="fecha_inicio: to sort column ascending" style="width: 10px;" aria-controls="sample-table-2" tabindex="3" role="columnheader" class="sorting center">INICIA</th>
-									<th aria-label="fecha_fin: to sort column ascending" style="width: 10px;" aria-controls="sample-table-2" tabindex="3" role="columnheader" class="sorting center">VENCE</th>
-									<th aria-label="lecturas: to sort column ascending" style="width: 5px;" aria-controls="sample-table-2" tabindex="3" role="columnheader" class="sorting center">LEC</th>
-									<th aria-label="respuestas: to sort column ascending" style="width: 5px;" aria-controls="sample-table-2" tabindex="4" role="columnheader" class="sorting center">RESP</th>
-									<th aria-label="archivos: to sort column ascending" style="width: 5px;" aria-controls="sample-table-2" tabindex="3" role="columnheader" class="sorting center">ARCH</th>
-									<th aria-label="destinatarios: to sort column ascending" style="width: 5px;" aria-controls="sample-table-2" tabindex="4" role="columnheader" class="sorting center">DEST</th>
-									<th aria-label="" style="width: 120px;" role="columnheader" class="sorting_disabled"></th>
+									<th aria-label="idtarea: to sort column ascending" style="width: 10px;" tabindex="0" >ID</th>
+									<th aria-label="titulo: to sort column ascending" style="width: 150px;" tabindex="1">TAREA</th>
+									<th aria-label="fecha_inicio: to sort column ascending" style="width: 10px;" tabindex="2" class=" center">INICIA</th>
+									<th aria-label="fecha_fin: to sort column ascending" style="width: 10px;" tabindex="3" class=" center">VENCE</th>
+									<th aria-label="lecturas: to sort column ascending" style="width: 5px;" tabindex="4" class=" center">LEC</th>
+									<th aria-label="respuestas: to sort column ascending" style="width: 5px;" tabindex="5" class=" center">RESP</th>
+									<th aria-label="archivos: to sort column ascending" style="width: 5px;" tabindex="6" class=" center">ARCH</th>
+									<th aria-label="destinatarios: to sort column ascending" style="width: 5px;" tabindex="7" class=" center">DEST</th>
+									<th aria-label="" style="width: 120px;" class="sorting_disabled"></th>
 								</tr>
 							</thead>
 											
@@ -106,7 +106,7 @@ jQuery(function($) {
 
 	function getTable(){
 
-		oTable = $('#sample-table-2').dataTable({
+		oTable = $('#tblTarProf01').dataTable({
 	        "oLanguage": {
 	                    	"sLengthMenu": "_MENU_ registros por página",
 	                    	"oPaginate": {
@@ -175,34 +175,34 @@ jQuery(function($) {
 						tB +='				<td class="center">'+des+'</td>';
 						tB +='				<td>';
 						tB +='					<div class="action-buttons">';
-						tB +=' ';
 						tB +='						<a class="green modTarPro0" href="#" id="idtarea-'+item.idtarea+'" data-rel="tooltip" data-placement="top" title="Editar Tarea">';
 						tB +='							<i class="icon-pencil bigger-130"></i>';
 						tB +='						</a>';
 						tB +=' ';
 						if ( parseInt(item.status_tarea,0) == 1 ){
-							tB +='						<a class="red delTar0" href="#" id="delTar0-'+item.idtarea+'"  data-rel="tooltip" data-placement="top" title="Eliminar Tarea">';
+							tB +='						<a class="red delTarAB0" href="#" id="delTarAB0-'+item.idtarea+'"  data-rel="tooltip" data-placement="top" title="Eliminar Tarea">';
 							tB +='							<i class="icon-trash bigger-130"></i>';
 							tB +='						</a>';
-							tB +=' ';
 						}
 						tB +='						<a class="cafe modTarFileAddProProf1" href="#" id="modTarFileAddProProf1-'+item.idtarea+'-'+item.titulo_tarea+ '" data-rel="tooltip" data-placement="top" title="Ver Archivos">';
 						tB +='							<i class="fa fa-paperclip bigger-130"></i>';
 						tB +='						</a>';
 						tB +=' ';
-						tB +=' ';
 						tB +='						<a class="blue marginLeft1em modTarPro2" href="#" id="modTarPro2-'+item.idtarea+'-'+item.titulo_tarea+ '" data-rel="tooltip" data-placement="top" title="Ver Destinatarios" >';
 						tB +='							<i class="icon-group bigger-130"></i>'
 						tB +='						</a>';
-						tB +='					</div>';
 						tB +=' ';
+						tB +='						<a class="green marginLeft1em refreshTarPro2" href="#" id="refreshTarPro2-'+item.idtarea+'-'+item.titulo_tarea+ '" data-rel="tooltip" data-placement="top" title="Actualizar" >';
+						tB +='							<i class="icon-refresh bigger-130"></i>'
+						tB +='						</a>';
+						tB +='					</div>';
 						tB +='				</td>';
 						tB +='			</tr>';
 					});
 				 	
 				 	//alert(tB);
 
-					$('#sample-table-2 > tbody').html(tB);
+					$('#tblTarProf01 > tbody').html(tB);
 
 					$("#preloaderPrincipal").hide();
 
@@ -227,17 +227,15 @@ jQuery(function($) {
 						getDestinatariosTar1(arr[1],arr[2]);
 					});
 
-					$(".delTar0").on("click",function(event){
+					$(".delTarAB0").on("click",function(event){
 						event.preventDefault();
 						$("#iconSaveCommentResp").show();
 						var resp =  confirm("Desea eliminar este registro?");
-						//alert(resp);
-						//return false;
 						if (resp){
 							var arr = event.currentTarget.id.split('-');
-							//alert(arr[1]);
 							obj.setIsTimeLine(false);
-				            $.post(obj.getValue(0) + "data/", {o:40, t:2, c:arr[1], p:2, from:0, cantidad:0, s:''},
+							var nc = "u="+localStorage.nc+"&idtarea="+arr[1];
+				            $.post(obj.getValue(0) + "tt-del-1a/", {data:nc},
 				            function(json) {
 				            		if (json[0].msg=="OK"){
 										onClickFillTable();
@@ -247,6 +245,22 @@ jQuery(function($) {
 				        	}, "json");
 			        	}
 					});
+					
+					$(".refreshTarPro2").on("click",function(event){
+						event.preventDefault();
+						$("#preloaderPrincipal").show();
+						var arr = event.currentTarget.id.split('-');
+						obj.setIsTimeLine(false);
+				        $.post(obj.getValue(0) + "data/", {o:40, t:10, c:arr[1], p:2, from:0, cantidad:0, s:''},
+			            function(json) {
+			            		if (json[0].msg=="OK"){
+									onClickFillTable();
+			        			}else{
+			        				alert(json[0].msg);	
+			        			}
+			        	}, "json");
+					});
+
 
 					$('[data-rel=tooltip]').tooltip();
 
@@ -288,7 +302,7 @@ jQuery(function($) {
 	function onClickFillTable(){
 		if(oTable != null){
 			oTable.fnDestroy();
-			$('#sample-table-2 > tbody').empty();
+			$('#tblTarProf01 > tbody').empty();
 			init = true;
 		}
 		fillTable();
