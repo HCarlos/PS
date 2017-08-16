@@ -192,7 +192,7 @@ jQuery(function($) {
 						tB +='							<i class="icon-group bigger-130"></i>'
 						tB +='						</a>';
 						tB +=' ';
-						tB +='						<a class="green marginLeft1em refreshTarPro2" href="#" id="refreshTarPro2-'+item.idtarea+'-'+item.titulo_tarea+ '" data-rel="tooltip" data-placement="top" title="Actualizar" >';
+						tB +='						<a class="green marginLeft1em refreshTarPro2" href="#" id="refreshTarPro2-'+item.idtarea+'-'+item.titulo_tarea+ '" data-rel="tooltip" data-placement="top" title="Actualizar datos" >';
 						tB +='							<i class="icon-refresh bigger-130"></i>'
 						tB +='						</a>';
 						tB +='					</div>';

@@ -10,7 +10,7 @@ ini_set('display_errors', TRUE);
 ini_set('display_startup_errors', TRUE);
 
 // Put your device token here (without spaces):
-$deviceToken = strtoupper('e2p530oKlWw:APA91bHpPm7MqDIltO7KJs8spuPMknMUXbvkmBDJ-nD1DSfEIoWaGcDRKF1DJA0CC4JDr7PmqNaCqxBwwZrc27Gf2_UqAtSzks-3-04EAO8BieMc4Y8zke_V4NX6NzgjgQBhBjKqjKcW');
+$deviceToken = strtoupper('9759b56f789dc70c3c9f60abc305d4431ccfe657f41b6fe7dff61aed262ebbb8');
 
 // Put your private key's passphrase here:
 // $passphrase = 'devch43';

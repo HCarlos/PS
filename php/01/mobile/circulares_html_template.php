@@ -187,6 +187,8 @@ html {
 
                     </ul>
                     <?php
+                        $cad = "user=".$user."&idcommensajedestinatario=".$idcommensajedestinatario;
+                        $f->setSaveData(42,$cad,0,0,9);
                         } else
                         {
 

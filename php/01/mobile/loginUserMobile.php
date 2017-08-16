@@ -1,9 +1,11 @@
 <?php
 
+ini_set('display_errors', '0');     
+error_reporting(E_ALL | E_STRICT);  
+
 error_reporting(E_ALL);
 ini_set('display_errors', TRUE);
 ini_set('display_startup_errors', TRUE);
-
 
 header("application/json; charset=utf-8");  
 header("Cache-Control: no-cache");
@@ -33,6 +35,13 @@ if (count($res)>0){
 	$respuesta[0]->msg = "OK";
 
 	try{
+
+		$dato = explode("|", $respuesta[0]->data );
+
+		$iduser 		   = intval($dato[0]);
+		$idusernivelacceso = intval($dato[3]);
+		$clavex = intval($dato[5]);
+
 		$arg = "user=$us&UUID=$UUID&tD=$tD&device_token=$device_token";
 		
 		if ( intval($tD) == 1 ){
@@ -40,7 +49,11 @@ if (count($res)>0){
 		}else{
 			$respuesta[0]->msg = $F->saveDataPDO(56,$arg,0,0,4);
 		}
+
+		$respuesta[0]->estadisticas = $F->getEstadisticasNoLeidas($clavex,$idusernivelacceso,$us,$iduser);
 		
+		// $respuesta[0]->clave = $us;
+
 	} catch (Exception $e) {
 
 		$respuesta[0]->msg = $e->getMessage();

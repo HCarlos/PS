@@ -15,7 +15,7 @@ class oCommunications_Android {
 				return self::$instancia;
 	 }
 
-	 public function sendNotification_Android($token,$mensaje,$type){
+	 public function sendNotification_Android($token,$mensaje,$type,$title="Colegio Arjí AC",$badge="0"){
 
 		$registrationIds = $token;
 		$body = $mensaje;
@@ -32,13 +32,20 @@ class oCommunications_Android {
 		$msg = array
 		(
 			"body" => $body,
-			"title"	=> "Colegio Arjí AC"
+			"title"	=> $title
+		);
+
+		$data = array
+		(
+			"badge" => $badge
 		);
 
 		$fields = array
 		(
-		 	'to' 	=> $registrationIds,
-			'notification' => $msg
+		 	"to" 	=> $registrationIds,
+			"priority" => "normal",
+			"notification" => $msg,
+			"data" => $data
 		);
 
 		$headers = array

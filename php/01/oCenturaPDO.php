@@ -1118,6 +1118,7 @@ class oCenturaPDO {
 			case 41:
 
 				parse_str($cad);
+				
 				$query = "	SELECT idmobilmensaje, mensaje
 							FROM _viMobileMensajes 
 							WHERE iduser = $iduser AND 
@@ -2258,7 +2259,7 @@ class oCenturaPDO {
 					        $idemp = $this->getIdEmpFromAlias($user);
 							$idciclo = $this->getCicloFromIdEmp($idemp);		        
 
-							$qry = "SELECT iddevice AS IDs FROM cat_devices WHERE iduser = $idusr AND UUID = '$UUID' AND idemp = $idemp LIMIT 1";							
+							$qry = "SELECT iddevice AS IDs FROM cat_devices WHERE iduser = $idusr AND device_token = '$device_token' AND idemp = $idemp LIMIT 1";							
 							$result23 = $this->getArray($qry);
 							
 							if (!$result23) {
@@ -3754,6 +3755,68 @@ class oCenturaPDO {
 		$ret = $this->execQuery($query);
 
 	    return $ret;
+
+	}
+
+	public function getEstadisticasNoLeidas($Clave=0,$IdUserNivelAcceso=0,$u="",$iduser=0){
+		$totalNoLeidasTareas     = 0;
+		$totalNoLeidasCirculares = 0;
+		$totalNoLeidasMensajes   = 0;
+		$totalNoLeidasBadge      = 0;
+
+		require_once("oCentura.php");
+		$f = oCentura::getInstance();
+
+		switch ($Clave) {
+			case 5:
+					// Tareas
+					$arg = "u=$u&sts=0&iduseralu=".$iduser;
+					$tipo = 20009;
+					$r = $f->getQuerys($tipo,$arg,0,0,0,array(),"",1);
+					$totalNoLeidasTareas = $totalNoLeidasTareas + count($r);
+					// Circulaes
+					$arg = "u=$u&sts=0";
+					$tipo = 31009;
+					$r = $f->getQuerys($tipo,$arg,0,0,0,array(),"",1);
+					$totalNoLeidasCirculares = $totalNoLeidasCirculares + count($r);
+
+				break;
+
+			case 7:
+			case 28:
+			case 29:
+
+				$arg = "u=".$u;
+				
+				$res = $f->getCombo(1,$arg,0,0,61,'');
+				
+				if ( count($res) > 0 ){	
+					foreach ($res as $i => $value) {
+						// Tareas
+						$arg = "u=".$u."&sts=0&iduseralu=".$res[$i]->data;
+						$tipo = 20009;
+						$r = $f->getQuerys($tipo,$arg,0,0,0,array(),"",1);
+						$totalNoLeidasTareas = $totalNoLeidasTareas + count($r);
+						// Circulaes
+						$arg = "u=".$u."&sts=0";
+						$tipo = 31009;
+						$r = $f->getQuerys($tipo,$arg,0,0,0,array(),"",1);
+						$totalNoLeidasCirculares = $totalNoLeidasCirculares + count($r);
+					}	
+				}
+				
+
+				break;
+		}
+
+		$totalNoLeidasBadge = $totalNoLeidasTareas + $totalNoLeidasCirculares + $totalNoLeidasMensajes;
+
+		return array(
+					"totalNoLeidasTareas"     => $totalNoLeidasTareas,
+					"totalNoLeidasCirculares" => $totalNoLeidasCirculares,
+					"totalNoLeidasMensajes"   => $totalNoLeidasMensajes,
+					"totalNoLeidasBadge"      => $totalNoLeidasBadge
+					);
 
 	}
 

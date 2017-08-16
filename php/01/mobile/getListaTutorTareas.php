@@ -43,22 +43,6 @@ switch ($tipoConsulta) {
 		break;
 }
 
-
-	// var nc = "u="+localStorage.nc+ "&idfamilia="+IdFamilia+"&idalumno="+idalu;
-
-/*
-
-        var nc = "u="+localStorage.nc+"&idfamilia="+IdFamilia;
-        $.post(obj.getValue(0) + "data/", {o:2, t:7, c:nc, p:0, from:0, cantidad:0, s:''},
-
-	var nc = "u="+localStorage.nc+ "&sts="+val+ "&iduseralu="+$("#listAlumnosTarTutor0 option:selected").val();
-
-	$.post(obj.getValue(0) + "data/", {o:40, t:20008, c:nc, p:10, from:0, cantidad:0,s:''},
-	getQuerys($tipo=0,$cad="",$type=0,$from=0,$cant=0,$ar=array(),$otros="",$withPag=1)
-
-*/
-
-
 $r = $f->getQuerys($tipo,$arg,0,0,0,array(),$otros,1);
 if (count($r)>0){
             

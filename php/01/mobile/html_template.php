@@ -194,6 +194,10 @@ html {
 
                     </ul>
                     <?php
+
+                        $cad = "user=".$user."&idtareadestinatario=".$idtareadestinatario;
+                        $f->setSaveData(40,$cad,0,0,9);
+                    
                         } else
                         {
 

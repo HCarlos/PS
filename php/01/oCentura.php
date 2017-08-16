@@ -303,16 +303,16 @@ class oCentura {
 								parse_str($arg);
 								$pass = md5($passwordL);
 								$query = "SELECT username AS label, concat(
-																		iduser,'|',
-																		password,'|',
-																		idemp,'|',
-																		idusernivelacceso,'|',
-																		registrosporpagina,'|',
+																		iduser,'|', 
+																		password,'|', 
+																		idemp,'|', 
+																		idusernivelacceso,'|', 
+																		registrosporpagina,'|', 
 																		clave,'|', 
 																			CASE param1 
 																				WHEN '' THEN -1
 																				WHEN NULL THEN -2 
-																				ELSE param1 END,'|',
+																				ELSE param1 END,'|', 
 																		nombre_completo_usuario) 
 														AS data 
 										FROM  _viUsuarios WHERE username = '$username' AND password = '$pass' AND status_usuario = 1";

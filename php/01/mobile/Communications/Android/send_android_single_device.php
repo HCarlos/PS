@@ -10,6 +10,8 @@ ini_set('display_startup_errors', TRUE);
 $registrationIds = $_POST['token'];
 $body = $_POST['body'];
 $type = intval($_POST['type']);
+$title = $_POST['title'];
+$badge = $_POST['badge'];
 
 date_default_timezone_set('America/Mexico_City');
 if ( $type == 1 ){
@@ -23,13 +25,20 @@ if ( $type == 1 ){
 $msg = array
 (
 	"body" => $body,
-	"title"	=> "Colegio Arjí AC"
+	"title"	=> $title
+);
+
+$data = array
+(
+	"badge" => $badge
 );
 
 $fields = array
 (
- 	'to' 	=> $registrationIds,
-	'notification' => $msg
+ 	"to" 	=> $registrationIds,
+	"priority" => "normal",
+	"notification" => $msg,
+	"data" => $data
 );
 
 $headers = array
