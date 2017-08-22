@@ -90,7 +90,7 @@ $idpaicriterio  = $_POST['idpaicriterio'];
 
 jQuery(function($) {
 
-	var stream = io.connect(obj.getValue(4));
+	// var stream = io.connect(obj.getValue(4));
 
 
 	$("#preloaderPrincipal").hide();
@@ -136,7 +136,7 @@ jQuery(function($) {
             function(json) {
             		if (json[0].msg=="OK"){
             			alert("Datos guardados con éxito.");
-						stream.emit("cliente", {mensaje: "PLATSOURCE-CRITERIOS-PROP-"+IdPAICriterio});
+						// stream.emit("cliente", {mensaje: "PLATSOURCE-CRITERIOS-PROP-"+IdPAICriterio});
 						$("#preloaderPrincipal").hide();
 						$("#contentProfile").hide(function(){
 							$("#contentProfile").empty();

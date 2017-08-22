@@ -270,7 +270,7 @@ jQuery(function($) {
         return false;
 	}
 
-
+/*
 	var stream = io.connect(obj.getValue(4));
 	stream.on("servidor", jsNewprofesor);
 	function jsNewprofesor(datosServer) {
@@ -281,7 +281,7 @@ jQuery(function($) {
 			onClickFillTable();
 		}
 	}
-
+*/
 	
 
 });

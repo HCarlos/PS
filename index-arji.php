@@ -167,7 +167,7 @@
   <script src="/js/libs/modernizr.min.js"></script>
     <script  src="/js/01/base.js"> </script>
     <script typy="text/javascript">
-        document.write("<script src='"+obj.getValue(4)+"/socket.io/socket.io.js'>"+"<"+"/script>");
+        /* document.write("<script src='"+obj.getValue(4)+"/socket.io/socket.io.js'>"+"<"+"/script>"); */
     </script>    
 
     

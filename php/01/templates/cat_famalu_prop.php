@@ -101,7 +101,7 @@ $(document).ready(function () {
             function(json){
                 if (json[0].msg=="OK"){
                     //alert("Información guardada con éxito!");
-                    stream.emit("cliente", {mensaje: "PLATSOURCE-FAMALU-PROP-"+idfamalu});
+                    // stream.emit("cliente", {mensaje: "PLATSOURCE-FAMALU-PROP-"+idfamalu});
                     $("#preloaderPrincipal").hide();
                     $("#divUploadImage").modal('hide');
                 }else{
@@ -163,7 +163,7 @@ $(document).ready(function () {
 
     getAlumnos();
 
-    var stream = io.connect(obj.getValue(4));
+    // var stream = io.connect(obj.getValue(4));
 
     $('[data-rel=popover]').popover({container:$('.span7')});
 

@@ -283,7 +283,7 @@ jQuery(function($) {
 
 	var lc = parseInt(localStorage.IdUserNivelAcceso,0);
 
-	var stream = io.connect(obj.getValue(4));
+	// var stream = io.connect(obj.getValue(4));
 
 	$("#preloaderPrincipal").hide();
 
@@ -363,7 +363,7 @@ jQuery(function($) {
             function(json) {
             		if (json[0].msg=="OK"){
             			alert("Datos guardados con éxito.");
-						stream.emit("cliente", {mensaje: "PLATSOURCE-ALUMNOS-PROP-"+IdAlumno});
+						// stream.emit("cliente", {mensaje: "PLATSOURCE-ALUMNOS-PROP-"+IdAlumno});
 						$("#preloaderPrincipal").hide();
 						$("#contentProfile").hide(function(){
 							$("#contentProfile").html("");
@@ -407,7 +407,7 @@ jQuery(function($) {
             $.post(obj.getValue(0) + "data/", {o:5, t:2, c:idalumno, p:3, from:0, cantidad:0, s:''},
             function(json) {
             		if (json[0].msg=="OK"){
-						stream.emit("cliente", {mensaje: "PLATSOURCE-ALUMNOS-PROP-"+idalumno});
+						// stream.emit("cliente", {mensaje: "PLATSOURCE-ALUMNOS-PROP-"+idalumno});
 						$("#preloaderPrincipal").hide();
 						$("#contentProfile").hide(function(){
 							$("#contentProfile").html("");

@@ -63,7 +63,7 @@ $idciclo = $_POST['idciclo'];
 
 jQuery(function($) {
 
-	var stream = io.connect(obj.getValue(4));
+	// var stream = io.connect(obj.getValue(4));
 
 	var idgrupo = <?php echo $idgrupo ?>;
 	var Grupo = "<?php echo $grupo; ?>";
@@ -138,7 +138,7 @@ jQuery(function($) {
         function(json) {
         		if (json[0].msg=="OK"){
         			alert("Lista guardada con éxito.");
-					stream.emit("cliente", {mensaje: "PLATSOURCE-LISTA_ORDENADA_GRUPO-IDGPO-"+idgrupo});
+					// stream.emit("cliente", {mensaje: "PLATSOURCE-LISTA_ORDENADA_GRUPO-IDGPO-"+idgrupo});
 					getGrupo(idgrupo);
     			}else{
     				alert(json[0].msg);	

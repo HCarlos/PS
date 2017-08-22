@@ -244,7 +244,7 @@ jQuery(function($) {
                     success: function(json){
                         if (json.status=="OK"){
                             alert( json.message );
-                            stream.emit("cliente", {mensaje: "PLATSOURCE-DELETE_FILES_MENSAJES-PROP-"+IdTareaArchivo});
+                            // stream.emit("cliente", {mensaje: "PLATSOURCE-DELETE_FILES_MENSAJES-PROP-"+IdTareaArchivo});
                             onClickFillTable();
                             
                         }else{
@@ -269,6 +269,7 @@ jQuery(function($) {
         return false;
     });
 
+/*
     var stream = io.connect(obj.getValue(4));
     stream.on("servidor", jsNewSolMatEnc0);
     function jsNewSolMatEnc0(datosServer) {
@@ -277,6 +278,7 @@ jQuery(function($) {
             onClickFillTable();
         }
     }
+*/
 
 
 });

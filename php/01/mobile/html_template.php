@@ -15,6 +15,14 @@ $idtareadestinatario = $_POST['idtareadestinatario'];
 
 $rs = $f->getQuerys(20001,"idtarea=".$idtarea);
 
+if ( count($rs) <= 0 ){
+    $rs[0] = new StdClass();
+    $rs[0]->titulo_tarea = "";
+    $rs[0]->fecha0 = "";
+    $rs[0]->fecha1 = "";
+    $rs[0]->tarea = "";
+}
+
 $rprof = $f->getQuerys(20010,"idtareadestinatario=".$idtareadestinatario);
 
 ?>
@@ -194,12 +202,8 @@ html {
 
                     </ul>
                     <?php
-
-                        $cad = "user=".$user."&idtareadestinatario=".$idtareadestinatario;
-                        $f->setSaveData(40,$cad,0,0,9);
                     
-                        } else
-                        {
+                        } else {
 
                     ?>
                         <small><i>No se encontraron archivos.</i></small>
@@ -207,6 +211,10 @@ html {
                     <?php
 
                         }
+
+                        $cad = "user=".$user."&idtareadestinatario=".$idtareadestinatario;
+                        $f->setSaveData(40,$cad,0,0,9);
+
                     ?>
 
 

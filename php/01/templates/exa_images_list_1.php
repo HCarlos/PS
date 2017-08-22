@@ -227,7 +227,7 @@ jQuery(function($) {
                     success: function(json){
                         if (json.status=="OK"){
                             alert( json.message );
-                            stream.emit("cliente", {mensaje: "PLATSOURCE-DELETE_IMAGES_EXA-PROP-"+IdExaImage});
+                            // stream.emit("cliente", {mensaje: "PLATSOURCE-DELETE_IMAGES_EXA-PROP-"+IdExaImage});
                             onClickFillTable();
                             
                         }else{
@@ -240,7 +240,7 @@ jQuery(function($) {
 
     }
 
-
+/*
 	var stream = io.connect(obj.getValue(4));
 	stream.on("servidor", jsNewExa);
 	function jsNewExa(datosServer) {
@@ -255,6 +255,7 @@ jQuery(function($) {
 			//onClickFillTable();
 		}
 	}
+*/
 
 	
 

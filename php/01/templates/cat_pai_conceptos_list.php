@@ -218,7 +218,7 @@ jQuery(function($) {
 	}
 
 
-
+/*
 	var stream = io.connect(obj.getValue(4));
 	stream.on("servidor", jsNewPAIC0);
 	function jsNewPAIC0(datosServer) {
@@ -229,7 +229,7 @@ jQuery(function($) {
 			onClickFillTable();
 		}
 	}
-
+*/
 	
 
 });

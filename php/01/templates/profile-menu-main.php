@@ -75,8 +75,8 @@
             function(json) {
                 // alert(json[0].msg);
                 if (json[0].msg=="OK"){
-                var stream = io.connect(obj.getValue(4));
-                stream.emit("cliente", {mensaje: "PLATSOURCE-UCONNECTDELL-"+localStorage.IdUser+'-'+localStorage.nc});
+                // var stream = io.connect(obj.getValue(4));
+                // stream.emit("cliente", {mensaje: "PLATSOURCE-UCONNECTDELL-"+localStorage.IdUser+'-'+localStorage.nc});
                 console.log("Desconectado...");
                 delete sessionStorage.Id;
                 delete localStorage.nc;
@@ -207,8 +207,8 @@
         });
     }
 
-    var stream = io.connect(obj.getValue(4));
-    stream.on("servidor", jsNewEstado);
+    // var stream = io.connect(obj.getValue(4));
+    // stream.on("servidor", jsNewEstado);
     function jsNewEstado(datosServer) {
         var ms = datosServer.mensaje.split("|");
         if (ms[0]=='NT') {

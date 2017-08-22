@@ -78,7 +78,7 @@ $idsolicituddematerial  = $_POST['idsolicituddematerial'];
 
 jQuery(function($) {
 
-	var stream = io.connect(obj.getValue(4));
+	// var stream = io.connect(obj.getValue(4));
 
 
 	$("#preloaderPrincipal").hide();
@@ -124,7 +124,7 @@ jQuery(function($) {
             function(json) {
             		if (json[0].msg=="OK"){
             			alert("Datos guardados con éxito.");
-						stream.emit("cliente", {mensaje: "PLATSOURCE-SOL_MAT_ENC-PROP-"+IdSolMat1});
+						// stream.emit("cliente", {mensaje: "PLATSOURCE-SOL_MAT_ENC-PROP-"+IdSolMat1});
 						$("#preloaderPrincipal").hide();
 						$("#divUploadImage").modal('hide');
         			}else{

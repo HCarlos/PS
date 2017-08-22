@@ -40,7 +40,7 @@ if (count($res)>0){
 
 		$iduser 		   = intval($dato[0]);
 		$idusernivelacceso = intval($dato[3]);
-		$clavex = intval($dato[5]);
+		$clave 			   = intval($dato[5]);
 
 		$arg = "user=$us&UUID=$UUID&tD=$tD&device_token=$device_token";
 		
@@ -50,10 +50,8 @@ if (count($res)>0){
 			$respuesta[0]->msg = $F->saveDataPDO(56,$arg,0,0,4);
 		}
 
-		$respuesta[0]->estadisticas = $F->getEstadisticasNoLeidas($clavex,$idusernivelacceso,$us,$iduser);
+		$respuesta[0]->estadisticas = $F->getEstadisticasNoLeidas($clave,$idusernivelacceso,$us,$iduser);
 		
-		// $respuesta[0]->clave = $us;
-
 	} catch (Exception $e) {
 
 		$respuesta[0]->msg = $e->getMessage();

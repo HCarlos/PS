@@ -162,48 +162,84 @@ html {
                 <div class="widget-main">
                     <?php
                         if ( count($rs) > 0 && intval($rs[0]->ver_boleta_interna) == 1 ){
+                            $claveNivel = intval($rs[0]->clave_nivel);
+                            $bEsp = "";
+                            $bing = "Inglés";
 
-                        switch (intval($rs[0]->clave_nivel)) {
-                             case 5:
-                                 $url = "print-calif-prepa-interna-arji/";
-                                 break;
-                             case 4:
-                                 $url = "print-calif-secundaria-interna-arji/";
-                                 break;
-                             case 2:
-                                 $url = "print-calif-primaria-interna-arji/";
-                                 break;
-                             case 3:
-                                 $url = "print-calif-primaria-interna-arji/";
-                                 break;
-                             case 1:
-                                 $url = "print-calif-kinder-interna-arji-esp/";
-                                 break;
-                         } 
-                         $idgrualu = $rs[0]->idgrualu;
-                         $nc = "u=$user&strgrualu=$idgrualu&logoEmp=$logoEmp&logoIbo=$logoIB&grado=".$rs[0]->grado;
-                    ?>
-                    <form action="http://www.platsource.mx/<?= $url; ?>" method="POST">
+                            switch ($claveNivel) {
+                                 case 5:
+                                     $url = "print-calif-prepa-interna-arji/";
+                                     break;
+                                 case 4:
+                                     $url = "print-calif-secundaria-interna-arji/";
+                                     break;
+                                 case 2:
+                                     $url = "print-calif-primaria-interna-arji/";
+                                     break;
+                                 case 3:
+                                     $url = "print-calif-primaria-interna-arji/";
+                                     break;
+                                 case 1:
+                                    $bEsp = "Español";
+                                     $url = "print-calif-kinder-interna-arji-esp/";
+                                     $url2 = "print-calif-kinder-interna-arji-ing/";
+                                     break;
+                             } 
     
-                        <input type="hidden" name="o" value="0" id="o" />
-                        <input type="hidden" name="t" value="40" id="t" />
-                        <input type="hidden" name="c" value="<?= $nc; ?>" id="c" />
-                        <input type="hidden" name="from" value="0" id="from" />
-                        <input type="hidden" name="cantidad" value="0" id="cantidad" />
-                        <input type="hidden" name="s" value=" order by orden_impresion asc " id="s" />
-                        
-                        <div class="row-fluid">
-                            <button type="submit" class="btn btn-app btn-yellow btn-mini pull-right" >
-                                <i class="icon-calendar bigger-160"></i>
-                                Ver Boleta
-                            </button>
-                        </div>
+                        $idgrualu = $rs[0]->idgrualu;
+                        $nc = "u=$user&strgrualu=$idgrualu&logoEmp=$logoEmp&logoIbo=$logoIB&grado=".$rs[0]->grado;
 
-                    </form>
-                    <?php
-                        }else{
+                            if ( $claveNivel != 1 ){
+
+                            ?>
+
+                                <form action="http://www.platsource.mx/<?= $url; ?>" method="POST">
+                
+                                    <input type="hidden" name="o" value="0" id="o" />
+                                    <input type="hidden" name="t" value="40" id="t" />
+                                    <input type="hidden" name="c" value="<?= $nc; ?>" id="c" />
+                                    <input type="hidden" name="from" value="0" id="from" />
+                                    <input type="hidden" name="cantidad" value="0" id="cantidad" />
+                                    <input type="hidden" name="s" value=" order by orden_impresion asc " id="s" />
+                                    
+                                    <div class="row-fluid">
+                                        <button type="submit" class="btn btn-app btn-yellow btn-mini pull-right" >
+                                            <i class="icon-calendar bigger-160"></i>
+                                            Ver Boleta <?= $bEsp; ?>
+                                        </button>
+                                    </div>
+
+                                </form>
+
+                            <?php
+                            }else{
+                            ?>
+
+                                <form action="http://www.platsource.mx/<?= $url2; ?>" method="POST">
+                
+                                    <input type="hidden" name="o" value="0" id="o" />
+                                    <input type="hidden" name="t" value="40" id="t" />
+                                    <input type="hidden" name="c" value="<?= $nc; ?>" id="c" />
+                                    <input type="hidden" name="from" value="0" id="from" />
+                                    <input type="hidden" name="cantidad" value="0" id="cantidad" />
+                                    <input type="hidden" name="s" value=" order by orden_impresion asc " id="s" />
+                                    
+                                    <div class="row-fluid">
+                                        <button type="submit" class="btn btn-app btn-yellow btn-mini pull-right" >
+                                            <i class="icon-calendar bigger-160"></i>
+                                            Ver Boleta  <?= $bIng; ?>
+                                        </button>
+                                    </div>
+
+                                </form>
+
+                            <?php
+
+                            }
+
+                    }else{
                     ?>
-                    <b>Boleta NO DISPONIBLE</b>
+                        <b>Boleta NO DISPONIBLE</b>
                     <?php
                         }
                     ?>

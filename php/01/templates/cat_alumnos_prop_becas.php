@@ -93,7 +93,7 @@ jQuery(function($) {
 
 	var lc = parseInt(localStorage.IdUserNivelAcceso,0);
 
-	var stream = io.connect(obj.getValue(4));
+	// var stream = io.connect(obj.getValue(4));
 
 	$("#preloaderPrincipal").hide();
 
@@ -133,7 +133,7 @@ jQuery(function($) {
             function(json) {
             		if (json[0].msg=="OK"){
             			alert("Datos guardados con éxito.");
-						stream.emit("cliente", {mensaje: "PLATSOURCE-ALUMNOS_BECAS_CAJA-PROP-"+idalumno});
+						// stream.emit("cliente", {mensaje: "PLATSOURCE-ALUMNOS_BECAS_CAJA-PROP-"+idalumno});
 						$("#preloaderPrincipal").hide();
 						$("#contentProfile").hide(function(){
 							$("#contentProfile").empty();

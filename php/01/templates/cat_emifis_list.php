@@ -222,7 +222,7 @@ jQuery(function($) {
 
 	}
 
-
+/*
 	var stream = io.connect(obj.getValue(4));
 	stream.on("servidor", jsNewEmiFis);
 	function jsNewEmiFis(datosServer) {
@@ -233,7 +233,7 @@ jQuery(function($) {
 			onClickFillTable();
 		}
 	}
-
+*/
 	
 
 });

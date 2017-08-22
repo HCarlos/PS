@@ -86,7 +86,7 @@ $idpaiareadisciplinaria  = $_POST['idpaiareadisciplinaria'];
 
 jQuery(function($) {
 
-	var stream = io.connect(obj.getValue(4));
+	// var stream = io.connect(obj.getValue(4));
 
 
 	$("#preloaderPrincipal").hide();
@@ -134,7 +134,7 @@ jQuery(function($) {
             		
             		if (json[0].msg=="OK"){
             			alert("Datos guardados con éxito.");
-						stream.emit("cliente", {mensaje: "PLATSOURCE-AD_PAI-PROP-"+IdPAIAD1});
+						// stream.emit("cliente", {mensaje: "PLATSOURCE-AD_PAI-PROP-"+IdPAIAD1});
 						$("#preloaderPrincipal").hide();
 						$("#contentProfile").hide(function(){
 							$("#contentProfile").empty();

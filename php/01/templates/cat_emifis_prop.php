@@ -176,7 +176,7 @@ jQuery(function($) {
             function(json) {
             		if (json[0].msg=="OK"){
             			alert("Datos guardados con éxito.");
-						stream.emit("cliente", {mensaje: "PLATSOURCE-EMIFIS-PROP-"+idemisorfiscal});
+						// stream.emit("cliente", {mensaje: "PLATSOURCE-EMIFIS-PROP-"+idemisorfiscal});
 						$("#preloaderPrincipal").hide();
 						$("#contentProfile").hide(function(){
 							$("#contentProfile").html("");
@@ -258,7 +258,7 @@ jQuery(function($) {
 		getEmiFis(idemisorfiscal);
 	}
 
-	var stream = io.connect(obj.getValue(4));
+	// var stream = io.connect(obj.getValue(4));
 
 
 });

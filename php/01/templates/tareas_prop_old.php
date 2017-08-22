@@ -625,7 +625,7 @@ jQuery(function($) {
                         //alert(json.status+" => "+json.message);
                         if (json.status=="OK"){
                             alert( json.message );
-                            stream.emit("cliente", {mensaje: "PLATSOURCE-UPLOAD_FILES_TAREAS-PROP-"+idtarea});
+                            // stream.emit("cliente", {mensaje: "PLATSOURCE-UPLOAD_FILES_TAREAS-PROP-"+idtarea});
                             $("#preloaderPrincipal").hide();
                             // if (is_fotos){
                                 $("#contentProfile").hide(function(){
@@ -989,7 +989,7 @@ jQuery(function($) {
                         //alert(json.status+" => "+json.message);
                         if (json.status=="OK"){
                             alert( json.message );
-                            stream.emit("cliente", {mensaje: "PLATSOURCE-DELETE_FILES_TAREAS-PROP-"+IdTareaArchivo});
+                            // stream.emit("cliente", {mensaje: "PLATSOURCE-DELETE_FILES_TAREAS-PROP-"+IdTareaArchivo});
                             $("#preloaderPrincipal").hide();
                             
                         }else{
@@ -1031,7 +1031,7 @@ jQuery(function($) {
     $('#fecha_fin').mask('99-99-9999');
     $('#fecha_fin').val(obj.getDateToday());
 
-    var stream = io.connect(obj.getValue(4));
+    // var stream = io.connect(obj.getValue(4));
 
     if ( idtarea > 0 ) {
         getTarea(idtarea);

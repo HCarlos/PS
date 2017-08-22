@@ -93,7 +93,7 @@ jQuery(function($) {
                 function(json){
                     if (json[0].msg=="OK"){
                         //alert("Información guardada con éxito!");
-                        stream.emit("cliente", {mensaje: "PLATSOURCE-FAMPER-PROP-"+idfamper});
+                        // stream.emit("cliente", {mensaje: "PLATSOURCE-FAMPER-PROP-"+idfamper});
                         $("#preloaderPrincipal").hide();
                         $("#divUploadImage").modal('hide');
                     }else{
@@ -152,7 +152,8 @@ jQuery(function($) {
 
         getPersonas();
 
-        var stream = io.connect(obj.getValue(4));
+
+        // var stream = io.connect(obj.getValue(4));
 
         $('[data-rel=popover]').popover({container:$('.span7')});
 

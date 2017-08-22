@@ -242,7 +242,7 @@ MODULO DE COMPORABLES Y HOMOLOGACION
 	});
 
 
-
+/*
 	var stream = io.connect(obj.getValue(4));
 
     stream.on("servidor", jsNewAEFInformacion);
@@ -255,6 +255,7 @@ MODULO DE COMPORABLES Y HOMOLOGACION
 		}
 
     }
+*/
 
 
 });

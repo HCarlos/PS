@@ -200,7 +200,7 @@ $idbeneficio  = $_POST['idbeneficio'];
 
 jQuery(function($) {
 
-	var stream = io.connect(obj.getValue(4));
+	// var stream = io.connect(obj.getValue(4));
 
 	$("#preloaderPrincipal").hide();
 
@@ -259,7 +259,7 @@ jQuery(function($) {
                         //alert(json.status+" => "+json.message);
                         if (json.status=="OK"){
                             alert( json.message );
-                            stream.emit("cliente", {mensaje: "PLATSOURCE-BENEFICIO_AFILIADOS-PROP-"+idbeneficio});
+                            // stream.emit("cliente", {mensaje: "PLATSOURCE-BENEFICIO_AFILIADOS-PROP-"+idbeneficio});
 							$("#preloaderPrincipal").hide();
 							$("#divUploadImage").modal('hide');
                             

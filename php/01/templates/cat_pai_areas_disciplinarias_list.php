@@ -223,7 +223,7 @@ jQuery(function($) {
 	}
 
 
-
+/*
 	var stream = io.connect(obj.getValue(4));
 	stream.on("servidor", jsNewAD0);
 	function jsNewAD0(datosServer) {
@@ -234,7 +234,7 @@ jQuery(function($) {
 			onClickFillTable();
 		}
 	}
-
+*/
 	
 
 });

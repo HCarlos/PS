@@ -5,6 +5,9 @@ header("Cache-Control: no-cache");
 
 require_once("../oCentura.php");
 $f = oCentura::getInstance();
+require_once("../oCenturaPDO.php");
+$F = oCenturaPDO::getInstance();
+
 $username     = $_POST['username'];
 $sts   		  = $_POST['sts'];
 $iduseralu    = $_POST['iduseralu'];
@@ -43,40 +46,64 @@ switch ($tipoConsulta) {
 		break;
 }
 
-$r = $f->getQuerys($tipo,$arg,0,0,0,array(),$otros,1);
-if (count($r)>0){
-            
-            $r[0]->msg="OK";
+if ( ($tipoConsulta >= 0) && ($tipoConsulta <= 3) ){
 
-            if ($tipoConsulta == 3){
+	$r = $f->getQuerys($tipo,$arg,0,0,0,array(),$otros,1);
 
-            	foreach ($r as $i => $value) {
-            		$r[$i]->idconceptounico = 0;
-            	}
+	if (count($r)>0){
+	            
+	            $r[0]->msg="OK";
 
-            	foreach ($r as $i => $value) {
+	            if ($tipoConsulta == 3){
 
-	                $encontrado = false;
-
-	        		$IdConcepto = $r[$i]->idconcepto;
-
-	            	foreach ($r as $j => $value) {
-	                    if( $r[$j]->idconceptounico == $IdConcepto ) {
-	                        $encontrado = true;
-	                        break;
-	                    }
+	            	foreach ($r as $i => $value) {
+	            		$r[$i]->idconceptounico = 0;
 	            	}
 
-                    if ( !$encontrado && intval($r[$i]->status_movto) == 0){
-                        $r[$i]->idconceptounico = $IdConcepto;
-                    }
+	            	foreach ($r as $i => $value) {
 
-            	}
+		                $encontrado = false;
 
-            }
+		        		$IdConcepto = $r[$i]->idconcepto;
+
+		            	foreach ($r as $j => $value) {
+		                    if( $r[$j]->idconceptounico == $IdConcepto ) {
+		                        $encontrado = true;
+		                        break;
+		                    }
+		            	}
+
+	                    if ( !$encontrado && intval($r[$i]->status_movto) == 0){
+	                        $r[$i]->idconceptounico = $IdConcepto;
+	                    }
+
+	            	}
+
+	            }
+
+				switch ($tipoConsulta) {
+					case 0:
+					case 1:
+
+							$arg = "u=$username";
+							$res = $f->getCombo(0,$arg,0,0,5);
+
+							$dato = explode("|", $res[0]->data );
+							$iduser 		   = intval($dato[0]);
+							$idusernivelacceso = intval($dato[3]);
+							$clave 			   = intval($dato[5]);
+
+							$r[0]->estadisticas = $F->getEstadisticasNoLeidas($clave,$idusernivelacceso,$username,$iduser);
+
+							break;
+
+				}
+
+	}else{
+	    $r[0]  = array("msg" => "empty");
+	}
 
 }else{
-    // $r[0]->msg="empty";
     $r[0]  = array("msg" => "empty");
 }
 

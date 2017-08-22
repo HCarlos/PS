@@ -78,7 +78,7 @@ $idalutipoactividad  = $_POST['idalutipoactividad'];
 
 jQuery(function($) {
 
-	var stream = io.connect(obj.getValue(4));
+	// var stream = io.connect(obj.getValue(4));
 
 
 	$("#preloaderPrincipal").hide();
@@ -124,7 +124,7 @@ jQuery(function($) {
             function(json) {
             		if (json[0].msg=="OK"){
             			alert("Datos guardados con éxito.");
-						stream.emit("cliente", {mensaje: "PLATSOURCE-TIPO_ACTIVIDAD_ALUMNO-PROP-"+IdAluTipoActividad});
+						// stream.emit("cliente", {mensaje: "PLATSOURCE-TIPO_ACTIVIDAD_ALUMNO-PROP-"+IdAluTipoActividad});
 						$("#preloaderPrincipal").hide();
 						$("#divUploadImage").modal('hide');
         			}else{

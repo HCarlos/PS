@@ -134,7 +134,7 @@ jQuery(function($) {
             function(json) {
             		if (json[0].msg=="OK"){
             			alert("Datos guardados con éxito.");
-						stream.emit("cliente", {mensaje: "PLATSOURCE-GENERACION-PROP-"+idgeneracion});
+						// stream.emit("cliente", {mensaje: "PLATSOURCE-GENERACION-PROP-"+idgeneracion});
 						$("#preloaderPrincipal").hide();
 						$("#contentProfile").hide(function(){
 							$("#contentProfile").empty();
@@ -185,6 +185,7 @@ jQuery(function($) {
 		getGeneracion(idgeneracion);
 	}
 
+/*
 
 	var stream = io.connect(obj.getValue(4));
     stream.on("servidor", jsNewConcepto);
@@ -193,7 +194,7 @@ jQuery(function($) {
 
     }
 
-
+*/
 
 });
 

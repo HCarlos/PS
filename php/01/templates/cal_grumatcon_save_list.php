@@ -93,7 +93,7 @@ jQuery(function($) {
 
 	$("#preloaderPrincipal").hide();
 
-	var stream = io.connect(obj.getValue(4));
+	// var stream = io.connect(obj.getValue(4));
 
 	var idmatconsave = <?php echo $idmatconsave ?>;
 	var IdGruMat = <?php echo $idgrumat; ?>;
@@ -172,7 +172,7 @@ jQuery(function($) {
             function(json){
         		if (json[0].msg=="OK"){
         			alert("Datos guardados con éxito.");
-					stream.emit("cliente", {mensaje: "PLATSOURCE-MATCONSAVEMOVE-PROP-"+idmatconsave});
+					// stream.emit("cliente", {mensaje: "PLATSOURCE-MATCONSAVEMOVE-PROP-"+idmatconsave});
 					$("#preloaderPrincipal").hide();
 					$("#divUploadImage").modal('hide');
     			}else{
@@ -248,7 +248,7 @@ jQuery(function($) {
         function(json) {
         		if (json[0].msg=="OK"){
         			alert("Configuración Eliminada con éxito.");
-					stream.emit("cliente", {mensaje: "PLATSOURCE-MATCONSAVE-PROP-"+ids[2]});
+					// stream.emit("cliente", {mensaje: "PLATSOURCE-MATCONSAVE-PROP-"+ids[2]});
 					$("#preloaderPrincipal").hide();
 					$("#divUploadImage").modal('hide');
     			}else{

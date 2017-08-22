@@ -220,7 +220,7 @@ jQuery(function($) {
         return false;
 	}
 
-
+/*
 	var stream = io.connect(obj.getValue(4));
 	stream.on("servidor", jsNewMateria);
 	function jsNewMateria(datosServer) {
@@ -229,7 +229,7 @@ jQuery(function($) {
 			// onClickFillTable();
 		}
 	}
-
+*/
 	
 
 });

@@ -108,7 +108,7 @@ $idciclo = $_POST['idciclo'];
 
 jQuery(function($) {
 
-	var stream = io.connect(obj.getValue(4));
+	// var stream = io.connect(obj.getValue(4));
 
 	var idgrupo = <?php echo $idgrupo ?>;
 	var Grupo = "<?php echo $grupo; ?>";

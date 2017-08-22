@@ -469,6 +469,7 @@ jQuery(function($) {
 		});
 	}
 
+/*
 	var stream = io.connect(obj.getValue(4));
 	stream.on("servidor", jsNewGruMat);
 	function jsNewGruMat(datosServer) {
@@ -479,7 +480,7 @@ jQuery(function($) {
 			// onClickFillTable();
 		}
 	}
-
+*/
 	
 
 });

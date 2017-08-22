@@ -161,7 +161,7 @@ $idciclo        = $_POST['idciclo'];
 
 jQuery(function($) {
 
-	var stream = io.connect(obj.getValue(4));
+	// var stream = io.connect(obj.getValue(4));
 
 
 	$("#preloaderPrincipal").hide();
@@ -224,7 +224,7 @@ jQuery(function($) {
             function(json) {
             		if (json[0].msg=="OK"){
             			alert("Datos guardados con éxito.");
-						stream.emit("cliente", {mensaje: "PLATSOURCE-ADD_ALUMNOS_PSA-PROP-"+IdPSA});
+						// stream.emit("cliente", {mensaje: "PLATSOURCE-ADD_ALUMNOS_PSA-PROP-"+IdPSA});
                         $("#preloaderPrincipal").hide();
                         $("#contentLevel3").hide(function(){
                             $("#contentLevel3").empty();

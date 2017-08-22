@@ -229,10 +229,12 @@ body{background: transparent url("/img/blueprint.png") top left; }
     <script  src="/js/01/base.js"> </script>
     
     <script typy="text/javascript">
+        /*
         document.write("<script src='"+obj.getValue(4)+"/socket.io/socket.io.js'>"+"<"+"/script>");
         if ( localStorage.IdEmpresaHome ){
 
         }
+        */
     </script>    
 
 

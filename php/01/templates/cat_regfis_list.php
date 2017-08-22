@@ -227,7 +227,7 @@ jQuery(function($) {
 
 	}
 
-
+/*
 	var stream = io.connect(obj.getValue(4));
 	stream.on("servidor", jsNewRegFis);
 	function jsNewRegFis(datosServer) {
@@ -238,7 +238,7 @@ jQuery(function($) {
 			//onClickFillTable();
 		}
 	}
-
+*/
 	
 
 });

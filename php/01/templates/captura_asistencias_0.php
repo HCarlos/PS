@@ -291,7 +291,7 @@ jQuery(function($) {
 			function(json){
         		if (json[0].msg=="OK"){
         			alert("Lista de Asistencia guardada con éxito.");
-					stream.emit("cliente", {mensaje: "PLATSOURCE-CAPLISTASIST-PROP-"+localStorage.grupo_cal});
+					// stream.emit("cliente", {mensaje: "PLATSOURCE-CAPLISTASIST-PROP-"+localStorage.grupo_cal});
 					validDate();
 					$("#preloaderPrincipal").hide();
     			}else{
@@ -397,7 +397,7 @@ jQuery(function($) {
 			function(json){
         		if (json[0].msg=="OK"){
         			alert("Lista de Asistencia eliminada con éxito.");
-					stream.emit("cliente", {mensaje: "PLATSOURCE-CAPLISTASIST-PROP-"+localStorage.grupo_cal});
+					// stream.emit("cliente", {mensaje: "PLATSOURCE-CAPLISTASIST-PROP-"+localStorage.grupo_cal});
 					validDate();
 					$("#preloaderPrincipal").hide();
     			}else{

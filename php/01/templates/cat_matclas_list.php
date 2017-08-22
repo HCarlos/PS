@@ -211,7 +211,7 @@ jQuery(function($) {
 
 	}
 
-
+/*
 	var stream = io.connect(obj.getValue(4));
 	stream.on("servidor", jsNewMatClas);
 	function jsNewMatClas(datosServer) {
@@ -222,7 +222,7 @@ jQuery(function($) {
 			onClickFillTable();
 		}
 	}
-
+*/
 	
 
 });

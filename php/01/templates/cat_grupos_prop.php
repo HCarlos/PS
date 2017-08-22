@@ -207,7 +207,7 @@ $idgrupo  = $_POST['idgrupo'];
 
 jQuery(function($) {
 
-	var stream = io.connect(obj.getValue(4));
+	// var stream = io.connect(obj.getValue(4));
 	var User = "<?= $user; ?>";
 
 
@@ -267,7 +267,7 @@ jQuery(function($) {
             function(json) {
             		if (json[0].msg=="OK"){
             			alert("Datos guardados con éxito.");
-						stream.emit("cliente", {mensaje: "PLATSOURCE-GRUPOS-PROP-"+idgrupo+"-"+User});
+						// stream.emit("cliente", {mensaje: "PLATSOURCE-GRUPOS-PROP-"+idgrupo+"-"+User});
 						$("#preloaderPrincipal").hide();
 						$("#divUploadImage").modal('hide');
         			}else{

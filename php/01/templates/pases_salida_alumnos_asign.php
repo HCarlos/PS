@@ -223,7 +223,7 @@ jQuery(function($) {
         $.post(obj.getValue(0)+"data/", { o:51, c:nc, t:10, p:53, s:nc, from:0, cantidad:0 },
             function(json){
                 getAlumnosToTareas();
-                stream.emit("cliente", {mensaje: "PLATSOURCE-LIST_ALUMNOS_PSA-PROP-"+IdPSA+'-'+dest0+'-'+localStorage.nc});                
+                // stream.emit("cliente", {mensaje: "PLATSOURCE-LIST_ALUMNOS_PSA-PROP-"+IdPSA+'-'+dest0+'-'+localStorage.nc});                
                 $("#preloaderPrincipal").hide();
         }, "json");
     
@@ -253,7 +253,7 @@ jQuery(function($) {
         $.post(obj.getValue(0)+"data/", { o:51, c:nc, t:20, p:53, s:nc, from:0, cantidad:0 },
             function(json){
                 getAlumnosToTareas();
-                stream.emit("cliente", {mensaje: "PLATSOURCE-LIST_ALUMNOS_PSA-PROP-"+IdPSA+'-'+dest0+'-'+localStorage.nc});                
+                // stream.emit("cliente", {mensaje: "PLATSOURCE-LIST_ALUMNOS_PSA-PROP-"+IdPSA+'-'+dest0+'-'+localStorage.nc});                
                 $("#preloaderPrincipal").hide();
         }, "json");
     
@@ -304,7 +304,7 @@ jQuery(function($) {
         return false;
     });
 
-    var stream = io.connect(obj.getValue(4));
+    // var stream = io.connect(obj.getValue(4));
 
 
 });

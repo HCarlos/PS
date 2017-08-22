@@ -270,6 +270,7 @@ jQuery(function($) {
 
 	});
 
+/*
 	var stream = io.connect(obj.getValue(4));
 	stream.on("servidor", jsNewUsuario);
 	function jsNewUsuario(datosServer) {
@@ -278,7 +279,7 @@ jQuery(function($) {
 			onClickFillTable();
 		}
 	}
-
+*/
 	
 
 });

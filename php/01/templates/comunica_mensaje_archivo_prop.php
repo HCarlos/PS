@@ -128,7 +128,7 @@ jQuery(function($) {
                         alert( json.message );
 
                         if (json.status=="OK"){
-                            stream.emit("cliente", {mensaje: "PLATSOURCE-UPLOAD_FILES_COM_MENSAJE-PROP-"+idcommensaje});
+                            // stream.emit("cliente", {mensaje: "PLATSOURCE-UPLOAD_FILES_COM_MENSAJE-PROP-"+idcommensaje});
                         }
                         
                         $("#preloaderPrincipal").hide();
@@ -188,7 +188,7 @@ jQuery(function($) {
 
 
 
-    var stream = io.connect(obj.getValue(4));
+    // var stream = io.connect(obj.getValue(4));
 
     $("#descripcion_archivo").focus();
 

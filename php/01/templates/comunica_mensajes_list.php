@@ -363,6 +363,7 @@ jQuery(function($) {
         return false;
 	}
 
+/*
 	var stream = io.connect(obj.getValue(4));
 	stream.on("servidor", jsNewSolMatEnc0);
 	function jsNewSolMatEnc0(datosServer) {
@@ -375,6 +376,7 @@ jQuery(function($) {
 			onClickFillTable();
 		}
 	}
+*/
 
     $("#preloaderPrincipal").hide();
 	

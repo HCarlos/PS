@@ -296,7 +296,7 @@ jQuery(function($) {
         $.post(obj.getValue(0)+"data/", { o:41, c:nc, t:10, p:1, s:nc, from:0, cantidad:0 },
             function(json){
                 getAlumnosToTareas();
-                stream.emit("cliente", {mensaje: "PLATSOURCE-MIS_GRUPOS-PROP-"+idcomgrupo+'-'+localStorage.nc});                
+                // stream.emit("cliente", {mensaje: "PLATSOURCE-MIS_GRUPOS-PROP-"+idcomgrupo+'-'+localStorage.nc});                
                 $("#preloaderPrincipal").hide();
         }, "json");
     
@@ -326,7 +326,7 @@ jQuery(function($) {
         $.post(obj.getValue(0)+"data/", { o:41, c:nc, t:20, p:1, s:nc, from:0, cantidad:0 },
             function(json){
                 getAlumnosToTareas();
-                stream.emit("cliente", {mensaje: "PLATSOURCE-MIS_GRUPOS-PROP-"+idcomgrupo+'-'+localStorage.nc});                
+                // stream.emit("cliente", {mensaje: "PLATSOURCE-MIS_GRUPOS-PROP-"+idcomgrupo+'-'+localStorage.nc});                
                 $("#preloaderPrincipal").hide();
         }, "json");
     
@@ -377,7 +377,7 @@ jQuery(function($) {
         return false;
     });
 
-    var stream = io.connect(obj.getValue(4));
+    // var stream = io.connect(obj.getValue(4));
 
 
 });

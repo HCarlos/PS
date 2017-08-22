@@ -298,7 +298,11 @@ switch($index){
 
 			case 55:
 				$ret = $fp->getQueryPDO($var2,$cad,0,$from,$cantidad,array(),$otros,0);
-				$ret[0]->msg = count($ret);
+				if ( count($ret) > 0){
+					$ret[0]->msg = count($ret);
+				}else{
+					$ret[0] = array("msg" => 0);
+				}
 				break;
 
 			case 56:

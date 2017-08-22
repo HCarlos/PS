@@ -65,7 +65,7 @@ $user = $_POST['user'];
 
 jQuery(function($) {
 
-	var stream = io.connect(obj.getValue(4));
+	// var stream = io.connect(obj.getValue(4));
 
 	$("#preloaderPrincipal").hide();
 
@@ -101,7 +101,7 @@ jQuery(function($) {
 				if (json[0].msg == "OK"){
 					$("#preloaderPrincipal").hide();
 					alert("Notificaciones enviadas correctamente.");
-				    stream.emit("cliente", {mensaje: msg});
+				    // stream.emit("cliente", {mensaje: msg});
 				}else{
 					alert(json[0].success);
 				}

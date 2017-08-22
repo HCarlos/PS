@@ -110,7 +110,7 @@ jQuery(function($) {
                         alert( json.message );
                         
                         if (json.status=="OK"){
-                            stream.emit("cliente", {mensaje: "PLATSOURCE-UPLOAD_FILES_TAREAS_ALUMNO-PROP-"+idtareadestinatario});
+                            // stream.emit("cliente", {mensaje: "PLATSOURCE-UPLOAD_FILES_TAREAS_ALUMNO-PROP-"+idtareadestinatario});
                         }
                         $("#preloaderPrincipal").hide();
                         $("#contentLevel3").hide(function(){
@@ -165,7 +165,7 @@ jQuery(function($) {
 
 
 
-    var stream = io.connect(obj.getValue(4));
+    // var stream = io.connect(obj.getValue(4));
 
     $("#descripcion_archivo").focus();
 

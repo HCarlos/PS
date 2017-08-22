@@ -34,8 +34,8 @@ $("#frmLogin").on("submit", function(event) {
 					var xim = json[0].data.split('|');
 					localStorage.IdUser = parseInt(xim[0]);
 
-				    var stream = io.connect(obj.getValue(4));
-				    stream.emit("cliente", {mensaje: "PLATSOURCE-CONECTADO-"+localStorage.IdUser+"-"+localStorage.nc });
+				    // var stream = io.connect(obj.getValue(4));
+				    // stream.emit("cliente", {mensaje: "PLATSOURCE-CONECTADO-"+localStorage.IdUser+"-"+localStorage.nc });
 					localStorage.IdEmp = parseInt(xim[2]);
 					localStorage.Empresa = xim[3];
 					localStorage.IdUserNivelAcceso = parseInt(xim[4]);

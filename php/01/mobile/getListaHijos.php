@@ -33,18 +33,23 @@ if (count($res)>0){
             switch (intval($r[0]->clave_nivel)) {
                  case 5:
                      $res[$i]->urlBoleta = $urlBase."print-calif-prepa-interna-arji/";
+                     $res[$i]->urlBoleta2 = $urlBase."";
                      break;
                  case 4:
                      $res[$i]->urlBoleta = $urlBase."print-calif-secundaria-interna-arji/";
+                     $res[$i]->urlBoleta2 = $urlBase."";
                      break;
                  case 2:
                      $res[$i]->urlBoleta = $urlBase."print-calif-primaria-interna-arji/";
+                     $res[$i]->urlBoleta2 = $urlBase."";
                      break;
                  case 3:
                      $res[$i]->urlBoleta = $urlBase."print-calif-primaria-interna-arji/";
+                     $res[$i]->urlBoleta2 = $urlBase."";
                      break;
                  case 1:
                      $res[$i]->urlBoleta = $urlBase."print-calif-kinder-interna-arji-esp/";
+                     $res[$i]->urlBoleta2 = $urlBase."print-calif-kinder-interna-arji-ing/";
                      break;
              } 
 
@@ -70,6 +75,7 @@ if (count($res)>0){
 			$res[$i]->logoEmp = "";
 			$res[$i]->logoIB = "";
 			$res[$i]->urlBoleta = "";
+			$res[$i]->urlBoleta2 = "";
 			$res[$i]->IsBoleta = 0;				
 			$res[$i]->msg = "OK";
 			$res[$i]->idgrualu = 0;

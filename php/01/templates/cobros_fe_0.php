@@ -233,7 +233,7 @@ jQuery(function($) {
 		}
 	}
 
-	var stream = io.connect(obj.getValue(4));
+	// var stream = io.connect(obj.getValue(4));
 	var IdFamilia = <?php echo $idfamilia; ?>;
 	var IdFactura = <?php echo $idfactura; ?>;
 	var IdMetododePago = <?php echo $idmetododepago; ?>;

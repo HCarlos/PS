@@ -75,7 +75,7 @@ $idgirobeneficio  = $_POST['idgirobeneficio'];
 
 jQuery(function($) {
 
-	var stream = io.connect(obj.getValue(4));
+	// var stream = io.connect(obj.getValue(4));
 
 
 	$("#preloaderPrincipal").hide();
@@ -115,7 +115,7 @@ jQuery(function($) {
             function(json) {
             		if (json[0].msg=="OK"){
             			alert("Datos guardados con éxito.");
-						stream.emit("cliente", {mensaje: "PLATSOURCE-GIRO_BENEFICIO-PROP-"+IdGiroAfiliado});
+						// stream.emit("cliente", {mensaje: "PLATSOURCE-GIRO_BENEFICIO-PROP-"+IdGiroAfiliado});
 						$("#preloaderPrincipal").hide();
 						$("#divUploadImage").modal('hide');
         			}else{

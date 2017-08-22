@@ -116,7 +116,7 @@ jQuery(function($) {
                     alert(json[0].msg); 
 
                     if (json[0].msg=="OK"){
-                        stream.emit("cliente", {mensaje: "PLATSOURCE-RESPUESTA_TAREA-PROP-"+IdTareaDestinatarioRespuesta});
+                        // stream.emit("cliente", {mensaje: "PLATSOURCE-RESPUESTA_TAREA-PROP-"+IdTareaDestinatarioRespuesta});
                     }
 
                     $("#preloaderPrincipal").hide();
@@ -156,7 +156,7 @@ jQuery(function($) {
         return false;
     });
 
-    var stream = io.connect(obj.getValue(4));
+    // var stream = io.connect(obj.getValue(4));
 
     $("#respuesta").focus();
 

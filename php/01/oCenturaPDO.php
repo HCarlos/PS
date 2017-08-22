@@ -34,7 +34,7 @@ class oCenturaPDO {
 			$this->User     = "";
 			$this->Pass     = "";
 			$this->iva      = 0.16;
-			$this->URL      = "http://platsource.mx/";
+			$this->URL      = "https://platsource.mx/";
 	}
 
 	public static function getInstance(){
@@ -1519,15 +1519,15 @@ class oCenturaPDO {
 		        			$csts = ' AND status_movto = 0';
 		        			break;
 		        	}	
-				$query = "SELECT *
+		        	// AND deuda_anterior = 0
+				$query = "SELECT * 
 								FROM _viEdosCta
 							WHERE 
 								idfamilia = $idfamilia AND 
 								idalumno = $idalumno AND 
 								idciclo = $idciclo AND 
 								idemp = $idemp AND 
-								idconcepto = $idconcepto AND 
-								deuda_anterior = 0 
+								idconcepto = $idconcepto
 								$csts
 							$otros ";
 				break;
@@ -3797,12 +3797,13 @@ class oCenturaPDO {
 						$tipo = 20009;
 						$r = $f->getQuerys($tipo,$arg,0,0,0,array(),"",1);
 						$totalNoLeidasTareas = $totalNoLeidasTareas + count($r);
-						// Circulaes
-						$arg = "u=".$u."&sts=0";
-						$tipo = 31009;
-						$r = $f->getQuerys($tipo,$arg,0,0,0,array(),"",1);
-						$totalNoLeidasCirculares = $totalNoLeidasCirculares + count($r);
 					}	
+					// Circulaes
+					$arg = "u=".$u."&sts=0";
+					$tipo = 31009;
+					$r = $f->getQuerys($tipo,$arg,0,0,0,array(),"",1);
+					// $totalNoLeidasCirculares = $totalNoLeidasCirculares + count($r);
+					$totalNoLeidasCirculares = $totalNoLeidasCirculares + count($r);
 				}
 				
 
@@ -3815,7 +3816,8 @@ class oCenturaPDO {
 					"totalNoLeidasTareas"     => $totalNoLeidasTareas,
 					"totalNoLeidasCirculares" => $totalNoLeidasCirculares,
 					"totalNoLeidasMensajes"   => $totalNoLeidasMensajes,
-					"totalNoLeidasBadge"      => $totalNoLeidasBadge
+					"totalNoLeidasBadge"      => $totalNoLeidasBadge,
+					"currentVersion"		  => "1.1.30"
 					);
 
 	}

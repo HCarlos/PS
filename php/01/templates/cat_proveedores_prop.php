@@ -177,7 +177,7 @@ jQuery(function($) {
             function(json) {
             		if (json[0].msg=="OK"){
             			alert("Datos guardados con éxito.");
-						stream.emit("cliente", {mensaje: "PLATSOURCE-PROVEEDORES-PROP-"+idproveedor});
+						// stream.emit("cliente", {mensaje: "PLATSOURCE-PROVEEDORES-PROP-"+idproveedor});
 						$("#preloaderPrincipal").hide();
 						$("#contentProfile").hide(function(){
 							$("#contentProfile").html("");
@@ -307,7 +307,7 @@ jQuery(function($) {
 
     getEstados();
 
-	var stream = io.connect(obj.getValue(4));
+	// var stream = io.connect(obj.getValue(4));
 
 
 });

@@ -121,7 +121,7 @@ jQuery(function($) {
             function(json) {
             		if (json[0].msg=="OK"){
             			alert("Datos guardados con éxito.");
-						stream.emit("cliente", {mensaje: "PLATSOURCE-PRODUCTOS-PROP-"+idproducto});
+						// stream.emit("cliente", {mensaje: "PLATSOURCE-PRODUCTOS-PROP-"+idproducto});
 						$("#preloaderPrincipal").hide();
 						$("#contentProfile").hide(function(){
 							$("#contentProfile").html("");
@@ -251,7 +251,7 @@ jQuery(function($) {
 
     getProveedores();
 
-	var stream = io.connect(obj.getValue(4));
+	// var stream = io.connect(obj.getValue(4));
 
 
 });

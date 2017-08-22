@@ -87,7 +87,7 @@ $iddirector  = $_POST['iddirector'];
 
 jQuery(function($) {
 
-	var stream = io.connect(obj.getValue(4));
+	// var stream = io.connect(obj.getValue(4));
 
 
 	$("#preloaderPrincipal").hide();
@@ -126,7 +126,7 @@ jQuery(function($) {
             function(json) {
             		if (json[0].msg=="OK"){
             			alert("Datos guardados con éxito.");
-						stream.emit("cliente", {mensaje: "PLATSOURCE-DIRECTORES-PROP-"+iddirector});
+						// stream.emit("cliente", {mensaje: "PLATSOURCE-DIRECTORES-PROP-"+iddirector});
 						$("#preloaderPrincipal").hide();
 						$("#divUploadImage").modal('hide');
         			}else{

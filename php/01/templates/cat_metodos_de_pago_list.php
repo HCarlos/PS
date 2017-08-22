@@ -237,7 +237,7 @@ jQuery(function($) {
 
 	}
 
-
+/*
 	var stream = io.connect(obj.getValue(4));
 	stream.on("servidor", jsNewMetodo_de_Pago);
 	function jsNewMetodo_de_Pago(datosServer) {
@@ -248,7 +248,7 @@ jQuery(function($) {
 			onClickFillTable();
 		}
 	}
-
+*/
 	
 
 });

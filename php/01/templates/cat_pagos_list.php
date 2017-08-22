@@ -221,7 +221,7 @@ jQuery(function($) {
 
 	}
 
-
+/*
 	var stream = io.connect(obj.getValue(4));
 	stream.on("servidor", jsNewPago);
 	function jsNewPago(datosServer) {
@@ -232,6 +232,7 @@ jQuery(function($) {
 			// onClickFillTable();
 		}
 	}
+*/
 
 	
 });

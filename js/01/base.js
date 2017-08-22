@@ -32,7 +32,7 @@ function oObject() {
 
 	var pURLS = ["platsource.mx", "www.platsource.mx", "platsource.com.mx", "www.platsource.com.mx", "platsource.tecnointel.mx"];
 	
-	var pHost = ["http://platsource.mx/", /iphone|ipad|ipod|android/i.test(navigator.userAgent), false, /msie\s6/i.test(navigator.userAgent), "http://187.217.204.100:1803"];
+	var pHost = ["https://platsource.mx/", /iphone|ipad|ipod|android/i.test(navigator.userAgent), false, /msie\s6/i.test(navigator.userAgent), "http://187.217.204.100:1803"];
 	// var pHost = ["http://platsource.mx/", /iphone|ipad|ipod|android/i.test(navigator.userAgent), false, /msie\s6/i.test(navigator.userAgent), "http://187.217.204.101:9602"];
 	// var pHost = ["http://platsource.mx/", /iphone|ipad|ipod|android/i.test(navigator.userAgent), false, /msie\s6/i.test(navigator.userAgent), "http://187.157.37.204:8080"];
 
@@ -78,7 +78,7 @@ function oObject() {
 				}else{
 					url = pURLS[x];
 				}
-				pHost[0] = "http://"+url+"/";
+				pHost[0] = "https://"+url+"/";
 			},
 			getValue: function(i) {
 				return pHost[i];

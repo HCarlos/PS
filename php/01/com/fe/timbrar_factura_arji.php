@@ -425,7 +425,7 @@ foreach ($xml->xpath('//t:TimbreFiscalDigital') as $tfd) {
 
 			include("crear_PDF_Arji.php");
 
-			$dir_upload = "http://platsource.mx/uw_fe/".$directorio;
+			$dir_upload = "https://platsource.mx/uw_fe/".$directorio;
 			$pdf = $fpdf;
 			$xml = $fxml;
 			$emailto = $email1;

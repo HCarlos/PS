@@ -118,7 +118,7 @@
  -->
 <script type="text/javascript"> 
 
-	var stream = io.connect(obj.getValue(4));
+	// var stream = io.connect(obj.getValue(4));
 	var IdFamilia = 0;
 	var Tutor = "";
 	var arrAlu = [];
@@ -309,7 +309,7 @@
             function(json) {
             		if (json[0].msg=="OK"){
             			alert("Datos guardados con éxito.");
-						stream.emit("cliente", {mensaje: "PLATSOURCE-CONVENIO-PROP-"+idfamconv});
+						// stream.emit("cliente", {mensaje: "PLATSOURCE-CONVENIO-PROP-"+idfamconv});
 						$("#preloaderPrincipal").hide();
 
 			            $.post(obj.getValue(0) + "family-dir-admin/", {
@@ -345,7 +345,7 @@
         function(json) {
         		if (json[0].msg=="OK"){
         			alert("Convenio Eliminado con Éxito.");
-					stream.emit("cliente", {mensaje: "PLATSOURCE-DEL_CONVENIO-PROP-"+idfamconv});
+					// stream.emit("cliente", {mensaje: "PLATSOURCE-DEL_CONVENIO-PROP-"+idfamconv});
 					$("#preloaderPrincipal").hide();
 
 		            $.post(obj.getValue(0) + "family-dir-admin/", {
@@ -412,7 +412,7 @@
 
 	}
 
-	stream.on("servidor", jsNodeMsg0);
+	// stream.on("servidor", jsNodeMsg0);
 
 	$("#preloaderPrincipal").hide();
 

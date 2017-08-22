@@ -261,6 +261,7 @@ MODULO DE COMPORABLES Y HOMOLOGACION
 	});
 
 
+/*
 
 	var stream = io.connect(obj.getValue(4));
 
@@ -275,6 +276,7 @@ MODULO DE COMPORABLES Y HOMOLOGACION
 
     }
 
+*/
 
 });
 

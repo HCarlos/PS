@@ -207,7 +207,7 @@ MODULO DE COMPORABLES Y HOMOLOGACION
 				            function(json){
 				                if (json[0].msg=="OK"){
 				                    alert("Registro eliminado con éxito!");
-				                    stream.emit("cliente", {mensaje: "PLATSOURCE-SOLMATENC-PROP-"+aObj[1]});
+				                    // stream.emit("cliente", {mensaje: "PLATSOURCE-SOLMATENC-PROP-"+aObj[1]});
 				                    $("#preloaderPrincipal").hide();
 				                    $("#divUploadImage").modal('hide');
 				                }
@@ -268,6 +268,7 @@ MODULO DE COMPORABLES Y HOMOLOGACION
 	});
 
 
+/*
 
 	var stream = io.connect(obj.getValue(4));
 
@@ -282,6 +283,7 @@ MODULO DE COMPORABLES Y HOMOLOGACION
 
     }
 
+*/
 
 });
 

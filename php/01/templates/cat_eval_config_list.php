@@ -238,7 +238,7 @@ jQuery(function($) {
 
 	}
 
-
+/*
 	var stream = io.connect(obj.getValue(4));
 	stream.on("servidor", jsNewEvalConfig);
 	function jsNewEvalConfig(datosServer) {
@@ -249,7 +249,7 @@ jQuery(function($) {
 			onClickFillTable();
 		}
 	}
-
+*/
 	
 
 });

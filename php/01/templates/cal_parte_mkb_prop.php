@@ -75,7 +75,7 @@ $num_eval = $_POST['num_eval'];
 
 jQuery(function($) {
 
-	var stream = io.connect(obj.getValue(4));
+	// var stream = io.connect(obj.getValue(4));
 
 	//alert($("#num_eval_matcon").val());
 
@@ -118,7 +118,7 @@ jQuery(function($) {
             function(json) {
             		if (json[0].msg=="OK"){
             			alert("Datos guardados con éxito.");
-						stream.emit("cliente", {mensaje: "PLATSOURCE-GRUMATCONMKB-PROP-"+IdGruMatConMKB0});
+						// stream.emit("cliente", {mensaje: "PLATSOURCE-GRUMATCONMKB-PROP-"+IdGruMatConMKB0});
 						$("#preloaderPrincipal").hide();
 						$("#divUploadImage").modal('hide');
         			}else{

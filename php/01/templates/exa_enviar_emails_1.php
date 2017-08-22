@@ -200,7 +200,7 @@ jQuery(function($) {
         function(json) {
         		if (json[0].msg=="OK"){
         			alert("Datos guardados con éxito.");
-					stream.emit("cliente", {mensaje: "PLATSOURCE-ADD_EXA_ALUMNOS-PROP"});
+					// stream.emit("cliente", {mensaje: "PLATSOURCE-ADD_EXA_ALUMNOS-PROP"});
                     $("#preloaderPrincipal").hide();
 					$("#"+objOrigen).hide(function(){
 						$("#"+objOrigen).empty();

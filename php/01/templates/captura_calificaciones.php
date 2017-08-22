@@ -351,7 +351,7 @@ jQuery(function($) {
         function(json) {
         		if (json[0].msg=="OK"){
         			alert("Datos guardados con éxito.");
-					stream.emit("cliente", {mensaje: "PLATSOURCE-CAPCAL-PROP-"+localStorage.grupo_cal});
+					// stream.emit("cliente", {mensaje: "PLATSOURCE-CAPCAL-PROP-"+localStorage.grupo_cal});
 					var igm = IdGruMat;
 					closeCapCal02();
 					$("#preloaderPrincipal").hide();
@@ -363,6 +363,7 @@ jQuery(function($) {
 
 	});
 
+/*
 	var stream = io.connect(obj.getValue(4));
 	stream.on("servidor", jsNewEstado);
 	function jsNewEstado(datosServer) {
@@ -372,7 +373,7 @@ jQuery(function($) {
 		    // getGridCaptura( idgm );
 		}
 	}
-
+*/
 	$("#btnCloseCapCal02").on("click",function(event){
 		event.preventDefault();
 		closeCapCal02()

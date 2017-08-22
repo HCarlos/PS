@@ -225,7 +225,7 @@ jQuery(function($) {
 	}
 
 
-
+/*
 	var stream = io.connect(obj.getValue(4));
 	stream.on("servidor", jsNewMedida);
 	function jsNewMedida(datosServer) {
@@ -236,7 +236,7 @@ jQuery(function($) {
 			onClickFillTable();
 		}
 	}
-
+*/
 	
 
 });

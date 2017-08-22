@@ -38,7 +38,7 @@ include("includes/metas.php");
 
 jQuery(function($) {
 
-	var stream = io.connect(obj.getValue(4));
+	// var stream = io.connect(obj.getValue(4));
 
 
 	var IdFamilia = 0;
@@ -57,7 +57,7 @@ jQuery(function($) {
 
 		    var queryString = $(this).serialize();	
 		    
-			stream.emit("cliente", {mensaje: "PLATSOURCE|IDFAMILY|"+IdFamilia+"|"+cFamilia+"|"+localStorage.nc});
+			// stream.emit("cliente", {mensaje: "PLATSOURCE|IDFAMILY|"+IdFamilia+"|"+cFamilia+"|"+localStorage.nc});
 			$("#preloaderPrincipal").hide();
 			$("#contentProfile").hide(function(){
 				$("#contentProfile").empty();

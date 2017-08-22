@@ -223,7 +223,7 @@ jQuery(function($) {
 	}
 
 
-
+/*
 	var stream = io.connect(obj.getValue(4));
 	stream.on("servidor", jsNewColor);
 	function jsNewColor(datosServer) {
@@ -234,7 +234,7 @@ jQuery(function($) {
 			onClickFillTable();
 		}
 	}
-
+*/
 	
 
 });

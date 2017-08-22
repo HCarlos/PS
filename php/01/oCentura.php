@@ -38,7 +38,7 @@ class oCentura {
 		$this->User     = "";
 		$this->Pass     = "";
 		$this->iva      = 0.16;
-		$this->URL      = "http://platsource.mx/";
+		$this->URL      = "https://platsource.mx/";
 	}
 
 	public static function getInstance(){
@@ -316,6 +316,25 @@ class oCentura {
 																		nombre_completo_usuario) 
 														AS data 
 										FROM  _viUsuarios WHERE username = '$username' AND password = '$pass' AND status_usuario = 1";
+								break;		
+							case 5:
+								parse_str($arg);
+								$idemp = $this->getIdEmpFromAlias($u);
+								$iduser = $this->getIdUserFromAlias($u);
+								$query = "SELECT username AS label, concat(
+																		iduser,'|', 
+																		password,'|', 
+																		idemp,'|', 
+																		idusernivelacceso,'|', 
+																		registrosporpagina,'|', 
+																		clave,'|', 
+																			CASE param1 
+																				WHEN '' THEN -1
+																				WHEN NULL THEN -2 
+																				ELSE param1 END,'|', 
+																		nombre_completo_usuario) 
+														AS data 
+										FROM  _viUsuarios WHERE iduser = $iduser AND idemp = $idemp AND status_usuario = 1";
 								break;		
 						}
 						break;						

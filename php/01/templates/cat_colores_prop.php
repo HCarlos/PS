@@ -85,7 +85,7 @@ $idcolor  = $_POST['idcolor'];
 
 jQuery(function($) {
 
-	var stream = io.connect(obj.getValue(4));
+	// var stream = io.connect(obj.getValue(4));
 
 
 	$("#preloaderPrincipal").hide();
@@ -131,7 +131,7 @@ jQuery(function($) {
             function(json) {
             		if (json[0].msg=="OK"){
             			alert("Datos guardados con éxito.");
-						stream.emit("cliente", {mensaje: "PLATSOURCE-COLORES-PROP-"+IdNivel});
+						// stream.emit("cliente", {mensaje: "PLATSOURCE-COLORES-PROP-"+IdNivel});
 						$("#preloaderPrincipal").hide();
 						$("#contentProfile").hide(function(){
 							$("#contentProfile").html("");

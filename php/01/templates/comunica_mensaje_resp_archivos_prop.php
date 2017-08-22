@@ -108,7 +108,7 @@ jQuery(function($) {
                         //alert(json.status+" => "+json.message);
                         if (json.status=="OK"){
                             alert( json.message );
-                            stream.emit("cliente", {mensaje: "PLATSOURCE-UPLOAD_FILES_COM_MENSAJE_RESP-PROP-"+idcommensajedestinatario});
+                            // stream.emit("cliente", {mensaje: "PLATSOURCE-UPLOAD_FILES_COM_MENSAJE_RESP-PROP-"+idcommensajedestinatario});
                             $("#preloaderPrincipal").hide();
                             $("#contentLevel4").hide(function(){
                                 $("#contentLevel4").empty();
@@ -168,7 +168,7 @@ jQuery(function($) {
 
 
 
-    var stream = io.connect(obj.getValue(4));
+    // var stream = io.connect(obj.getValue(4));
 
     $("#descripcion_archivo").focus();
 

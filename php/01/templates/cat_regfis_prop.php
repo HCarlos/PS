@@ -185,7 +185,7 @@ jQuery(function($) {
             function(json) {
             		if (json[0].msg=="OK"){
             			alert("Datos guardados con éxito.");
-						stream.emit("cliente", {mensaje: "PLATSOURCE-REGFIS-PROP-"+idregfis});
+						// stream.emit("cliente", {mensaje: "PLATSOURCE-REGFIS-PROP-"+idregfis});
 						$("#preloaderPrincipal").hide();
 						$("#contentProfile").hide(function(){
 							$("#contentProfile").html("");
@@ -286,7 +286,7 @@ jQuery(function($) {
 		getRegFis(idregfis);
 	}
 
-	var stream = io.connect(obj.getValue(4));
+	// var stream = io.connect(obj.getValue(4));
 
 
 });

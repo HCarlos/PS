@@ -284,6 +284,7 @@ jQuery(function($) {
         return false;
 	}
 
+/*
 	var stream = io.connect(obj.getValue(4));
 	stream.on("servidor", jsNewFamilia);
 	function jsNewFamilia(datosServer) {
@@ -294,7 +295,7 @@ jQuery(function($) {
 			//onClickFillTable();
 		}
 	}
-
+*/
 
 
 

@@ -15,6 +15,13 @@ $sts = $_POST['sts'];
 
 $rs = $f->getQuerys(31011,"u=$user&idcommensaje=$idcommensaje&sts=$sts&idcommensajedestinatario=$idcommensajedestinatario");
 
+if ( count($rs) <= 0 ){
+    $rs[0] = new StdClass();
+    $rs[0]->titulo_mensaje = "";
+    $rs[0]->fecha = "";
+    $rs[0]->mensaje = "";
+}
+
 ?>
 <!DOCTYPE html>
 <!--[if lt IE 7]> <html lang="en" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
@@ -139,7 +146,7 @@ html {
             <div class="widget-header widget-header-flat">
                 <h4 class="smaller lighter blue">
                     <i class="icon-flag"></i>
-                    <span id="tituloPanel"><?= $rs[0]->titulo_mensaje; ?></span>
+                    <span id="tituloPanel"><?= $rs[0]->titulo_mensaje.' '.$idcommensajedestinatario; ?></span>
                 </h4>                       
             </div>
 
@@ -149,7 +156,7 @@ html {
                     <div> 
                         <i class="icon-calendar blue"></i>  
                         <span><strong>Fecha:</strong></span>
-                        <span id="fecha_inicio"><?= $rs[0]->fecha; ?></span>
+                        <span id="fecha_inicio">---<?= $rs[0]->fecha; ?></span>
 
 
                     </div> <br/>
@@ -178,7 +185,6 @@ html {
                     <ul class="wd95prc" id="tbl_FileRespAlu0">
                     <?php
                         foreach ($rat as $i => $value) {
-         
                     ?>
                         <li><a href="http://platsource.mx/<?= $rat[0]->directorio; ?><?= $rat[0]->archivo; ?>" target="_blank" rel="external"><?= $rat[0]->descripcion_archivo; ?></a>  <small class="grey"><i><?= $rat[0]->creado_el; ?></i></small>  </li>
                     <?php
@@ -186,18 +192,19 @@ html {
                     ?>
 
                     </ul>
-                    <?php
-                        $cad = "user=".$user."&idcommensajedestinatario=".$idcommensajedestinatario;
-                        $f->setSaveData(42,$cad,0,0,9);
-                        } else
-                        {
 
+                    <?php
+                        } else {
                     ?>
                         <small><i>No se encontraron archivos.</i></small>
 
                     <?php
 
                         }
+
+                        $cad = "user=".$user."&idcommensajedestinatario=".$idcommensajedestinatario;
+                        $f->setSaveData(42,$cad,0,0,9);
+
                     ?>
 
                 </div><!--/widget-main-->

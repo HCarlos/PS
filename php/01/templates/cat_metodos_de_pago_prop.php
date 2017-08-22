@@ -78,7 +78,7 @@ $idmetododepago  = $_POST['idmetododepago'];
 
 jQuery(function($) {
 
-	var stream = io.connect(obj.getValue(4));
+	// var stream = io.connect(obj.getValue(4));
 
 
 	$("#preloaderPrincipal").hide();
@@ -123,7 +123,7 @@ jQuery(function($) {
             function(json) {
             		if (json[0].msg=="OK"){
             			alert("Datos guardados con éxito.");
-						stream.emit("cliente", {mensaje: "PLATSOURCE-METODOS_DE_PAGO-PROP-"+IdMetododePago});
+						// stream.emit("cliente", {mensaje: "PLATSOURCE-METODOS_DE_PAGO-PROP-"+IdMetododePago});
 						$("#preloaderPrincipal").hide();
 						$("#divUploadImage").modal('hide');
         			}else{

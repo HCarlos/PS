@@ -103,7 +103,7 @@ $idpdf  = $_POST['idpdf'];
 
 jQuery(function($) {
 
-	var stream = io.connect(obj.getValue(4));
+	// var stream = io.connect(obj.getValue(4));
 
 	$("#preloaderPrincipal").hide();
 
@@ -152,7 +152,7 @@ jQuery(function($) {
                         //alert(json.status+" => "+json.message);
                         if (json.status=="OK"){
                             alert( json.message );
-                            stream.emit("cliente", {mensaje: "PLATSOURCE-UPLOAD_BOLETIN-PROP-"+idpdf});
+                            // stream.emit("cliente", {mensaje: "PLATSOURCE-UPLOAD_BOLETIN-PROP-"+idpdf});
 							$("#preloaderPrincipal").hide();
 							$("#divUploadImage").modal('hide');
                             

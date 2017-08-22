@@ -497,7 +497,7 @@ jQuery(function($) {
         function(json) {
         		if (json[0].msg=="OK"){
         			alert("Datos guardados con éxito.");
-					stream.emit("cliente", {mensaje: "PLATSOURCE-CAPCAL-PROP-"+localStorage.grupo_cal});
+					// stream.emit("cliente", {mensaje: "PLATSOURCE-CAPCAL-PROP-"+localStorage.grupo_cal});
 					var igm = $("#lstMat").val();
 					getGridCaptura( igm );
 					$("#preloaderPrincipal").hide();
@@ -580,7 +580,7 @@ jQuery(function($) {
         return temp;
  	});
 
-
+/*
 	var stream = io.connect(obj.getValue(4));
 	stream.on("servidor", jsNewEstado);
 	function jsNewEstado(datosServer) {
@@ -590,6 +590,8 @@ jQuery(function($) {
 		    // getGridCaptura( idgm );
 		}
 	}
+*/
+
 
 });
 

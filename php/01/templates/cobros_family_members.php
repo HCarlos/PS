@@ -260,7 +260,7 @@ if (count($arr)>0){
 
 jQuery(function($){
 
-	var stream = io.connect(obj.getValue(4));
+	// var stream = io.connect(obj.getValue(4));
 
 	var IdFamilia = <?php echo $idfam; ?>;
 	var Tutor = "<?php echo $tutor; ?>";
@@ -338,7 +338,7 @@ jQuery(function($){
 				$("#preloaderPrincipal").hide();
         		if (json[0].msg=="OK"){
         			alert("Registro CANCELADO con éxito.");
-					stream.emit("cliente", {mensaje: "PLATSOURCE|PAGO_CANCELADO|PROP|"+item[1]});
+					// stream.emit("cliente", {mensaje: "PLATSOURCE|PAGO_CANCELADO|PROP|"+item[1]});
     			}else{
     				alert(json[0].msg);	
     			}
@@ -393,7 +393,7 @@ jQuery(function($){
 					$("#preloaderPrincipal").hide();
             		if (json[0].msg=="OK"){
             			alert("Concepto ELIMINADO con éxito.");
-						stream.emit("cliente", {mensaje: "PLATSOURCE|DELETECONCEPTFROMALU|PROP|"+item[2]});
+						// stream.emit("cliente", {mensaje: "PLATSOURCE|DELETECONCEPTFROMALU|PROP|"+item[2]});
         			}else{
         				alert(json[0].msg);	
         			}

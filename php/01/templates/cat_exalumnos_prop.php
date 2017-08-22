@@ -256,7 +256,7 @@ jQuery(function($) {
 
 	var lc = parseInt(localStorage.IdUserNivelAcceso,0);
 
-	var stream = io.connect(obj.getValue(4));
+	// var stream = io.connect(obj.getValue(4));
 
 	$("#preloaderPrincipal").hide();
 
@@ -334,7 +334,7 @@ jQuery(function($) {
             function(json) {
             		if (json[0].msg=="OK"){
             			alert("Datos guardados con éxito.");
-						stream.emit("cliente", {mensaje: "PLATSOURCE-EXALUMNOS-PROP-"+IdExAlumno});
+						// stream.emit("cliente", {mensaje: "PLATSOURCE-EXALUMNOS-PROP-"+IdExAlumno});
 						$("#preloaderPrincipal").hide();
 						$("#"+objOrigen).hide(function(){
 							$("#"+objOrigen).empty();
@@ -380,7 +380,7 @@ jQuery(function($) {
             $.post(obj.getValue(0) + "data/", {o:60, t:2, c:idexalumno, p:3, from:0, cantidad:0, s:''},
             function(json) {
             		if (json[0].msg=="OK"){
-						stream.emit("cliente", {mensaje: "PLATSOURCE-EXALUMNOS-PROP-"+idexalumno});
+						// stream.emit("cliente", {mensaje: "PLATSOURCE-EXALUMNOS-PROP-"+idexalumno});
 						$("#preloaderPrincipal").hide();
 						$("#"+objOrigen).hide(function(){
 							$("#"+objOrigen).empty();

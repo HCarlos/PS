@@ -194,7 +194,7 @@ jQuery(function($) {
         function(json) {
                 if (json[0].msg=="OK"){
                     alert("Datos guardados con éxito");
-                    stream.emit("cliente", {mensaje: "PLATSOURCE-TAREA_EDIT-PROP-"+IdTarea});
+                    // stream.emit("cliente", {mensaje: "PLATSOURCE-TAREA_EDIT-PROP-"+IdTarea});
                     $("#preloaderPrincipal").hide();
                     // if (is_fotos){
                         $("#contentProfile").hide(function(){
@@ -606,6 +606,7 @@ jQuery(function($) {
 
     getTarea(idtarea);
 
+/*
     var stream = io.connect(obj.getValue(4));
     stream.on("servidor", jsNewSolMatEnc0);
     function jsNewSolMatEnc0(datosServer) {
@@ -622,6 +623,7 @@ jQuery(function($) {
     }
 
     var stream = io.connect(obj.getValue(4));
+*/
 
     getTareaArchivosRespuestas(idtareadestinatario);
 

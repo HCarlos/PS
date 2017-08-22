@@ -247,7 +247,7 @@ jQuery(function($) {
 
 	}
 
-
+/*
 	var stream = io.connect(obj.getValue(4));
 	stream.on("servidor", jsNewProducto);
 	function jsNewProducto(datosServer) {
@@ -258,7 +258,7 @@ jQuery(function($) {
 			//onClickFillTable();
 		}
 	}
-
+*/
 	
 
 });

@@ -80,7 +80,7 @@ $idfamilia  = $_POST['idfamilia'];
 
 jQuery(function($) {
 
-	var stream = io.connect(obj.getValue(4));
+	// var stream = io.connect(obj.getValue(4));
 	var idedocta = <?php echo $idedocta; ?>;
 
 	$("#preloaderPrincipal").hide();
@@ -103,7 +103,7 @@ jQuery(function($) {
             function(json) {
             		if (json[0].msg=="OK"){
             			alert("Descuento aplicado con éxito.");
-						stream.emit("cliente", {mensaje: "PLATSOURCE-APLYDESCTO-PROP-"+idedocta});
+						// stream.emit("cliente", {mensaje: "PLATSOURCE-APLYDESCTO-PROP-"+idedocta});
 						$("#preloaderPrincipal").hide();
 						$("#divUploadImage").modal('hide');
         			}else{

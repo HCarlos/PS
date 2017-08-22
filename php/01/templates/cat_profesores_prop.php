@@ -156,7 +156,7 @@ $idprofesor  = $_POST['idprofesor'];
 
 jQuery(function($) {
 
-	var stream = io.connect(obj.getValue(4));
+	// var stream = io.connect(obj.getValue(4));
 
 
 	$("#preloaderPrincipal").hide();
@@ -216,7 +216,7 @@ jQuery(function($) {
             function(json) {
             		if (json[0].msg=="OK"){
             			alert("Datos guardados con éxito.");
-						stream.emit("cliente", {mensaje: "PLATSOURCE-personaES-PROP-"+idprofesor});
+						// stream.emit("cliente", {mensaje: "PLATSOURCE-personaES-PROP-"+idprofesor});
 						$("#preloaderPrincipal").hide();
 						$("#contentProfile").hide(function(){
 							$("#contentProfile").html("");
@@ -253,7 +253,7 @@ jQuery(function($) {
             $.post(obj.getValue(0) + "data/", {o:6, t:2, c:idprofesor, p:3, from:0, cantidad:0, s:''},
             function(json) {
             		if (json[0].msg=="OK"){
-						stream.emit("cliente", {mensaje: "PLATSOURCE-PROFESORES-PROP-"+idprofesor});
+						// stream.emit("cliente", {mensaje: "PLATSOURCE-PROFESORES-PROP-"+idprofesor});
 						$("#preloaderPrincipal").hide();
 						$("#contentProfile").hide(function(){
 							$("#contentProfile").html("");

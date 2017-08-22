@@ -180,6 +180,7 @@ jQuery(function($) {
         return false;
 	}
 
+/*
 	var stream = io.connect(obj.getValue(4));
 	stream.on("servidor", jsNewAlumno);
 	function jsNewAlumno(datosServer) {
@@ -190,7 +191,7 @@ jQuery(function($) {
 			//onClickFillTable();
 		}
 	}
-
+*/
 	
 
 });

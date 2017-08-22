@@ -84,9 +84,20 @@ jQuery(function($) {
 
 							if ( IdEmp == 1 ){
 							
-								tB +='						<a class="blue printBolCalAluFromTutores1" href="#" id="l1-'+item.data+'-'+item.clave_nivel+'-'+item.grado+'"  data-rel="tooltip" data-placement="top" title="Ver Boleta de Calificaciones" >';
-								tB +='							<i class="icon-print bigger-130"></i>'
-								tB +='						</a>';
+								if (CveNiv != 1){
+									tB +='						<a class="blue printBolCalAluFromTutores1" href="#" id="l1-'+item.data+'-'+item.clave_nivel+'-0'+'-'+item.grado+'-0"  data-rel="tooltip" data-placement="top" title="Ver Boleta de Calificaciones" >';
+									tB +='							<i class="icon-print bigger-130"></i>'
+									tB +='						</a>';
+								}else{
+
+									tB +='						<a class="blue printBolCalAluFromTutores1" href="#" id="l1-'+item.data+'-'+item.clave_nivel+'-0'+'-'+item.grado+'-0"  data-rel="tooltip" data-placement="top" title="Ver Boleta de Calificaciones Español" >';
+									tB +='							<i class="icon-print bigger-130"></i>'
+									tB +='						</a>';
+
+									tB +='						<a class="blue printBolCalAluFromTutores1" href="#" id="l1-'+item.data+'-'+item.clave_nivel+'-0'+'-'+item.grado+'-1"  data-rel="tooltip" data-placement="top" title="Ver Boleta de Calificaciones Inglés" >';
+									tB +='							<i class="icon-print bigger-130"></i>'
+									tB +='						</a>';
+								}
 							
 							}else{
 
@@ -131,7 +142,8 @@ jQuery(function($) {
 						var arr = event.currentTarget.id.split('-');
 				        var cveNivel = parseInt(arr[2],0);
 				        var Grado = parseInt(arr[3],0);
-				        getBolCalFromTutores(arr[1],cveNivel, Grado);
+				        var tDocto = parseInt(arr[5],0);
+				        getBolCalFromTutores(arr[1],cveNivel, Grado, tDocto);
 					});
 
 					$(".detailBolCalAluFromTutores1").on("click",function(event){
@@ -179,7 +191,7 @@ jQuery(function($) {
 	}
 
 		
-	function getBolCalFromTutores(IdGruAlu, ClaveNivel, Grado){
+	function getBolCalFromTutores(IdGruAlu, ClaveNivel, Grado, TDocto){
 
     	// alert("Boleta en Proceso de Evaluación");
     	// return false;
@@ -204,7 +216,8 @@ jQuery(function($) {
         }else if (ClaveNivel==3){
         	url = obj.getValue(0)+"print-calif-primaria-interna-arji/";
         }else if (ClaveNivel==1){
-        	url = obj.getValue(0)+"print-calif-kinder-interna-arji-esp/";
+        	// url = obj.getValue(0)+"print-calif-kinder-interna-arji-esp/";
+	        url = TDocto == 0 ? obj.getValue(0)+"print-calif-kinder-interna-arji-esp/" : obj.getValue(0)+"print-calif-kinder-interna-arji-ing/";
         }else{
         	alert("Boleta en Construcción");
         	return false;

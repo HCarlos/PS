@@ -222,7 +222,7 @@ jQuery(function($) {
         return false;
 	}
 
-
+/*
 	var stream = io.connect(obj.getValue(4));
 	stream.on("servidor", jsNewTAtns);
 	function jsNewTAtns(datosServer) {
@@ -231,7 +231,7 @@ jQuery(function($) {
 			// onClickFillTable();
 		}
 	}
-
+*/
 	
 
 });

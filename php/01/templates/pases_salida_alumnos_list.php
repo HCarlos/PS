@@ -257,7 +257,7 @@ jQuery(function($) {
         var nc = "user="+localStorage.nc+"&dests="+IdPSAAlumno+"&idpsa="+IdPSA;
         $.post(obj.getValue(0)+"data/", { o:51, c:nc, t:20, p:53, s:nc, from:0, cantidad:0 },
             function(json){
-                stream.emit("cliente", {mensaje: "PLATSOURCE-LIST_ALUMNOS_PSA-PROP-"+IdPSAAlumno+'-'+IdAlumno+'-'+Alumno+'-'+localStorage.nc});                
+                // stream.emit("cliente", {mensaje: "PLATSOURCE-LIST_ALUMNOS_PSA-PROP-"+IdPSAAlumno+'-'+IdAlumno+'-'+Alumno+'-'+localStorage.nc});                
                 onClickFillTable();
                 $("#preloaderPrincipal").hide();
         }, "json");
@@ -314,6 +314,7 @@ jQuery(function($) {
         return false;
     });
 
+/*
     var stream = io.connect(obj.getValue(4));
     stream.on("servidor", jsNewSolMatEnc0);
     function jsNewSolMatEnc0(datosServer) {
@@ -322,7 +323,7 @@ jQuery(function($) {
             onClickFillTable();
         }
     }
-
+*/
 
 });
 

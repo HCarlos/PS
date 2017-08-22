@@ -160,7 +160,7 @@
 
 jQuery(function($) {
 
-	var stream = io.connect(obj.getValue(4));
+	// var stream = io.connect(obj.getValue(4));
 	var IdFamilia = 0;
 	var Tutor = "";
 	var arrAlu = [];
@@ -452,7 +452,7 @@ jQuery(function($) {
 				$("#preloaderPrincipal").hide();
         		if (json[0].msg=="OK"){
         			alert("Pago APLICADO con éxito.");
-					stream.emit("cliente", {mensaje: "PLATSOURCE|PAGOAPLICADO|PROP|"+arrIdPago});
+					// stream.emit("cliente", {mensaje: "PLATSOURCE|PAGOAPLICADO|PROP|"+arrIdPago});
 					//getAlumnos(IdFamilia);
     			}else{
     				alert(json[0].msg);	
@@ -474,7 +474,7 @@ jQuery(function($) {
 				$("#preloaderPrincipal").hide();
 	    		if (json[0].msg=="OK"){
 	    			alert("Proceso ejecutado con éxito.");
-					stream.emit("cliente", {mensaje: "PLATSOURCE|IDFAMILY|PROP|"+item[2]});
+					// stream.emit("cliente", {mensaje: "PLATSOURCE|IDFAMILY|PROP|"+item[2]});
 					//getAlumnos(IdFamilia);
 				}else{
 					alert(json[0].msg);	
@@ -554,7 +554,7 @@ jQuery(function($) {
 				$("#preloaderPrincipal").hide();
 	    		if (json[0].msg=="OK"){
 	    			alert("Proceso ejecutado con éxito.");
-					stream.emit("cliente", {mensaje: "PLATSOURCE|REFRESH-EDO-CTA|PROP|"+IdFamilia});
+					// stream.emit("cliente", {mensaje: "PLATSOURCE|REFRESH-EDO-CTA|PROP|"+IdFamilia});
 					getAlumnos(IdFamilia);
 				}else{
 					alert(json[0].msg);	
@@ -652,7 +652,7 @@ jQuery(function($) {
 
 	getMetodoPago();
 
-	stream.on("servidor", jsNodeMsg0);
+	// stream.on("servidor", jsNodeMsg0);
 
 	$("#getConvenio").hide();
 

@@ -228,7 +228,7 @@ jQuery(function($) {
             function(json){
                 //stream.emit("cliente", {mensaje: "PLATSOURCE-DELETE_DESTINATARIOS_TAREAS-PROP-"+IdTareaDestinatario});
                 //alert(IdDestinatario);
-                stream.emit("cliente", {mensaje: "PLATSOURCE-DESTINATARIOS_COM_GPO-PROP-"+IdComUserAsocGpo+'-'+localStorage.nc});                
+                // stream.emit("cliente", {mensaje: "PLATSOURCE-DESTINATARIOS_COM_GPO-PROP-"+IdComUserAsocGpo+'-'+localStorage.nc});                
                 onClickFillTable();
                 $("#preloaderPrincipal").hide();
         }, "json");
@@ -247,6 +247,7 @@ jQuery(function($) {
         return false;
     });
 
+/*
     var stream = io.connect(obj.getValue(4));
     stream.on("servidor", jsNewSolMatEnc0);
     function jsNewSolMatEnc0(datosServer) {
@@ -255,6 +256,7 @@ jQuery(function($) {
             onClickFillTable();
         }
     }
+*/
 
 
 });

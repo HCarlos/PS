@@ -123,7 +123,7 @@ jQuery(function($) {
         function(json) {
                 if (json[0].msg=="OK"){
                     alert("Datos guardados con éxito");
-                    stream.emit("cliente", {mensaje: "PLATSOURCE-MENSAJE_EDIT-PROP-"+IdComMensaje});
+                    // stream.emit("cliente", {mensaje: "PLATSOURCE-MENSAJE_EDIT-PROP-"+IdComMensaje});
                     $("#preloaderPrincipal").hide();
                     // if (is_fotos){
                         $("#contentProfile").hide(function(){
@@ -206,7 +206,7 @@ jQuery(function($) {
 
    $("#titulo").focus();
 
-    var stream = io.connect(obj.getValue(4));
+    // var stream = io.connect(obj.getValue(4));
 
 
 });

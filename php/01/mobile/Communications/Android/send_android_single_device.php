@@ -25,7 +25,10 @@ if ( $type == 1 ){
 $msg = array
 (
 	"body" => $body,
-	"title"	=> $title
+	"title"	=> $title,
+	"priority" => "normal",
+	"sound" => "",
+	"content-available" => 1
 );
 
 $data = array
@@ -36,7 +39,6 @@ $data = array
 $fields = array
 (
  	"to" 	=> $registrationIds,
-	"priority" => "normal",
 	"notification" => $msg,
 	"data" => $data
 );

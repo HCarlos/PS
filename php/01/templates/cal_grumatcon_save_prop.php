@@ -84,7 +84,7 @@ jQuery(function($) {
 
 	$("#preloaderPrincipal").hide();
 
-	var stream = io.connect(obj.getValue(4));
+	// var stream = io.connect(obj.getValue(4));
 
 
 	var idmatconsave = <?php echo $idmatconsave ?>;
@@ -127,7 +127,7 @@ jQuery(function($) {
             function(json) {
             		if (json[0].msg=="OK"){
             			alert("Datos guardados con éxito.");
-						stream.emit("cliente", {mensaje: "PLATSOURCE-MATCONSAVE-PROP-"+idmatconsave});
+						// stream.emit("cliente", {mensaje: "PLATSOURCE-MATCONSAVE-PROP-"+idmatconsave});
 						$("#preloaderPrincipal").hide();
 						$("#divUploadImage").modal('hide');
         			}else{

@@ -129,7 +129,7 @@ jQuery(function($) {
             function(json) {
             		if (json[0].msg=="OK"){
             			alert("Datos guardados con éxito.");
-						stream.emit("cliente", {mensaje: "PLATSOURCE-ADD_EXA_FIRMA-PROP-"+IdExaFirma});
+						// stream.emit("cliente", {mensaje: "PLATSOURCE-ADD_EXA_FIRMA-PROP-"+IdExaFirma});
 						$("#preloaderPrincipal").hide();
 						$("#contentProfile").hide(function(){
 							$("#contentProfile").empty();

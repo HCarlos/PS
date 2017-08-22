@@ -82,7 +82,8 @@ jQuery(function($) {
                 function(json){
                     if (json[0].msg=="OK"){
                         //alert("Información guardada con éxito!");
-                        stream.emit("cliente", {mensaje: "PLATSOURCE-SOLMATDETOBS-PROP-"+idsolicituddematerial});
+                        
+                        // stream.emit("cliente", {mensaje: "PLATSOURCE-SOLMATDETOBS-PROP-"+idsolicituddematerial});
                     
 
                         $("#preloaderPrincipal").hide();
@@ -117,7 +118,7 @@ jQuery(function($) {
 
         updateForm();
 
-        var stream = io.connect(obj.getValue(4));
+        // var stream = io.connect(obj.getValue(4));
 
         $('[data-rel=popover]').popover({container:$('.span7')});
 

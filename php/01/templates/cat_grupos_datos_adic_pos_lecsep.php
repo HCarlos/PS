@@ -846,7 +846,7 @@ jQuery(function($) {
         		if (json[0].msg=="OK"){
 
         			alert("Datos guardados con éxito.");
-					stream.emit("cliente", {mensaje: "PLATSOURCE-DATOS_ADICIONALES_OFICIALES_POS_LEC_SEP-IDGPO-"+Grado});
+					// stream.emit("cliente", {mensaje: "PLATSOURCE-DATOS_ADICIONALES_OFICIALES_POS_LEC_SEP-IDGPO-"+Grado});
 
 					$("#preloaderPrincipal").hide();
 					$("#contentLevel4").hide(function(){

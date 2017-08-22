@@ -262,6 +262,7 @@ jQuery(function($) {
 
 	getGruMatConMKB0PartesList0();
 
+	/*
 	var stream = io.connect(obj.getValue(4));
 	stream.on("servidor", jsNewEstado);
 	function jsNewEstado(datosServer) {
@@ -270,6 +271,7 @@ jQuery(function($) {
 			//getGruMatConMKB0PartesList0();
 		}
 	}
+	*/
 
 
 });

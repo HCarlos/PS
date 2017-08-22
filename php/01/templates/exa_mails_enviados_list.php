@@ -295,6 +295,7 @@ jQuery(function($) {
         return temp;
  	}
 
+/*
 	var stream = io.connect(obj.getValue(4));
 	stream.on("servidor", jsNewExa);
 	function jsNewExa(datosServer) {
@@ -305,7 +306,7 @@ jQuery(function($) {
 			//onClickFillTable();
 		}
 	}
-
+*/
 	
 
 });

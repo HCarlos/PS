@@ -114,7 +114,7 @@ jQuery(function($) {
             function(json) {
                     if (json[0].msg=="OK"){
                         //alert("Datos guardados con éxito.");
-                        stream.emit("cliente", {mensaje: "PLATSOURCE-RESPUESTA_COM_MEN-PROP-"+IdComMensajeDestinatarioRespuesta});
+                        // stream.emit("cliente", {mensaje: "PLATSOURCE-RESPUESTA_COM_MEN-PROP-"+IdComMensajeDestinatarioRespuesta});
                         $("#preloaderPrincipal").hide();
                         $("#contentLevel4").hide(function(){
                             $("#contentLevel4").empty();
@@ -155,7 +155,7 @@ jQuery(function($) {
         return false;
     });
 
-    var stream = io.connect(obj.getValue(4));
+    // var stream = io.connect(obj.getValue(4));
 
     $("#respuesta").focus();
 
