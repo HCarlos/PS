@@ -10,19 +10,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="tecnointel.mx" name="author">
 
-    <link href="<?= "http://".$_SERVER['SERVER_NAME'];?>/css/style-t1.css" rel="stylesheet">
+    <link href="<?= "https://".$_SERVER['SERVER_NAME'];?>/css/style-t1.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="<?= "http://".$_SERVER['SERVER_NAME'];?>/assets/css_/font-awesome.css" />
+    <link rel="stylesheet" href="<?= "https://".$_SERVER['SERVER_NAME'];?>/assets/css_/font-awesome.css" />
 
-    <link rel="stylesheet" href="<?= "http://".$_SERVER['SERVER_NAME'];?>/assets/css/ace-fonts.css" />
+    <link rel="stylesheet" href="<?= "https://".$_SERVER['SERVER_NAME'];?>/assets/css/ace-fonts.css" />
 
     <!--ace styles-->
 
-    <link rel="stylesheet" href="<?= "http://".$_SERVER['SERVER_NAME'];?>/assets/css/ace.css" />
-    <link rel="stylesheet" href="<?= "http://".$_SERVER['SERVER_NAME'];?>/assets/css/ace-responsive.css" />
+    <link rel="stylesheet" href="<?= "https://".$_SERVER['SERVER_NAME'];?>/assets/css/ace.css" />
+    <link rel="stylesheet" href="<?= "https://".$_SERVER['SERVER_NAME'];?>/assets/css/ace-responsive.css" />
 
-    <link href="<?= "http://".$_SERVER['SERVER_NAME'];?>/css/docs.css" rel="stylesheet">
-    <link href="<?= "http://".$_SERVER['SERVER_NAME'];?>/css/sg-01.css" rel="stylesheet">
+    <link href="<?= "https://".$_SERVER['SERVER_NAME'];?>/css/docs.css" rel="stylesheet">
+    <link href="<?= "https://".$_SERVER['SERVER_NAME'];?>/css/sg-01.css" rel="stylesheet">
 
 <style type="text/css">
 
@@ -126,7 +126,7 @@ html {
         </div>
         <div class="widget-body">
             <div class="widget-main">
-                <p class="text-center"><img src="http://platsource.mx/php/01/mobile/img/IB400x.png" width="100" height="100" /></p>
+                <p class="text-center"><img src="https://platsource.mx/php/01/mobile/img/IB400x.png" width="100" height="100" /></p>
                 <p><strong class="cafe">PEP:</strong></p>
                 <p>El <strong>Programa de la Escuela Primaria</strong> de IB prepara a los alumnos para participar activamente en un viaje de descubrimiento y aprendizaje que se desarrolla toda la vida.</p>
                 <p>Est&aacute; dedicado a ni&ntilde;os de 3 a 12 a&ntilde;os, se centra en el desarrollo integral del ni&ntilde;o y de su capacidad de indagaci&oacute;n y descubrimiento, tanto en la clase como en el mundo que le rodea.</p>
@@ -160,7 +160,7 @@ html {
         </div>
         <div class="widget-body">
             <div class="widget-main">
-                <p class="text-center"><img src="http://platsource.mx/php/01/mobile/img/cambridgeEsol400x.png" width="200" height="100" /></p>
+                <p class="text-center"><img src="https://platsource.mx/php/01/mobile/img/cambridgeEsol400x.png" width="200" height="100" /></p>
                 <p>Cambridge English Language Assessment se distingue por sus altos est&aacute;ndares de calidad, habiendo sido seleccionado por ministerios de educaci&oacute;n de varios pa&iacute;ses para desarrollar programas de evaluaci&oacute;n de ingl&eacute;s.</p><br>
                 <p>Los ex&aacute;menes de Cambridge:  </p>
                 <ul>
@@ -194,7 +194,7 @@ html {
         </div>
         <div class="widget-body">
             <div class="widget-main">
-                <p class="text-center"><img src="http://platsource.mx/php/01/mobile/img/habilMind400x.png" width="150" height="100" /></p>
+                <p class="text-center"><img src="https://platsource.mx/php/01/mobile/img/habilMind400x.png" width="150" height="100" /></p>
                 <p>Este programa, creado por el prestigiado pedagogo mexicano, el Dr. Isauro Blanco. Se ha impartido en nuestra instituci&oacute;n desde 1993 y tiene como principal objetivo educar la inteligencia del alumno mediante el desarrollo de 23 habilidades b&aacute;sicas requeridas para el aprendizaje acad&eacute;mico de aritm&eacute;tica, l&oacute;gica matem&aacute;tica, lectura b&aacute;sica, lectura de comprensi&oacute;n y creatividad.</p>
                 <p>Este programa se trabaja una hora por semana, e inicia con una relajaci&oacute;n o ejercicio de gimnasia cerebral y posteriormente se trabajan los ejercicios, seg&uacute;n corresponda.</p></br>
                 <p><strong class="cafe">Filosof&iacute;a para Ni&ntilde;os (DHV):</strong></p></br>

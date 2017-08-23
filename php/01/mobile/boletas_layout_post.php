@@ -35,19 +35,19 @@ $logoIB = $F->getLogoIB($idemp);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="tecnointel.mx" name="author">
 
-    <link href="<?= "http://".$_SERVER['SERVER_NAME'];?>/css/style-t1.css" rel="stylesheet">
+    <link href="<?= "https://".$_SERVER['SERVER_NAME'];?>/css/style-t1.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="<?= "http://".$_SERVER['SERVER_NAME'];?>/assets/css_/font-awesome.css" />
+    <link rel="stylesheet" href="<?= "https://".$_SERVER['SERVER_NAME'];?>/assets/css_/font-awesome.css" />
 
-    <link rel="stylesheet" href="<?= "http://".$_SERVER['SERVER_NAME'];?>/assets/css/ace-fonts.css" />
+    <link rel="stylesheet" href="<?= "https://".$_SERVER['SERVER_NAME'];?>/assets/css/ace-fonts.css" />
 
     <!--ace styles-->
 
-    <link rel="stylesheet" href="<?= "http://".$_SERVER['SERVER_NAME'];?>/assets/css/ace.css" />
-    <link rel="stylesheet" href="<?= "http://".$_SERVER['SERVER_NAME'];?>/assets/css/ace-responsive.css" />
+    <link rel="stylesheet" href="<?= "https://".$_SERVER['SERVER_NAME'];?>/assets/css/ace.css" />
+    <link rel="stylesheet" href="<?= "https://".$_SERVER['SERVER_NAME'];?>/assets/css/ace-responsive.css" />
 
-    <link href="<?= "http://".$_SERVER['SERVER_NAME'];?>/css/docs.css" rel="stylesheet">
-    <link href="<?= "http://".$_SERVER['SERVER_NAME'];?>/css/sg-01.css" rel="stylesheet">
+    <link href="<?= "https://".$_SERVER['SERVER_NAME'];?>/css/docs.css" rel="stylesheet">
+    <link href="<?= "https://".$_SERVER['SERVER_NAME'];?>/css/sg-01.css" rel="stylesheet">
 
 <style type="text/css">
 
@@ -191,7 +191,7 @@ html {
 
                             ?>
 
-                                <form action="http://www.platsource.mx/<?= $url; ?>" method="POST">
+                                <form action="https://platsource.mx/<?= $url; ?>" method="POST">
                 
                                     <input type="hidden" name="o" value="0" id="o" />
                                     <input type="hidden" name="t" value="40" id="t" />
@@ -213,7 +213,7 @@ html {
                             }else{
                             ?>
 
-                                <form action="http://www.platsource.mx/<?= $url2; ?>" method="POST">
+                                <form action="https://platsource.mx/<?= $url2; ?>" method="POST">
                 
                                     <input type="hidden" name="o" value="0" id="o" />
                                     <input type="hidden" name="t" value="40" id="t" />
@@ -255,7 +255,7 @@ html {
 
 var nc = "user=<?= $user; ?>&strgrualu=<?= $idgrualu; ?>&logoEmp=<?= $logoEmp; ?>&logoIbo=<?= $logoIB; ?>&IdEmp=<?= $idemp; ?>";
 
-var url = "http://platsource.mx/<?= $url; ?>";
+var url = "https://platsource.mx/<?= $url; ?>";
 
 function submitform()
 {

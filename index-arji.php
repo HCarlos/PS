@@ -170,7 +170,6 @@
         /* document.write("<script src='"+obj.getValue(4)+"/socket.io/socket.io.js'>"+"<"+"/script>"); */
     </script>    
 
-    
   <script  src="/js/01/registry.js"> </script>
 
   <script type="text/javascript">

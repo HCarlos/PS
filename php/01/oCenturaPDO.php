@@ -3817,7 +3817,7 @@ class oCenturaPDO {
 					"totalNoLeidasCirculares" => $totalNoLeidasCirculares,
 					"totalNoLeidasMensajes"   => $totalNoLeidasMensajes,
 					"totalNoLeidasBadge"      => $totalNoLeidasBadge,
-					"currentVersion"		  => "1.1.30"
+					"currentVersion"		  => "1.1.31"
 					);
 
 	}

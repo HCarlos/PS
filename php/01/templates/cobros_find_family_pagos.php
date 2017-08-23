@@ -41,7 +41,7 @@ jQuery(function($) {
 	// var stream = io.connect(obj.getValue(4));
 
 
-	var IdFamilia = 0;
+	var IdFamFind = 0;
 	var cFamilia = "";
 	var data = [];
 
@@ -56,12 +56,24 @@ jQuery(function($) {
 		$("#preloaderPrincipal").show();
 
 		    var queryString = $(this).serialize();	
-		    
-			// stream.emit("cliente", {mensaje: "PLATSOURCE|IDFAMILY|"+IdFamilia+"|"+cFamilia+"|"+localStorage.nc});
+
+		    var dFam = $("#search").val().split(" - ");
+		    var IdFam01 = parseInt(dFam[0],0);
+
+			// stream.emit("cliente", {mensaje: "PLATSOURCE|IDFAMILY|"+IdFamFind+"|"+cFamilia+"|"+localStorage.nc});
 			$("#preloaderPrincipal").hide();
 			$("#contentProfile").hide(function(){
 				$("#contentProfile").empty();
 				$("#contentMain").show();
+
+				$("#idfamilia").val(IdFam01);				
+				$("#cfamilia_id").val(IdFam01);
+				$("#cfamilia").val(dFam[1]);
+				
+				// jQuery.event.trigger({ type : 'keypress', which : character.charCodeAt(0) });
+
+				// getAlumnos(IdFam01);
+				
 			});
 
 	});
@@ -107,7 +119,7 @@ jQuery(function($) {
 					select: function(event, ui) { 
 						if (ui.item){
 							cFamilia = ui.item.value;
-							IdFamilia = ui.item.indice;
+							IdFamFind = ui.item.indice;
 			        	}
 			      	},
 					open: function() {

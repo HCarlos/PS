@@ -184,8 +184,6 @@ jQuery(function($) {
 		//alert(event.currentTarget.id);
 		var idf = parseInt( $("#cfamilia_id").val() ,0);
 
-		console.log(idf);
-
 		//return false;
 
 		if ( isNaN(idf) ) {
@@ -200,14 +198,13 @@ jQuery(function($) {
 		            },
 		            function(html) {	
 		            	if (html!="NoFamilia"){                
-		                $("#contentProfile").html(html).show('slow',function(){
-		                	//$("#contentProfile");	
-			                $('#breadcrumb').html(getBar('Inicio, Pago de Conceptos '));
-		                });
+			                $("#contentProfile").html(html).show('slow',function(){
+				                $('#breadcrumb').html(getBar('Inicio, Pago de Conceptos '));
+			                });
 		            	}else{
 		            		alert("No se encontró la familia");	
 		            	}
-		            }, "html");
+	            }, "html");
 	        });
 
     	}else{
@@ -453,7 +450,7 @@ jQuery(function($) {
         		if (json[0].msg=="OK"){
         			alert("Pago APLICADO con éxito.");
 					// stream.emit("cliente", {mensaje: "PLATSOURCE|PAGOAPLICADO|PROP|"+arrIdPago});
-					//getAlumnos(IdFamilia);
+					getAlumnos(IdFamilia);
     			}else{
     				alert(json[0].msg);	
     			}
@@ -475,7 +472,7 @@ jQuery(function($) {
 	    		if (json[0].msg=="OK"){
 	    			alert("Proceso ejecutado con éxito.");
 					// stream.emit("cliente", {mensaje: "PLATSOURCE|IDFAMILY|PROP|"+item[2]});
-					//getAlumnos(IdFamilia);
+					getAlumnos(IdFamilia);
 				}else{
 					alert(json[0].msg);	
 				}
@@ -590,6 +587,7 @@ jQuery(function($) {
 			getAlumnos(IdFamilia);
 		}
 
+/*
 		if ( ms[1] == 'PAGOAPLICADO' && ms[4] == localStorage.nc ) {
 			getAlumnos(IdFamilia);
 		}
@@ -598,6 +596,7 @@ jQuery(function($) {
 		if ( ms[1] == 'DELETECONCEPTFROMALU' && ms[4] == localStorage.nc ) {
 			getAlumnos(IdFamilia);
 		}
+*/
 
 	}
 

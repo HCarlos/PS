@@ -6,14 +6,14 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="tecnointel.mx" name="author">
-    <link href="<?= "http://".$_SERVER['SERVER_NAME'];?>/css/style-t1.css" rel="stylesheet">
-    <link rel="stylesheet" href="<?= "http://".$_SERVER['SERVER_NAME'];?>/assets/css_/font-awesome.css" />
-    <link rel="stylesheet" href="<?= "http://".$_SERVER['SERVER_NAME'];?>/assets/css/ace-fonts.css" />
+    <link href="<?= "https://".$_SERVER['SERVER_NAME'];?>/css/style-t1.css" rel="stylesheet">
+    <link rel="stylesheet" href="<?= "https://".$_SERVER['SERVER_NAME'];?>/assets/css_/font-awesome.css" />
+    <link rel="stylesheet" href="<?= "https://".$_SERVER['SERVER_NAME'];?>/assets/css/ace-fonts.css" />
     <!--ace styles-->
-    <link rel="stylesheet" href="<?= "http://".$_SERVER['SERVER_NAME'];?>/assets/css/ace.css" />
-    <link rel="stylesheet" href="<?= "http://".$_SERVER['SERVER_NAME'];?>/assets/css/ace-responsive.css" />
-    <link href="<?= "http://".$_SERVER['SERVER_NAME'];?>/css/docs.css" rel="stylesheet">
-    <link href="<?= "http://".$_SERVER['SERVER_NAME'];?>/css/sg-01.css" rel="stylesheet">
+    <link rel="stylesheet" href="<?= "https://".$_SERVER['SERVER_NAME'];?>/assets/css/ace.css" />
+    <link rel="stylesheet" href="<?= "https://".$_SERVER['SERVER_NAME'];?>/assets/css/ace-responsive.css" />
+    <link href="<?= "https://".$_SERVER['SERVER_NAME'];?>/css/docs.css" rel="stylesheet">
+    <link href="<?= "https://".$_SERVER['SERVER_NAME'];?>/css/sg-01.css" rel="stylesheet">
 
 <style type="text/css">
 

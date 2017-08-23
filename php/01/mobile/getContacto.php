@@ -7,8 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="tecnointel.mx" name="author">
 
-    <link href="<?= "http://".$_SERVER['SERVER_NAME'];?>/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="<?= "http://".$_SERVER['SERVER_NAME'];?>/bootstrap_v4/css/bootstrap.min.css" rel="stylesheet">
+    <link href="<?= "https://".$_SERVER['SERVER_NAME'];?>/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="<?= "https://".$_SERVER['SERVER_NAME'];?>/bootstrap_v4/css/bootstrap.min.css" rel="stylesheet">
 
 <style type="text/css">
 
@@ -115,7 +115,7 @@ html {
         <div class="well well-lg">
             <div class="card card-inverse center" style="background-color: #333; border-color: #333; width: 100% !important;">
               <div class="card-block">
-                <p class="text-center"><img src="<?= "http://".$_SERVER['SERVER_NAME'];?>/images/web/favicon-157-157.png" width="157" height="157" /> </p>
+                <p class="text-center"><img src="<?= "https://".$_SERVER['SERVER_NAME'];?>/images/web/favicon-157-157.png" width="157" height="157" /> </p>
                 <h3 class="card-title text-center">PlatSource<small class="superindice">&copy</small> <?= date('Y'); ?></h3>
                 <p class="card-text text-center">Plataforma Educativa en Tiempo Real.</p>
                 <p class="card-text left-center">

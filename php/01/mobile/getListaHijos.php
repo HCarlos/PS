@@ -29,7 +29,7 @@ if (count($res)>0){
 			$res[$i]->idgrualu = $r[0]->idgrualu;
 			$res[$i]->grupo = $r[0]->grupo;
 			$res[$i]->genero = $r[0]->genero;
-			$urlBase = "http://www.platsource.mx/";
+			$urlBase = "https://platsource.mx/";
             switch (intval($r[0]->clave_nivel)) {
                  case 5:
                      $res[$i]->urlBoleta = $urlBase."print-calif-prepa-interna-arji/";

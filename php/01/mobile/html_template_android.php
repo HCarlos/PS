@@ -35,19 +35,19 @@ $rprof = $f->getQuerys(20010,"idtareadestinatario=".$idtareadestinatario);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="platsource.mx" name="author">
 
-    <link href="<?= "http://".$_SERVER['SERVER_NAME'];?>/css/style-t1.css" rel="stylesheet">
+    <link href="<?= "https://".$_SERVER['SERVER_NAME'];?>/css/style-t1.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="<?= "http://".$_SERVER['SERVER_NAME'];?>/assets/css_/font-awesome.css" />
+    <link rel="stylesheet" href="<?= "https://".$_SERVER['SERVER_NAME'];?>/assets/css_/font-awesome.css" />
 
-    <link rel="stylesheet" href="<?= "http://".$_SERVER['SERVER_NAME'];?>/assets/css/ace-fonts.css" />
+    <link rel="stylesheet" href="<?= "https://".$_SERVER['SERVER_NAME'];?>/assets/css/ace-fonts.css" />
 
     <!--ace styles-->
 
-    <link rel="stylesheet" href="<?= "http://".$_SERVER['SERVER_NAME'];?>/assets/css/ace.css" />
-    <link rel="stylesheet" href="<?= "http://".$_SERVER['SERVER_NAME'];?>/assets/css/ace-responsive.css" />
+    <link rel="stylesheet" href="<?= "https://".$_SERVER['SERVER_NAME'];?>/assets/css/ace.css" />
+    <link rel="stylesheet" href="<?= "https://".$_SERVER['SERVER_NAME'];?>/assets/css/ace-responsive.css" />
 
-    <link href="<?= "http://".$_SERVER['SERVER_NAME'];?>/css/docs.css" rel="stylesheet">
-    <link href="<?= "http://".$_SERVER['SERVER_NAME'];?>/css/sg-01.css" rel="stylesheet">
+    <link href="<?= "https://".$_SERVER['SERVER_NAME'];?>/css/docs.css" rel="stylesheet">
+    <link href="<?= "https://".$_SERVER['SERVER_NAME'];?>/css/sg-01.css" rel="stylesheet">
 
 <style type="text/css">
 
@@ -195,7 +195,7 @@ html {
                         foreach ($rat as $i => $value) {
          
                     ?>
-                        <li><a href="http://platsource.mx/<?= $rat[0]->directorio; ?><?= $rat[0]->archivo; ?>" target="_blank" rel="external"><?= utf8_decode($rat[0]->descripcion_archivo); ?></a>  <small class="grey"><i><?= $rat[0]->creado_el; ?></i></small>  </li>
+                        <li><a href="https://platsource.mx/<?= $rat[0]->directorio; ?><?= $rat[0]->archivo; ?>" target="_blank" rel="external"><?= utf8_decode($rat[0]->descripcion_archivo); ?></a>  <small class="grey"><i><?= $rat[0]->creado_el; ?></i></small>  </li>
                     <?php
                         } 
                     ?>
@@ -231,7 +231,7 @@ html {
 
 </div>
 <!--
-<script src="<?= "http://".$_SERVER['SERVER_NAME'];?>/js/jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.js"></script>
+<script src="<?= "https://".$_SERVER['SERVER_NAME'];?>/js/jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function(){
         $('a[rel="external"]').click(function() {
