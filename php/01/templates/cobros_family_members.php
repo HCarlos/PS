@@ -9,8 +9,9 @@ $user = $_POST['user'];
 $idfam = $_POST['idfamilia'];
 $tutor = $_POST['tutor'];
 
-$arr = $f->getQuerys(10009,"idfamilia=".$idfam."&u=".$user,0,0,0,array(),'alumno');
-	
+$arr0 = $f->getQuerys(10009,"idfamilia=".$idfam."&u=".$user,0,0,0,array(),'alumno');
+$arr = new StdClass();
+$arr = $arr0;	
 foreach ($arr as $i => $value) {
 
 	$arrAlu = $f->getQuerys(10023,"idfamilia=".$idfam."&u=".$user."&idciclo=".$arr[$i]->idciclo."&idalumno=".$arr[$i]->idalumno,0,0,0,array(),'alumno');
@@ -27,6 +28,13 @@ foreach ($arr as $i => $value) {
 		$arr[$i]->beca_bach 		= $arrAlu[0]->beca_bach;	
 		$arr[$i]->grupo_bloqueado 	= intval($arrAlu[0]->grupo_bloqueado);	
 
+
+	}else{
+
+		$arrAlu = new StdClass();
+		$arr[$i]->nivel 			= "Lock"; 
+		$arr[$i]->grupo 			= "Lock"; 
+		$arr[$i]->grupo_bloqueado 	= 0;	
 
 	}
 
