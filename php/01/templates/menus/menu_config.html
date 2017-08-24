@@ -30,9 +30,16 @@
                             </li>
 
                             <li>
-                                <a href="#" id="asoc_observacion_to_nivel"><!-- newTask -->
+                                <a href="#" id="asoc_observacion_to_nivel">
                                     <i class="icon-edit"></i>
                                     <span class="menu-text"> Obs. a Nivel</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="#" id="asoc_usuarios_to_conceptos">
+                                    <i class="icon-edit"></i>
+                                    <span class="menu-text"> Usarios a Conceptos</span>
                                 </a>
                             </li>
 
@@ -144,7 +151,6 @@ jQuery(function($) {
         });
     }
 
-
     if ($("#asoc_observacion_to_nivel").length) {
         $("#asoc_observacion_to_nivel").on("click", function(event) {
             event.preventDefault();
@@ -160,6 +166,23 @@ jQuery(function($) {
             return false;
         });
     }
+
+    if ($("#asoc_usuarios_to_conceptos").length) {
+        $("#asoc_usuarios_to_conceptos").on("click", function(event) {
+            event.preventDefault();
+            cfgBase0();
+            var nc = localStorage.nc;
+            $.post(obj.getValue(0) + "asoc-usuarios-to-conceptos/", {
+                    user: nc
+                },
+                function(html) {
+                    $("#contentMain").html(html);
+                    $('#breadcrumb').html(getBar('Inicio,Asociar Usuarios a Conceptos'));
+                }, "html");
+            return false;
+        });
+    }
+
 
     if ($("#asoc_grualu_to_grualu").length) {
         $("#asoc_grualu_to_grualu").on("click", function(event) {

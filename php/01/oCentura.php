@@ -6355,7 +6355,11 @@ class oCentura {
 		        $idemp = $this->getIdEmpFromAlias($u);
 				$query = "SELECT *
 								FROM _viPagos
-							WHERE idemp = $idemp ORDER BY $otros DESC";
+							WHERE 
+									idemp = $idemp AND 
+									status_concepto = 1 AND 
+									status_pago = 1
+							ORDER BY $otros DESC";
 				break;
 			case 10008:
 				$query = "SELECT *
@@ -6387,7 +6391,13 @@ class oCentura {
 		        $idemp = $this->getIdEmpFromAlias($u);
 				$query = "SELECT *
 								FROM _viPagos
-							WHERE idemp = $idemp AND idemisorfiscal = $idemisorfiscal AND clave_nivel = $clave_nivel ORDER BY $otros ASC";
+							WHERE 
+								idemp = $idemp AND 
+								idemisorfiscal = $idemisorfiscal AND 
+								clave_nivel = $clave_nivel AND 
+								status_concepto = 1 AND 
+								status_pago = 1
+							ORDER BY $otros ASC";
 				break;
 
 			case 10012:
@@ -6509,7 +6519,11 @@ class oCentura {
 		        $idemp = $this->getIdEmpFromAlias($u);
 				$query = "SELECT DISTINCT idconcepto, concepto
 								FROM _viPagos
-							WHERE idemp = $idemp AND idemisorfiscal = $idemisorfiscal ORDER BY $otros ASC";
+							WHERE idemp = $idemp AND 
+									idemisorfiscal = $idemisorfiscal AND 
+									status_concepto = 1 AND 
+									status_pago = 1
+							ORDER BY concepto ASC";
 				break;
 
 			case 10021:
@@ -6544,7 +6558,13 @@ class oCentura {
 		        $idemp = $this->getIdEmpFromAlias($u);
 				$query = "SELECT DISTINCT idconcepto, concepto
 								FROM _viPagos
-							WHERE idemp = $idemp AND idemisorfiscal = $idemisorfiscal AND is_pagos_diversos = 1 ORDER BY $otros ASC";
+							WHERE 
+									idemp = $idemp AND 
+									idemisorfiscal = $idemisorfiscal AND 
+									is_pagos_diversos = 1 AND 
+									status_concepto = 1 AND 
+									status_pago = 1
+							ORDER BY $otros ASC";
 				break;
 
 			case 10025:
@@ -6555,6 +6575,19 @@ class oCentura {
 					$query = "SELECT * 
 							FROM _viGrupo_Alumnos WHERE idemp = $idemp AND idfamilia = $idfamilia AND idalumno = $idalumno AND status_grualu = 1 LIMIT 1";
 				break;	
+
+			case 10026:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+		        $idusr = $this->getIdUserFromAlias($u);
+		        $strIN = $this->getIdConceptosIN($u);
+				$query = "SELECT DISTINCT idconcepto, concepto
+								FROM _viUsersConceptosPagos
+							WHERE idemp = $idemp AND 
+									iduser = $idusr AND 
+									idconcepto IN ($strIN) 
+							ORDER BY concepto ASC";
+				break;
 
 			case 20000:
 				parse_str($cad);
@@ -6930,5 +6963,32 @@ class oCentura {
 			$idusr = $this->getIdFamFromIdUser($iduseralu,1);
 			return $idusr;
 	}
+
+	public function getIdConceptosIN($u=""){
+			$idemp = $this->getIdEmpFromAlias($u);
+			$idusr = $this->getIdUserFromAlias($u);		
+			$query = "SELECT DISTINCT idconcepto, concepto
+								FROM _viUsersConceptosPagos
+							WHERE idemp = $idemp AND 
+									iduser = $idusr
+							ORDER BY concepto ASC";
+			$result = $this->getArray($query);
+			$INStr = "";
+			foreach ($result as $i => $value) {
+				if ($i == 0){
+					$INStr = $result[$i]->idconcepto.',';
+				}else{
+					if ($i == (count($result)-1) ) {
+						$INStr .= $result[$i]->idconcepto;
+					}else{
+						$INStr .= $result[$i]->idconcepto.',';
+					}
+				}
+			}
+
+			return $INStr;
+
+	}
+
  }  // OF CLASS
 ?>

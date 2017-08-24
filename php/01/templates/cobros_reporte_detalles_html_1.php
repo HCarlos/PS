@@ -81,7 +81,7 @@ if ( $tiporeporte==3 ){
 								<th aria-label="subtotal: activate to sort column ascending" style="width: 80px;" aria-controls="sample-table-2" tabindex="3" role="columnheader" class="sorting">IMPORTE</th>
 								<th aria-label="descto: activate to sort column ascending" style="width: 80px;" aria-controls="sample-table-2" tabindex="3" role="columnheader" class="sorting">DESCTO</th>
 								<th aria-label="importe: activate to sort column ascending" style="width: 80px;" aria-controls="sample-table-2" tabindex="3" role="columnheader" class="sorting">SUBTOTAL</th>
-								<th aria-label="recargo: activate to sort column ascending" style="width: 80px;" aria-controls="sample-table-2" tabindex="3" role="columnheader" class="sorting">RECAGRGO</th>
+								<th aria-label="recargo: activate to sort column ascending" style="width: 80px;" aria-controls="sample-table-2" tabindex="3" role="columnheader" class="sorting">RECARGO</th>
 								<th aria-label="total: activate to sort column ascending" style="width: 80px;" aria-controls="sample-table-2" tabindex="3" role="columnheader" class="sorting">TOTAL</th>
 							</tr>
 						</thead>

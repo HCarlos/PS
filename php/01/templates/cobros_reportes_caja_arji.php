@@ -32,7 +32,15 @@ $IdUserNivelAcceso = intval( $_POST["IdUserNivelAcceso"] );
 								<td><label for="tiporeporte">Tipo Reporte:</label></td>
 								<td colspan="3">
 									<select id="tiporeporte" name="tiporeporte">
-										<?php if ( $IdUserNivelAcceso == 12 ) { ?>
+										<?php if ( 
+													$IdUserNivelAcceso == 12 || 
+													$IdUserNivelAcceso == 13 || 
+													$IdUserNivelAcceso == 14 || 
+													$IdUserNivelAcceso == 15 || 
+													$IdUserNivelAcceso == 16 
+												) 
+										{ 
+											?>
 											<option value="-1" selected disabled>Seleccione un reporte</option>
 											<option value="6">Análisis por Concepto</option>
 										<?php } else { ?>
@@ -315,7 +323,7 @@ jQuery(function($) {
 	 	$("#conceptos").empty();
 	 	$("#conceptos").html("<option value='0' selected>Seleccione un Concepto</option>");
 	 	var nc = "u="+localStorage.nc+"&idemisorfiscal=" + $("#emisor").val();
-	    $.post(obj.getValue(0)+"data/", { o:1, t:10020, p:11,c:nc,from:0,cantidad:0, s:'idconcepto' },
+	    $.post(obj.getValue(0)+"data/", { o:1, t:10026, p:11,c:nc,from:0,cantidad:0, s:'idconcepto' },
 	        function(json){
 	           $.each(json, function(i, item) {
 	                $("#conceptos").append("<option value='"+item.idconcepto+"'>"+item.concepto+"</option>");
@@ -333,7 +341,7 @@ jQuery(function($) {
 	 	
 	 	// Se reemplaza 10024 por 10020
 	 	 
-	    $.post(obj.getValue(0)+"data/", { o:1, t:10020, p:11,c:nc,from:0,cantidad:0, s:'idconcepto' },
+	    $.post(obj.getValue(0)+"data/", { o:1, t:10026, p:11,c:nc,from:0,cantidad:0, s:'idconcepto' },
 	        function(json){
 	           $.each(json, function(i, item) {
 	                $("#vconcepto").append("<option value='"+item.idconcepto+"'>"+item.concepto+"</option>");

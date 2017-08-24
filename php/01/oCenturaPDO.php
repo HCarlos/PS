@@ -570,6 +570,18 @@ class oCenturaPDO {
 		$query="";
     	switch ($tipo){
 
+			case -6:
+					parse_str($cad);
+					$idemp = $this->getIdEmpFromAlias($u);
+					$query = "SELECT nombre_completo_usuario AS label, iduser AS data 
+							FROM  _viUsuarios 
+							WHERE 
+								idemp = $idemp AND
+								idusernivelacceso IN (12,13,14,15,16,17,20,21,23,24,999,1000) AND 
+								status_usuario = 1
+							ORDER BY nombre_completo_usuario ASC ";
+				break;						
+
 			case -5:
 				parse_str($cad);
 		        $idemp = $this->getIdEmpFromAlias($u);
@@ -1532,6 +1544,32 @@ class oCenturaPDO {
 							$otros ";
 				break;
 
+			case 76:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);	
+				$idusr = $this->getIdUserFromAlias($u);
+				$query = "SELECT iduserconceptoescenario, escenario
+							FROM usuarios_conceptos_escenarios
+							WHERE idemp = $idemp AND 
+								status_usuario_concepto_escenario = 1 ";
+
+				break;
+
+			case 77:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);	
+				$idusr = $this->getIdUserFromAlias($u);
+				$query = "SELECT idusuarioconceptopago, concepto
+							FROM _viUsersConceptosPagos
+							WHERE  
+								iduser = $idusuario AND 
+								iduserconceptoescenario = $escenario AND 
+								idemp = $idemp 
+							ORDER BY nombre_completo_usuario ASC";
+
+				break;
+
+
 	  	}
 		$result = $this->getArray($query);
 		return $result;	
@@ -1550,6 +1588,7 @@ class oCenturaPDO {
 			switch($var2){
 				case 10:
 					parse_str($arg);
+					parse_str($otros);
 					$iduser = $this->getIdUserFromAlias($u);
 					$idemp = $this->getIdEmpFromAlias($u);
 
@@ -1568,6 +1607,44 @@ class oCenturaPDO {
 					foreach($ar AS $i=>$valor){
 						if ((int)($ar[$i])>0){
 							$query = "DELETE FROM pase_salida_alumnos WHERE idpsaalumno = ".$ar[$i];
+							$vRet = $this->guardarDatos($query);
+						}
+					}
+					break;		
+			}
+			break;
+
+		case 52:
+			switch($var2){
+				case 10:
+					parse_str($arg);
+					parse_str($otros);
+					$iduser = $this->getIdUserFromAlias($u);
+					$idemp = $this->getIdEmpFromAlias($u);
+
+		  			$ar = explode("|",$IdConceptos);
+					foreach($ar AS $i=>$valor){
+						if ((int)($ar[$i])>0){
+							$query = "INSERT INTO usuarios_conceptos_pago(
+														iduser,
+														idconcepto,
+														iduserconceptoescenario
+														,idemp,ip,host,creado_por,creado_el)
+												VALUES(
+													$IdUsuario,
+													$ar[$i],
+													$escenario,
+													$idemp,'$ip','$host',$iduser,NOW())";
+							$vRet = $this->guardarDatos($query);
+						}
+					}
+					break;		
+				case 20:
+					parse_str($arg);
+		  			$ar = explode("|",$IdConceptos);
+					foreach($ar AS $i=>$valor){
+						if ((int)($ar[$i])>0){
+							$query = "DELETE FROM usuarios_conceptos_pago WHERE idusuarioconceptopago = ".$ar[$i];
 							$vRet = $this->guardarDatos($query);
 						}
 					}
