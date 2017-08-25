@@ -6976,6 +6976,7 @@ class oCentura {
 	}
 
 	public function getIdConceptosIN($u="", $iduserconceptoescenario=0){
+			// Chingonería
 			$idemp = $this->getIdEmpFromAlias($u);
 			$idusr = $this->getIdUserFromAlias($u);		
 			$query = "SELECT DISTINCT idconcepto, concepto
