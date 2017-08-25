@@ -23,6 +23,12 @@ $IdUserNivelAcceso = intval( $_POST["IdUserNivelAcceso"] );
 
 						<table class="tblReports">
 							<tr>
+								<td><label for="iduserconceptoescenario">Target:</label></td>
+								<td colspan="3">
+									<select id="iduserconceptoescenario" name="iduserconceptoescenario" size="1"></select>							
+								</td>
+							</tr>
+							<tr>
 								<td><label for="emisor">Emisor:</label></td>
 								<td colspan="3">
 									<select id="emisor" name="emisor" size="1"></select>							
@@ -303,6 +309,25 @@ jQuery(function($) {
     });
 
 
+	function getEscenario(){
+		$("#preloaderPrincipal").show();		
+	    var nc = "u="+localStorage.nc;
+	 	$("#iduserconceptoescenario").empty();
+	    $.post(obj.getValue(0)+"data/", { o:1, t:70, p:0,c:nc,from:0,cantidad:0, s:'' },
+	        function(json){
+	           $.each(json, function(i, item) {
+	                $("#iduserconceptoescenario").append('<option value="'+item.data+'"> '+item.label+'</option>');
+	            });
+	           getEmisor();
+	        }, "json"
+	    );  
+	}
+
+	 $("#iduserconceptoescenario").on("change",function(event){
+	 	event.preventDefault();
+	 	getConceptos();
+	 });
+
 	function getEmisor(){
 	    var nc = "u="+localStorage.nc;
 	 	$("#emisor").empty();
@@ -314,15 +339,20 @@ jQuery(function($) {
 	           		xp = item.data.split("-");
 	                $("#emisor").append('<option value="'+xp[0]+'"> '+item.label+'</option>');
 	            });
+	           	$("#preloaderPrincipal").hide();
 	        }, "json"
 	    );  
 	}
 
 	 $("#emisor").on("change",function(event){
 	 	event.preventDefault();
+	 	getConceptos();
+	 });
+
+	 function getConceptos(){
 	 	$("#conceptos").empty();
 	 	$("#conceptos").html("<option value='0' selected>Seleccione un Concepto</option>");
-	 	var nc = "u="+localStorage.nc+"&idemisorfiscal=" + $("#emisor").val();
+	 	var nc = "u="+localStorage.nc+"&idemisorfiscal=" + $("#emisor").val()+"&iduserconceptoescenario="+$("#iduserconceptoescenario").val();
 	    $.post(obj.getValue(0)+"data/", { o:1, t:10026, p:11,c:nc,from:0,cantidad:0, s:'idconcepto' },
 	        function(json){
 	           $.each(json, function(i, item) {
@@ -330,28 +360,27 @@ jQuery(function($) {
 	            });
 	        }, "json"
 	    );  
-       getConceptoVencimientos( $(this).val() );
-
-	 });
+       getConceptoVencimientos();	 	
+	 }
 
 	 function getConceptoVencimientos(idemisorfiscal){
+	 	$("#preloaderPrincipal").show();
 	 	$("#vconcepto").empty();
 	 	$("#vconcepto").html("<option value='0' selected>Seleccione un Concepto</option>");
-	 	var nc = "u="+localStorage.nc+"&idemisorfiscal=" + $("#emisor").val();
-	 	
-	 	// Se reemplaza 10024 por 10020
-	 	 
+	 	var nc = "u="+localStorage.nc+"&idemisorfiscal=" + $("#emisor").val()+"&iduserconceptoescenario="+$("#iduserconceptoescenario").val();	 	
 	    $.post(obj.getValue(0)+"data/", { o:1, t:10026, p:11,c:nc,from:0,cantidad:0, s:'idconcepto' },
 	        function(json){
 	           $.each(json, function(i, item) {
 	                $("#vconcepto").append("<option value='"+item.idconcepto+"'>"+item.concepto+"</option>");
 	            });
+	           	$("#preloaderPrincipal").hide();
 	        }, "json"
 	    );  
 
 	 }
 
 	function getNivel(){
+		$("#preloaderPrincipal").show();		
 	    var nc = "u="+localStorage.nc;
         $("#clave_nivel").empty();
         $.post(obj.getValue(0)+"data/", { o:1, t:45, p:0,c:nc,from:0,cantidad:0, s:"" },
@@ -360,6 +389,7 @@ jQuery(function($) {
                     $("#clave_nivel").append('<option value="'+item.data+'"> '+item.label+'</option>');
                 });
 		        $("#clave_nivel").append('<option value="-1">Todos los niveles</option>');
+		        $("#preloaderPrincipal").hide();
                 getGpoNiv();
             }, "json"
         );  
@@ -373,6 +403,7 @@ jQuery(function($) {
     });
 
     function getGpoNiv(){
+		$("#preloaderPrincipal").show();		
         var cveniv = $("#clave_nivel option:selected").val();
         var nc = "u="+localStorage.nc+"&clave_nivel="+cveniv;
         $("#idgrupo").empty();
@@ -390,6 +421,7 @@ jQuery(function($) {
 
     function getViewRecordatorios(){
 
+		$("#preloaderPrincipal").show();		
     	queryString = $("#frmPanelReports0").serialize();
 		PARAMS = {data:queryString};
 
@@ -403,6 +435,7 @@ jQuery(function($) {
 	                $("#contentProfile").html(html).show('slow',function(){
 		                $('#breadcrumb').html(getBar('Inicio, Listado de Facturas '));
 	                });
+					$("#preloaderPrincipal").hide();		
 	            }, "html");
         });
         return false;
@@ -500,7 +533,8 @@ jQuery(function($) {
 		return true;
 	}
 
-	getEmisor();
+	getEscenario();
+	// getEmisor();
 	getNivel();
 	//getFechasVencimientos();
 	

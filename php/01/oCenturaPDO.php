@@ -568,6 +568,9 @@ class oCenturaPDO {
 
 	public function getQueryPDO($tipo=0,$cad="",$type=0,$from=0,$cant=0,$ar=array(),$otros="",$withPag=1) {
 		$query="";
+		require_once("oCentura.php");
+		$f = oCentura::getInstance();
+
     	switch ($tipo){
 
 			case -6:
@@ -786,6 +789,7 @@ class oCenturaPDO {
 				parse_str($cad);
 		        $idemp = $this->getIdEmpFromAlias($u);	
 				$idciclo = $this->getCicloFromIdEmp($idemp);		        
+		        $strIN = $f->getIdConceptosIN($u,$iduserconceptoescenario);
 
 		        switch (intval($tipoBeca)) {
 		        	case -2:
@@ -841,6 +845,7 @@ class oCenturaPDO {
 									idciclo = $idciclo AND 
 									status_movto = 1 AND 
 									idemisorfiscal = $emisor AND 
+									idconcepto IN ($strIN) AND 
 									".$tBeca."
 									(fecha_de_pago >= '$fi' AND fecha_de_pago <= '$ff')
 							GROUP BY idconcepto ";
@@ -1154,6 +1159,7 @@ class oCenturaPDO {
 				parse_str($cad);
 		        $idemp = $this->getIdEmpFromAlias($u);	
 				$idciclo = $this->getCicloFromIdEmp($idemp);		        
+		        $strIN = $f->getIdConceptosIN($u,$iduserconceptoescenario);
 
 		        $f0 = explode('-',$fi);
 		        $f1 = explode('-',$ff);
@@ -1170,6 +1176,7 @@ class oCenturaPDO {
 							WHERE idemp = $idemp AND 
 									status_movto = 1 AND 
 									idemisorfiscal = $emisor AND 
+									idconcepto IN ($strIN) AND 
 									(fecha_de_pago >= '$fi' AND fecha_de_pago <= '$ff') AND 
 									recargo > 0
 							GROUP BY idconcepto ";
@@ -1565,7 +1572,7 @@ class oCenturaPDO {
 								iduser = $idusuario AND 
 								iduserconceptoescenario = $escenario AND 
 								idemp = $idemp 
-							ORDER BY nombre_completo_usuario ASC";
+							ORDER BY concepto ASC";
 
 				break;
 

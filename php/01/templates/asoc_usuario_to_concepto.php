@@ -36,7 +36,7 @@
         <div class="span4">
             <div class="panel panel-primary">
               <div class="panel-heading">Usuarios</div>
-              <div class="panel-body" style="height: 40em !important; ">
+              <div class="panel-body" style="height: 35em !important; ">
 
                     <label for="IdUsuario" class="lblH2cmb">Usuarios </label>
                     <select name="IdUsuario" id="IdUsuario" size="1" style="width:100% !important;" > 
@@ -47,7 +47,7 @@
                     </select>
 
                     <label for="lstConceptUser01" class="lblH2">Conceptos Asignados:</label>
-                    <select class="lstConceptUser01" name="lstConceptUser01" id="lstConceptUser01" multiple="multiple" style="width:100% !important; height: 50% !important;" >
+                    <select class="lstConceptUser01" name="lstConceptUser01" id="lstConceptUser01" multiple="multiple" style="width:100% !important; height: 64% !important; margin-bottom:1.5em !important;" >
                     </select>
                     <span class="label label-large label-yellow arrowed pull-right" id="lbl01"></span>
 
@@ -85,7 +85,7 @@ function getConceptos(){
            $.each(json, function(i, item) {
                 $("#IdConcepto").append('<option value="'+item.idconcepto+'"> '+item.concepto+'</option>');
             });
-            $("#lbl02").html(commaSeparateNumber(json.length)+" alumnos")
+            $("#lbl02").html(commaSeparateNumber(json.length)+" Concepto(s)")
             $("#preloaderPrincipal").hide();
             
             // getUsuarios();
@@ -139,7 +139,7 @@ function getConceptUsers(ciclo){
            $.each(json, function(i, item) {
                 $("#lstConceptUser01").append('<option value="'+item.idusuarioconceptopago+'"> '+item.concepto+'</option>');
             });
-            $("#lbl01").html(commaSeparateNumber(json.length)+" alumnos")
+            $("#lbl01").html(commaSeparateNumber(json.length)+" Concepto(s)")
 
         }, "json"
     );  

@@ -946,6 +946,15 @@ class oCentura {
 										FROM cat_claveunidadmedida_sat WHERE idemp = $idemp and status_claveunidadmedida = 1
 										ORDER BY label ASC ";
 								break;	
+
+							case 70:
+								parse_str($arg);
+								$idemp = $this->getIdEmpFromAlias($u);
+								$idusr = $this->getIdUserFromAlias($u);
+								$query = "SELECT DISTINCT escenario AS label, iduserconceptoescenario AS data  
+										FROM _viUsersConceptosPagos WHERE idemp = $idemp AND iduser = $idusr AND status_usuario_concepto_escenario = 1
+										ORDER BY iduserconceptoescenario ASC ";
+								break;		
 								
 						}
 						break;
@@ -6427,7 +6436,7 @@ class oCentura {
 			case 10015:
 				parse_str($cad);
 		        $idemp = $this->getIdEmpFromAlias($u);	
-		        
+		        $strIN = $this->getIdConceptosIN($u,$iduserconceptoescenario);
 		        $f0 = explode('-',$fi);
 		        $f1 = explode('-',$ff);
 		        $fi = $f0[2].'-'.$f0[1].'-'.$f0[0].' 00:00:00';
@@ -6440,9 +6449,10 @@ class oCentura {
 								SUM( IF ( clave_nivel = 4, total, 0 ) ) AS 'tres', 
 								SUM( IF ( clave_nivel = 5, total, 0 ) ) AS 'cuatro' 
 							FROM _viEdosCta
-							WHERE idemp = $idemp And 
-									status_movto = 1 And 
-									idemisorfiscal = $emisor And 
+							WHERE idemp = $idemp AND  
+									status_movto = 1 AND  
+									idemisorfiscal = $emisor AND  
+									idconcepto IN ($strIN) AND 
 									(fecha_de_pago >= '$fi' AND fecha_de_pago <= '$ff')
 							GROUP BY idconcepto ";
 				break;
@@ -6451,7 +6461,6 @@ class oCentura {
 
 				parse_str($cad);
 		        $idemp = $this->getIdEmpFromAlias($u);	
-		        
 		        $f0 = explode('-',$fi);
 		        $f1 = explode('-',$ff);
 		        $fi = $f0[2].'-'.$f0[1].'-'.$f0[0].' 00:00:00';
@@ -6580,12 +6589,14 @@ class oCentura {
 				parse_str($cad);
 		        $idemp = $this->getIdEmpFromAlias($u);
 		        $idusr = $this->getIdUserFromAlias($u);
-		        $strIN = $this->getIdConceptosIN($u);
+		        $strIN = $this->getIdConceptosIN($u,$iduserconceptoescenario);
 				$query = "SELECT DISTINCT idconcepto, concepto
-								FROM _viUsersConceptosPagos
-							WHERE idemp = $idemp AND 
-									iduser = $idusr AND 
-									idconcepto IN ($strIN) 
+								FROM _viPagos
+							WHERE idemp = $idemp AND 									
+									idconcepto IN ($strIN) AND 
+									idemisorfiscal = $idemisorfiscal AND 
+									status_concepto = 1 AND 
+									status_pago = 1						 
 							ORDER BY concepto ASC";
 				break;
 
@@ -6964,13 +6975,14 @@ class oCentura {
 			return $idusr;
 	}
 
-	public function getIdConceptosIN($u=""){
+	public function getIdConceptosIN($u="", $iduserconceptoescenario=0){
 			$idemp = $this->getIdEmpFromAlias($u);
 			$idusr = $this->getIdUserFromAlias($u);		
 			$query = "SELECT DISTINCT idconcepto, concepto
 								FROM _viUsersConceptosPagos
 							WHERE idemp = $idemp AND 
-									iduser = $idusr
+									iduser = $idusr AND 
+									iduserconceptoescenario = $iduserconceptoescenario 
 							ORDER BY concepto ASC";
 			$result = $this->getArray($query);
 			$INStr = "";
