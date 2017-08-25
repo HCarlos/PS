@@ -1,0 +1,66 @@
+                    <li class="open" id="subMenuCatalogos"> 
+                        <a href="#" class="dropdown-toggle">
+                                <i class="icon-book"></i>
+                                <span class="menu-text"> CENVA </span>
+
+                                <b class="arrow icon-angle-down"></b>
+                        </a>
+
+                        <ul class="submenu">
+                        
+                            <li>
+                                <a href="#" id="caja_reportpanel_1">
+                                    <i class="icon-laptop"></i>
+                                    <span class="menu-text">Reportes de Pagos</span>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </li>
+
+<script type="text/javascript">
+jQuery(function($) {
+
+    $("#preloaderPrincipal").show();
+
+    if ($("#caja_reportpanel_1").length) {
+        $("#caja_reportpanel_1").on("click", function(event) {
+            event.preventDefault();
+            cfgBase0();
+            var nc = localStorage.nc.split("@");
+            $.post(obj.getValue(0) + "caja-report-panel/", {
+                    IdUserNivelAcceso: localStorage.IdUserNivelAcceso,
+                    ClaveNivelAcceso: localStorage.ClaveNivelAcceso,
+                    user: nc[0]
+                },
+                function(html) {
+                    $("#contentMain").html(html);
+                    $('#breadcrumb').html(getBar('Inicio,Panel de Reportes'));
+                }, "html");
+            return false;
+        });
+    }
+
+    function cfgBase0(){
+        resizeScreen();
+        $("#contentLevel5").empty();
+        $("#contentLevel5").hide();
+        $("#contentLevel4").empty();
+        $("#contentLevel4").hide();
+        $("#contentLevel3").empty();
+        $("#contentLevel3").hide();
+        $("#contentProfile").empty();
+        $("#contentProfile").hide();
+        $("#contentMain").show();
+        $("#contentMain").empty();
+        $("#preloaderPrincipal").show();
+        obj.setIsTimeLine(false);
+    }
+
+
+    $("#preloaderPrincipal").hide();
+
+
+})
+
+</script>

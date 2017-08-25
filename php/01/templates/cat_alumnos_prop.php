@@ -108,16 +108,6 @@ $idalumno  = $_POST['idalumno'];
 		      		</div>
 			    </div>
 
-				<div class="form-group ">
-			    	<label for="status_alumno" class="col-lg-2 control-label">Status</label>
-			    	<div class="col-lg-10">
-						<select class="form-control input-lg"  name="status_alumno" id="status_alumno" size="1">
-							<option value="0">Inactivo</option>
-							<option value="1" selected >Activo</option>
-						</select>
-		      		</div>
-			    </div>
-
 			</div>
 
 			<div id="especificos" class="tab-pane">
@@ -239,14 +229,54 @@ $idalumno  = $_POST['idalumno'];
 						</td>
 					</tr>
 
-					<tr><td>
-						<label class="green" for="valid_for_admin">
-								<b>Validado por el Administrador</b>
-						</label>
+					<tr>
+						<td>
+							<label class="green" for="valid_for_admin">
+									<b>Validado por el Administrador</b>
+							</label>
 						</td>
 						<td>
 							<input name="valid_for_admin" id="valid_for_admin" class="ace ace-switch ace-switch-6" type="checkbox">
 							<span class="lbl"></span>
+						</td>
+					</tr>
+
+					<tr>
+						<td>
+							<label class="green" for="status_alumno">
+									<b>Status</b>
+							</label>
+						</td>
+						<td>
+							<input name="status_alumno" id="status_alumno" class="ace ace-switch ace-switch-6" type="checkbox">
+							<span class="lbl"></span>
+						</td>
+					</tr>
+
+					<tr>
+						<td>
+							<label class="green" for="is_baja">
+									<b>Es Baja</b>
+							</label>
+						</td>
+						<td>
+							<input name="is_baja" id="is_baja" class="ace ace-switch ace-switch-6" type="checkbox">
+							<span class="lbl"></span>
+						</td>
+					</tr>
+
+					<tr>
+						<td>
+							<label class="green" for="motivo_baja">
+							</label>
+						</td>
+						<td>
+							<select class="form-control"  name="motivo_baja" id="motivo_baja" size="1">
+								<option value="" selected>Seleccione un opción</option>
+								<option value="Se va de la ciudad">Se va de la ciudad</option>
+								<option value="Cuestion económica">Cuestion económica</option>
+								<option value="Cambio de escuela">Cambio de escuela</option>
+							</select>
 						</td>
 					</tr>
 				
@@ -317,7 +347,6 @@ jQuery(function($) {
 					$("#matricula_interna").val(json[0].matricula_interna);
 					$("#matricula_oficial").val(json[0].matricula_oficial);
 
-					$("#status_alumno").val(json[0].status_alumno);
 					$("#genero").val(json[0].genero);
 
 					$("#beca_sep").val(json[0].beca_sep);
@@ -327,6 +356,9 @@ jQuery(function($) {
 
 					$("#valid_for_admin").prop("checked",json[0].valid_for_admin==1?true:false);	
 					$("#activo_en_ciclo").prop("checked",json[0].activo_en_ciclo==1?true:false);	
+					$("#status_alumno").prop("checked",json[0].status_alumno==1?true:false);	
+					$("#is_baja").prop("checked",json[0].is_baja==1?true:false);	
+					$("#motivo_baja").val(json[0].motivo_baja);
 
 					
 					if ( $("#username").val() == "" ){

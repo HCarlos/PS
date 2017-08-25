@@ -1637,6 +1637,8 @@ class oCentura {
 
 								$activo_en_ciclo = !isset($activo_en_ciclo)?0:1;
 								$valid_for_admin = !isset($valid_for_admin)?0:1;
+								$status_alumno = !isset($status_alumno)?0:1;
+								$is_baja = !isset($is_baja)?0:1;
 
 								$query = "INSERT INTO cat_alumnos(
 																ap_paterno,
@@ -1651,6 +1653,8 @@ class oCentura {
 																matricula_interna,
 																matricula_oficial,
 																status_alumno,
+																is_baja,
+																motivo_baja,
 																tipo_sangre,
 																enfermedades,
 																reacciones_alergicas,
@@ -1675,6 +1679,8 @@ class oCentura {
 																'$matricula_interna',
 																'$matricula_oficial',
 																$status_alumno,
+																$is_baja,
+																'$motivo_baja',
 																'$tipo_sangre',
 																'$enfermedades',
 																'$reacciones_alergicas',
@@ -1700,6 +1706,8 @@ class oCentura {
 
 								$activo_en_ciclo = !isset($activo_en_ciclo)?0:1;
 								$valid_for_admin = !isset($valid_for_admin)?0:1;
+								$status_alumno = !isset($status_alumno)?0:1;
+								$is_baja = !isset($is_baja)?0:1;
 
 								$query = "UPDATE cat_alumnos SET 	
 																ap_paterno = '$ap_paterno',
@@ -1714,6 +1722,8 @@ class oCentura {
 																matricula_interna = '$matricula_interna',
 																matricula_oficial = '$matricula_oficial',
 																status_alumno = $status_alumno,
+																is_baja = $is_baja,
+																motivo_baja = '$motivo_baja',
 																genero = $genero,
 																tipo_sangre = '$tipo_sangre',
 																enfermedades = '$enfermedades',

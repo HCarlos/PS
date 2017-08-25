@@ -906,13 +906,11 @@ class oCenturaPDO {
 				parse_str($cad);
 		        $idemp = $this->getIdEmpFromAlias($u);
 				$idciclo = $this->getCicloFromIdEmp($idemp);
-				$fvencimiento = date('Y-m-d', time());
-				$fv0 = explode("-",$fvencimiento);
-				$fv = $fv0[2].'-'.$fv0[1].'-'.$fv0[0];
+								//  
 				$query = "	SELECT *
 							FROM _viEdoCtaFamilia 
 							WHERE idemp = $idemp 
-								AND idciclo = $idciclo 
+								AND idciclo = $idciclo
 								AND idfamilia = $idfamilia 
 								AND is_pagos_diversos = 1 
 								AND is_vencimiento = 1 

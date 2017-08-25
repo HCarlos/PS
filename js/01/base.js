@@ -28,6 +28,7 @@ function oObject() {
 	var keyUP33   = [21]; // Profesor - Director
 	var keyUP40   = [22]; // PSA
 	var keyUP60   = [20]; // Caja
+	var keyUP70   = [24]; // CENVA
 	var minHeight = 0;
 
 	var pURLS = ["platsource.mx", "www.platsource.mx", "platsource.com.mx", "www.platsource.com.mx", "platsource.tecnointel.mx"];
@@ -212,6 +213,9 @@ function oObject() {
 						break;
 					case 60:
 						nreturn = keyUP60.indexOf(value);
+						break;
+					case 70:
+						nreturn = keyUP70.indexOf(value);
 						break;
 					case 200:
 						nreturn = keyUP21.indexOf(value);

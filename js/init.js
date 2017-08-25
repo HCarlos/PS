@@ -344,14 +344,25 @@ function init() {
             }, "html");
     }
 
+    var IDTCve = parseInt(localStorage.ClaveNivelAcceso, 0);    
+    uParam0 = obj.getkeyUP(IDTCve, 70); // 24 = CENVA
+    if (uParam0 !== -1) {
 
-    // uParam0 = obj.getkeyUP(IDTUSer, 2);
-    // if (uParam0 !== -1) {
-    //     $.post(obj.getValue(0) + "menu-clau/", {},
-    //         function(html) {
-    //             $("#menuPrincipal").append(html);
-    //         }, "html");
-    // }
+        $.post(obj.getValue(0) + "menu-cenva/", {},
+            function(html) {
+                $("#menuPrincipal").append(html);
+            }, "html");
+    }
+
+    var IDTCve = parseInt(localStorage.ClaveNivelAcceso, 0);    
+    if (obj.getkeyUP(IDTCve, 0) !== -1) {
+        
+        $.post(obj.getValue(0) + "menu-convenios/", {},
+        function(html) {
+            $("#menuPrincipal").append(html);
+        }, "html");
+
+    }
 
 
     window.onload = function() {

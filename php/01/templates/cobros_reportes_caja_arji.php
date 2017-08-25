@@ -3,7 +3,7 @@
 include("includes/metas.php");
 $user = $_POST["user"];
 $IdUserNivelAcceso = intval( $_POST["IdUserNivelAcceso"] );
-
+$ClaveNivelAcceso = intval( $_POST["ClaveNivelAcceso"] );
 ?>
 
 <div  class="row-fluid">
@@ -39,11 +39,13 @@ $IdUserNivelAcceso = intval( $_POST["IdUserNivelAcceso"] );
 								<td colspan="3">
 									<select id="tiporeporte" name="tiporeporte">
 										<?php if ( 
-													$IdUserNivelAcceso == 12 || 
-													$IdUserNivelAcceso == 13 || 
-													$IdUserNivelAcceso == 14 || 
-													$IdUserNivelAcceso == 15 || 
-													$IdUserNivelAcceso == 16 
+													$ClaveNivelAcceso == 8 || 
+													$ClaveNivelAcceso == 9 || 
+													$ClaveNivelAcceso == 10 || 
+													$ClaveNivelAcceso == 11 || 
+													$ClaveNivelAcceso == 12 ||
+													$ClaveNivelAcceso == 19 ||
+													$ClaveNivelAcceso == 24 
 												) 
 										{ 
 											?>
@@ -204,7 +206,7 @@ jQuery(function($) {
 
 	$("#u").val( localStorage.nc );
 
-	var IdUserNivelAcceso = <?php echo $IdUserNivelAcceso; ?>;
+	var ClaveNivelAcceso = <?php echo $ClaveNivelAcceso; ?>;
 
     $("#frmPanelReports0").on("unsubmit");
     $("#frmPanelReports0").on("submit", function(event) {
