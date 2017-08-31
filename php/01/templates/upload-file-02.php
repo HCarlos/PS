@@ -42,7 +42,9 @@ function saveFileIFE($file,$descripcion="",$result=array(),$iduser ){
 		) {
 			// || getimagesize($file['tmp_name']) === FALSE
 			$result['status'] = 'ERR';
-			$x = end(explode(".", $file['name']));
+			// $x = end(explode(".", $file['name']));
+			$ext0 = explode(".", $file['name']);
+			$x = $ext0[count($ext0)-1];
 			$result['message'] = 'Formato incorrecto de archivo: '.$x;
 		} else if($file['size'] > 10240000000) {
 				$result['status'] = 'ERR';
@@ -54,7 +56,9 @@ function saveFileIFE($file,$descripcion="",$result=array(),$iduser ){
 			
 			$name = $file['name'];
 			$nameFile = $iduser;//md5($name).time();
-			$ext = end(explode(".", $name));
+			// $ext = end(explode(".", $name));
+			$ext0 = explode(".", $name);
+			$ext = $ext0[count($ext0)-1];
 			$nFle   = $nameFile.".".$ext;//$file['name']."_|_".$curp."_|_";
 
 			$save_path = '../../../upload/'.$nFle;

@@ -318,7 +318,8 @@ switch($index){
 
 			case 58:
 				$res = $fp->setCloneMatConSave($cad);
-				$ret[0]->msg = $res;
+
+				// $ret[0]->msg = $res;
 				$ret[0] = array("msg" => $res);
 				break;
 

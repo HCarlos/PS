@@ -166,7 +166,9 @@ function saveFileTarea($file,$descripcion="",$arr=array(),$objeto,$idtarea,$idem
 		) {
 		
 			$arr['status'] = 'ERR';
-			$x = end(explode(".", $file['name']));
+			// $x = end(explode(".", $file['name']));
+			$ext0 = explode(".", $file['name']);
+			$x = $ext0[count($ext0)-1];
 			$arr['message'] = 'Formato incorrecto de archivo: '.$x;
 		
 		} else {
@@ -175,7 +177,9 @@ function saveFileTarea($file,$descripcion="",$arr=array(),$objeto,$idtarea,$idem
 			$name = $file['name'];
 			//$nameFile = md5($name).time();
 			$nameFile = $idtarea.'_'.$idemp.'_'.$i;
-			$ext = end(explode(".", $name));
+			// $ext = end(explode(".", $name));
+			$ext0 = explode(".", $name);
+			$ext = $ext0[count($ext0)-1];
 			$nFle   = $nameFile.".".strtolower($ext);
 			$save_path = '../../../up_tareas/'.$nFle;
 
@@ -186,7 +190,9 @@ function saveFileTarea($file,$descripcion="",$arr=array(),$objeto,$idtarea,$idem
 				//$nameFile = md5($name).time();
 				$y = ++$i;
 				$nameFile = $idtarea.'_'.$idemp.'_'.$y;
-				$ext = end(explode(".", $name));
+				// $ext = end(explode(".", $name));
+				$ext0 = explode(".", $name);
+				$ext = $ext0[count($ext0)-1];
 				$nFle   = $nameFile.".".strtolower($ext);
 
 				$save_path = '../../../up_tareas/'.$nFle;

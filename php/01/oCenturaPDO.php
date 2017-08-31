@@ -3795,7 +3795,7 @@ class oCenturaPDO {
 								$secuencia,
 								$idalutipoactividad,
 								$idemp,'$ip','$host',$idusr,NOW())";
-			$vRet = $f->guardarDatos($query);
+			$vRet = $this->guardarDatos($query);
 
 			if (intval($isitem) > 0){
 
@@ -3822,7 +3822,7 @@ class oCenturaPDO {
 										'$db',
 										'$da',
 										$idemp,'$ip','$host',$idusr,NOW())";
-					$vRet = $f->guardarDatos($q2);
+					$vRet = $this->guardarDatos($q2);
 				}
 			}
 		}

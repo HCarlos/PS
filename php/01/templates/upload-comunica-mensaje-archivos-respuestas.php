@@ -110,7 +110,9 @@ function saveFileTarea($file,$descripcion="",$arr=array(),$objeto,$idcommensajed
 		) {
 		
 			$arr['status'] = 'ERR';
-			$x = end(explode(".", $file['name']));
+			// $x = end(explode(".", $file['name']));
+			$ext0 = explode(".", $file['name']);
+			$x = $ext0[count($ext0)-1];
 			$arr['message'] = 'Formato incorrecto de archivo: '.$x;
 		
 		} else {
@@ -119,7 +121,9 @@ function saveFileTarea($file,$descripcion="",$arr=array(),$objeto,$idcommensajed
 			$name = $file['name'];
 			//$nameFile = md5($name).time();
 			$nameFile = $idcommensajedestinatario.'_'.$idemp.'_'.$i;
-			$ext = end(explode(".", $name));
+			// $ext = end(explode(".", $name));
+			$ext0 = explode(".", $name);
+			$ext = $ext0[count($ext0)-1];
 
 			if ($ext == "php" || $ext == "PHP"){
 			
@@ -141,7 +145,9 @@ function saveFileTarea($file,$descripcion="",$arr=array(),$objeto,$idcommensajed
 					//$nameFile = md5($name).time();
 					$y = ++$i;
 					$nameFile = $idcommensajedestinatario.'_'.$idemp.'_'.$y;
-					$ext = end(explode(".", $name));
+					// $ext = end(explode(".", $name));
+					$ext0 = explode(".", $name);
+					$ext = $ext0[count($ext0)-1];
 					$nFle   = $nameFile."_r.".strtolower($ext);//$file['name']."_|_".$curp."_|_";
 
 					$save_path = '../../../up_mensajes/'.$nFle;
