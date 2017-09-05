@@ -955,6 +955,15 @@ class oCentura {
 										FROM _viUsersConceptosPagos WHERE idemp = $idemp AND iduser = $idusr AND status_usuario_concepto_escenario = 1
 										ORDER BY iduserconceptoescenario ASC ";
 								break;		
+
+							case 71:
+								parse_str($arg);
+								$idemp = $this->getIdEmpFromAlias($u);
+								$idusr = $this->getIdUserFromAlias($u);
+								$query = "SELECT motivo_baja AS label, idalumotivobaja AS data, clave  
+										FROM cat_alu_baja_motivos WHERE idemp = $idemp AND status_motivo_baja = 1
+										ORDER BY idalumotivobaja ASC ";
+								break;		
 								
 						}
 						break;
@@ -1635,6 +1644,9 @@ class oCentura {
 								$fi = explode('-',$fecha_ingreso);
 								$fi = $fi[2].'-'.$fi[1].'-'.$fi[0];
 
+								$fb = explode('-',$fecha_baja);
+								$fb = $fb[2].'-'.$fb[1].'-'.$fb[0];
+
 								$activo_en_ciclo = !isset($activo_en_ciclo)?0:1;
 								$valid_for_admin = !isset($valid_for_admin)?0:1;
 								$status_alumno = !isset($status_alumno)?0:1;
@@ -1654,7 +1666,9 @@ class oCentura {
 																matricula_oficial,
 																status_alumno,
 																is_baja,
-																motivo_baja,
+																idalumotivobaja,
+																tipo_baja,
+																fecha_baja,
 																tipo_sangre,
 																enfermedades,
 																reacciones_alergicas,
@@ -1680,7 +1694,9 @@ class oCentura {
 																'$matricula_oficial',
 																$status_alumno,
 																$is_baja,
-																'$motivo_baja',
+																$idalumotivobaja,
+																$tipo_baja,
+																'$fb',
 																'$tipo_sangre',
 																'$enfermedades',
 																'$reacciones_alergicas',
@@ -1704,6 +1720,9 @@ class oCentura {
 								$fi = explode('-',$fecha_ingreso);
 								$fi = $fi[2].'-'.$fi[1].'-'.$fi[0];
 
+								$fb = explode('-',$fecha_baja);
+								$fb = $fb[2].'-'.$fb[1].'-'.$fb[0];
+
 								$activo_en_ciclo = !isset($activo_en_ciclo)?0:1;
 								$valid_for_admin = !isset($valid_for_admin)?0:1;
 								$status_alumno = !isset($status_alumno)?0:1;
@@ -1723,7 +1742,9 @@ class oCentura {
 																matricula_oficial = '$matricula_oficial',
 																status_alumno = $status_alumno,
 																is_baja = $is_baja,
-																motivo_baja = '$motivo_baja',
+																idalumotivobaja = $idalumotivobaja,
+																tipo_baja = $tipo_baja,
+																fecha_baja = '$fb',
 																genero = $genero,
 																tipo_sangre = '$tipo_sangre',
 																enfermedades = '$enfermedades',

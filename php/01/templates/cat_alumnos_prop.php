@@ -267,18 +267,41 @@ $idalumno  = $_POST['idalumno'];
 
 					<tr>
 						<td>
-							<label class="green" for="motivo_baja">
+							<label class="green" for="idalumotivobaja">
 							</label>
 						</td>
 						<td>
-							<select class="form-control"  name="motivo_baja" id="motivo_baja" size="1">
-								<option value="" selected>Seleccione un opción</option>
-								<option value="Se va de la ciudad">Se va de la ciudad</option>
-								<option value="Cuestion económica">Cuestion económica</option>
-								<option value="Cambio de escuela">Cambio de escuela</option>
+							<select class="form-control"  name="idalumotivobaja" id="idalumotivobaja" size="1">
 							</select>
 						</td>
 					</tr>
+
+					<tr>
+						<td>
+							<label class="green" for="tipo_baja">
+									<b>Tipo Baja</b>
+							</label>
+						</td>
+						<td>
+    		                <select name="tipo_baja" id="tipo_baja" size="1" > 
+    		                	<option value="0">Ninguno</option>
+    		                	<option value="1">Temporal</option>
+    		                	<option value="2">Definitiva</option>
+	                    	</select>
+						</td>
+					</tr>
+
+					<tr>
+						<td>
+							<label class="green" for="fecha_baja">
+									<b>Fecha Baja</b>
+							</label>
+						</td>
+						<td>
+							<input class="col-lg-6 date-picker altoMoz" id="fecha_baja" name="fecha_baja" data-date-format="dd-mm-yyyy" type="text" value="<?= date('d-m-Y'); ?>" >
+						</td>
+					</tr>
+
 				
 				</table>
 			</div>
@@ -357,8 +380,11 @@ jQuery(function($) {
 					$("#valid_for_admin").prop("checked",json[0].valid_for_admin==1?true:false);	
 					$("#activo_en_ciclo").prop("checked",json[0].activo_en_ciclo==1?true:false);	
 					$("#status_alumno").prop("checked",json[0].status_alumno==1?true:false);	
+
 					$("#is_baja").prop("checked",json[0].is_baja==1?true:false);	
-					$("#motivo_baja").val(json[0].motivo_baja);
+					$("#idalumotivobaja").val(json[0].idalumotivobaja);
+					$("#tipo_baja").val(json[0].tipo_baja);
+					$("#fecha_baja").val(json[0].cfecha_baja);
 
 					
 					if ( $("#username").val() == "" ){
@@ -505,13 +531,33 @@ jQuery(function($) {
 	$('#fecha_ingreso').mask('99-99-9999');
 	$('#fecha_ingreso').val(obj.getDateToday());
 
+	$('#fecha_baja').mask('99-99-9999');
+	$('#fecha_baja').val(obj.getDateToday());
+
 	if (idalumno<=0){ // Nuevo Registro
+		getMotivosBaja (0);		
 		validPermissionsDisabled(lc);
 		$("#title").html("Nuevo registro");
-
 	}else{ // Editar Registro
 		$("#title").html("Editando el registro: "+idalumno);
-		getAlumno(idalumno);
+		getMotivosBaja(idalumno);
+	}
+
+
+	function getMotivosBaja(idalumno){
+	    var nc = "u="+localStorage.nc;
+	    $("#idalumotivobaja").empty();
+	    $("#idalumotivobaja").append('<option value="0" >Seleccione un motivo de baja</option>');
+	    $.post(obj.getValue(0)+"data/", { o:1, t:71, p:0,c:nc,from:0,cantidad:0, s:"" },
+	        function(json){
+	           $.each(json, function(i, item) {
+	                $("#idalumotivobaja").append('<option value="'+item.data+'" > '+item.label+'</option>');
+	            });
+
+	            getAlumno(idalumno); 
+
+	        }, "json"
+	    );  
 	}
 
 	function validPermissionsDisabled(lc){
@@ -539,7 +585,6 @@ jQuery(function($) {
 				$("#beca_bach").prop("disabled",true);
 				$("#btnGenUser").prop("disabled",true);
 		}
-
 	}
 
 	function validPermissionsEnabled(lc){
@@ -549,7 +594,6 @@ jQuery(function($) {
 		$("#beca_sp").prop("disabled",false);
 		$("#beca_bach").prop("disabled",false);
 	}
-
 
 });
 

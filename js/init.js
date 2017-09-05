@@ -277,8 +277,16 @@ function init() {
             function(html) {
                 $("#menuPrincipal").append(html);
             }, "html");
-            break;
+
+            
+            $.post(obj.getValue(0) + "menu-comunica/", {},
+                function(html) {
+                    $("#menuPrincipal").append(html);
+                }, "html");
+            
         }
+
+        break;
     }
 
     var IDTCve = parseInt(localStorage.ClaveNivelAcceso, 0);    

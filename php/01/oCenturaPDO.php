@@ -3689,7 +3689,10 @@ class oCenturaPDO {
 	public function UPDATEVencimientoEdoCta($cad) {
 
 		parse_str($cad);
-		$query = "SET @X = Actualizar_Pagos_Metodo_B(".$idfamilia.",0,1)";
+        $idemp = $this->getIdEmpFromAlias($u);
+		$idciclo = $this->getCicloFromIdEmp($idemp);		        
+
+		$query = "SET @X = Actualizar_Pagos_Metodo_B(".$idfamilia.",0,".$idemp.",".$idciclo.")";
 		$ret = $this->execQuery($query);
 	    return $ret;
 
@@ -3698,13 +3701,16 @@ class oCenturaPDO {
 	public function refreshVencimientos($cad) {
 
 		parse_str($cad);
+        $idemp = $this->getIdEmpFromAlias($u);
+		$idciclo = $this->getCicloFromIdEmp($idemp);		        
 
-		$query = "SET @X = Actualizar_Pagos_Metodo_B(".$idfamilia.",0,1)";
+		$query = "SET @X = Actualizar_Pagos_Metodo_B(".$idfamilia.",0,".$idemp.",".$idciclo.")";
 		$ret = $this->execQuery($query);
 
-		if ( $ret[0]->Respuesta == "OK" ) {
+		// if ( $ret[0]->Respuesta == "OK" ) {
+		if ( $ret == "OK" ) {
 
-			$query = "SET @X = Actualizar_Pagos_Metodo_A(".$idfamilia.",0,1)";
+			$query = "SET @X = Actualizar_Pagos_Metodo_A(".$idfamilia.",0,".$idemp.",".$idciclo.")";
 			$ret = $this->execQuery($query);
 
 		}
