@@ -37,7 +37,7 @@
                     <select name="selDirectores" id="selDirectores" size="1" style="width:100% !important;" > 
                     </select>
                    
-                    <label for="lstProfDir" class="lblH2">Profesores Asignados:</label>
+                    <label for="lstProfDir" class="lblH2">Asesores Asignados:</label>
                     <select class="lstProfDir" name="lstProfDir" id="lstProfDir" multiple="multiple" style="width:100% !important; height: 69% !important;" >
                     </select>
                     <span class="label label-large label-yellow arrowed pull-right" id="lbl01"></span>
@@ -90,7 +90,7 @@ function getProfDir(){
     $("#lstProfDir").empty();
     var y = $('select[name="selDirectores"] option:selected').val(); 
     $("#lstProfDir").empty();
-    $.post(obj.getValue(0)+"data/", {o:2, t:3, p:0,c:nc,from:0,cantidad:0, s:y },
+    $.post(obj.getValue(0)+"data/", {o:2, t:12, p:0,c:nc,from:0,cantidad:0, s:y },
         function(json){
            $.each(json, function(i, item) {
                 $("#lstProfDir").append('<option value="'+item.data+'"> '+item.label+'</option>');
@@ -149,7 +149,7 @@ $("#AddItem").on("click",function(event){
 
     var nc = "u="+localStorage.nc;
 
-    $.post(obj.getValue(0)+"data/", { o:3, c:d, t:10, p:1, s:nc, from:0, cantidad:0 },
+    $.post(obj.getValue(0)+"data/", { o:5, c:d, t:10, p:1, s:nc, from:0, cantidad:0 },
         function(json){
             //alert( json[0].msg);
             if (json.length<=0 && json[0].msg=="Error") { return false;}
@@ -178,7 +178,7 @@ $("#DeleteItem").on("click",function(event){
     //alert(x);
     var nc = "u="+localStorage.nc;
 
-    $.post(obj.getValue(0)+"data/", { o:3, c:x, t:20, p:1, s:nc, from:0, cantidad:0 },
+    $.post(obj.getValue(0)+"data/", { o:5, c:x, t:20, p:1, s:nc, from:0, cantidad:0 },
         function(json){
             //alert(json[0].msg)
             if (json.length<=0 && json[0].msg=="Error") { return false;}

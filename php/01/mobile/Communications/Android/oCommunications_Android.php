@@ -1,4 +1,4 @@
-<?php
+33<?php
 
 class oCommunications_Android {
 	 
@@ -23,30 +23,45 @@ class oCommunications_Android {
 		if ( $type == 1 ){
 			// iOS
 			$API_ACCESS_KEY = 'AIzaSyD6p5QiWIA9zrUlTBsgJJ8Pbg2225cec7E';
+
+			$msg = array
+			(
+				"body" => $body,
+				"title"	=> $title,
+				"priority" => "normal",
+				"sound" => "",
+				"content-available" => 1
+			);
+
+			$data = array
+			(
+				"badge" => $badge
+			);
+
+			$fields = array
+			(
+			 	"to" 	=> $registrationIds,
+				"notification" => $msg,
+				"data" => $data
+			);
+
 		} else{
 			// Android
 			$API_ACCESS_KEY = 'AIzaSyDOffRahfHSX0fqoQ2FkQacpnP-AJg4NwM';
+			
+			$msg = array
+			(
+				"body" => $body,
+				"title"	=> $title
+			);
+
+			$fields = array
+			(
+			 	"to" 	=> $registrationIds,
+				"notification" => $msg
+			);
+			
 		}	
-
-
-		$msg = array
-		(
-			"body" => $body,
-			"title"	=> $title
-		);
-
-		$data = array
-		(
-			"badge" => $badge
-		);
-
-		$fields = array
-		(
-		 	"to" 	=> $registrationIds,
-			"priority" => "normal",
-			"notification" => $msg,
-			"data" => $data
-		);
 
 		$headers = array
 		(

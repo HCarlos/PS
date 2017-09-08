@@ -60,6 +60,40 @@ class oCenturaPDO {
 		return $ret;
 	}
 
+	private function getIdProfesorFromAlias($str){
+
+		$query = "SELECT idprofesor FROM _viProfesores WHERE username = '$str' AND status_usuario = 1";
+
+		$Conn = new voConnPDO();
+		$result = $Conn->queryFetchAllAssocOBJ($query);
+
+		if (!$result) {
+			$ret=0;
+		}else{
+		   	$ret= $result[0]->idprofesor;
+		}
+		$Conn = null;
+		return $ret;
+	}
+
+
+	private function getIdUserProfesorFromIdProfesor($idprofesor){
+
+		$query = "SELECT idusuario FROM _viProfesores WHERE idprofesor = $idprofesor AND status_usuario = 1";
+
+		$Conn = new voConnPDO();
+		$result = $Conn->queryFetchAllAssocOBJ($query);
+
+		if (!$result) {
+			$ret=0;
+		}else{
+		   	$ret= $result[0]->idusuario;
+		}
+		$Conn = null;
+		return $ret;
+	}
+
+
 	private function getIdEmpFromAlias($str){
 
 		$query = "SELECT idemp FROM usuarios WHERE username = '$str' AND status_usuario = 1";
@@ -106,8 +140,7 @@ class oCenturaPDO {
 			$ret = $result[0]->idciclo;
 		}
 		$Conn = null;
-		return $ret;
-	
+		return $ret;	
 	}
 
 	private function getNivelFromIdGrupo($idgrupo=0,$idciclo=0){
@@ -126,7 +159,6 @@ class oCenturaPDO {
 		return $ret;
 
 	}
-
 
 	private function getNivelFromIdUserAlu($iduseralu=0){
 
@@ -1134,7 +1166,7 @@ class oCenturaPDO {
 
 				parse_str($cad);
 				
-				$query = "	SELECT idmobilmensaje, mensaje
+				$query = "	SELECT idmobilmensaje, fecha, remitente, destinatario, titulo, mensaje
 							FROM _viMobileMensajes 
 							WHERE iduser = $iduser AND 
 									device_token = '$device' AND 
@@ -1145,7 +1177,7 @@ class oCenturaPDO {
 			case 42:
 
 				parse_str($cad);
-				$query = "	SELECT idmobilmensaje, titulo, mensaje
+				$query = "	SELECT idmobilmensaje, fecha, remitente, destinatario, titulo, mensaje
 							FROM _viMobileMensajes 
 							WHERE idmobilmensaje = $idmobilmensaje AND 
 									iduser = $iduser AND 
@@ -1572,6 +1604,57 @@ class oCenturaPDO {
 								idemp = $idemp 
 							ORDER BY concepto ASC";
 
+				break;
+
+			case 78:
+				parse_str($cad);
+				$idusr   = $this->getIdUserFromAlias($u);
+				$idemp   = $this->getIdEmpFromAlias($u);
+		        $idciclo = $this->getCicloFromIdEmp($idemp);	
+		        $strIN   = $this->getIdGruposIN($u); 
+				$query = "SELECT DISTINCT profesor AS label,idprofesor AS data 
+						FROM _viGrupo_Materias 
+						WHERE idemp = $idemp AND 
+								idciclo = $idciclo AND 
+								idgrupo IN ($strIN)  
+						ORDER BY profesor ASC ";
+				break;		
+
+			case 79:
+				parse_str($cad);
+				$idusr   = $this->getIdUserFromAlias($u);
+				$idemp   = $this->getIdEmpFromAlias($u);
+		        $idciclo = $this->getCicloFromIdEmp($idemp);	
+		        $strIN   = $this->getIdGruposIN($u); 
+				$query = "SELECT DISTINCT grupo AS label,idgrupo AS data 
+						FROM _viNivel_Grupos 
+						WHERE idemp = $idemp AND 
+								idciclo = $idciclo AND 
+								idgrupo IN ($strIN)  
+						ORDER BY idgrupo ASC ";
+				break;		
+
+			case 80:
+				parse_str($cad);
+				$idusr   = $this->getIdUserFromAlias($u);
+				$idemp   = $this->getIdEmpFromAlias($u);
+		        $idciclo = $this->getCicloFromIdEmp($idemp);	
+		        $strIN   = $this->getIdGruposIN($u); 
+				$query = "SELECT DISTINCT CONCAT(alumno,' ',grupo) AS label,idalumno AS data 
+						FROM _viGrupo_Alumnos 
+						WHERE idemp = $idemp AND 
+								idciclo = $idciclo AND 
+								idgrupo IN ($strIN)  
+						ORDER BY label ASC ";
+				break;		
+
+			case 81:
+				parse_str($cad);
+		        $idemp      = $this->getIdEmpFromAlias($u);
+		        $idprof = $this->getIdUserProfesorFromIdProfesor($idprofesor);			
+				$query = " SELECT DISTINCT idtarea, titulo_tarea, fecha_inicio, fecha_fin, lecturas, respuestas, archvos_tareas, destinatarios, status_tarea
+								FROM _viTareasDestinatarios
+							WHERE idemp = $idemp AND creado_por = $idprof ORDER BY idtarea DESC ";
 				break;
 
 
@@ -3846,6 +3929,35 @@ class oCenturaPDO {
 
 	}
 
+	public function getIdGruposIN($u=""){
+			// Chingonería
+			$idprofesor   = $this->getIdProfesorFromAlias($u);		
+			$idemp   = $this->getIdEmpFromAlias($u);
+			$idciclo = $this->getCicloFromIdEmp($idemp);		        
+			$query = "SELECT DISTINCT idgrupo
+								FROM _viGrupoAsesor
+							WHERE idemp = $idemp AND 
+									idciclo = $idciclo AND 
+									idprofesor = $idprofesor 
+							ORDER BY nombre_profesor ASC";
+			$result = $this->getArray($query);
+			$INStr = "";
+			foreach ($result as $i => $value) {
+				if ($i == 0){
+					$INStr = $result[$i]->idgrupo.',';
+				}else{
+					if ($i == (count($result)-1) ) {
+						$INStr .= $result[$i]->idgrupo;
+					}else{
+						$INStr .= $result[$i]->idgrupo.',';
+					}
+				}
+			}
+
+			return $query;
+
+	}
+
 	public function getEstadisticasNoLeidas($Clave=0,$IdUserNivelAcceso=0,$u="",$iduser=0){
 		$totalNoLeidasTareas     = 0;
 		$totalNoLeidasCirculares = 0;
@@ -3905,7 +4017,7 @@ class oCenturaPDO {
 					"totalNoLeidasCirculares" => $totalNoLeidasCirculares,
 					"totalNoLeidasMensajes"   => $totalNoLeidasMensajes,
 					"totalNoLeidasBadge"      => $totalNoLeidasBadge,
-					"currentVersion"		  => "1.1.31"
+					"currentVersion"		  => "1.1.32"
 					);
 
 	}

@@ -372,6 +372,16 @@ function init() {
 
     }
 
+    var IDTCve = parseInt(localStorage.ClaveNivelAcceso, 0);    
+    if (obj.getkeyUP(IDTCve, 2) !== -1) {
+        
+        $.post(obj.getValue(0) + "menu-asesores/", {},
+        function(html) {
+            $("#menuPrincipal").append(html);
+        }, "html");
+
+    }
+
 
     window.onload = function() {
 

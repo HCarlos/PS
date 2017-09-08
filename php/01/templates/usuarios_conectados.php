@@ -103,20 +103,6 @@ jQuery(function($) {
 
 	$.getEval();
 
-/*
-    var stream = io.connect(obj.getValue(4));
-    stream.on("servidor", jsNewAlumno);
-    function jsNewAlumno(datosServer) {
-        var ms = datosServer.mensaje.split("-");
-        if ( ms[1]=='UCONNECT' || ms[1]=='UCONNECTDELL' )  {
-        	//if (!ocupado){
-				$.getEval();
-			//}
-        }
-    }
-*/
-
-
 });
 
 function resizeScreen() {

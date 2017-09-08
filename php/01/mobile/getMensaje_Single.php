@@ -113,9 +113,7 @@ html {
 
 <div class="container-fluid">
     <div class="row">
-        <div class="well well-lg">
-            <div class="card card-inverse center" style="border-color: #333; width: 100% !important;">
-              <div class="card-block">
+
               <?php 
 
 require_once("../oCenturaPDO.php");
@@ -131,20 +129,31 @@ $r = $F->getQueryPDO(42,$arg);
 
                 $titulo = "";
                 $mensaje = "";
+                $fecha = "";
                 if (count($r)>0){
-                            $titulo = $r[0]->titulo;
+                            $titulo  = $r[0]->titulo;
                             $mensaje = $r[0]->mensaje;
+                            $fecha   = $r[0]->fecha;
                 }else{
                             $titulo = "Error...";
                             $mensaje = "Ha ocurrido un error, ya estamos trabajando en repararlo.";
+                            $fecha   = "";
                 }
 
                ?>
-                <h3 class="text-left"><?= utf8_decode($titulo); ?></h3></br>
-                <p class="text-left"><?= utf8_decode($mensaje); ?></p>
-              </div>
+
+        <div class="panel panel-warning"> 
+            <div class="panel-heading"> 
+                <h3 class="panel-title"><?= $titulo; ?></h3> 
+            </div> 
+            <div class="panel-body">
+                <?= $mensaje; ?>
+            </div> 
+            <div class="panel-footer">
+                <?= $fecha; ?>
             </div>
         </div>
+
     </div>
 </div>
 

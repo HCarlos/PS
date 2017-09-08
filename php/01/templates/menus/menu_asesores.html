@@ -1,0 +1,65 @@
+                    <li class="" id="subMenuCobrosOnSite"> 
+                        <a href="#" class="dropdown-toggle">
+                                <i class="icon-money"></i>
+                                <span class="menu-text">Asesores</span>
+
+                                <b class="arrow icon-angle-down"></b>
+                        </a>
+
+                        <ul class="submenu">
+                            <li>
+                                <a href="#" id="asesores_consultas">
+                                    <i class="icon-money"></i>
+                                    <span class="menu-text">Consultas</span>
+                                </a>
+                            </li>
+                        
+
+                        </ul>
+                    </li>
+
+<script type="text/javascript">
+jQuery(function($) {
+
+    $("#preloaderPrincipal").show();
+
+
+    if ($("#asesores_consultas").length) {
+        $("#asesores_consultas").on("click", function(event) {
+            event.preventDefault();
+            cfgBase0();
+            var nc = localStorage.nc;
+            $.post(obj.getValue(0) + "asesores-consulta-1/", {
+                    user: nc
+                },
+                function(html) {
+                    $("#contentMain").html(html);
+                    $('#breadcrumb').html(getBar('Inicio,Asesores Consultas'));
+                }, "html");
+            return false;
+        });
+    }
+
+    function cfgBase0(){
+        resizeScreen();
+        $("#contentLevel5").empty();
+        $("#contentLevel5").hide();
+        $("#contentLevel4").empty();
+        $("#contentLevel4").hide();
+        $("#contentLevel3").empty();
+        $("#contentLevel3").hide();
+        $("#contentProfile").empty();
+        $("#contentProfile").hide();
+        $("#contentMain").show();
+        $("#contentMain").empty();
+        $("#preloaderPrincipal").show();
+        obj.setIsTimeLine(false);
+    }
+
+
+    $("#preloaderPrincipal").hide();
+
+
+})
+
+</script>

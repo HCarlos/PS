@@ -373,17 +373,17 @@ if ( count($alu) > 0 ){
 	$pdf->Cell(17,4,utf8_decode('CELULAR'),'',0,'L');
 	// $pdf->SetFont('ARIAL','B',8);
 	$pdf->SetTextColor(64);
-	$tel2Mama = count($madre) <= 0 ? '' : $madre[0]->tel2;
-	$pdf->Cell(41,4,$tel2Mama,'B',0,'C');
+	$cel1Mama = count($madre) <= 0 ? '' : $madre[0]->cel1;
+	$cel2Mama = count($madre) <= 0 ? '' : $madre[0]->cel2;
+	$pdf->Cell(41,4,$cel1Mama.' '.$cel2Mama,'B',0,'C');
 	$pdf->SetFont('ARIAL','',8);
 	$pdf->SetTextColor(152,72,7);
 	$pdf->Cell(5,4,'','',0,'L');
 	$pdf->Cell(16,4,utf8_decode('OFICINA'),'',0,'L');
 	// $pdf->SetFont('ARIAL','B',8);
 	$pdf->SetTextColor(64);
-	$cel1Mama = count($madre) <= 0 ? '' : $madre[0]->cel1;
-	$cel2Mama = count($madre) <= 0 ? '' : $madre[0]->cel2;
-	$pdf->Cell(41,4,$cel1Mama.' '.$cel2Mama,'B',1,'C');
+	$tel2Mama = count($madre) <= 0 ? '' : $madre[0]->tel2;
+	$pdf->Cell(41,4,$tel2Mama,'B',1,'C');
 
 	$pdf->SetFont('ARIAL','',8);
 	$pdf->SetTextColor(152,72,7);
@@ -491,17 +491,17 @@ if ( count($alu) > 0 ){
 	$pdf->Cell(17,4,utf8_decode('CELULAR'),'',0,'L');
 	// $pdf->SetFont('ARIAL','B',8);
 	$pdf->SetTextColor(64);
-	$tel2Papa = count($padre) <= 0 ? '' : $padre[0]->tel2;
-	$pdf->Cell(41,4,$tel2Papa,'B',0,'C');
+	$cel1Papa = count($padre) <= 0 ? '' : $padre[0]->cel1;
+	$cel2Papa = count($padre) <= 0 ? '' : $padre[0]->cel2;
+	$pdf->Cell(41,4,$cel1Papa.' '.$cel2Papa,'B',0,'C');
 	$pdf->SetFont('ARIAL','',8);
 	$pdf->SetTextColor(152,72,7);
 	$pdf->Cell(5,4,'','',0,'L');
 	$pdf->Cell(16,4,utf8_decode('OFICINA'),'',0,'L');
 	// $pdf->SetFont('ARIAL','B',8);
 	$pdf->SetTextColor(64);
-	$cel1Papa = count($padre) <= 0 ? '' : $padre[0]->cel1;
-	$cel2Papa = count($padre) <= 0 ? '' : $padre[0]->cel2;
-	$pdf->Cell(41,4,$cel1Papa.' '.$cel2Papa,'B',1,'C');
+	$tel2Papa = count($padre) <= 0 ? '' : $padre[0]->tel2;
+	$pdf->Cell(41,4,$tel2Papa,'B',1,'C');
 
 	$pdf->SetFont('ARIAL','',8);
 	$pdf->SetTextColor(152,72,7);

@@ -65,7 +65,7 @@ $user = $_POST['user'];
 
 jQuery(function($) {
 
-	// var stream = io.connect(obj.getValue(4));
+	//  var stream = io.connect(obj.getValue(4));
 
 	$("#preloaderPrincipal").hide();
 

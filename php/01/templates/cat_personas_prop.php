@@ -115,14 +115,14 @@ $idpersona  = $_POST['idpersona'];
 			<div id="especificos" class="tab-pane">
 
 				<div class="form-group ">
-					<label for="tel1" class="col-lg-2">Teléfono 1</label>
+					<label for="tel1" class="col-lg-2">Teléfono Casa</label>
 			    	<div class="col-lg-10">
 						<input class="form-control altoMoz" id="tel1" name="tel1" type="text" >
 			      	</div>
 			    </div>
 
 				<div class="form-group ">
-					<label for="tel2" class="col-lg-2">Teléfono 2</label>
+					<label for="tel2" class="col-lg-2">Teléfono Oficina</label>
 			    	<div class="col-lg-10">
 						<input class="form-control altoMoz" id="tel2" name="tel2" type="text" >
 			      	</div>

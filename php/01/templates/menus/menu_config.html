@@ -53,10 +53,23 @@
                             <li>
                                 <a href="#" id="asoc_profesor_to_director">
                                     <i class="icon-edit"></i>
-                                    <span class="menu-text"> Prof a Dir</span>
+                                    <span class="menu-text"> Profesor a Director</span>
                                 </a>
                             </li>
 
+                            <li>
+                                <a href="#" id="asoc_profesor_to_asesor">
+                                    <i class="icon-edit"></i>
+                                    <span class="menu-text"> Profesor a Asesor</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="#" id="asoc_grupo_to_asesor">
+                                    <i class="icon-edit"></i>
+                                    <span class="menu-text"> Grupo a Asesor</span>
+                                </a>
+                            </li>
 
                             <li>
                                 <a href="#" id="cat_supervisores_caja_list">
@@ -215,6 +228,41 @@ jQuery(function($) {
             return false;
         });
     }
+
+    if ($("#asoc_profesor_to_asesor").length) {
+        $("#asoc_profesor_to_asesor").on("click", function(event) {
+            event.preventDefault();
+            cfgBase0();
+            var nc = localStorage.nc;
+            $.post(obj.getValue(0) + "asoc-profesor-to-asesor-list/", {
+                    user: nc
+                },
+                function(html) {
+                    $("#contentMain").html(html);
+                    $('#breadcrumb').html(getBar('Inicio,Convierte a un Profesor en Asesor'));
+                }, "html");
+            return false;
+        });
+    }
+
+
+
+    if ($("#asoc_grupo_to_asesor").length) {
+        $("#asoc_grupo_to_asesor").on("click", function(event) {
+            event.preventDefault();
+            cfgBase0();
+            var nc = localStorage.nc;
+            $.post(obj.getValue(0) + "asoc-grupo-to-asesor-list/", {
+                    user: nc
+                },
+                function(html) {
+                    $("#contentMain").html(html);
+                    $('#breadcrumb').html(getBar('Inicio,Asigna Grupo a Asesor'));
+                }, "html");
+            return false;
+        });
+    }
+
 
     if ($("#cat_supervisores_caja_list").length) {
         $("#cat_supervisores_caja_list").on("click", function(event) {

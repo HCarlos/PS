@@ -113,6 +113,36 @@ class oCentura {
 	    return $ret;
 	}
 
+	private function getIdUsuarioFromIdProfesor($IdEmp, $IdProfesor){
+	    	$query = "SELECT idusuario FROM cat_profesores WHERE idprofesor = $IdProfesor AND idemp = $IdEmp AND status_profesor = 1";
+
+			$Conn = new voConnPDO();
+			$result = $Conn->queryFetchAllAssocOBJ($query);
+
+			if (!$result) {
+    				$ret=0;
+			}else{
+				   	$ret= intval($result[0]->idusuario);
+			}
+			$Conn = null;
+	    	return $ret;
+	}
+
+	private function getIdNivelFromIdDirector($IdEmp, $IdDirector){
+	    	$query = "SELECT idnivel FROM _viDirectores WHERE iddirector = $IdDirector AND idemp = $IdEmp AND status_director = 1";
+
+			$Conn = new voConnPDO();
+			$result = $Conn->queryFetchAllAssocOBJ($query);
+
+			if (!$result) {
+    				$ret=0;
+			}else{
+				   	$ret= intval($result[0]->idnivel);
+			}
+			$Conn = null;
+	    	return $ret;
+	}
+
 	private function getCicloFromIdEmp($idemp=0){
 	    $query = "SELECT idciclo FROM cat_ciclos WHERE idemp = $idemp AND predeterminado = 1 AND status_ciclo = 1 LIMIT 1";
 
@@ -964,7 +994,15 @@ class oCentura {
 										FROM cat_alu_baja_motivos WHERE idemp = $idemp AND status_motivo_baja = 1
 										ORDER BY idalumotivobaja ASC ";
 								break;		
-								
+
+							case 72:
+								parse_str($arg);
+								$idemp = $this->getIdEmpFromAlias($u);
+								$idciclo = $this->getCicloFromIdEmp($idemp);
+								$query = "SELECT grupo AS label, idgrupo AS data 
+										FROM _viNivel_Grupos WHERE idemp = $idemp AND idciclo = $idciclo AND status_grupo = 1  AND grupo_visible = 1
+										ORDER BY data ASC ";
+								break;	
 						}
 						break;
 					case 2:  // Asociaciones
@@ -1077,6 +1115,21 @@ class oCentura {
 										limit 1";
 								break;		
 			
+							case 12:
+								parse_str($arg);
+								$idemp = $this->getIdEmpFromAlias($u);
+								$query = "SELECT nombre_profesor AS label,idprofesorasesor AS data 
+										FROM _viAsesores WHERE idemp = $idemp AND iddirector = $otros
+										ORDER BY nombre_profesor ASC ";
+								break;		
+
+							case 13:
+								parse_str($arg);
+								$idemp = $this->getIdEmpFromAlias($u);
+								$query = "SELECT grupo AS label,idgrupoasesor AS data 
+										FROM _viGrupoAsesor WHERE idemp = $idemp AND idprofesorasesor = $otros
+										ORDER BY idgrupo ASC ";
+								break;		
 
 
 						}
@@ -1259,6 +1312,73 @@ class oCentura {
 
 					}
 					break; // 4
+
+				case 5:
+					switch($var2){
+						case 10:
+							parse_str($otros);
+							$iduser = $this->getIdUserFromAlias($u);
+							$idemp = $this->getIdEmpFromAlias($u);
+
+							$idciclo = $this->getCicloFromIdEmp($idemp);
+
+		          			$ar = explode(".",$arg);
+		          			$item = explode("|",$ar[0]);
+							foreach($item AS $i=>$valor){
+								if ((int)($item[$i])>0){
+									$idusuario = $this->getIdUsuarioFromIdProfesor($idemp,$item[$i]);
+									$iddirector = $ar[1];
+									$idnivel = $this->getIdNivelFromIdDirector($idemp,$iddirector);									
+									$query = "INSERT INTO profesores_asesores(idprofesor,idusuario,iddirector,idciclo,idnivel,idemp,ip,host,creado_por,creado_el)
+											VALUES($item[$i],$idusuario,$iddirector,$idciclo,$idnivel,$idemp,'$ip','$host',$iduser,NOW())";
+									$vRet = $this->guardarDatos($query);
+								}
+							}
+							break;		
+						case 20:
+
+		          			$ar = explode("|",$arg);
+							foreach($ar AS $i=>$valor){
+								if ((int)($ar[$i])>0){
+									$query = "DELETE FROM profesores_asesores WHERE idprofesorasesor = ".$ar[$i];
+									$vRet = $this->guardarDatos($query);
+								}
+							}
+							break;		
+
+					}
+					break; // 5
+
+				case 6:
+					switch($var2){
+						case 10:
+							parse_str($otros);
+							$iduser = $this->getIdUserFromAlias($u);
+							$idemp = $this->getIdEmpFromAlias($u);
+							$idciclo = $this->getCicloFromIdEmp($idemp);
+
+		          			$ar = explode(".",$arg);
+		          			$item = explode("|",$ar[0]);
+							foreach($item AS $i=>$valor){
+								if ((int)($item[$i])>0){
+									$query = "INSERT INTO profesor_grupo_asesor(idciclo,idprofesorasesor,idgrupo,idemp,ip,host,creado_por,creado_el)
+																		 VALUES($idciclo,$ar[1],$item[$i],$idemp,'$ip','$host',$iduser,NOW())";
+									$vRet = $this->guardarDatos($query);
+								}
+							}
+							break;		
+						case 20:
+
+		          			$ar = explode("|",$arg);
+							foreach($ar AS $i=>$valor){
+								if ((int)($ar[$i])>0){
+									$query = "DELETE FROM profesor_grupo_asesor WHERE idgrupoasesor = ".$ar[$i];
+									$vRet = $this->guardarDatos($query);
+								}
+							}
+							break;		
+					}
+					break;
 
 
 				case 41:
@@ -6613,7 +6733,7 @@ class oCentura {
 					$idciclo = $this->getCicloFromIdEmp($idemp);
 							// FROM _viGrupo_Alumnos WHERE idciclo = $idciclo AND idemp = $idemp AND idfamilia = $idfamilia AND idalumno = $idalumno AND status_grualu = 1 LIMIT 1";
 					$query = "SELECT * 
-							FROM _viGrupo_Alumnos WHERE idemp = $idemp AND idfamilia = $idfamilia AND idalumno = $idalumno AND status_grualu = 1 LIMIT 1";
+							FROM _viGrupo_Alumnos WHERE idemp = $idemp AND idciclo = $idciclo AND idfamilia = $idfamilia AND idalumno = $idalumno AND status_grualu = 1 LIMIT 1";
 				break;	
 
 			case 10026:
