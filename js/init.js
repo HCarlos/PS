@@ -373,7 +373,11 @@ function init() {
     }
 
     var IDTCve = parseInt(localStorage.ClaveNivelAcceso, 0);    
-    if (obj.getkeyUP(IDTCve, 2) !== -1) {
+    if ( (obj.getkeyUP(IDTCve, 2)  !== -1) || 
+         (obj.getkeyUP(IDTCve, 3)  !== -1) || 
+         (obj.getkeyUP(IDTCve, 6)  !== -1) || 
+         (obj.getkeyUP(IDTCve, 26) !== -1) 
+        ) {
         
         $.post(obj.getValue(0) + "menu-asesores/", {},
         function(html) {

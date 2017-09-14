@@ -253,7 +253,6 @@ class oCentura {
 			}else{
 				$ret = "OK";
 			}
-
 			$Conn = null;
 			return $ret;
 	}
@@ -6763,6 +6762,11 @@ class oCentura {
 				$query = " SELECT idtarea, titulo_tarea, tarea, fecha_inicio, fecha_fin, lecturas, respuestas, archivos, destinatarios, status_tarea 
 								FROM _viTareas
 							WHERE creado_por = $idprofesor AND idemp = $idemp $cfg ORDER BY idtarea DESC ";
+
+				// $query = " SELECT DISTINCT idtarea, titulo_tarea, fecha_inicio, fecha_fin, lecturas, respuestas, archvos_tareas as archivos, destinatarios, status_tarea, materia 
+				// 				FROM _viTareasDestinatarios
+				// 			WHERE creado_por = $idprofesor AND idemp = $idemp AND !(grupo IS NULL) $cfg ORDER BY idtarea DESC ";
+				
 				break;
 
 			case 20001:
@@ -6785,7 +6789,8 @@ class oCentura {
 
 				$query = " SELECT idtareadestinatario, alumno, materia, abreviatura, grupo, isrespuesta, isleida, iddestinatario, idtarea, iteracciones, profesor, profesor_tarea, archivos
 								FROM _viTareasDestinatarios
-							WHERE idemp = $idemp AND idtarea = $idtarea AND status_tarea = 1 ORDER BY alumno ASC ";
+							WHERE idemp = $idemp AND idtarea = $idtarea AND status_tarea = 1 
+							ORDER BY alumno ASC, grupo ASC ";
 				break;
 
 			case 20004:

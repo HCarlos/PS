@@ -1088,11 +1088,11 @@ class oCenturaPDO {
 		        $idciclo = $this->getCicloFromIdEmp($idemp);
 
 		        // AND iduser = $iduser AND type = $type
+				// idciclo = $idciclo AND 
 		        
 				$query = "SELECT DISTINCT iddevice, iduser, device_token, type
-							FROM cat_devices 
+							FROM mobile_cat_devices 
 							WHERE idemp = $idemp AND 
-									idciclo = $idciclo AND 
 									status_device = 1 AND 
 									(device_token LIKE '%:%') 
 							ORDER BY iddevice DESC";
@@ -1165,21 +1165,23 @@ class oCenturaPDO {
 			case 41:
 
 				parse_str($cad);
+
+				$stcito = intval($sts) == -1 ? "" : " AND status_read = $sts";
 				
-				$query = "	SELECT idmobilmensaje, fecha, remitente, destinatario, titulo, mensaje
+				$query = "	SELECT  idmobilemensaje, fecha, status_read, fecha_leida, remitente, destinatario, titulo, mensaje
 							FROM _viMobileMensajes 
 							WHERE iduser = $iduser AND 
-									device_token = '$device' AND 
-									status_read = $sts 
-									ORDER BY fecha DESC ";
+									type = $type  
+									$stcito 
+									ORDER BY idmobilemensaje DESC ";
 				break;
 
 			case 42:
 
 				parse_str($cad);
-				$query = "	SELECT idmobilmensaje, fecha, remitente, destinatario, titulo, mensaje
+				$query = "	SELECT idmobilemensaje, fecha, status_read, fecha_leida, remitente, destinatario, titulo, mensaje
 							FROM _viMobileMensajes 
-							WHERE idmobilmensaje = $idmobilmensaje AND 
+							WHERE idmobilemensaje = $idmobilemensaje AND 
 									iduser = $iduser AND 
 									idemp = $idemp 
 							LIMIT 1";
@@ -1645,18 +1647,36 @@ class oCenturaPDO {
 						WHERE idemp = $idemp AND 
 								idciclo = $idciclo AND 
 								idgrupo IN ($strIN)  
-						ORDER BY label ASC ";
+						ORDER BY alumno ASC ";
 				break;		
 
 			case 81:
 				parse_str($cad);
 		        $idemp      = $this->getIdEmpFromAlias($u);
-		        $idprof = $this->getIdUserProfesorFromIdProfesor($idprofesor);			
-				$query = " SELECT DISTINCT idtarea, titulo_tarea, fecha_inicio, fecha_fin, lecturas, respuestas, archvos_tareas, destinatarios, status_tarea
+		        $idciclo = $this->getCicloFromIdEmp($idemp);	
+				$qry = "";
+				switch ( intval($tType) ) {
+					case 1:
+				        $idprof = $this->getIdUserProfesorFromIdProfesor($idprofesor);			
+						$qry = " creado_por = ".$idprof;
+						$fldSel = "idtarea, titulo_tarea, fecha_inicio, fecha_fin, lecturas, respuestas, archvos_tareas, destinatarios, status_tarea, materia, grupo";
+						break;
+					case 2:
+						$qry = " idgrupo = $idgrupo ";
+						$fldSel = "idtarea, titulo_tarea, fecha_inicio, fecha_fin, lecturas, respuestas, archvos_tareas, destinatarios, status_tarea, materia, profesor";
+						break;
+					case 3:
+						$qry = " idalumno = $idalumno ";
+						$fldSel = "idtarea, titulo_tarea, fecha_inicio, fecha_fin, isleida, iteracciones, archivos, materia, profesor";
+						break;
+				}
+				$query = " SELECT DISTINCT $fldSel 
 								FROM _viTareasDestinatarios
-							WHERE idemp = $idemp AND creado_por = $idprof ORDER BY idtarea DESC ";
+							WHERE idemp = $idemp AND 
+									idciclo = $idciclo AND 
+									$qry 
+							ORDER BY idtarea DESC ";
 				break;
-
 
 	  	}
 		$result = $this->getArray($query);
@@ -2424,17 +2444,17 @@ class oCenturaPDO {
 					        $idemp = $this->getIdEmpFromAlias($user);
 							$idciclo = $this->getCicloFromIdEmp($idemp);		        
 
-							$qry = "SELECT iddevice AS IDs FROM cat_devices WHERE iduser = $idusr AND device_token = '$device_token' AND idemp = $idemp LIMIT 1";							
+							$qry = "SELECT iddevice AS IDs FROM mobile_cat_devices WHERE iduser = $idusr AND device_token = '$device_token' AND idemp = $idemp LIMIT 1";							
 							$result23 = $this->getArray($qry);
 							
 							if (!$result23) {
 								
-								$query = "UPDATE cat_devices SET 	
+								$query = "UPDATE mobile_cat_devices SET 	
 											  	status_device = 0
 										WHERE 	iduser = ".$idusr." AND type = " . $tD ;
 								$result = $this->guardarDatos($query);
 
-								$query = "INSERT INTO cat_devices(
+								$query = "INSERT INTO mobile_cat_devices(
 													iduser,
 													UUID,
 													device_token,
@@ -2453,12 +2473,12 @@ class oCenturaPDO {
 							}else{
 								$IDs = $result23[0]->IDs;
 
-								$query = "UPDATE cat_devices SET 	
+								$query = "UPDATE mobile_cat_devices SET 	
 											  	status_device = 0
 										WHERE 	iduser = ".$idusr." AND type = " . $tD ;
 								$result = $this->guardarDatos($query);
 
-								$query = "UPDATE cat_devices SET 	
+								$query = "UPDATE mobile_cat_devices SET 	
 											  	UUID = '$UUID',
 											  	device_token = '$device_token',
 											  	iduser = $idusr,
@@ -2476,7 +2496,7 @@ class oCenturaPDO {
 							parse_str($arg);
 							$idusr = $this->getIdUserFromAlias($user);
 
-							$query = "UPDATE cat_devices SET 	
+							$query = "UPDATE mobile_cat_devices SET 	
 										  	UUID = '$UUID',
 										  	device_token = '$device_token',
 										  	idsuer = $idusr,
@@ -2490,7 +2510,7 @@ class oCenturaPDO {
 							break;	
 						case 2:
 
-							$query = "DELETE FROM cat_devices WHERE iddevice = ".$arg;
+							$query = "DELETE FROM mobile_cat_devices WHERE iddevice = ".$arg;
 							$vRet = $this->guardarDatos($query);
 							break;	
 
@@ -2498,14 +2518,17 @@ class oCenturaPDO {
 							parse_str($arg);
 							$idusr = $this->getIdUserFromAlias($user);
 					        $idemp = $this->getIdEmpFromAlias($user);
+					        $version_mobile = isset($version_mobile)?'':$version_mobile;
 								
-							$query = "INSERT INTO mobil_mensaje(
+							$query = "INSERT INTO mobile_mensajes_enviados(
 												iddevice,
 												titulo,
 												mensaje,
 												fecha,
 												from_module,
 												idremitente,
+												respuesta_envio,
+												version_mobile,
 												idemp,ip,host,creado_por,creado_el)
 										VALUES(
 												$iddevice,
@@ -2514,6 +2537,8 @@ class oCenturaPDO {
 												NOW(),
 												'$from_module',
 												$idusr,
+												'$respuesta_envio',
+												'$version_mobile',
 												$idemp,'$ip','$host',$idusr,NOW())";
 							$vRet = $this->guardarDatos($query);
 							break;		
@@ -2522,17 +2547,17 @@ class oCenturaPDO {
 							$idusr = $this->getIdUserFromAlias($user);
 					        $idemp = $this->getIdEmpFromAlias($user);
 							$idciclo = $this->getCicloFromIdEmp($idemp);		        
-							$qry = "SELECT iddevice AS IDs FROM cat_devices WHERE iduser = $idusr AND UUID = '$UUID' AND idemp = $idemp LIMIT 1";
+							$qry = "SELECT iddevice AS IDs FROM mobile_cat_devices WHERE iduser = $idusr AND device_token = '$device_token' AND idemp = $idemp LIMIT 1";							
 							$result23 = $this->getArray($qry);
 							
 							if (!$result23) {
 								
-								$query = "UPDATE cat_devices SET 	
+								$query = "UPDATE mobile_cat_devices SET 	
 											  	status_device = 0
 										WHERE 	iduser = ".$idusr." AND type = " . $tD ;
 								$result = $this->guardarDatos($query);
 
-								$query = "INSERT INTO cat_devices(
+								$query = "INSERT INTO mobile_cat_devices(
 													iduser,
 													UUID,
 													device_token,
@@ -2549,20 +2574,45 @@ class oCenturaPDO {
 								$vRet = $this->guardarDatos($query);
 
 							}else{
+
 								$IDs = $result23[0]->IDs;
 
-								$query = "UPDATE cat_devices SET 	
+								$query = "UPDATE mobile_cat_devices SET 	
 											  	status_device = 0
 										WHERE 	iduser = ".$idusr." AND type = " . $tD ;
 								$result = $this->guardarDatos($query);
 
-								$query3 = "UPDATE cat_devices 
-												SET device_token = '$device_token',
-													status_device = 1
-											WHERE iddevice = $IDs";
-								$vRet = $this->guardarDatos($query3);
+								$query = "UPDATE mobile_cat_devices SET 	
+											  	UUID = '$UUID',
+											  	device_token = '$device_token',
+											  	iduser = $idusr,
+											  	status_device = 1,
+											  	type = $tD,
+												ip = '$ip', 
+												host = '$host',
+												modi_por = $idusr, 
+												modi_el = NOW()
+										WHERE 	iddevice = ".$IDs;
+								$vRet = $this->guardarDatos($query);
+
 							}
 							break;	
+
+						case 5:
+							parse_str($arg);
+							$idusr = $this->getIdUserFromAlias($user);
+							$query = "UPDATE mobile_mensajes_enviados 
+													SET 
+														status_read = 1,	
+														fecha_leida = NOW(),
+														ip = '$ip',
+														host = '$host',
+														modi_por = $idusr,
+														modi_el = NOW()
+										WHERE idmobilemensaje = ".$idmobilemensaje;
+							$vRet = $this->guardarDatos($query);
+							break;		
+
 					} // 56
 					break;
 				case 57:
@@ -3305,12 +3355,8 @@ class oCenturaPDO {
 
 	  	$ip=$_SERVER['REMOTE_ADDR']; 
 	  	$host=gethostbyaddr($_SERVER['REMOTE_ADDR']);
-     	// $Conn = new voConnPDO();
 
 	    $query = "SELECT * FROM _viEdosCta WHERE idedocta = $id LIMIT 1";
-
-  //    	$Conn = new voConnPDO();
-		// $rst = $Conn->queryFetchAllAssocOBJ($query);
 
 	    $rst = $this->getArray($query);
 
@@ -3357,27 +3403,11 @@ class oCenturaPDO {
 
 	    $facEnc = "INSERT INTO facturas_encabezado(idcliente,idmetododepago,idemisorfiscal,serie,referencia,fecha,fecha_total_pagado,subtotal,descto_becas,importe,descto,recargo,total,idemp,ip,host,creado_por,creado_el)
 	    		VALUES(".$IdFs.",$idmetododepago,$idemisorfiscal,'$serie','$referencia',NOW(),NOW(),$subtotal,$descto_becas,$importe,$descto,$recargo,$total,$idemp,'$ip','$host',$idusr,NOW())";
-/*
-		$result = $Conn->exec($facEnc);
-		if ($result != 1){
-			$vR = $Conn->errorInfo();
-			$vRet = var_dump($vR[2]);
-		}else{
-			$vRet = "OK";
-		}
-*/
 		$vRet = $this->guardarDatos($facEnc);
 
 
 	    $qry = "SELECT MAX(idfactura) AS IDs FROM facturas_encabezado";
-	    /*
-		$result23 = $Conn->queryFetchAllAssocOBJ($qry);
-		if (!$result23) {
-			$rFac=0;
-		}else{
-			$rFac = $result23[0]->IDs;
-		}
-		*/
+
 	    $result23 = $this->getArray($qry);
 	    $rFac = !$result23 ? 0 : $result23[0]->IDs;
 
@@ -3411,15 +3441,6 @@ class oCenturaPDO {
 						".$aRecargo.",
 						".$aTotal.",
 						$idemp,'$ip','$host',$idusr,NOW())";
-/*
-		$result = $Conn->exec($facDet);
-		if ($result != 1){
-			$vR = $Conn->errorInfo();
-			$vRet = var_dump($vR[2]);
-		}else{
-			$vRet = "OK";
-		}
-*/
 		$vRet = $this->guardarDatos($facDet);
 
 		$qry = "UPDATE estados_de_cuenta SET 	
@@ -3435,18 +3456,8 @@ class oCenturaPDO {
 										modi_por = $idusr, 
 										modi_el = NOW()
 				WHERE idedocta = ".$IDs;
-/*	
-		$result = $Conn->exec($qry);
-		if ($result != 1){
-			$vR = $Conn->errorInfo();
-			$vRet = var_dump($vR[2]);
-		}else{
-			$vRet = "OK";
-		}
-*/
-		$vRet = $this->guardarDatos($qry);
 
-		// $Conn = null;		  
+		$vRet = $this->guardarDatos($qry);
 
 		return $vRet;
 	}
@@ -3790,7 +3801,6 @@ class oCenturaPDO {
 		$query = "SET @X = Actualizar_Pagos_Metodo_B(".$idfamilia.",0,".$idemp.",".$idciclo.")";
 		$ret = $this->execQuery($query);
 
-		// if ( $ret[0]->Respuesta == "OK" ) {
 		if ( $ret == "OK" ) {
 
 			$query = "SET @X = Actualizar_Pagos_Metodo_A(".$idfamilia.",0,".$idemp.",".$idciclo.")";
@@ -4002,7 +4012,6 @@ class oCenturaPDO {
 					$arg = "u=".$u."&sts=0";
 					$tipo = 31009;
 					$r = $f->getQuerys($tipo,$arg,0,0,0,array(),"",1);
-					// $totalNoLeidasCirculares = $totalNoLeidasCirculares + count($r);
 					$totalNoLeidasCirculares = $totalNoLeidasCirculares + count($r);
 				}
 				

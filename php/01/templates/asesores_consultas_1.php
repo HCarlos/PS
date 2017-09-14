@@ -36,8 +36,8 @@ $ClaveNivelAcceso = intval( $_POST["ClaveNivelAcceso"] );
 							</tr>
 							<tr>
 								<td><label for="selAsesType">Elementos:</label></td>
-								<td colspan="2">
-									<select id="selAsesType" name="selAsesType" size="1">
+								<td colspan="2" class="wd60prc">
+									<select id="selAsesType" name="selAsesType" size="1" class="wd100prc altoMoz">
 									</select>							
 								</td>
 								<td>
@@ -139,30 +139,42 @@ jQuery(function($) {
 		$("#preloaderPrincipal").show();
 		
 		var tFiltro = parseInt($("#tipoFiltro").val(),0);
-		var valSel = parseInt($("#selAsesType").val(),0);
-		var nc = "u="+localStorage.nc;
+		var valSel  = parseInt($("#selAsesType").val(),0);
+		var txtSel  = $("#selAsesType :selected").text();
+		var nc      = "u="+localStorage.nc;
 
 		switch( tFiltro ){
 			case 1:
 				nc += "&idprofesor="+valSel;
 				break;
 			case 2:
-				nc += "&idprofesor="+valSel;
+				nc += "&idgrupo="+valSel;
 				break;
 			case 3:
-				nc += "&idprofesor="+valSel;
+				nc += "&idalumno="+valSel;
 				break;
 		}
+		nc += "&tType=" + tFiltro;
+
+		// alert(nc);
 
 		$.post(obj.getValue(0) + "data/", {o:40, t:81, c:nc, p:55, from:0, cantidad:0,s:''},
 			function(json){
 				if (parseInt(json[0].msg,0) > 0){
 					var lec,arc,res,des;
 					$.each(json, function(i, item) {
+						if (tFiltro == 1 || tFiltro == 2){
 						lec = item.lecturas>0?item.lecturas:'';
 						res = item.respuestas>0?item.respuestas:'';
 						arc = item.archvos_tareas>0?item.archvos_tareas:'';
 						des = item.destinatarios>0?item.destinatarios:'';
+					}else{
+						lec = parseInt(item.isleida) == 1 ? '<i class="icon-ok green"></i>':'';
+						res = item.iteracciones>0?item.iteracciones:'';
+						arc = item.archivos>0?item.archivos:'';						
+						des = '';
+					}
+
 
 						tB +=' 			<tr class="odd">';
 						tB +=' ';
@@ -170,7 +182,19 @@ jQuery(function($) {
 						tB +='					<a class="modTarAse0" href="#" id="idprof0-'+item.idtarea+'"  data-rel="tooltip" data-placement="top" title="Editar la Solicitud">'+padl(item.idtarea,4)+'</a>';
 						tB +='				</td>';
 						// tB +='				<td>'+item.grupo+': '+item.materia+'</br>'+item.titulo_tarea+'</td>';
-						tB +='				<td>'+item.titulo_tarea+'</td>';
+						switch(tFiltro)
+						{
+							case 1:
+								tB +='				<td><small><span class="orange">'+item.materia+'</span>: <span class="grey">'+item.grupo+'</span></small><br/><b>'+item.titulo_tarea+'</b></td>';
+								break;
+							case 2:
+								tB +='				<td><small><span class="green">'+txtSel+'</span>: <span class="orange">'+item.materia+'</span>: <span class="grey">'+item.profesor+'</span></small><br/><b>'+item.titulo_tarea+'</b></td>';
+								break;
+							case 3:
+								tB +='				<td><small><span class="orange">'+item.materia+'</span>: <span class="grey">'+item.profesor+'</span></small><br/><b>'+item.titulo_tarea+'</b></td>';
+								break;
+						}
+
 						tB +='				<td>'+item.fecha_inicio+'</td>';
 						tB +='				<td>'+item.fecha_fin+'</td>';
 						tB +='				<td class="center">'+lec +'</td>';
@@ -335,7 +359,8 @@ jQuery(function($) {
 	        $.post(obj.getValue(0) + "tareas-archivos-list/", {
 				user: nc,
 				idtarea: IdTarea,
-				tarea: Tarea
+				tarea: Tarea,
+				tfuete: 0
 	            },
 	            function(html) {	                
 	                $("#contentProfile").html(html).show('slow',function(){
@@ -355,7 +380,8 @@ jQuery(function($) {
 	        $.post(obj.getValue(0) + "tareas-destinatarios-list/", {
 				user: nc,
 				idtarea: IdTarea,
-				tarea: Tarea
+				tarea: Tarea,
+				tfuete: 0
 	            },
 	            function(html) {	                
 	                $("#contentProfile").html(html).show('slow',function(){

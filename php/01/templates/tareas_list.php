@@ -166,7 +166,7 @@ jQuery(function($) {
 						tB +='				<td class=" ">';
 						tB +='					<a class="modTarPro0" href="#" id="idprof0-'+item.idtarea+'"  data-rel="tooltip" data-placement="top" title="Editar la Solicitud">'+padl(item.idtarea,4)+'</a>';
 						tB +='				</td>';
-						tB +='				<td>'+item.titulo_tarea+'</td>';
+						tB +='				<td><small></small><br/><b>'+item.titulo_tarea+'</b></td>';
 						tB +='				<td>'+item.fecha_inicio+'</td>';
 						tB +='				<td>'+item.fecha_fin+'</td>';
 						tB +='				<td class="center">'+lec +'</td>';

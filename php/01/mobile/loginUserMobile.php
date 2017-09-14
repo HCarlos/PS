@@ -48,8 +48,8 @@ if (count($res)>0){
 			$respuesta[0]->msg = $F->saveDataPDO(56,$arg,0,0,0);
 		}else{
 			$respuesta[0]->msg = $F->saveDataPDO(56,$arg,0,0,4);
+			$respuesta[0]->arg = $arg;
 		}
-
 		$respuesta[0]->estadisticas = $F->getEstadisticasNoLeidas($clave,$idusernivelacceso,$us,$iduser);
 		
 	} catch (Exception $e) {

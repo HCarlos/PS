@@ -116,29 +116,35 @@ html {
 
               <?php 
 
-require_once("../oCenturaPDO.php");
-$F = oCenturaPDO::getInstance();
 
-$iduser         = $_GET['iduser'];
-$idemp          = $_GET['idemp'];
-$idmobilmensaje = $_GET['idmobilmensaje'];
+                    require_once("../oCenturaPDO.php");
+                    $F = oCenturaPDO::getInstance();
 
-$arg = "iduser=$iduser&idemp=$idemp&idmobilmensaje=$idmobilmensaje";
+                    $iduser         = $_GET['iduser'];
+                    $idemp          = $_GET['idemp'];
+                    $idmobilemensaje = $_GET['idmobilemensaje'];
 
-$r = $F->getQueryPDO(42,$arg);
+                    $arg = "iduser=$iduser&idemp=$idemp&idmobilemensaje=$idmobilemensaje";
 
-                $titulo = "";
-                $mensaje = "";
-                $fecha = "";
-                if (count($r)>0){
-                            $titulo  = $r[0]->titulo;
-                            $mensaje = $r[0]->mensaje;
-                            $fecha   = $r[0]->fecha;
-                }else{
-                            $titulo = "Error...";
-                            $mensaje = "Ha ocurrido un error, ya estamos trabajando en repararlo.";
-                            $fecha   = "";
-                }
+                    $r = $F->getQueryPDO(42,$arg);
+
+                    $titulo = "";
+                    $mensaje = "";
+                    $fecha = "";
+                    if (count($r)>0){
+                                $titulo      = $r[0]->titulo;
+                                $mensaje     = $r[0]->mensaje;
+                                $fecha       = $r[0]->fecha;
+                                $fecha_leida = $r[0]->fecha_leida;
+                                $cad3 = "user=".$user."&idmobilemensaje=".$idmobilemensaje;
+                                $F->saveDataPDO(56,$cad3,0,0,5);
+
+                    }else{
+                                $titulo      = "Error...";
+                                $mensaje     = "Ha ocurrido un error, ya estamos trabajando en repararlo.";
+                                $fecha       = "";
+                                $fecha_leida = "";
+                    }
 
                ?>
 
@@ -150,7 +156,8 @@ $r = $F->getQueryPDO(42,$arg);
                 <?= $mensaje; ?>
             </div> 
             <div class="panel-footer">
-                <?= $fecha; ?>
+                <small class="pull-left"><i class="glyphicon glyphicon-time"></i> <?= $fecha; ?></small>
+                <small class="pull-right"><i class="glyphicon glyphicon-eye-open"></i> <?= $fecha_leida; ?></small>    <br/>            
             </div>
         </div>
 

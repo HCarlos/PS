@@ -222,25 +222,13 @@ html {
 
                     <div><strong>Profesor(a):</strong> <?= $rprof[0]->profesor; ?></div>
 
-                </div><!--/widget-main-->
-            </div><!--/widget-body-->
+                </div>
+            </div>
 
         </div>
 
     </div>
 
 </div>
-<!--
-<script src="<?= "https://".$_SERVER['SERVER_NAME'];?>/js/jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.js"></script>
-<script type="text/javascript">
-    $(document).ready(function(){
-        $('a[rel="external"]').click(function() {
-            alert("Hola Mundo")
-            window.open($(this).attr('href'));
-            return false;
-        });
-    });    
-</script>
--->
 </body>
 </html>

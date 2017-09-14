@@ -129,10 +129,8 @@ switch($index){
 				if (trim($res)!="OK"){
 					$pos = strpos($res, 'Duplicate');
 					if ($pos !== false) {
-	     				$ret[0]->msg = $res; // "Valor DUPLICADO";
-						// $ret[0] = array("msg" => $res);
+	     				$ret[0]->msg = $res; 
 					}else{
-						//require_once('core/messages.php');
 						$res = str_replace("Table 'tecnoint_dbPlatSource.", "", $res);
 						$res = str_replace("' doesn't exist", "", $res);
 						$ret[0] = array("msg" => $res);						
@@ -142,28 +140,20 @@ switch($index){
 			case 3:
 				$res = $f->genUserFromCat($cad,$index);
 				if ($res == 'true'){
-					// $ret[0]->msg  = "OK";
 					$ret[0] = array("msg" => "OK");
 				}else{
-					// $ret[0]->msg  = $res;
 					$ret[0] = array("msg" => $res);
 				}
 				break;
 			case 4:
 				$ret = $f->getQuerys($var2,$cad,0,$from,$cantidad);
 				if (count($ret) <= 0){
-						// $ret[0]->razon_social = "No se encontraron datos";
-						// $ret[0]->idcli  = -1;
-						// $ret[0]->tel1   = "";
-						// $ret[0]->cel1   = "";
-						// $ret[0]->email  = "";
 						$ret[0] = array("razon_social" => "No se encontraron datos",
 										"idcli" => -1,
 										"tel1" => "",
 										"cel1" => "",
 										"email" => ""
 										);
-
 				}else{
 					$xx = 0;
 					if (intval($var2)==22) {
@@ -172,7 +162,6 @@ switch($index){
 					}
 					foreach($ret as $i=>$value){
 						$ret[$i]->registros = $xx;
-						// $ret[$i] = array("registros" => $xx);
 					}
 				}
 				break;
@@ -184,12 +173,10 @@ switch($index){
 				break;
 			case 12:
                 $res = $f->setSaveData($index,$cad,0,0,$var2,$otros);
-				// $ret[0]->msg = $res;
 				$ret[0] = array("msg" => $res);
 				break;
 			case 13:
 				$res = $f->genNumListaPorGrupo($cad);
-				// $ret[0]->msg  = $res;
 				$ret[0] = array("msg" => $res);
 				break;
 			case 14:
@@ -219,10 +206,7 @@ switch($index){
 					foreach($ret as $i=>$value){
 						$c2 = "u=".$u."&idboleta=".$ret[$i]->idboleta."&numval=".$numval;
 						$ret[$i]->nodo = $f->getQuerys(118,$c2,0,0,0,array(),$otros);
-						// $ret[$i] = array("nodo" => $f->getQuerys(118,$c2,0,0,0,array(),$otros));
 					}
-					
-					// $ret = $r0;
 
 				break;
 
@@ -233,43 +217,16 @@ switch($index){
 			case 52:
 
                 $res = $fp->saveDataPDO($index,$cad,0,0,$var2);
-
 				$ret[0] = array("msg" => $res);
-
-				/*
-
-				if (trim($res)!=="OK"){
-					$pos = strpos($res, 'Duplicate');
-					if ($pos >= 0) {
-	     				// $ret[0]->msg = "Valor DUPLICADO";
-						$ret[0] = array("msg" => "Valor DUPLICADO");
-					}else{
-						//require_once('core/messages.php');
-						$res = str_replace("Table 'tecnoint_dbPlatSource.", "", $res);
-						$res = str_replace("' doesn't exist", "", $res);						
-						$ret[0] = array("msg" => $res);
-					}
-				}else{
-					// $ret[0]->msg = "OK";
-					$ret[0] = array("msg" => "OK");
-				}			
-				*/	
-
 				break;
 
 			case 53:
-				// $ret[0]->msg = $fp->setAsocia($index,$cad,0,0,$var2, $otros);
 				$ret[0] = array("msg" => $fp->setAsocia($index,$cad,0,0,$var2, $otros));
 				break;
 
 			case 54:
 				$ret = $fp->getQueryPDO($var2,$cad,0,$from,$cantidad);
 				if (count($ret) <= 0){
-						// $ret[0]->razon_social = "No se encontraron datos";
-						// $ret[0]->idcli  = -1;
-						// $ret[0]->tel1   = "";
-						// $ret[0]->cel1   = "";
-						// $ret[0]->email  = "";
 				}else{
 					$xx = 0;
 					
@@ -289,7 +246,6 @@ switch($index){
 
 						foreach($ret as $i=>$value){
 							$ret[$i]->fAgo = $Q->time_stamp( $ret[$i]->ultima_conexion );
-							// $ret[0] = array("fAgo" => $Q->time_stamp( $ret[$i]->ultima_conexion ));
 						}
 					}
 

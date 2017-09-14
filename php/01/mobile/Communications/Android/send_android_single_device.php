@@ -1,7 +1,7 @@
 <?php
 
-ini_set('display_errors', '0');     # don't show any errors...
-error_reporting(E_ALL | E_STRICT);  # ...but do log them
+ini_set('display_errors', '0');     
+error_reporting(E_ALL | E_STRICT);  
 
 error_reporting(E_ALL);
 ini_set('display_errors', TRUE);
@@ -42,6 +42,7 @@ $fields = array
 	"notification" => $msg,
 	"data" => $data
 );
+
 
 $headers = array
 (

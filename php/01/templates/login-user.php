@@ -7,7 +7,6 @@ $f = oCentura::getInstance();
 $arg   = $_POST['data'];
 $ret = array();
 
-
 $ret = $f->getCombo(0,$arg,0,0,0);
 if (count($ret)>0){
 	$ret[0]->msg = "OK";

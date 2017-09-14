@@ -11,7 +11,11 @@ $f = oCentura::getInstance();
 $user = $_POST['user'];
 $idtarea = $_POST['idtarea'];
 $tarea = $_POST['tarea'];
-
+if ( !isset($_POST['tfuete']) ){
+    $tfuete = 1;
+}else{
+    $tfuete = intval($_POST['tfuete']);
+}
 ?>
 <div class="widget-box">
     <div class="widget-header widget-header-blue widget-header-flat">
@@ -77,6 +81,7 @@ jQuery(function($) {
 
     var idtarea = <?php echo $idtarea ?>;
     var tarea = "<?php echo $tarea ?>";
+    var tfuete  = <?php echo $tfuete; ?>;
 
     var oTable;
 
@@ -127,9 +132,11 @@ jQuery(function($) {
                         tB +='              <td class="tbl100W">';
                         tB +='                  <div class="action-buttons">';
                         tB +=' ';
+                        if ( tfuete == 1 ){                        
                             tB +='                      <a class="red delTar0" href="#" id="delTar0-'+item.idtareaarchivo+'-'+item.archivo+'"  data-rel="tooltip" data-placement="top" title="Eliminar Archivo">';
                             tB +='                          <i class="icon-trash bigger-130"></i>';
                             tB +='                      </a>';
+                        }
                         tB +='                  </div>';
                         tB +='              </td>';
                         tB +='          </tr>';

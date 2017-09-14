@@ -23,6 +23,7 @@ if (count($res)>0){
 		$iduseralu = $res[$i]->data;
 		$arg = "u=".$us."&iduseralu=".$iduseralu;
 		$r = $f->getCombo(1,$arg,0,0,59,' limit 1 ');
+
 		if (count($r)>0){
 
 			$res[$i]->iduseralu = $r[0]->iduseralu;
@@ -69,7 +70,7 @@ if (count($res)>0){
 
 
 		}else{
-			// unset($res[$i]);
+
 			$res[$i]->iduseralu = 0;
 			$res[$i]->grupo = "";
 			$res[$i]->logoEmp = "";
@@ -81,7 +82,34 @@ if (count($res)>0){
 			$res[$i]->idgrualu = 0;
 			$res[$i]->genero = 0;
 		}
+
 	}
+
+/*
+	$arOO = array("uno","dos","tres");
+	$j=0;
+	$rr = count($res);
+	for ($i= $rr+1; $i <= ($rr+3); ++$i) {
+		$res[] = array(
+			"iduseralu" => ($i*-1), 
+			"label" => $arOO[$j], 
+			"data" => ($j+1)*-1, 
+			"grupo" => "", 
+			"logoEmp" => "", 
+			"logoIB" => "", 
+			"urlBoleta" => "", 
+			"urlBoleta2" => "", 
+			"IsBoleta" => "0", 
+			"msg" => "OK", 
+			"idgrualu" => "0", 
+			"genero" => "0"
+			);
+		++$j;
+
+	 } 
+*/
+	 
+
 }else{
 	// $res[0]->msg = "OK";	
     $res[0]  = array("msg" => "OK");

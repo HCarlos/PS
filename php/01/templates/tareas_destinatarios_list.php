@@ -12,6 +12,13 @@ $user = $_POST['user'];
 $idtarea = $_POST['idtarea'];
 $tarea = $_POST['tarea'];
 
+if ( !isset($_POST['tfuete']) ){
+    $tfuete = 1;
+}else{
+    $tfuete = intval($_POST['tfuete']);
+}
+
+
 ?>
 <div class="widget-box">
     <div class="widget-header widget-header-blue widget-header-flat">
@@ -77,8 +84,9 @@ jQuery(function($) {
 
 	$("#preloaderPrincipal").hide();
 
-    var idtarea = <?php echo $idtarea ?>;
-    var tarea = "<?php echo $tarea ?>";
+    var idtarea = <?php echo $idtarea; ?>;
+    var tarea   = "<?php echo $tarea; ?>";
+    var tfuete  = <?php echo $tfuete; ?>;
 
     var oTable;
 
@@ -99,7 +107,7 @@ jQuery(function($) {
                             "sInfoEmpty": "No existen datos",
                             "sInfoFiltered": "(De _MAX_ registros)"                                        
                         },  
-            "aaSorting": [[ 0, "desc" ]],           
+            "aaSorting": [[ 1, "asc" ],[ 2, "asc" ]],           
             "aoColumns": [ null, null, null, null, null, null, { "bSortable": false }],
             "aLengthMenu": [[10, 25, 50, -1], [10, 25, 50, "Todos"]],
             "bRetrieve": true,
@@ -134,13 +142,15 @@ jQuery(function($) {
                         tB +='              <td class="tbl100W">';
                         tB +='                  <div class="action-buttons">';
                         tB +=' ';
-                            tB +='                      <a class="blue modTarPro1" href="#" id="modTarPro1-'+item.idtarea+'-'+item.idtareadestinatario+'-'+item.iddestinatario+'-'+item.profesor_tarea+'"  data-rel="tooltip" data-placement="top" title="Abrir Tarea">';
-                            tB +='                          <i class="icon-folder-open-alt bigger-130"></i>';
-                            tB +='                      </a>';
-                        tB +=' ';
+                        tB +='                      <a class="blue modTarPro1" href="#" id="modTarPro1-'+item.idtarea+'-'+item.idtareadestinatario+'-'+item.iddestinatario+'-'+item.profesor_tarea+'"  data-rel="tooltip" data-placement="top" title="Abrir Tarea">';
+                        tB +='                          <i class="icon-folder-open-alt bigger-130"></i>';
+                        tB +='                      </a>';
+                        if ( tfuete == 1 ){
+                            tB +=' ';
                             tB +='                      <a class="red delTar0" href="#" id="delTar0-'+item.idtareadestinatario+'-'+item.alumno+'-'+item.iddestinatario+'"  data-rel="tooltip" data-placement="top" title="Eliminar Alumno">';
                             tB +='                          <i class="icon-trash bigger-130"></i>';
                             tB +='                      </a>';
+                        }
                         tB +='                  </div>';
                         tB +='              </td>';
                         tB +='          </tr>';

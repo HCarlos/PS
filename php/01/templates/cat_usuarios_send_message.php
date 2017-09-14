@@ -65,12 +65,9 @@ $user = $_POST['user'];
 
 jQuery(function($) {
 
-	//  var stream = io.connect(obj.getValue(4));
-
 	$("#preloaderPrincipal").hide();
 
 	$("#title").html("Enviar mensaje");
-
 
     $("#frmUserSendMessage").unbind("submit");
 	$("#frmUserSendMessage").on("submit",function(event){
@@ -82,28 +79,21 @@ jQuery(function($) {
 	    var srcimg = $("#imgFoto").attr('src');
 	    var nameuser = $("#nameuser").html();
 
-		var msg = "NT|PlatSource|"+$("#mensaje").val()+"|"+srcimg+"|9000";
-
-		// alert(localStorage.nc);
-		 
 		var x = confirm("En este momento se dispone a enviar esta Notificación vía MOBILE, esto puede tardar algunos minutos.\n\nDesea Continuar?");
 
 		if (!x){
 			$("#preloaderPrincipal").hide();
 			return false;
 		}
-
-	    // $.post(obj.getValue(0) + "cat-usuario-send-notification/", 
-
 	    $.post(obj.getValue(0) + "sn-android-users-cat/", 
 	    	{user:localStorage.nc,mensaje:$("#mensaje").val()},
 			function(json){
+				// alert(json.length);
 				if (json[0].msg == "OK"){
 					$("#preloaderPrincipal").hide();
 					alert("Notificaciones enviadas correctamente.");
-				    // stream.emit("cliente", {mensaje: msg});
 				}else{
-					alert(json[0].success);
+					alert(json[0].msg);
 				}
 			},
 		'json');
