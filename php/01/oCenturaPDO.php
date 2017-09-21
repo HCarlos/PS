@@ -1642,7 +1642,7 @@ class oCenturaPDO {
 				$idemp   = $this->getIdEmpFromAlias($u);
 		        $idciclo = $this->getCicloFromIdEmp($idemp);	
 		        $strIN   = $this->getIdGruposIN($u); 
-				$query = "SELECT DISTINCT CONCAT(alumno,' ',grupo) AS label,idalumno AS data 
+				$query = "SELECT DISTINCT CONCAT(alumno,' - ',grupo) AS label,idalumno AS data, idgrupo, idnivel, nivel 
 						FROM _viGrupo_Alumnos 
 						WHERE idemp = $idemp AND 
 								idciclo = $idciclo AND 
@@ -1677,6 +1677,37 @@ class oCenturaPDO {
 									$qry 
 							ORDER BY idtarea DESC ";
 				break;
+
+			case 82:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+		        $idciclo = $this->getCicloFromIdEmp($idemp);	
+		        $strIN   = $this->getIdGruposIN($u); 
+				$query = "SELECT idasesoria, nombre_alumno, ciclo, nivel, grupo, cfecha, titulo_reporte, reporte, nombre_persona_acuerdo, nombre_persona_asesoria, idalumno
+						FROM _viAsesorias 
+						WHERE idemp = $idemp AND 
+								idciclo = $idciclo AND 
+								idgrupo IN ($strIN)  
+						ORDER BY idasesoria DESC ";
+				break;	
+
+			case 83:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+				$query = "SELECT FP.idpersona, FA.idtutor, FP.idusername as idusertutor, FP.nombre_persona, FP.parentezco
+						FROM _viFamAlu FA
+						LEFT JOIN _viFamPer FP 
+							ON FA.idfamilia = FP.idfamilia AND FA.idemp = FP.idemp   
+						WHERE FA.idemp = $idemp AND 
+								FA.idalumno = $idalumno 
+						ORDER BY FA.nombre_tutor ASC ";
+				break;	
+
+			case 84:
+				$query = "SELECT * 
+						FROM _viAsesorias 
+						WHERE idasesoria = $cad ";
+				break;	
 
 	  	}
 		$result = $this->getArray($query);
@@ -3344,6 +3375,74 @@ class oCenturaPDO {
 							break;		
 					}
 					break; // 68
+
+			case 69:
+					switch($tipo){
+						case 0:
+							parse_str($arg);
+							$idusr   = $this->getIdUserFromAlias($user);
+							$idemp   = $this->getIdEmpFromAlias($user);
+							$idciclo = $this->getCicloFromIdEmp($idemp);
+							
+							$status_asesoria = isset($status_asesoria)?1:0;
+							
+							$query = "INSERT INTO asesorias(
+															idalumno,
+															idciclo,
+															idnivel,
+															idgrupo,
+															fecha,
+															titulo_reporte,
+															reporte,
+															idpersona_acuerdo,
+															idusuario_acuerdo,
+															idusuario_asesoria,
+															idpersona_asesoria,
+															status_asesoria,
+															idemp,ip,host,creado_por,creado_el)
+										VALUES(
+															$idalumno,
+															$idciclo,
+															$idnivel,
+															$idgrupo,
+															NOW(),
+															'$titulo_reporte',	
+															'$reporte',
+															$idpersona_acuerdo,
+															$idusuario_acuerdo,
+															$idusuario_asesoria,
+															$idusr,
+															$status_asesoria,
+															$idemp,'$ip','$host',$idusr,NOW())";
+							$vRet = $this->guardarDatos($query);
+							break;
+						case 1:
+							parse_str($arg);
+							$idusr = $this->getIdUserFromAlias($user);
+							$idemp = $this->getIdEmpFromAlias($user);
+
+							$status_asesoria = isset($status_asesoria)?1:0;
+
+							$query = "UPDATE asesorias SET 	
+															titulo_reporte = '$titulo_reporte',
+															reporte = '$reporte',
+													  		idpersona_acuerdo = $idpersona_acuerdo,
+													  		idusuario_acuerdo = $idusuario_acuerdo,
+															ip = '$ip', 
+															host = '$host',
+															modi_por = $idusr, 
+															modi_el = NOW()
+									WHERE idasesoria = $idasesoria";
+							$vRet = $this->guardarDatos($query);
+							break;		
+						case 2:
+							$query = "DELETE FROM asesorias WHERE idasesoria = ".$arg;
+							$vRet = $this->guardarDatos($query);
+							break;		
+					}
+					break; // 69
+
+
 	  	}
 		return $vRet;
 	}
@@ -4015,7 +4114,6 @@ class oCenturaPDO {
 					$totalNoLeidasCirculares = $totalNoLeidasCirculares + count($r);
 				}
 				
-
 				break;
 		}
 
@@ -4026,7 +4124,7 @@ class oCenturaPDO {
 					"totalNoLeidasCirculares" => $totalNoLeidasCirculares,
 					"totalNoLeidasMensajes"   => $totalNoLeidasMensajes,
 					"totalNoLeidasBadge"      => $totalNoLeidasBadge,
-					"currentVersion"		  => "1.1.32"
+					"currentVersion"		  => "1.1.33"
 					);
 
 	}

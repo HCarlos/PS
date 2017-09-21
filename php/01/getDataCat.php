@@ -114,6 +114,7 @@ switch($index){
 	case 66: // Catálogo de Lista de Vencimintos
 	case 67: // Catálogo de Exalumno imágenes
 	case 68: // Catálogo de Exalumno firmas de email
+	case 69: // Catálogo de Asesorías
 		
 		switch($proc){
 			case 0:

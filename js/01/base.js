@@ -7,9 +7,9 @@ function oObject() {
 	];
 	var IdUser    = 0;
 	var Username  = "";
-	var keyUP0    = [3, 4, 999, 1000];
+	var keyUP0    = [999, 1000];
 	var keyUP1    = [1, 3, 4];
-	var keyUP2    = [0, 2, 6, 26, 31];
+	var keyUP2    = [2, 6, 26, 31];
 	var keyUP3    = [3];
 	var keyUP5    = [5];
 	var keyUP6    = [6]; // maestros
@@ -25,7 +25,7 @@ function oObject() {
 	var keyUP28   = [28]; // tutores
 	var keyUP29   = [29]; // Relaciones Publicas
 	var keyUP30   = [3, 4]; // Comunica
-	var keyUP31   = [0, 2, 3, 6, 26, 31]; // Asesores
+	var keyUP31   = [2, 3, 6, 26, 31]; // Asesores
 	var keyUP33   = [21]; // Profesor - Director
 	var keyUP40   = [22]; // PSA
 	var keyUP60   = [20]; // Caja
