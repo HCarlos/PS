@@ -175,11 +175,19 @@ $pdf->SetFillColor(192,192,192);
 $pdf->logoEmp = $logoEmp;
 $pdf->logoIBO = $logoIbo;
 $pdf->grado = intval($grado);
+
+/*
+
 if ( $pdf->grado == 5 || $pdf->grado == 6 ){
 	$pdf->incorporado = "INCORPORADO AL COBATAB CLAVE 27PCB00230 ";
 }else{
 	$pdf->incorporado = "INCORPORADO A SEP CLAVE 27PBH0004V ";
 }
+
+*/
+
+
+$pdf->incorporado = "INCORPORADO A SEP CLAVE 27PBH0004V ";
 
 $arrAlu = explode(",",$strgrualu);
 
@@ -187,9 +195,7 @@ foreach ($arrAlu as $i => $value) {
 
 	$result = $f->getQuerys($t,"idgrualu=".$arrAlu[$i],0,0,0,array(),$s,1);
 	
-
 	if ( count($result)>0  ){
-
 
 		$pdf->alumno = $result[0]->alumno; //.' '.$arrAlu[$i];
 		$pdf->num_lista = $result[0]->num_lista;

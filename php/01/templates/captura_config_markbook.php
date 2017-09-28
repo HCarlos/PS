@@ -493,7 +493,8 @@ jQuery(function($) {
 	        $.post(obj.getValue(0) + "cal_partes_config/", {
 				idgrumat: $("#cmbMaterias100").val(),
 				materia: $("#cmbMaterias100 :selected").text(),
-				num_eval: evalDef
+				num_eval: evalDef,
+				grupo: localStorage.grupo_cal
 	            },
 	            function(html) {	                
 	                $("#contentProfile").html(html).show('slow',function(){

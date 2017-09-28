@@ -27,25 +27,20 @@ $de       = $_POST['user'];
 
 <div class="borderTopContainer">
 	<div id="user-profile-1" class="user-profile row-fluid">
-			<div id="tblAluListBecas_wrapper" class="dataTables_wrapper" role="grid">
-
-				<table aria-describedby="tblAluListBecas_info" id="tblAluListBecas" class="table table-striped table-bordered table-hover dataTable">
-									
-					<thead>
-						<tr role="row">
-							<th aria-label="idalumno: activate to sort column ascending" style="width: 80px;" colspan="1" rowspan="1" aria-controls="tblAluListBecas" tabindex="0" role="columnheader" class="sorting" >ID</th>
-							<th aria-label="nombre_alumno: activate to sort column ascending" style="width: 200px;" colspan="1" rowspan="1" aria-controls="tblAluListBecas" tabindex="1" role="columnheader" class="sorting">Alumno</th>
-							<th aria-label="usuario: activate to sort column ascending" style="width: 60px;" colspan="1" rowspan="1" aria-controls="tblAluListBecas" tabindex="1" role="columnheader" class="sorting">Usuario</th>
-							<th aria-label="mod: activate to sort column ascending" style="width: 5px;" colspan="1" rowspan="1" aria-controls="tblAluListBecas" tabindex="1" role="columnheader" class="sorting">M</th>
-							<th aria-label="" style="width: 200px;" colspan="1" rowspan="1" role="columnheader" class="sorting_disabled"></th>
-						</tr>
-					</thead>
-									
-					<tbody aria-relevant="all" aria-live="polite" role="alert"></tbody>
-				</table>
-
-			</div><!--PAGE CONTENT ENDS-->
-
+		<div id="tblAluListBecas_wrapper" class="dataTables_wrapper" role="grid">
+			<table aria-describedby="tblAluListBecas_info" id="tblAluListBecas" class="table table-striped table-bordered table-hover dataTable">
+				<thead>
+					<tr role="row">
+						<th aria-label="idalumno: activate to sort column ascending" style="width: 80px;" colspan="1" rowspan="1" aria-controls="tblAluListBecas" tabindex="0" role="columnheader" class="sorting" >ID</th>
+						<th aria-label="nombre_alumno: activate to sort column ascending" style="width: 200px;" colspan="1" rowspan="1" aria-controls="tblAluListBecas" tabindex="1" role="columnheader" class="sorting">Alumno</th>
+						<th aria-label="usuario: activate to sort column ascending" style="width: 60px;" colspan="1" rowspan="1" aria-controls="tblAluListBecas" tabindex="1" role="columnheader" class="sorting">Usuario</th>
+						<th aria-label="mod: activate to sort column ascending" style="width: 5px;" colspan="1" rowspan="1" aria-controls="tblAluListBecas" tabindex="1" role="columnheader" class="sorting">M</th>
+						<th aria-label="" style="width: 200px;" colspan="1" rowspan="1" role="columnheader" class="sorting_disabled"></th>
+					</tr>
+				</thead>
+				<tbody aria-relevant="all" aria-live="polite" role="alert"></tbody>
+			</table>
+		</div>
 	</div>
 </div>
 
@@ -101,13 +96,13 @@ jQuery(function($) {
 
 						tB +=' 			<tr class=" odd ">';
 						tB +='';
-						tB +='				<td class=" ">';
+						tB +='				<td>';
 						tB +='					<a href="#" >'+padl(item.idalumno,4)+'</a>';
 						tB +='				</td>';
-						tB +='				<td class=" " >'+item.nombre_alumno+'</td>';
-						tB +='				<td class=" " >'+item.username+'</td>';
+						tB +='				<td >'+item.nombre_alumno+'</td>';
+						tB +='				<td >'+item.username+'</td>';
 						tB +='				<td class="center" >'+vad+'</td>';
-						tB +='				<td class=" ">';
+						tB +='				<td>';
 						tB +='					<div class="hidden-phone visible-desktop action-buttons">';
 						tB +='';
 						tB +='						<a class="green modAlumnoPro" href="#" id="idalumno-'+item.idalumno+'" >';

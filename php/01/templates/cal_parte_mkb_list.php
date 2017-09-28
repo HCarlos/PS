@@ -6,6 +6,8 @@ $idgrumatcon  = $_POST['idgrumatcon'];
 $idgrumat  = $_POST['idgrumat'];
 $parte  = $_POST['parte'];
 $num_eval = $_POST['num_eval'];
+$grupo = $_POST['grupo'];
+$materia = $_POST['materia'];
 ?>
 
 
@@ -22,7 +24,7 @@ $num_eval = $_POST['num_eval'];
 
 		<div class="widget-toolbar orange pull-left no-border ">
 
-		    <h3 id="title"><i class="icon-edit"></i><?php echo $parte; ?></h3>
+		    <h3 id="title"><i class="icon-edit"></i><?php echo $grupo.' | '.$materia.' | '.$parte; ?></h3>
 
 		</div>
 

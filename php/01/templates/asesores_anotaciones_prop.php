@@ -31,7 +31,7 @@ $idalumno  = $_POST['idalumno'];
 						<table class="wd100prc">
 							<tr>
 								<td class="wd10prc">
-		                    		<label for="idpaiareadisciplinaria" class="lblH2cmb">Alumno </label>
+		                    		<label for="search_alumno" class="lblH2cmb">Alumno </label>
 		                    	</td>	
 								<td class="wd100prc">
 									<input class="input-large form-control altoMoz wd60prc show" id="search_alumno" name="search_alumno" type="text" placeholder="Alumno" autofocus>
@@ -183,8 +183,6 @@ jQuery(function($) {
             getDatosTutores($("#idpersonaacuerdo"));
 
             var queryString = $(this).serialize();  
-            
-            // alert(queryString);
 
             var IdAsesoria = (idasesoria==0?0:1);
             $.post(obj.getValue(0) + "data/", {o:69, t:IdAsesoria, c:queryString, p:52, from:0, cantidad:0, s:''},

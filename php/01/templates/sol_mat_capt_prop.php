@@ -17,16 +17,34 @@ $idsolicituddematerialdetalle = $_POST['idsolicituddematerialdetalle'];
                 <table>
 
                     <tr>
-                        <td><label for="idproducto" class="textRight">Producto</label></td>
+                        <td><label for="empieza_con" class="textRight">Empieza con:</label></td>
                         <td>
                             <span class="add-on"><i class="icon-asterisk red"></i></span>
-                            <select class=" altoMoz" name="idproducto" id="idproducto" size="1" required>
+                            <select class=" altoMoz" name="empieza_con" id="empieza_con" size="1" required>
+                                <?php
+
+                                for($i=65; $i<=90; $i++) {  
+                                    $letra = chr($i);  
+                                    echo '<option value="'.$letra.'">'.$letra.'</option>\n\t ';  
+                                }                                  
+                                
+                                ?>
+
                             </select>
                         </td>
                     </tr>
 
                     <tr>
-                        <td><label for="idcolor" class="textRight">Color</label></td>
+                        <td><label for="idproducto" class="textRight">Producto:</label></td>
+                        <td>
+                            <span class="add-on"><i class="icon-asterisk red"></i></span>
+                            <select class=" altoMoz" name="idproducto" id="idproducto" size="1" required>
+                            </select><span class="marginLeft2em">Productos: <span class="orange" id="cantidadDeProductosEncontrados"></span> </span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><label for="idcolor" class="textRight">Color:</label></td>
                         <td>
                             <span class="add-on"><i class="icon-asterisk red"></i></span>
                             <select class=" altoMoz" name="idcolor" id="idcolor" size="1">
@@ -35,7 +53,7 @@ $idsolicituddematerialdetalle = $_POST['idsolicituddematerialdetalle'];
                     </tr>
 
                     <tr>
-                        <td><label for="cantidad_solicitada" class="textRight">Cantidad</label></td>
+                        <td><label for="cantidad_solicitada" class="textRight">Cantidad:</label></td>
                         <td>
                             <span class="add-on"><i class="icon-asterisk red"></i></span>
                             <input class="altoMoz wd62prc" name="cantidad_solicitada" id="cantidad_solicitada" type="text"  pattern="[-+]?[0-9]*[.,]?[0-9]+" required>
@@ -43,7 +61,7 @@ $idsolicituddematerialdetalle = $_POST['idsolicituddematerialdetalle'];
                     </tr>
                   
                     <tr>
-                        <td><label for="observaciones_solicitud" class="textRight">Observaciones</label></td>
+                        <td><label for="observaciones_solicitud" class="textRight">Observaciones:</label></td>
                         <td>
                             <span class="add-on"><i class="icon-asterisk red"></i></span>
                             <textarea rows="4" cols="50" class="" id="observaciones_solicitud" name="observaciones_solicitud"></textarea>                  
@@ -140,7 +158,8 @@ jQuery(function($) {
                         $("#idcolor").val(json[0].idcolor);            
                         $("#costo_unitario").val( json[0].costo_unitario );            
                         $("#observaciones_solicitud").val(json[0].observaciones_solicitud);            
-                        $("#cantidad_solicitada").val(json[0].cantidad_solicitada);            
+                        $("#cantidad_solicitada").val(json[0].cantidad_solicitada); 
+                        $("#empieza_con").val(json[0].producto);           
                         $("#cantidad_solicitada").focus();  
                 },'json');
             }else{
@@ -149,13 +168,19 @@ jQuery(function($) {
             }
         }
 
+        $("#empieza_con").on("change",function(event){
+            event.preventDefault();
+            getProductos();            
+        });
+
         function getProductos(){
-            $("#idproducto").html('');
-            var nc = "u="+localStorage.nc;
+            $("#idproducto").empty();
+            var nc = "u="+localStorage.nc+"&empieza_con="+$("#empieza_con").val();
             $.post(obj.getValue(0)+"data/", { o:1, t:38, p:0,c:nc,from:0,cantidad:0, s:"" },
                 function(json){
                     var y;
                     y = json.length;
+                    $("#cantidadDeProductosEncontrados").html(y);
                    $.each(json, function(i, item) {
                         //console.log(item.data+"|"+item.costo_unitario);
                         arritems[item.data] = {idproducto:item.data, costo_unitario:item.costo_unitario};

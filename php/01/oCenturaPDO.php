@@ -2547,8 +2547,9 @@ class oCenturaPDO {
 
 						case 3:
 							parse_str($arg);
-							$idusr = $this->getIdUserFromAlias($user);
-					        $idemp = $this->getIdEmpFromAlias($user);
+							$idusr          = $this->getIdUserFromAlias($user);
+							$user_sender    = $this->getIdUserFromAlias($user_sender);
+					        $idemp          = $this->getIdEmpFromAlias($user);
 					        $version_mobile = isset($version_mobile)?'':$version_mobile;
 								
 							$query = "INSERT INTO mobile_mensajes_enviados(
@@ -2570,7 +2571,7 @@ class oCenturaPDO {
 												$idusr,
 												'$respuesta_envio',
 												'$version_mobile',
-												$idemp,'$ip','$host',$idusr,NOW())";
+												$idemp,'$ip','$host',$user_sender,NOW())";
 							$vRet = $this->guardarDatos($query);
 							break;		
 						case 4:
@@ -4063,9 +4064,51 @@ class oCenturaPDO {
 				}
 			}
 
-			return $query;
+			return $INStr;
 
 	}
+
+
+	public function getTokensMobileString($u="",$type=0){
+
+			$idusr     = $this->getIdUserFromAlias($u);
+			$idemp     = $this->getIdEmpFromAlias($u);
+			$fields    = "";
+			$separator = ",";
+			switch ($type) {
+				case 1:
+					$fields = "type as sDato";
+					$separator = "";
+					break;
+				default:
+					$fields = "CONCAT(iddevice,'|DevCH|',device_token,'|DevCH|',type) as sDato";
+					break;
+			}
+			
+			$query = "SELECT $fields
+								FROM mobile_cat_devices
+							WHERE idemp = $idemp AND 
+									iduser = $idusr AND 
+									status_device = 1 
+							ORDER BY type ASC";
+			$result = $this->getArray($query);
+			$INStr = "";
+			foreach ($result as $i => $value) {
+				if ($i == 0){
+					$INStr = $result[$i]->sDato.$separator;
+				}else{
+					if ($i == (count($result)-1) ) {
+						$INStr .= $result[$i]->sDato;
+					}else{
+						$INStr .= $result[$i]->sDato.$separator;
+					}
+				}
+			}
+
+			return $INStr;
+
+	}
+
 
 	public function getEstadisticasNoLeidas($Clave=0,$IdUserNivelAcceso=0,$u="",$iduser=0){
 		$totalNoLeidasTareas     = 0;

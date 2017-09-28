@@ -54,7 +54,7 @@ $numeval    = $_POST['numeval'];
 						<input type="hidden" name="num_eval_capcal_fmt_0" id="num_eval_capcal_fmt_0" value="<?php echo $numeval; ?>">
 						<input type="hidden" name="user" id="user" value="<?php echo $de; ?>">
 						<div class="form-group w96" style='margin-right: 3em; margin-top: 1em;'>
-							<button type="submit" class="btn btn-primary pull-left" style='margin-right: 4em;' id="cmdSaveCapCal"><i class="icon-save"></i>Guardar</button>
+							<button type="submit" class="btn btn-primary pull-left" style='margin-right: 4em;' id="cmdSaveCapCal"><i class="icon-save"></i>Guardar...</button><span id="spLoading1" class="marginLeft1em"><i class="fa fa-spinner fa-spin orange" aria-hidden="true"></i> Guardando datos, por favor espere...</span>
 						</div>
 
 					</form>	
@@ -68,6 +68,7 @@ $numeval    = $_POST['numeval'];
 
 jQuery(function($) {
 	$("#cmdSaveCapCal").hide();
+	$("#spLoading1").hide();
 
 	var TRPP = 20;
 	var IdUNA = localStorage.IdUserNivelAcceso;
@@ -310,7 +311,8 @@ jQuery(function($) {
 		event.preventDefault();
 
 		$("#preloaderPrincipal").show();
-		
+		$("#cmdSaveCapCal").prop("disabled",true);
+
 	    var queryString = $(this).serialize();	
 	    				var xIdBolPar = '';
 	    				var xIdBolParCal = '';
@@ -355,8 +357,13 @@ jQuery(function($) {
 					var igm = IdGruMat;
 					closeCapCal02();
 					$("#preloaderPrincipal").hide();
+					$("#cmdSaveCapCal").prop("disabled",false);
+					$("#spLoading1").hide();
+
     			}else{
 					$("#preloaderPrincipal").hide();
+					$("#cmdSaveCapCal").prop("disabled",false);
+					$("#spLoading1").hide();
     				alert("Error: "+json[0].msg);	
     			}
     	}, "json");

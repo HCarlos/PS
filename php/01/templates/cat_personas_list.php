@@ -43,7 +43,8 @@ $de       = $_POST['user'];
 						<tr role="row">
 							<th aria-label="idpersona: activate to sort column ascending" style="width: 80px;" colspan="1" rowspan="1" aria-controls="sample-table-2" tabindex="0" role="columnheader" class="sorting" >ID</th>
 							<th aria-label="nombre_persona: activate to sort column ascending" style="width: 200px;" colspan="1" rowspan="1" aria-controls="sample-table-2" tabindex="1" role="columnheader" class="sorting">Persona</th>
-							<th aria-label="username: activate to sort column ascending" style="width: 200px;" colspan="1" rowspan="1" aria-controls="sample-table-2" tabindex="1" role="columnheader" class="sorting">Username</th>
+							<th aria-label="is_mobile: activate to sort column ascending" style="width: 80px;" colspan="1" rowspan="1" aria-controls="sample-table-2" tabindex="2" role="columnheader" class="sorting">Is Mobile</th>
+							<th aria-label="username: activate to sort column ascending" style="width: 100px;" colspan="1" rowspan="1" aria-controls="sample-table-2" tabindex="3" role="columnheader" class="sorting">Username</th>
 							<th aria-label="" style="width: 200px;" colspan="1" rowspan="1" role="columnheader" class="sorting_disabled"></th>
 						</tr>
 					</thead>
@@ -85,7 +86,7 @@ jQuery(function($) {
 	            			"sInfoFiltered": "(De _MAX_ registros)"                                        
 	        			},	
 	        "aaSorting": [[ 0, "desc" ]],			
-			"aoColumns": [ null, null, null,  { "bSortable": false }],
+			"aoColumns": [ null, null, null, null,  { "bSortable": false }],
 			"aLengthMenu": [[10, 25, 50, -1], [10, 25, 50, "Todos"]],
 			"bRetrieve": true,
 			"bDestroy": false
@@ -102,24 +103,28 @@ jQuery(function($) {
 			function(json){
 				
 					$.each(json, function(i, item) {
-
+						var is_mobile = item.is_mobile=="1"?"<i class='green glyphicon glyphicon-ok'></i> SI":"";
 						tB +=' 			<tr class="odd">';
 						tB +='';
 						tB +='				<td class=" ">';
 						tB +='					<a class="modPersonaPro" href="#" id="idprof-'+item.idpersona+'" >'+padl(item.idpersona,4)+'</a>';
 						tB +='				</td>';
 						tB +='				<td class=" " >'+item.nombre_persona+'</td>';
+						tB +='				<td class="center" >'+is_mobile+'</td>';
 						tB +='				<td class=" " >'+item.username+'</td>';
 						tB +='				<td class=" ">';
-						tB +='					<div class="hidden-phone visible-desktop action-buttons">';
-						tB +='';
+						tB +='					<div class="visible-desktop action-buttons">';
 						tB +='						<a class="green modPersonaPro" href="#" id="idpersona-'+item.idpersona+'" >';
 						tB +='							<i class="icon-pencil bigger-130"></i>';
 						tB +='						</a>';
-						tB +='	';
 						tB +='						<a class="red delPersona" href="#" id="delPersona-'+item.idpersona+'" >';
 						tB +='							<i class="icon-trash bigger-130"></i>';
 						tB +='						</a>';
+						if ( item.is_mobile == "1" ){
+							tB +='						<a class="black mobilePersona" href="#" id="mobilePersona-'+item.username+'" >';
+							tB +='							<i class="glyphicon glyphicon-phone bigger-130"></i>';
+							tB +='						</a>';
+						}
 						tB +='					</div>';
 						tB +='';
 						tB +='				</td>';
@@ -135,6 +140,13 @@ jQuery(function($) {
 						var arr = event.currentTarget.id.split('-');
 						obj.setIsTimeLine(false);
 						getPropPersona(arr[1]);
+					});
+
+					$(".mobilePersona").on("click",function(event){
+						event.preventDefault();
+						var arr = event.currentTarget.id.split('-');
+						obj.setIsTimeLine(false);
+						sendMobilePersona(arr[1]);
 					});
 
 					$(".delPersona").on("click",function(event){
@@ -201,7 +213,7 @@ jQuery(function($) {
 	})
 
 	function getPropPersona(IdPersona){
-        $("#contentProfile").html("");
+        $("#contentProfile").empty();
         $("#contentMain").hide(function(){
 	        $("#preloaderPrincipal").show();
 	        obj.setIsTimeLine(false);
@@ -220,17 +232,20 @@ jQuery(function($) {
         return false;
 	}
 
-/*
-	var stream = io.connect(obj.getValue(4));
-	stream.on("servidor", jsNewPersona);
-	function jsNewPersona(datosServer) {
-		var ms = datosServer.mensaje.split("-");
-		if (ms[1]=='PERSONAS') {
-			// onClickFillTable();
-		}
+	function sendMobilePersona(username){
+        $("#contentProfile").empty();
+		var nc = localStorage.nc; 
+		$.post(obj.getValue(0) + "cat-usuario-send-message/", {
+				user: username,
+				context: 'send-user-notification/'
+			},
+			function(html) {
+				$("#divUploadImage").html(html);
+				$("#divUploadImage").modal('toggle');
+		}, "html");
+        return false;
 	}
-*/
-	
+
 
 });
 

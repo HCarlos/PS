@@ -104,7 +104,7 @@
 <script type="text/javascript"> 
 jQuery(function($) {
 
-	var stream = io.connect(obj.getValue(4));
+	// var stream = io.connect(obj.getValue(4));
 
 	var clavenivelacceso = parseInt(localStorage.ClaveNivelAcceso,0);
 	var user = localStorage.nc;
@@ -159,6 +159,7 @@ jQuery(function($) {
 
 	// Get Predeter
 	cad = "u="+user+"&llave="+evalpred;
+
     $.post(obj.getValue(0) + "data/", {o:1, t:-4, c:cad, p:10, from:0, cantidad:0, s:''},
         function(json) {
             $("#evalpred").val(json[0].valor);
@@ -198,7 +199,7 @@ jQuery(function($) {
             function(json) {
             		if (json[0].msg=="OK"){
             			alert("Datos guardados con éxito.");
-						stream.emit("cliente", {mensaje: "PLATSOURCE-CONFIG-PROP-"+clavenivelacceso});
+						// stream.emit("cliente", {mensaje: "PLATSOURCE-CONFIG-PROP-"+clavenivelacceso});
 						closeScrennConfig();
         			}else{
 						$("#preloaderPrincipal").hide();

@@ -79,7 +79,7 @@ $profesor = $_POST['profesor'];
 							<button class="btn btn-primary" type="submit" id="cmdSaveCapCalMKB023">
 								<i class="icon-ok icon-on-left bigger-130"></i>
 								Guardar Lista de Asistencia
-							</button>
+							</button><span id="spLoading1" class="marginLeft1em"><i class="fa fa-spinner fa-spin orange" aria-hidden="true"></i> Guardando datos, por favor espere...</span>
 						</div>
 
 					</div>
@@ -113,6 +113,8 @@ jQuery(function($) {
 	var IsExist = false;
 
 	$("#preloaderPrincipal").hide();
+	$("#spLoading1").hide();
+
 	var IdUNA = localStorage.IdUserNivelAcceso;
 
 	$("#btnCloseCapCalMKB002").on("click",function(event){
@@ -258,6 +260,8 @@ jQuery(function($) {
 		}
 
        	$("#preloaderPrincipal").show();
+		$("#cmdSaveCapCalMKB023").prop("disabled",true);
+		$("#spLoading1").show();
 
 		var xIdBolParMKB = '';
 		var xIdBolParMKBCal = '';
@@ -292,10 +296,14 @@ jQuery(function($) {
         		if (json[0].msg=="OK"){
         			alert("Lista de Asistencia guardada con éxito.");
 					// stream.emit("cliente", {mensaje: "PLATSOURCE-CAPLISTASIST-PROP-"+localStorage.grupo_cal});
-					validDate();
+					validDate();					
 					$("#preloaderPrincipal").hide();
+					$("#cmdSaveCapCalMKB023").prop("disabled",false);
+					$("#spLoading1").hide();
     			}else{
 					$("#preloaderPrincipal").hide();
+					$("#cmdSaveCapCalMKB023").prop("disabled",false);
+					$("#spLoading1").hide();
     				alert("Error: "+json[0].msg);	
     			}
 				

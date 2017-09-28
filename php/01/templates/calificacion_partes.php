@@ -5,6 +5,7 @@ include("includes/metas.php");
 $idgrumat  = $_POST['idgrumat'];
 $materia  = $_POST['materia'];
 $num_eval = $_POST["num_eval"];
+$grupo  = $_POST['grupo'];
 
 ?>
 
@@ -30,7 +31,7 @@ $num_eval = $_POST["num_eval"];
 
 		<div class="widget-toolbar orange pull-left no-border ">
 
-		    <h3 id="title"><i class="icon-edit"></i><?php echo $materia; ?></h3>
+		    <h3 id="title"><i class="icon-edit"></i><?php echo $grupo.' | '.$materia; ?></h3>
 
 		</div>
 
@@ -101,6 +102,7 @@ jQuery(function($) {
 
 	var IdGruMat = <?php echo $idgrumat; ?>;
 	var Materia = '<?php echo $materia; ?>';
+	var Grupo = '<?php echo $grupo; ?>';
 	var Num_Eval = <?php echo $num_eval; ?>;
 
 	function getGruMatConPartesList0(){
@@ -209,7 +211,8 @@ jQuery(function($) {
 				idgrumatcon: IdGruMatCon,
 				idgrumat: IdGruMat,
 				materia: Materia,
-				num_eval: Num_Eval
+				num_eval: Num_Eval,
+				grupo: Grupo
 			},
 			function(html) {
 				$("#divUploadImage").html(html);
@@ -233,7 +236,9 @@ jQuery(function($) {
 				idgrumatcon: IdGruMatCon,
 				idgrumat: IdGruMat,
 				parte: Parte,
-				num_eval: Num_Eval
+				num_eval: Num_Eval,
+				grupo: Grupo,
+				materia: Materia
 	            },
 	            function(html) {	                
 	                $("#contentLevel3").html(html).show('slow',function(){

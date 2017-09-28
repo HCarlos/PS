@@ -26,8 +26,8 @@ class oFunctions {
 			$this->IdUser       = 0;
 			$this->User        = "";
 			$this->Pass        = "";
-	 		$this->defaultMail = "gpmedicionweb@gmail.com";
-	 		$this->URL         = "http://siicopre.tecnointel.mx/";
+	 		$this->defaultMail = "informes@platsource.mx";
+	 		$this->URL         = "https://platsource.mx/";
 			$this->IP          = $_SERVER["REMOTE_ADDR"];
 			$this->Host        = gethostbyaddr($_SERVER['REMOTE_ADDR']);
 			$this->fromApp     = 0;

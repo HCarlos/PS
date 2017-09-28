@@ -52,6 +52,7 @@ $de       = $_POST['user'];
 							<th aria-label="iduser: activate to sort column ascending" style="width: 80px;" colspan="1" rowspan="1" aria-controls="sample-table-2" tabindex="0" role="columnheader" class="sorting" >ID</th>
 							<th aria-label="username: activate to sort column ascending" style="width: 80px;" colspan="1" rowspan="1" aria-controls="sample-table-2" tabindex="1" role="columnheader" class="sorting"><i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> USERNAME</th>
 							<th aria-label="nombre_completo: activate to sort column ascending" style="width: 150px;" colspan="1" rowspan="1" aria-controls="sample-table-2" tabindex="1" role="columnheader" class="sorting">NOMBRE COMPLETO</th>
+							<th aria-label="is_mobile: activate to sort column ascending" style="width: 80px;" colspan="1" rowspan="1" aria-controls="sample-table-2" tabindex="1" role="columnheader" class="sorting">IS MOBILE</th>
 							<th aria-label="foto: activate to sort column ascending" style="width: 20px;" colspan="1" rowspan="1" aria-controls="sample-table-2" tabindex="1" role="columnheader" class="sorting">IS PHOTO</th>
 							<th aria-label="" style="width: 80px;" colspan="1" rowspan="1" role="columnheader" class="sorting_disabled"></th>
 						</tr>
@@ -94,7 +95,7 @@ jQuery(function($) {
 	            			"sInfoFiltered": "(De _MAX_ registros)"                                        
 	        			},	
 	        "aaSorting": [[ 0, "desc" ]],			
-			"aoColumns": [ null, null,  null, null, { "bSortable": false }],
+			"aoColumns": [ null, null,  null,  null, null, { "bSortable": false }],
 			"aLengthMenu": [[10, 25, 50,100, -1], [10, 25, 50,100, "Todos"]],
 			"bRetrieve": true,
 			"bDestroy": false
@@ -112,6 +113,8 @@ jQuery(function($) {
 			function(json){
 					$.each(json, function(i, item) {
 						is_photo = item.foto!==""?"<i class='fa fa-user'></i> SI":"";
+						is_mobile = item.is_mobile=="1"?"<i class='green glyphicon glyphicon-ok'></i> SI":"";
+
 						tB +=' 			<tr class="odd">';
 						tB +='';
 						tB +='				<td class=" ">';
@@ -119,21 +122,24 @@ jQuery(function($) {
 						tB +='				</td>';
 						tB +='				<td class=" " >'+item.username+'</td>';
 						tB +='				<td class=" " >'+item.apellidos+' '+item.nombres+'</td>';
+						tB +='				<td class="center" >'+is_mobile+'</td>';
 						tB +='				<td class="center" >'+is_photo+'</td>';
 						tB +='				<td class=" ">';
 						tB +='					<div class="hidden-phone visible-desktop action-buttons">';
-						tB +='';
 						tB +='						<a class="green modUsuarioPro" href="#" id="iduser-'+item.iduser+'" >';
 						tB +='							<i class="icon-pencil bigger-130"></i>';
 						tB +='						</a>';
-						tB +='	';
 						tB +='						<a class="red delUsuario" href="#"  id="delUsuario-'+item.iduser+'" >';
 						tB +='							<i class="icon-trash bigger-130"></i>';
 						tB +='						</a>';
-						tB +='	';
 						tB +='						<a class="blue pwdUsuario" href="#"  id="pwdUsuario-'+item.iduser+'" >';
 						tB +='							<i class="icon-key bigger-130"></i>';
 						tB +='						</a>';
+						if ( item.is_mobile == "1" ){
+							tB +='						<a class="purple mobileUsuario" href="#" id="mobileUsuario-'+item.username+'" >';
+							tB +='							<i class="glyphicon glyphicon-phone bigger-130"></i>';
+							tB +='						</a>';
+						}
 						tB +='					</div>';
 						tB +='';
 						tB +='				</td>';
@@ -156,6 +162,13 @@ jQuery(function($) {
 						var arr = event.currentTarget.id.split('-');
 						obj.setIsTimeLine(false);
 						getChangePWD(arr[1]);
+					});
+
+					$(".mobileUsuario").on("click",function(event){
+						event.preventDefault();
+						var arr = event.currentTarget.id.split('-');
+						obj.setIsTimeLine(false);
+						sendMobileUsuario(arr[1]);
 					});
 
 					$(".delUsuario").on("click",function(event){
@@ -260,7 +273,8 @@ jQuery(function($) {
 
 		var nc = localStorage.nc; //.split("@");
 		$.post(obj.getValue(0) + "cat-usuario-send-message/", {
-				user: nc
+				user: nc,
+				context: 'All'
 			},
 			function(html) {
 				$("#divUploadImage").html(html);
@@ -270,16 +284,20 @@ jQuery(function($) {
 
 	});
 
-/*
-	var stream = io.connect(obj.getValue(4));
-	stream.on("servidor", jsNewUsuario);
-	function jsNewUsuario(datosServer) {
-		var ms = datosServer.mensaje.split("-");
-		if (ms[1]=='USUARIO') {
-			onClickFillTable();
-		}
+	function sendMobileUsuario(username){
+        $("#contentProfile").empty();
+		var nc = localStorage.nc; 
+		$.post(obj.getValue(0) + "cat-usuario-send-message/", {
+				user: username,
+				context: 'send-user-notification/'
+			},
+			function(html) {
+				$("#divUploadImage").html(html);
+				$("#divUploadImage").modal('toggle');
+		}, "html");
+        return false;
 	}
-*/
+
 	
 
 });

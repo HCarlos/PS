@@ -9,6 +9,7 @@ require_once("../oCentura.php");
 $f = oCentura::getInstance();
 
 $user = $_POST['user'];
+$context  = !isset($_POST['context']) ? 'All' : $_POST['context'];
 
 ?>
 <div class="row-fluid">
@@ -78,6 +79,8 @@ jQuery(function($) {
 	    var queryString = $(this).serialize();	
 	    var srcimg = $("#imgFoto").attr('src');
 	    var nameuser = $("#nameuser").html();
+	    var context = '<?= $context ?>';
+	    var User = '<?= $user ?>';
 
 		var x = confirm("En este momento se dispone a enviar esta Notificación vía MOBILE, esto puede tardar algunos minutos.\n\nDesea Continuar?");
 
@@ -85,8 +88,9 @@ jQuery(function($) {
 			$("#preloaderPrincipal").hide();
 			return false;
 		}
-	    $.post(obj.getValue(0) + "sn-android-users-cat/", 
-	    	{user:localStorage.nc,mensaje:$("#mensaje").val()},
+		var url = context == 'All' ? "sn-android-users-cat/" : context; 
+	    $.post(obj.getValue(0) + url, 
+	    	{user:User,mensaje:$("#mensaje").val(),user_sender:localStorage.nc},
 			function(json){
 				// alert(json.length);
 				if (json[0].msg == "OK"){

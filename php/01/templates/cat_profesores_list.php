@@ -62,7 +62,8 @@ $de       = $_POST['user'];
 						<tr role="row">
 							<th aria-label="idprofesor: activate to sort column ascending" style="width: 80px;" colspan="1" rowspan="1" aria-controls="sample-table-2" tabindex="0" role="columnheader" class="sorting" >ID</th>
 							<th aria-label="nombre_profesor: activate to sort column ascending" style="width: 200px;" colspan="1" rowspan="1" aria-controls="sample-table-2" tabindex="1" role="columnheader" class="sorting">profesor</th>
-							<th aria-label="username: activate to sort column ascending" style="width: 200px;" colspan="1" rowspan="1" aria-controls="sample-table-2" tabindex="1" role="columnheader" class="sorting">Username</th>
+							<th aria-label="username: activate to sort column ascending" style="width: 80px;" colspan="1" rowspan="1" aria-controls="sample-table-2" tabindex="2" role="columnheader" class="sorting">Username</th>
+							<th aria-label="is_mobile: activate to sort column ascending" style="width: 80px;" colspan="1" rowspan="1" aria-controls="sample-table-2" tabindex="3" role="columnheader" class="sorting">Is Mobile</th>
 							<th aria-label="" style="width: 200px;" colspan="1" rowspan="1" role="columnheader" class="sorting_disabled"></th>
 						</tr>
 					</thead>
@@ -104,7 +105,7 @@ jQuery(function($) {
 	            			"sInfoFiltered": "(De _MAX_ registros)"                                        
 	        			},	
 	        "aaSorting": [[ 0, "desc" ]],			
-			"aoColumns": [ null, null, null,  { "bSortable": false }],
+			"aoColumns": [ null, null, null, null,  { "bSortable": false }],
 			"aLengthMenu": [[10, 25, 50, -1], [10, 25, 50, "Todos"]],
 			"bRetrieve": true,
 			"bDestroy": false
@@ -121,6 +122,7 @@ jQuery(function($) {
 			function(json){
 				
 					$.each(json, function(i, item) {
+						var is_mobile = item.is_mobile=="1"?"<i class='green glyphicon glyphicon-ok'></i> SI":"";
 
 						tB +=' 			<tr class="odd">';
 						tB +='';
@@ -128,8 +130,9 @@ jQuery(function($) {
 						tB +='					<a class="modProfesorPro" href="#" id="idprof-'+item.idprofesor+'" >'+padl(item.idprofesor,4)+'</a>';
 						tB +='				</td>';
 						tB +='				<td class=" " >'+item.nombre_profesor+'</td>';
-						tB +='				<td class=" " >'+item.username+'</td>';
-						tB +='				<td class=" ">';
+						tB +='				<td class="center" >'+item.username+'</td>';
+						tB +='				<td class="center" >'+is_mobile+'</td>';
+						tB +='				<td class="left">';
 						tB +='					<div class="hidden-phone visible-desktop action-buttons">';
 						tB +='';
 						tB +='						<a class="green modProfesorPro" href="#" id="idprofesor-'+item.idprofesor+'" >';
@@ -139,6 +142,12 @@ jQuery(function($) {
 						tB +='						<a class="red delProfesor" href="#" id="delProfesor-'+item.idprofesor+'" >';
 						tB +='							<i class="icon-trash bigger-130"></i>';
 						tB +='						</a>';
+						if ( item.is_mobile == "1" ){
+							tB +='						<a class="black mobileProfesor" href="#" id="mobileProfesor-'+item.username+'" >';
+							tB +='							<i class="glyphicon glyphicon-phone bigger-130"></i>';
+							tB +='						</a>';
+						}
+
 						tB +='					</div>';
 						tB +='';
 						tB +='				</td>';
@@ -155,6 +164,14 @@ jQuery(function($) {
 						obj.setIsTimeLine(false);
 						getPropprofesor(arr[1]);
 					});
+
+					$(".mobileProfesor").on("click",function(event){
+						event.preventDefault();
+						var arr = event.currentTarget.id.split('-');
+						obj.setIsTimeLine(false);
+						sendMobileProfesor(arr[1]);
+					});
+
 
 					$(".delProfesor").on("click",function(event){
 						event.preventDefault();
@@ -270,18 +287,19 @@ jQuery(function($) {
         return false;
 	}
 
-/*
-	var stream = io.connect(obj.getValue(4));
-	stream.on("servidor", jsNewprofesor);
-	function jsNewprofesor(datosServer) {
-		var ms = datosServer.mensaje.split("-");
-		//alert(datosServer);
-		//obj.setIsTimeLine(true);
-		if (ms[1]=='PROFESORES') {
-			onClickFillTable();
-		}
+	function sendMobileProfesor(username){
+        $("#contentProfile").empty();
+		var nc = localStorage.nc; 
+		$.post(obj.getValue(0) + "cat-usuario-send-message/", {
+				user: username,
+				context: 'send-user-notification/'
+			},
+			function(html) {
+				$("#divUploadImage").html(html);
+				$("#divUploadImage").modal('toggle');
+		}, "html");
+        return false;
 	}
-*/
 	
 
 });

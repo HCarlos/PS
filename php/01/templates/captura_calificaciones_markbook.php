@@ -56,7 +56,7 @@ $grupo = $_POST['grupo'];
 							<button class="btn btn-primary" type="submit" id="cmdSaveCapCalMKB023">
 								<i class="icon-ok icon-on-left bigger-130"></i>
 								Guardar Calificaciones
-							</button>
+							</button><span id="spLoading1" class="marginLeft1em"><i class="fa fa-spinner fa-spin orange" aria-hidden="true"></i> Guardando datos, por favor espere...</span>
 						</div>
 
 					</div>
@@ -86,7 +86,7 @@ jQuery(function($) {
 	var IdGruMatConMKB = <?= $idgrumatconmkb ?>;
 	var Num_Eval = <?= $num_eval ?>;
 
-
+	$("#spLoading1").hide();
 	$("#preloaderPrincipal").hide();
 	var IdUNA = localStorage.IdUserNivelAcceso;
 
@@ -197,6 +197,7 @@ jQuery(function($) {
 
 	$("#frmCapCalMKB030").on("submit",function(event){
 		event.preventDefault();
+		$("#preloaderPrincipal").show();
 
 		var xIdBolParMKB = '';
 		var xIdBolParMKBCal = '';
@@ -220,7 +221,8 @@ jQuery(function($) {
 
 		// alert(xIdBolObsMKBCal);
 		// return false;
-
+		$("#cmdSaveCapCalMKB023").prop("disabled",true);
+		$("#spLoading1").show();
 		var nc = "u="+localStorage.nc+"&cal0="+xIdBolParMKB+"&cal1="+xIdBolParMKBCal+"&obs1="+xIdBolObsMKBCal;
 		$.post(obj.getValue(0)+"data/", { o:46, t:1, p:52, c:nc, from:0, cantidad:0, s:"" },
 			function(json){
@@ -229,9 +231,13 @@ jQuery(function($) {
 					//stream.emit("cliente", {mensaje: "PLATSOURCE-CAPCAL-PROP-"+localStorage.grupo_cal});
 					getCalMKB();
 					$("#preloaderPrincipal").hide();
+					$("#cmdSaveCapCalMKB023").prop("disabled",false);
+					$("#spLoading1").hide();
     			}else{
-					$("#preloaderPrincipal").hide();
     				alert("Error: "+json[0].msg);	
+					$("#preloaderPrincipal").hide();
+					$("#cmdSaveCapCalMKB023").prop("disabled",false);
+					$("#spLoading1").hide();
     			}
 				
 			}, "json"

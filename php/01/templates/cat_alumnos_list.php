@@ -44,6 +44,7 @@ $de       = $_POST['user'];
 							<th aria-label="idalumno: activate to sort column ascending" style="width: 80px;" colspan="1" rowspan="1" aria-controls="sample-table-2" tabindex="0" role="columnheader" class="sorting" >ID</th>
 							<th aria-label="nombre_alumno: activate to sort column ascending" style="width: 200px;" colspan="1" rowspan="1" aria-controls="sample-table-2" tabindex="1" role="columnheader" class="sorting">Alumno</th>
 							<th aria-label="usuario: activate to sort column ascending" style="width: 60px;" colspan="1" rowspan="1" aria-controls="sample-table-2" tabindex="1" role="columnheader" class="sorting">Usuario</th>
+							<th aria-label="is_mobile: activate to sort column ascending" style="width: 80px;" colspan="1" rowspan="1" aria-controls="sample-table-2" tabindex="1" role="columnheader" class="sorting">Is Mobile</th>
 							<th aria-label="mod: activate to sort column ascending" style="width: 5px;" colspan="1" rowspan="1" aria-controls="sample-table-2" tabindex="1" role="columnheader" class="sorting">M</th>
 							<th aria-label="" style="width: 200px;" colspan="1" rowspan="1" role="columnheader" class="sorting_disabled"></th>
 						</tr>
@@ -88,7 +89,7 @@ jQuery(function($) {
 	            			"sInfoFiltered": "(De _MAX_ registros)"                                        
 	        			},	
 	        "aaSorting": [[ 0, "desc" ]],			
-			"aoColumns": [ null, null, null, null,  { "bSortable": false }],
+			"aoColumns": [ null, null, null, null, null,  { "bSortable": false }],
 			"aLengthMenu": [[10, 25, 50, -1], [10, 25, 50, "Todos"]],
 			"bRetrieve": true,
 			"bDestroy": false
@@ -107,7 +108,7 @@ jQuery(function($) {
 					$.each(json, function(i, item) {
 
 						var vad = parseInt(item.valid_for_admin,0) == 0 ? ' <i class="icon icon-certificate red"></i> ' : '';
-
+						var is_mobile = item.is_mobile=="1"?"<i class='green glyphicon glyphicon-ok'></i> SI":"";
 						tB +=' 			<tr class=" odd ">';
 						tB +='';
 						tB +='				<td class=" ">';
@@ -115,6 +116,7 @@ jQuery(function($) {
 						tB +='				</td>';
 						tB +='				<td class=" " >'+item.nombre_alumno+'</td>';
 						tB +='				<td class=" " >'+item.username+'</td>';
+						tB +='				<td class="center" >'+is_mobile+'</td>';
 						tB +='				<td class="center" >'+vad+'</td>';
 						tB +='				<td class=" ">';
 						tB +='					<div class="hidden-phone visible-desktop action-buttons">';
@@ -127,16 +129,13 @@ jQuery(function($) {
 							tB +='						<a class="red delAlumno" href="#"  id="delAlumno-'+item.idalumno+'" >';
 							tB +='							<i class="icon-trash bigger-130"></i>';
 							tB +='						</a>';
-							tB +='	';
 						}
 						tB +='						<a class="blue configMedAlu" href="#"  id="configMedAlu-'+item.idalumno+'-'+item.nombre_alumno+'" >';
 						tB +='							<i class="fa fa-user-md bigger-150"></i>';
 						tB +='						</a>';
-						tB +='	';
 						tB +='						<a class="yellow configEmerAlu " href="#"  id="configEmerAlu-'+item.idalumno+'-'+item.nombre_alumno+'" >';
 						tB +='							<i class="fa fa fa-phone bigger-150"></i>';
 						tB +='						</a>';
-						tB +='	';
 						if ( parseInt(item.genero,0) == 0 ){
 							tB += '			<a class="pink modGruMatProKRDX02 tooltip-info " href="#" id="idgrualu2two-'+item.idalumno+'-'+item.idusername+'" data-rel="tooltip" data-placement="top" data-original-title="Ver Kardex" title="Ver Kardex" >';
 							tB += '				<i class="fa fa-female bigger-150"></i>';
@@ -144,6 +143,14 @@ jQuery(function($) {
 							tB += '			<a class="blue modGruMatProKRDX02 tooltip-info " href="#" id="idgrualu2two-'+item.idalumno+'-'+item.idusername+'" data-rel="tooltip" data-placement="top" data-original-title="Ver Kardex" title="Ver Kardex" >';
 							tB += '				<i class="fa fa-male bigger-150"></i>';
 						}
+						tB +='						</a>';
+
+						if ( item.is_mobile == "1" ){
+							tB +='						<a class="black mobileAlumno" href="#" id="mobileAlumno-'+item.username+'" >';
+							tB +='							<i class="glyphicon glyphicon-phone bigger-130"></i>';
+							tB +='						</a>';
+						}
+
 						tB +='					</div>';
 						tB +='';
 						tB +='				</td>';
@@ -207,6 +214,13 @@ jQuery(function($) {
 						}else{
 							alert("Aún no se ha generado un Usuario a este alumno");
 						}	
+					});
+
+					$(".mobileAlumno").on("click",function(event){
+						event.preventDefault();
+						var arr = event.currentTarget.id.split('-');
+						obj.setIsTimeLine(false);
+						sendMobileAlumno(arr[1]);
 					});
 
 					if (init==true){
@@ -337,18 +351,19 @@ jQuery(function($) {
         return temp;
  	}
 
-/*
-	var stream = io.connect(obj.getValue(4));
-	stream.on("servidor", jsNewAlumno);
-	function jsNewAlumno(datosServer) {
-		var ms = datosServer.mensaje.split("-");
-		//alert(datosServer);
-		//obj.setIsTimeLine(true);
-		if (ms[1]=='ALUMNOS') {
-			//onClickFillTable();
-		}
+	function sendMobileAlumno(username){
+        $("#contentProfile").empty();
+		var nc = localStorage.nc; 
+		$.post(obj.getValue(0) + "cat-usuario-send-message/", {
+				user: username,
+				context: 'send-user-notification/'
+			},
+			function(html) {
+				$("#divUploadImage").html(html);
+				$("#divUploadImage").modal('toggle');
+		}, "html");
+        return false;
 	}
-*/
 	
 
 });

@@ -143,6 +143,28 @@ class oCentura {
 	    	return $ret;
 	}
 
+	private function getClaveNivelFromIdGruAlu($Valor,$IdEmp, $type = 0){
+			switch ($type) {
+				case 1:
+			    	$query = "SELECT clave_nivel FROM _viNivel_Grupos WHERE idgrupo = $Valor AND idemp = $IdEmp LIMIT 1";
+					break;		
+				default:
+			    	$query = "SELECT clave_nivel FROM _viGrupo_Alumnos WHERE idgrualu = $Valor AND idemp = $IdEmp LIMIT 1";
+					break;
+			}
+
+			$Conn = new voConnPDO();
+			$result = $Conn->queryFetchAllAssocOBJ($query);
+
+			if (!$result) {
+    				$ret=0;
+			}else{
+				   	$ret= intval($result[0]->clave_nivel);
+			}
+			$Conn = null;
+	    	return $ret;
+	}
+
 	private function getCicloFromIdEmp($idemp=0){
 	    $query = "SELECT idciclo FROM cat_ciclos WHERE idemp = $idemp AND predeterminado = 1 AND status_ciclo = 1 LIMIT 1";
 
@@ -452,9 +474,10 @@ class oCentura {
 							case 11:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT concat(razon_social,' - ',rfc) AS label, idregfis AS data 
-										FROM _viRegFis WHERE idemp = $idemp AND status_regfis = 1
-										ORDER BY razon_social ASC ";
+								// SELECT concat(razon_social,' - ',rfc) AS label, idregfis AS data 
+								$query = "SELECT idregfis AS label, idregfis AS data 
+										FROM cat_registros_fiscales WHERE idemp = $idemp AND status_regfis = 1
+										ORDER BY idregfis DESC ";
 								break;		
 							case 12:
 								parse_str($arg);
@@ -670,7 +693,7 @@ class oCentura {
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
 								$query = "SELECT concat(producto,' ',medida1) AS label, idproducto AS data, costo_unitario
-										FROM _viProductos WHERE idemp = $idemp AND status_producto = 1
+										FROM _viProductos WHERE idemp = $idemp AND status_producto = 1 AND (producto LIKE('$empieza_con%') )
 										ORDER BY label ASC ";
 								break;		
 							case 39:
@@ -1187,12 +1210,13 @@ class oCentura {
 							$iduser = $this->getIdUserFromAlias($u);
 							$idemp = $this->getIdEmpFromAlias($u);
 							$idciclo = $this->getCicloFromIdEmp($idemp);
+							$clave_nivel = $this->getClaveNivelFromIdGruAlu($idgrupo,$idemp,1);
 
 		          			$ar = explode(".",$arg);
 		          			$item = explode("|",$ar[0]);
 							foreach($item AS $i=>$valor){
 								if ((int)($item[$i])>0){
-									$query = "INSERT INTO grupo_alumnos(idciclo,idgrupo,idalumno,idemp,ip,host,creado_por,creado_el)VALUES($idciclo,$ar[1],$item[$i],$idemp,'$ip','$host',$iduser,NOW())";
+									$query = "INSERT INTO grupo_alumnos(idciclo,idgrupo,idalumno,clave_nivel,idemp,ip,host,creado_por,creado_el)VALUES($idciclo,$ar[1],$item[$i],$clave_nivel,$idemp,'$ip','$host',$iduser,NOW())";
 									$vRet = $this->guardarDatos($query);
 								}
 							}
@@ -2567,14 +2591,14 @@ class oCentura {
 						switch($tipo){
 							case 0:
 								parse_str($arg);
-								$idusr = $this->getIdUserFromAlias($user);
-								$idemp = $this->getIdEmpFromAlias($user);
-
+								$idusr       = $this->getIdUserFromAlias($user);
+								$idemp       = $this->getIdEmpFromAlias($user);
+								$clave_nivel = $this->getClaveNivelFromIdGruAlu($idgrupo,$idemp,1);
+								
 								$status_grumat = !isset($status_grumat)?0:1;	
 								$isoficial = !isset($isoficial)?0:1;	
 								$bloqueado = !isset($bloqueado)?0:1;	
 								$ispai = !isset($ispai)?0:1;
-								//
 								
 								$orden_impresion = intval($orden_impresion); 
 								$orden_historial = intval($orden_historial); 
@@ -2599,6 +2623,7 @@ class oCentura {
 																	bloqueado,
 																	eval_default,
 																	eval_mod,
+																	clave_nivel,
 																	status_grumat,
 																	idemp,ip,host,creado_por,creado_el)
 											VALUES(
@@ -2620,6 +2645,7 @@ class oCentura {
 																	$bloqueado,
 																	$eval_default,
 																	$eval_mod,
+																	$clave_nivel,
 																	$status_grumat,
 																	$idemp,'$ip','$host',$idusr,NOW())";
 								$vRet = $this->guardarDatos($query);
@@ -2722,15 +2748,21 @@ class oCentura {
 								break;		
 							case 5:
 								parse_str($arg);
-								$idusr = $this->getIdUserFromAlias($u);
-								$idemp = $this->getIdEmpFromAlias($u);
+								$idusr       = $this->getIdUserFromAlias($u);
+								$idemp       = $this->getIdEmpFromAlias($u);
+								$idciclo     = $this->getCicloFromIdEmp($idemp);
+								$clave_nivel = $this->getClaveNivelFromIdGruAlu($idgrualu,$idemp,0);
 								$query = "INSERT INTO boletas(
 																	idgrumat,
 																	idgrualu,
+																	clave_nivel,
+																	idciclo,
 																	idemp,ip,host,creado_por,creado_el)
 											VALUES(
 																	$idgrumat,
 																	$idgrualu,
+																	$clave_nivel,
+																	$idciclo,
 																	$idemp,'$ip','$host',$idusr,NOW())";
 								$vRet = $this->guardarDatos($query);
 								break;		
@@ -5251,7 +5283,7 @@ class oCentura {
 				$iduser = $this->getIdUserFromAlias($u);
 		        $idemp = $this->getIdEmpFromAlias($u);
 				
-				$query = "SELECT iduser, username, apellidos, nombres, foto
+				$query = "SELECT iduser, username, apellidos, nombres, foto, is_mobile
 							FROM _viUsuarios 
 							WHERE  idemp = $idemp AND status_usuario = 1  AND idusernivelacceso <= 100 
 							ORDER BY iduser DESC";
@@ -5328,7 +5360,7 @@ class oCentura {
 			case 9:
 				parse_str($cad);
 				$idemp = $this->getIdEmpFromAlias($u);
-				$query = "SELECT idalumno, nombre_alumno, username, genero, valid_for_admin, idusuario AS idusername
+				$query = "SELECT idalumno, nombre_alumno, username, genero, valid_for_admin, idusuario AS idusername, is_mobile
 								FROM _viAlumnos
 							WHERE idemp = $idemp ORDER BY idalumno DESC";
 				break;
@@ -5341,7 +5373,7 @@ class oCentura {
 			case 11:
 				parse_str($cad);
 		        $idemp = $this->getIdEmpFromAlias($u);
-				$query = "SELECT idprofesor, nombre_profesor, username, cel1, cel2, direccion
+				$query = "SELECT idprofesor, nombre_profesor, username, cel1, cel2, direccion, is_mobile
 								FROM _viProfesores
 							WHERE idemp = $idemp ORDER BY idprofesor DESC";
 				break;
@@ -5393,8 +5425,8 @@ class oCentura {
 			case 19:
 				parse_str($cad);
 		        $idemp = $this->getIdEmpFromAlias($u);
-				$query = "SELECT idpersona, nombre_persona, username
-								FROM _viPersonas
+				$query = "SELECT idpersona, nombre_persona, username, is_mobile
+								FROM _viPersonas per
 							WHERE idemp = $idemp ORDER BY idpersona DESC";
 				break;
 			case 20:

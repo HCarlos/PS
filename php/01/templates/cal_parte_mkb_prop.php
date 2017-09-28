@@ -64,7 +64,7 @@ $num_eval = $_POST['num_eval'];
 	    <div class="form-group w96" style='margin-right: 3em; margin-top: 1em;'>
 	    	<button type="button" class="btn btn-default pull-right" data-dismiss="modal" id="closeFormUpload"><i class="icon-signout"></i>Cerrar</button>
 	    	<span class="muted"></span>
-	    	<button type="submit" class="btn btn-primary pull-right" style='margin-right: 4em;'><i class="icon-save"></i>Guardar</button>
+	    	<button type="submit" class="btn btn-primary pull-right" style="margin-right: 4em;" id="cmdSaveElem01"><i class="icon-save"></i>Guardar</button><span id="spLoading1" class="marginLeft1em"><i class="fa fa-spinner fa-spin orange" aria-hidden="true"></i> Guardando...</span>
 		</div>
 
 	</form>
@@ -75,11 +75,8 @@ $num_eval = $_POST['num_eval'];
 
 jQuery(function($) {
 
-	// var stream = io.connect(obj.getValue(4));
-
-	//alert($("#num_eval_matcon").val());
-
 	$("#preloaderPrincipal").hide();
+	$("#spLoading1").hide();
 
 	$("#descripcion").focus();
 
@@ -103,6 +100,8 @@ jQuery(function($) {
 		event.preventDefault();
 
 		$("#preloaderPrincipal").show();
+		$("#cmdSaveElem01").prop("disabled",true);
+		$("#spLoading1").show();
 
 	    var queryString = $(this).serialize();	
 	    
@@ -118,10 +117,13 @@ jQuery(function($) {
             function(json) {
             		if (json[0].msg=="OK"){
             			alert("Datos guardados con éxito.");
-						// stream.emit("cliente", {mensaje: "PLATSOURCE-GRUMATCONMKB-PROP-"+IdGruMatConMKB0});
+						$("#cmdSaveElem01").prop("disabled",false);
+						$("#spLoading1").hide();
 						$("#preloaderPrincipal").hide();
 						$("#divUploadImage").modal('hide');
         			}else{
+						$("#cmdSaveElem01").prop("disabled",false);
+						$("#spLoading1").hide();
 						$("#preloaderPrincipal").hide();
         				alert(json[0].msg);	
         			}

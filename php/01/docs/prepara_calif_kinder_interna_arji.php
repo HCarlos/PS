@@ -61,7 +61,8 @@ foreach ($arrAlu as $i => $value) {
 $M->Actualizar_Promedios_Grupales_Idiomas(0,0,$user,$arrAlu[0],0);
 $M->Actualizar_Promedios_Grupales_Idiomas(0,0,$user,$arrAlu[0],1);
 
-$ret[0]->msg = "OK";
+$ret[0] = array("msg" => "OK");
+
 $m = json_encode($ret);
 
 echo $m;

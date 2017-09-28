@@ -400,7 +400,7 @@ $idtarea = $_POST['idtarea'];
             <div class="form-group w96" style='margin-right: 3em; margin-top: 1em;'>
                 <button type="button" class="btn btn-default pull-right closeFormUpload" data-dismiss="modal" ><i class="icon-signout "></i>Cerrar</button>
                 <span class="muted"></span>
-                <button type="submit" class="btn btn-primary pull-right" style='margin-right: 4em;'><i class="icon-save"></i>Guardar</button>
+                <button type="submit" class="btn btn-primary pull-right" style="margin-right: 4em;" id="cmdSaveTask1"><i class="icon-save"></i>Guardar</button><span id="spLoading1" class="marginLeft1em"><i class="fa fa-spinner fa-spin orange" aria-hidden="true"></i> Guardando datos, por favor espere...</span>
             </div>
 
         </form>
@@ -412,6 +412,7 @@ jQuery(function($) {
 
 
 	$("#preloaderPrincipal").hide();
+    $("#spLoading1").hide();
 
 	var idtarea = <?php echo $idtarea ?>;
 
@@ -420,6 +421,8 @@ jQuery(function($) {
         event.preventDefault();
 
         $("#preloaderPrincipal").show();
+        $("#spLoading1").show();
+        $("#cmdSaveTask1").prop("disabled",true);
 
         var queryString = $(this).serialize();  
         
@@ -429,17 +432,18 @@ jQuery(function($) {
         function(json) {
                 if (json[0].msg=="OK"){
                     alert("Datos guardados con éxito");
-                    // stream.emit("cliente", {mensaje: "PLATSOURCE-TAREA_EDIT-PROP-"+IdTarea});
                     $("#preloaderPrincipal").hide();
-                    // if (is_fotos){
-                        $("#contentProfile").hide(function(){
-                            $("#contentProfile").html("");
-                            $("#contentMain").show();
-                        });
-                    // }
+                    $("#contentProfile").hide(function(){
+                        $("#contentProfile").empty();
+                        $("#spLoading1").hide();
+                        $("#cmdSaveTask1").prop("disabled",false);
+                        $("#contentMain").show();
+                    });
                     
                 }else{
                     $("#preloaderPrincipal").hide();
+                    $("#spLoading1").hide();
+                    $("#cmdSaveTask1").prop("disabled",false);
                     alert(json.msg);    
                 }
 
@@ -498,7 +502,7 @@ jQuery(function($) {
 		event.preventDefault();
 		$("#preloaderPrincipal").hide();
 		$("#contentProfile").hide(function(){
-			$("#contentProfile").html("");
+			$("#contentProfile").empty();
 			$("#contentMain").show();
 		});
 		resizeScreen();

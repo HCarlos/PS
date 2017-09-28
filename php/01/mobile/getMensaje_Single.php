@@ -116,12 +116,11 @@ html {
 
               <?php 
 
-
                     require_once("../oCenturaPDO.php");
                     $F = oCenturaPDO::getInstance();
 
-                    $iduser         = $_GET['iduser'];
-                    $idemp          = $_GET['idemp'];
+                    $iduser          = $_GET['iduser'];
+                    $idemp           = $_GET['idemp'];
                     $idmobilemensaje = $_GET['idmobilemensaje'];
 
                     $arg = "iduser=$iduser&idemp=$idemp&idmobilemensaje=$idmobilemensaje";

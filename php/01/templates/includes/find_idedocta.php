@@ -8,6 +8,8 @@ $user = $_POST["user"];
 		<h4>Buscar ID de Pago </h4>
 	</div>
 
+	<div class="alert alert-danger" role="alert" id="msgEsp"></div>
+
 	<div class="widget-body">
 		<div class="widget-main">
 			<form class="form-inline padBot2em" id="frmFindIdEdoCta0">
@@ -98,7 +100,8 @@ $user = $_POST["user"];
 	var pIdEdoCta = 0;
 	var pIdUser = localStorage.IdUser;
 	var pUsuario = localStorage.nc;
-
+	var UUID = "";
+	$("#msgEsp").hide();
 
 	$("#frmFindIdEdoCta0").on("submit",function(event){
 		event.preventDefault();
@@ -124,7 +127,7 @@ $user = $_POST["user"];
         	}
         	$("#fndfamilia0").html("<strong class='blue'>"+json[0].idfamilia+"</strong> <strong class='green marginLeft2em'>"+json[0].familia+' ('+json[0].tutor+')'+"</strong>");
         	$("#fndalumno0").html("<strong class='blue'>"+json[0].idalumno+"</strong> <strong class='green marginLeft2em'>"+json[0].alumno+"</strong>");
-    		$("#fndconcepto0").html("<strong class='green'>"+json[0].concepto + ' ' + json[0].mes+ '  (' + json[0].cvencimiento+ ')  <span class="'+classColor+'">' + json[0].statusmovto +"</span></strong>");
+    		$("#fndconcepto0").html("<strong class='blue'>"+json[0].idconcepto+"</strong> <strong class='green marginLeft2em'>"+json[0].concepto + ' ' + json[0].mes+ '  (' + json[0].cvencimiento+ ')  <span class="'+classColor+'">' + json[0].statusmovto +"</span></strong>");
 
     		$("#fndsubtotal0").html("<strong class='green'>"+json[0].subtotal  +"</strong>");
     		$("#fnddesctobeca0").html("<strong class='green'>"+json[0].descto_becas  +"</strong>");
@@ -138,7 +141,14 @@ $user = $_POST["user"];
     		var status_pago = parseInt(json[0].status_movto,0);
 
     		if ((status_pago == 1 || status_pago == 2) && json[0].pdf == "" ){
+				$("#msgEsp").hide();
     			$("#reviveIdEdoCta").show();
+ 		   		$("#reviveIdEdoCta").prop("disabled",false);
+    		}else{
+				$("#msgEsp").show();
+				$("#msgEsp").html("<strong>Item!</strong> ya facturado");
+    			$("#reviveIdEdoCta").show();
+	   			$("#reviveIdEdoCta").prop("disabled",true);
     		}
 
     		pIdEdoCta = parseInt(json[0].idedocta,0);

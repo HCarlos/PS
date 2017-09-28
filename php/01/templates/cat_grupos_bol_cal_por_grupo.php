@@ -347,6 +347,15 @@ jQuery(function($) {
 
 	$("#prepareCal").on("click",function(event){
 		event.preventDefault();
+
+		var xquestion = confirm("Este proceso puede dudar algunos minutos, desea continuar?");
+
+		console.log(xquestion);
+
+		if (!xquestion){
+			return false;
+		}
+
 		$("#preloaderPrincipal").show();
 		$("#spnwork0").show();
 		$("#prepareCal").hide();

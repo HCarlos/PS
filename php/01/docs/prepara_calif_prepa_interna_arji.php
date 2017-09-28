@@ -51,7 +51,7 @@ foreach ($arrAlu as $i => $value) {
 
 }
 
-$ret[0]->msg = "OK";
+$ret[0] = array("msg" => "OK");
 $m = json_encode($ret);
 echo $m;
 
