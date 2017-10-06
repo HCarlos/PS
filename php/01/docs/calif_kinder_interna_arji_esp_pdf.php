@@ -1,9 +1,10 @@
 <?php
-/*error_reporting(E_ALL);
+
+error_reporting(E_ALL);
 ini_set('display_errors', TRUE);
 ini_set('display_startup_errors', TRUE);
 ini_set('default_socket_timeout', 6000);
-*/
+
 $o = $_POST['o'];
 $c = $_POST['c'];
 $t = $_POST['t'];
@@ -12,7 +13,7 @@ $cantidad = $_POST['cantidad'];
 $s = $_POST['s'];
 
 if (!isset($c)){
-	header('Location: http://platsource.mx/');
+	header('Location: https://platsource.mx/');
 }else{
 	if ( $c=='0' ){
 		$u = $_POST['u'];
@@ -202,9 +203,7 @@ $pdf->fechaImpresa = $Q->getWith3LetterMonthD(date('Y-m-d'));
 $d=0;
  
 foreach ($arrAlu as $i => $value) {
-	// $M->Llamar_Actualizar_Promedios_Padres_from_IdGruAlu($user,$arrAlu[$i]);
-	
-	// $result = $f->getQuerys(53,"idgrualu=".$arrAlu[$i]."&idioma=".$d,0,0,0,array(),"  ",1);
+
 	$result = $f->getQuerys(53,"idgrualu=".$arrAlu[$i]."&idioma=".$d,0,0,0,array()," order by orden_impresion asc ",1);
 	if ( count($result) > 0 ){
 

@@ -141,7 +141,7 @@ jQuery(function($) {
 					var arrPag = [];
 					$.each(json, function(i, item) {
 
-							var id = item.idedocta;
+							var id = parseInt(item.idedocta,0);
 							var idpago = item.idpago;
 							var idconcepto = parseInt(item.idconcepto,0);
 							var pagosDiv = parseInt(item.is_pagos_diversos,0); 
@@ -168,6 +168,9 @@ jQuery(function($) {
 							if ( arrPag.indexOf(idconcepto) == -1 || pagosDiv == 0 ) {
 								tB +='						<a class="btn btn-minier  btn-success modTutorPagoPro0" href="#" id="idpago-'+id+'-'+id+'-'+item.concepto2+'-'+item.total+'-'+Tutor+'" data-rel="tooltip" data-placement="top" title="Realizar Pago">Pagar</a>';
 								arrPag.push(idconcepto);
+								if ( id == 55914){
+									tB +='						<a class="btn btn-minier  btn-info modTutorPagoPro1" href="#" id="idpago-'+id+'-'+id+'-'+item.concepto2+'-'+item.total+'-'+Tutor+'" data-rel="tooltip" data-placement="top" title="Realizar Pago">Pagar</a>';
+								}
 							}else{
 								tB +='';
 							}
@@ -191,6 +194,13 @@ jQuery(function($) {
 						var arr = event.currentTarget.id.split('-');
 						obj.setIsTimeLine(false);
 						getPropPagoTutor2(arr[1],arr[2],arr[3],arr[4],arr[5]);
+					});
+
+					$(".modTutorPagoPro1").on("click",function(event){
+						event.preventDefault();
+						var arr = event.currentTarget.id.split('-');
+						obj.setIsTimeLine(false);
+						getPropPagoTutor3(arr[1],arr[2],arr[3],arr[4],arr[5]);
 					});
 
 					$('[data-rel=tooltip]').tooltip();
@@ -271,6 +281,48 @@ jQuery(function($) {
 
 
 	}
+
+
+	function getPropPagoTutor3(IdPago, Referencia, Concepto2, Importe, Tutor){
+
+		var oIdUser = localStorage.IdUser;
+        var urlRetorno = "https://platsource.mx/savePagoFromWeb2MPE/";
+
+
+        var PARAMS = {
+        				importe:Importe,
+        				referencia:IdPago,
+        				urlretorno:urlRetorno,
+        				idexpress:"928",
+        				financiamiento:"0",
+        				plazos:"",
+        				mediospago:"111000"
+        			};
+
+    	var url = "https://www.adquiramexico.com.mx:443/mExpress/pago/avanzado";
+
+        // var tit = "Tutor-Pago-"+nc+'-'+IdPago;
+
+        // trackOutboundLink(url,tit);
+
+        var temp=document.createElement("form");
+        temp.action=url;
+        temp.method="POST";
+        temp.target="_blank";
+        temp.style.display="none";
+        for(var x in PARAMS) {
+            var opt=document.createElement("textarea");
+            opt.name=x;
+            opt.value=PARAMS[x];
+            temp.appendChild(opt);
+        }
+        document.body.appendChild(temp);
+        temp.submit();
+        return temp;
+
+
+	}
+
 
     $("#preloaderPrincipal").show();
 

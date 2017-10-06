@@ -146,10 +146,19 @@ class oCentura {
 	private function getClaveNivelFromIdGruAlu($Valor,$IdEmp, $type = 0){
 			switch ($type) {
 				case 1:
-			    	$query = "SELECT clave_nivel FROM _viNivel_Grupos WHERE idgrupo = $Valor AND idemp = $IdEmp LIMIT 1";
+			    	$query = "SELECT clave_nivel as valor FROM _viNivel_Grupos WHERE idgrupo = $Valor AND idemp = $IdEmp LIMIT 1";
+					break;		
+				case 2:
+			    	$query = "SELECT idioma as valor FROM _viGrupo_Materias WHERE idgrumat = $Valor AND idemp = $IdEmp LIMIT 1";
+					break;		
+				case 3:
+			    	$query = "SELECT padre as valor FROM _viGrupo_Materias WHERE idgrumat = $Valor AND idemp = $IdEmp LIMIT 1";
+					break;		
+				case 4:
+			    	$query = "SELECT idmatclas as valor FROM _viGrupo_Materias WHERE idgrumat = $Valor AND idemp = $IdEmp LIMIT 1";
 					break;		
 				default:
-			    	$query = "SELECT clave_nivel FROM _viGrupo_Alumnos WHERE idgrualu = $Valor AND idemp = $IdEmp LIMIT 1";
+			    	$query = "SELECT clave_nivel as valor FROM _viGrupo_Alumnos WHERE idgrualu = $Valor AND idemp = $IdEmp LIMIT 1";
 					break;
 			}
 
@@ -159,7 +168,7 @@ class oCentura {
 			if (!$result) {
     				$ret=0;
 			}else{
-				   	$ret= intval($result[0]->clave_nivel);
+				   	$ret= intval($result[0]->valor);
 			}
 			$Conn = null;
 	    	return $ret;
@@ -280,7 +289,6 @@ class oCentura {
 	}
 
 	public function getArray($query){
-			$rs=0;
 		 	$Conn = new voConnPDO();
 			$result = $Conn->queryFetchAllAssocOBJ($query);
 			$Conn = null;
@@ -1210,13 +1218,14 @@ class oCentura {
 							$iduser = $this->getIdUserFromAlias($u);
 							$idemp = $this->getIdEmpFromAlias($u);
 							$idciclo = $this->getCicloFromIdEmp($idemp);
-							$clave_nivel = $this->getClaveNivelFromIdGruAlu($idgrupo,$idemp,1);
 
 		          			$ar = explode(".",$arg);
 		          			$item = explode("|",$ar[0]);
 							foreach($item AS $i=>$valor){
 								if ((int)($item[$i])>0){
-									$query = "INSERT INTO grupo_alumnos(idciclo,idgrupo,idalumno,clave_nivel,idemp,ip,host,creado_por,creado_el)VALUES($idciclo,$ar[1],$item[$i],$clave_nivel,$idemp,'$ip','$host',$iduser,NOW())";
+									$clave_nivel = $this->getClaveNivelFromIdGruAlu($ar[1],$idemp,1);
+									$query = "INSERT INTO grupo_alumnos(idciclo,idgrupo,idalumno,clave_nivel,idemp,ip,host,creado_por,creado_el)
+																 VALUES($idciclo,$ar[1],$item[$i],$clave_nivel,$idemp,'$ip','$host',$iduser,NOW())";
 									$vRet = $this->guardarDatos($query);
 								}
 							}
@@ -2752,17 +2761,26 @@ class oCentura {
 								$idemp       = $this->getIdEmpFromAlias($u);
 								$idciclo     = $this->getCicloFromIdEmp($idemp);
 								$clave_nivel = $this->getClaveNivelFromIdGruAlu($idgrualu,$idemp,0);
+								$idioma      = $this->getClaveNivelFromIdGruAlu($idgrumat,$idemp,2);
+								$padre       = $this->getClaveNivelFromIdGruAlu($idgrumat,$idemp,3);
+								$idmatclas   = $this->getClaveNivelFromIdGruAlu($idgrumat,$idemp,4);
 								$query = "INSERT INTO boletas(
 																	idgrumat,
 																	idgrualu,
 																	clave_nivel,
 																	idciclo,
+																	idioma,
+																	padre,
+																	idmatclas,
 																	idemp,ip,host,creado_por,creado_el)
 											VALUES(
 																	$idgrumat,
 																	$idgrualu,
 																	$clave_nivel,
 																	$idciclo,
+																	$idioma,
+																	$padre,
+																	$idmatclas,
 																	$idemp,'$ip','$host',$idusr,NOW())";
 								$vRet = $this->guardarDatos($query);
 								break;		
@@ -2843,6 +2861,14 @@ class oCentura {
 								$num_eval--; 
 
 								for ($i=0; $i < count($arrBolCon); $i++) {
+									/*
+									$idemp       = $this->getIdEmpFromAlias($user);
+									$idciclo     = $this->getCicloFromIdEmp($idemp);
+									$clave_nivel = $this->getClaveNivelFromIdGruAlu($idgrualu,$idemp,0);
+									$idioma      = $this->getClaveNivelFromIdGruAlu($idgrumat,$idemp,2);
+									$padre       = $this->getClaveNivelFromIdGruAlu($idgrumat,$idemp,3);
+									$idmatclas   = $this->getClaveNivelFromIdGruAlu($idgrumat,$idemp,4);
+									*/
 									$con = "con".$num_eval;		 
 									$query = "UPDATE boletas SET 	
 																	".$con." = ".$arrBolConCal[$i].",
@@ -5767,10 +5793,10 @@ class oCentura {
 			        $nina = "suminagpo";
 		        }else{
 			        $numval = intval($numval)-1;
-			        $ncal = "bol.cal".$numval;
-			        $ncon = "bol.con".$numval;
-			        $nina = "bol.ina".$numval;
-			        $nobs = "bol.obs".$numval;
+			        $ncal = "cal".$numval;
+			        $ncon = "con".$numval;
+			        $nina = "ina".$numval;
+			        $nobs = "obs".$numval;
 		        }
 		        
 		        if ( $numval == 9 ){
@@ -5783,13 +5809,13 @@ class oCentura {
 								WHERE idgrualu = $idgrualu AND idgrumat = $idgrumat $otros ";
 				}else{
 					
-					$qrytemp = "SELECT ".$ncal." AS cal, ".$ncon." AS con, ".$nina." AS ina, ".$nobs." AS obs, bol.idmatclas, bol.padre
-									FROM _viBoletas bol
-								WHERE bol.idgrumat = $idgrumat AND bol.idgrualu = $idgrualu $otros";
+					// $qrytemp = "SELECT ".$ncal." AS cal, ".$ncon." AS con, ".$nina." AS ina, ".$nobs." AS obs, bol.idmatclas, bol.padre
+					// 				FROM _viBoletas bol
+					// 			WHERE bol.idgrumat = $idgrumat AND bol.idgrualu = $idgrualu $otros";
 
-					$query = "SELECT ".$ncal." AS cal, ".$ncon." AS con, ".$nina." AS ina, ".$nobs." AS obs, bol.idmatclas, bol.padre
-									FROM _viBoletas bol
-								WHERE bol.idgrumat = $idgrumat AND bol.idgrualu = $idgrualu $otros";
+					$query = "SELECT ".$ncal." AS cal, ".$ncon." AS con, ".$nina." AS ina, ".$nobs." AS obs, idmatclas, padre
+									FROM _viBoletas
+								WHERE idgrumat = $idgrumat AND idgrualu = $idgrualu $otros";
 				}
 
 				break;
@@ -6884,13 +6910,13 @@ class oCentura {
 			case 20009:
 				parse_str($cad);
 		        $idemp = $this->getIdEmpFromAlias($u);
-		        $sts = intval($sts);
+		        // $sts = intval($sts);
 		        $loSts = "";
 				switch ($sts) {
-					case 0:
+					case "0":
 						$loSts = " AND isleida = 0 "; 
 						break;						
-					case 1:
+					case "1":
 						$loSts = " AND isleida = 1 "; 
 						break;
 					default:
@@ -6926,6 +6952,27 @@ class oCentura {
 								ORDER BY idtarea DESC";
 
 				}
+				break;
+
+			case 20012:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+		        $loSts = "";
+				switch ($sts) {
+					case "0":
+						$loSts = " AND isleida = 0 "; 
+						break;						
+					case "1":
+						$loSts = " AND isleida = 1 "; 
+						break;
+					default:
+						$loSts = "  "; 
+						break;
+				}
+		        
+				$query = " SELECT idtareadestinatario, idtarea, materia, grupo, profesor, titulo_tarea, fecha_fin, isleida
+								FROM _viTareasDestinatarios
+							WHERE idemp = $idemp AND iduseralu = $iduseralu ".$loSts." ORDER BY idtareadestinatario DESC ";
 				break;
 
 			case 30001:

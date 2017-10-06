@@ -12,15 +12,14 @@ $username     = $_POST['username'];
 $sts   		  = $_POST['sts'];
 $iduseralu    = $_POST['iduseralu'];
 $tipoConsulta = intval( $_POST['tipoconsulta'] );
-
-//$sts = !isset($_POST['sts']) ? '1' : $_POST['sts'];
+$fuente       = !isset($_POST['fuente']) ? 1 : 0;
 
 $tipo = 0;
 $otros="";
 switch ($tipoConsulta) {
 	case 0:
 		$arg = "u=$username&sts=$sts&iduseralu=$iduseralu";
-		$tipo = 20009;
+		$tipo = 20012;
 		break;	
 	case 1:
 		$arg = "u=$username&sts=$sts";
@@ -47,6 +46,9 @@ switch ($tipoConsulta) {
 }
 
 if ( ($tipoConsulta >= 0) && ($tipoConsulta <= 3) ){
+
+	ini_set('default_socket_timeout', 6000);
+	set_time_limit(6000);
 
 	$r = $f->getQuerys($tipo,$arg,0,0,0,array(),$otros,1);
 
@@ -84,16 +86,19 @@ if ( ($tipoConsulta >= 0) && ($tipoConsulta <= 3) ){
 				switch ($tipoConsulta) {
 					case 0:
 					case 1:
+							if ($fuente == 1){
+							
+								$arg = "u=$username";
+								$res = $f->getCombo(0,$arg,0,0,5);
 
-							$arg = "u=$username";
-							$res = $f->getCombo(0,$arg,0,0,5);
+								$dato = explode("|", $res[0]->data );
+								$iduser 		   = intval($dato[0]);
+								$idusernivelacceso = intval($dato[3]);
+								$clave 			   = intval($dato[5]);
 
-							$dato = explode("|", $res[0]->data );
-							$iduser 		   = intval($dato[0]);
-							$idusernivelacceso = intval($dato[3]);
-							$clave 			   = intval($dato[5]);
-
-							$r[0]->estadisticas = $F->getEstadisticasNoLeidas($clave,$idusernivelacceso,$username,$iduser);
+								$r[0]->estadisticas = $F->getEstadisticasNoLeidas($clave,$idusernivelacceso,$username,$iduser);
+							
+							}
 
 							break;
 

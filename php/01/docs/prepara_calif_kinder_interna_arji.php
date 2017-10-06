@@ -29,9 +29,6 @@ $M->Llamar_Actualiza_Promedios_Boletas_por_Grupo($arrAlu[0]);
 
 $M->Actualiza_Promedios_Grupales_por_Materia($user,$arrAlu[0]);
 
-// $M->Actualizar_Promedios_Grupales_Idiomas(0,0,$user,$arrAlu[0],0);
-// $M->Actualizar_Promedios_Grupales_Idiomas(0,0,$user,$arrAlu[0],1);
-
 foreach ($arrAlu as $i => $value) {
 	
 

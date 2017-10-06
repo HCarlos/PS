@@ -13,7 +13,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', TRUE);
 ini_set('display_startup_errors', TRUE);
-ini_set('default_socket_timeout', 6000);
+ini_set('default_socket_timeout', 60000);
 date_default_timezone_set('America/Mexico_City');
 
 $o = $_POST['o'];
@@ -24,12 +24,12 @@ $cantidad = $_POST['cantidad'];
 $s = $_POST['s'];
 
 if (!isset($c)){
-	header('Location: http://platsource.mx/');
+	header('Location: https://platsource.mx/');
 }
 
 /* MS Excel */
 set_include_path(get_include_path() . PATH_SEPARATOR . '../PHPExcel/Classes/');
-set_time_limit(600);
+set_time_limit(60000);
 require_once("../PHPExcel/Classes/PHPExcel.php");
 require_once("../PHPExcel/Classes/PHPExcel/Reader/Excel2007.php");
 $objReader = PHPExcel_IOFactory::createReader('Excel2007');
@@ -145,6 +145,7 @@ foreach ($arrAlu as $i => $value) {
 					$oS->setCellValueByColumnAndRow($fl,$k, $cal);
 					++$fl;
 				}
+				// echo "idgrualu=".$arrAlu[$i]." numval=".$w." "." idgrumat=".$arrIdGruMat[$l].", \n";
 			}
 
 			++$k;
@@ -256,7 +257,9 @@ foreach ($arrAlu as $i => $value) {
 			}
 		}
 
+
 		++$k;
+
 
 	} // Fin de Enf IF
 
@@ -268,7 +271,7 @@ $ti=$clave."-".$idciclo;//  time();
 $fileout= "reporte-calif-prepa-arji-".$ti.".xlsx";
 $objWriter->save($fileout);//guardamos el archivo excel  
 
-echo "Archivo generado con &eacute;xito, para abrir haga click <a href='http://platsource.mx/php/01/docs/".$fileout."'>aqu&iacute;</a>"  
+echo "Archivo generado con &eacute;xito, para abrir haga click <a href='https://platsource.mx/php/01/docs/".$fileout."'>aqu&iacute;</a>"  
 
 ?>
 

@@ -1,13 +1,3 @@
-<!DOCTYPE HTML>
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Reporte de Calificaciones en Español - primaria Arjí</title>
-<link rel="stylesheet" type="text/css" href="../../../css/01/class_gen.css"/>
-</head>
-
-<body>
-
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', TRUE);
@@ -25,21 +15,8 @@ $s = $_POST['s'];
 if (!isset($c)){
 	header('Location: https://platsource.mx/');
 }
+$filexls = "templates/_fmt_rep_kinder_esp_arji_1.xlsx";
 
-/* MS Excel */
-set_include_path(get_include_path() . PATH_SEPARATOR . '../PHPExcel/Classes/');
-set_time_limit(60000);
-require_once("../PHPExcel/Classes/PHPExcel.php");
-require_once("../PHPExcel/Classes/PHPExcel/Reader/Excel2007.php");
-$objReader = PHPExcel_IOFactory::createReader('Excel2007');
-$objReader->setReadDataOnly(false);
-$objPHPExcel = $objReader->load("templates/_fmt_rep_kinder_esp_arji_1.xlsx"); //cargamos el archivo excel (extensión *.xlsx)
-$objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel); //objeto de PHPExcel, para escribir en el excel
-$objWriter->setIncludeCharts(TRUE);
-
-$oS = $objPHPExcel->getActiveSheet();
-
-/* FIN MS Excel */
 
 parse_str($c);
 
@@ -66,7 +43,9 @@ $clave = $rst[0]->clave_grupo;
 
 $fl=4;
 $arrIdGruMat = array();
-//echo "idgrupo=".$idgrupo."&idciclo=".$idciclo;
+
+
+
 $mats = $f->getCombo(1,"idgrupo=".$idgrupo."&idciclo=".$idciclo,0,0,24,' and idioma = 0 and padre > 0 order by orden_historial asc '); 
 foreach ($mats as $i => $value) {
 	$oS->setCellValueByColumnAndRow($fl,$k, $mats[$i]->label);

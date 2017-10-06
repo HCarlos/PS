@@ -12,7 +12,7 @@ $cantidad = $_POST['cantidad'];
 $s = $_POST['s'];
 
 if (!isset($c)){
-	header('Location: http://platsource.mx/');
+	header('Location: https://platsource.mx/');
 }else{
 	if ( $c=='0' ){
 		$u = $_POST['u'];

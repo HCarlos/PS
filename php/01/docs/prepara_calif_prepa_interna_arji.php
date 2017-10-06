@@ -45,13 +45,13 @@ foreach ($arrAlu as $i => $value) {
 
 		}
 
-		$M->Actualiza_Grupo_Alumno_Promedio($user,$result[$j]->idgrualu);
+		$yy = $M->Actualiza_Grupo_Alumno_Promedio($user,$result[$j]->idgrualu);
 	
 	}
 
 }
 
-$ret[0] = array("msg" => "OK");
+$ret[0] = array("msg" => $yy);
 $m = json_encode($ret);
 echo $m;
 

@@ -1,4 +1,5 @@
 <?php
+
 error_reporting(E_ALL);
 ini_set('display_errors', TRUE);
 ini_set('display_startup_errors', TRUE);
@@ -27,33 +28,36 @@ $arrAlu = explode(",",$strgrualu);
 $M->Llamar_Actualiza_Promedios_Boletas_por_Grupo($arrAlu[0]);
 //$M->Llamar_Actualizar_Promedios_Padres_from_IdGruAlu($user,$arrAlu[0]);
 $M->Actualizar_Promedios_Grupales(0,0,$user,$arrAlu[0]);
-
+$dato = "";
 foreach ($arrAlu as $i => $value) {
 
 	$M->Llamar_Actualizar_Promedios_Padres_from_IdGruAlu($user,$arrAlu[$i]);
 
-		$M->Actualiza_Promedios_Grupales_por_Materia($user,$arrAlu[$i]);
+	$M->Actualiza_Promedios_Grupales_por_Materia($user,$arrAlu[$i]);
 
 	$result = $f->getQuerys(43,"idgrualu=".$arrAlu[$i],0,0,0,array()," order by orden_impresion asc ",1);
-	// $result = $f->getQuerys(46,"idgrualu=".$arrAlu[$i],0,0,0,array()," order by orden_impresion asc ",1);
 	
 	if ( count($result)>0  ){
 
-		foreach ($result as $j => $value) {
+		foreach ($result as $j => $value) {  }
 
+		try {
+
+			$srs = $M->Actualiza_Grupo_Alumno_Promedio($user,$result[$j]->idgrualu);
+
+			$prm = $f->getQuerys(71,"idgrualu=".$result[$j]->idgrualu,0,0,0,array(),'',1);
+
+			$dato =  $M->Copiar_Promedio_a_Promedios_Oficiales_por_Alumno($result[$j]->idalumno,$result[$j]->idnivel,$user, $prm[0]->promcalof, $grado);
+			
+		} catch (Exception $e) {
+		   $dato =  $e->getMessage();
 		}
 
-		$M->Actualiza_Grupo_Alumno_Promedio($user,$result[$j]->idgrualu);
-
-		$prom = $f->getQuerys(71,"idgrualu=".$result[$j]->idgrualu,0,0,0,array(),'',1);
-
-		$M->Copiar_Promedio_a_Promedios_Oficiales_por_Alumno($result[$j]->idalumno,$result[$j]->idnivel,$user, $prom[0]->promcalof, $grado);
-	
 	}
 
 }
 
-$ret[0] = array("msg" => "OK");
+$ret[0] = array("msg" => $dato);
 $m = json_encode($ret);
 echo $m;
 

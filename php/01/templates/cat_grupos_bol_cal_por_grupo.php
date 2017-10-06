@@ -35,7 +35,7 @@ $idciclo = $_POST['idciclo'];
 				</a>
 				<br/>				
 				<div id="boling0">
-	 				<a href="#" class="link link-info"  id="printBolCalGruAlu0">
+	 				<a href="#" class="link link-info"  id="boling00">
 						<i class="icon-print  bigger-125 icon-on-left"></i>
 						Imprimir Boletas Internas Inglés<br/>
 					</a>
@@ -360,6 +360,7 @@ jQuery(function($) {
 		$("#spnwork0").show();
 		$("#prepareCal").hide();
 		var nc = "user="+localStorage.nc+"&strgrualu="+strGruAlu+"&grado="+Gradox+"&idciclo="+IdCiclo;
+		
         var PARAMS = {o:0, t:40, c:nc, p:10, from:0, cantidad:0, s:' order by orden_impresion asc '};
         if (parseInt(arrItem[0].clave_nivel,0)==5){
         	url = obj.getValue(0)+"prepara-calif-prepa-interna-arji/";
@@ -451,7 +452,7 @@ jQuery(function($) {
  	});
 
 
-	$("#boling0").on("click",function(event){
+	$("#boling00").on("click",function(event){
 		
 		event.preventDefault();
 

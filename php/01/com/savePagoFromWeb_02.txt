@@ -1,0 +1,23 @@
+<form action="https://www.adquiramexico.com.mx:443/mExpress/pago/avanzado" method="post"/>
+<input type="hidden" name="importe" value="999.99"/>
+<input type="hidden" name="referencia" value="123658"/>
+<input type="hidden" name="urlretorno" value="https://platsource.mx/savePagoFromWeb2MPE/"/>
+<input type="hidden" name="idexpress" value="928"/>
+<input type="hidden" name="financiamiento" value="0"/>
+<input type="hidden" name="plazos" value=""/>
+<input type="hidden" name="mediospago" value="111000"/>
+<input type="image" src="https://dicff9jl33o1o.cloudfront.net/verticales/bexpress/resources/img/icon/paybutton_4.png" /></form>
+
+Los parámetros de respuesta que obtendrá después de que se realice un pago:
+codigo = 0 éxito , 3 pagado por CLABE y cualquier otro número es un error
+mensaje = "Pago exitoso" o mensaje de error
+autorizacion = Valor numérico de la autorización del pago
+referencia = 888.88
+importe = 999.99
+mediopago Medio de pago utilizado para realizar la transacción
+financiado Indica en el pago aplicó financiamiento
+plazos Número de meses en que aplica el financiamiento
+s_transm Identificador único del pago
+hash Cadena de identificación del pago utilizado por Multipagos
+tarjetahabiente Propietario de la tarjeta utilizada para el pago
+cveTipoPago ID del tipo de pago, estos valores son propios de un catálogo del SAT.(Solo pagos tarjeta)
