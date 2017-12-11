@@ -10,11 +10,9 @@
 
 <?php
 
-error_reporting(E_ALL);
-ini_set('display_errors', TRUE);
-ini_set('display_startup_errors', TRUE);
-ini_set('default_socket_timeout', 60000);
+ini_set('default_socket_timeout', 100000);
 date_default_timezone_set('America/Mexico_City');
+define('EOL',(PHP_SAPI == 'cli') ? PHP_EOL : '<br />');
 
 $o = $_POST['o'];
 $c = $_POST['c'];
@@ -29,15 +27,14 @@ if (!isset($c)){
 
 /* MS Excel */
 set_include_path(get_include_path() . PATH_SEPARATOR . '../PHPExcel/Classes/');
-set_time_limit(60000);
+set_time_limit(100000);
 require_once("../PHPExcel/Classes/PHPExcel.php");
-require_once("../PHPExcel/Classes/PHPExcel/Reader/Excel2007.php");
+$objPHPExcel = new PHPExcel();
+// require_once("../PHPExcel/Classes/PHPExcel/Reader/Excel2007.php");
 $objReader = PHPExcel_IOFactory::createReader('Excel2007');
-$objReader->setReadDataOnly(false);
+// $objReader->setReadDataOnly(false);
 $objPHPExcel = $objReader->load("templates/_fmt_rep_prepa_arji_1.xlsx"); //cargamos el archivo excel (extensión *.xlsx)
-$objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel); //objeto de PHPExcel, para escribir en el excel
-$objWriter->setIncludeCharts(TRUE);
-
+// $objPHPExcel = $objReader->load("templates/_fmt_rep_prepa_arji_1.xlsx"); //cargamos el archivo excel (extensión *.xlsx)
 $oS = $objPHPExcel->getActiveSheet();
 
 /* FIN MS Excel */
@@ -53,6 +50,8 @@ $A = oArji::getInstance();
 require('../oPHPExcel.php');
 $E = oPHPExcel::getInstance();
 
+
+
 $arrAlu = explode(",",$strgrualu);
 
 $k=6;
@@ -62,8 +61,7 @@ $k=6;
 $intro = true;
 $lk = 0;
 
-//echo $t;
-
+// echo $t;
 while ( $intro ){
 
 	$rst = $f->getQuerys($t,"idgrualu=".$arrAlu[$lk],0,0,0,array(),$s,1);
@@ -108,6 +106,9 @@ $oS->setCellValue("S3", $grupo);
 
 $k=7;
 
+// echo $k;
+
+
 
 foreach ($arrAlu as $i => $value) {
 
@@ -120,7 +121,7 @@ foreach ($arrAlu as $i => $value) {
 		$oS->setCellValue("B".$k, $result[0]->alumno);
 		$E->cellColor($objPHPExcel, "A".$k.':'."B".$k, 'CCF4CC');
 
-		// $E->cellColor($objPHPExcel, "A".$k.':'."Z".$k, '99FF66');
+
 
 		for ($w=1; $w<4; ++$w){
 
@@ -133,11 +134,13 @@ foreach ($arrAlu as $i => $value) {
 			$oS->setCellValueByColumnAndRow($fl,$k, $cal);
 
 			// Obtenemos las Calificaciones por Num Eval
+			$callStartTime = microtime(true);
+
 			$fl=4;
 			for ($l=0;$l<count($arrIdGruMat); ++$l){
 				$mat = $f->getQuerys(56,"idgrualu=".$arrAlu[$i]."&numval=".$w."&idgrumat=".$arrIdGruMat[$l],0,0,0,array(),' order by orden_historial asc ');
 				if ( count($mat)>0 ){
-					$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,3);
+					$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,1);
 					$oS->setCellValueByColumnAndRow($fl,$k, $cal);
 					++$fl;
 				}else{
@@ -145,12 +148,17 @@ foreach ($arrAlu as $i => $value) {
 					$oS->setCellValueByColumnAndRow($fl,$k, $cal);
 					++$fl;
 				}
-				// echo "idgrualu=".$arrAlu[$i]." numval=".$w." "." idgrumat=".$arrIdGruMat[$l].", \n";
+				// echo "idgrualu=".$arrAlu[$i]." numval=".$w." "." idgrumat=".$arrIdGruMat[$l].", \n", EOL;
 			}
+			
+			$callEndTime = microtime(true);
+			$callTime = $callEndTime - $callStartTime;
+			// echo "idgrualu=".$arrAlu[$i]." numval=".$w, sprintf(' %.4f',$callTime) , " seconds" , EOL;
 
 			++$k;
 
 		}
+		
 
 		// Obtenemos el Promedio del alumno
 
@@ -159,7 +167,7 @@ foreach ($arrAlu as $i => $value) {
 		$fl=3;
 		$mat = $f->getQuerys(57,"idgrualu=".$arrAlu[$i]."&numval=7",0,0,0,array(),'  ');
 
-		$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,3);
+		$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,1);
 		$oS->setCellValueByColumnAndRow($fl,$k, $cal);
 
 
@@ -167,7 +175,7 @@ foreach ($arrAlu as $i => $value) {
 		for ($l=0;$l<count($arrIdGruMat); ++$l){
 			$mat = $f->getQuerys(56,"idgrualu=".$arrAlu[$i]."&numval=7&idgrumat=".$arrIdGruMat[$l],0,0,0,array(),' order by orden_historial asc ');
 			if ( count($mat)>0 ){
-				$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,3);
+				$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,1);
 				$oS->setCellValueByColumnAndRow($fl,$k, $cal);
 				++$fl;
 			}else{
@@ -185,7 +193,7 @@ foreach ($arrAlu as $i => $value) {
  
 		$fl=3;
 		$mat = $f->getQuerys(57,"idgrualu=".$arrAlu[$i]."&numval=4",0,0,0,array(),'  ');
-		$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,3);
+		$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,1);
 		$oS->setCellValueByColumnAndRow($fl,$k, $cal);
 
 
@@ -193,7 +201,7 @@ foreach ($arrAlu as $i => $value) {
 		for ($l=0;$l<count($arrIdGruMat); ++$l){
 			$mat = $f->getQuerys(56,"idgrualu=".$arrAlu[$i]."&numval=4&idgrumat=".$arrIdGruMat[$l],0,0,0,array(),' order by orden_historial asc ');
 			if ( count($mat)>0 ){
-				$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,3);
+				$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,1);
 				$oS->setCellValueByColumnAndRow($fl,$k, $cal);
 				++$fl;
 			}else{
@@ -212,7 +220,7 @@ foreach ($arrAlu as $i => $value) {
  
 		$fl=3;
 		$mat = $f->getQuerys(57,"idgrualu=".$arrAlu[$i]."&numval=8",0,0,0,array(),'  ');
-		$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,3);
+		$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,1);
 		$oS->setCellValueByColumnAndRow($fl,$k, $cal);
 
 
@@ -220,7 +228,7 @@ foreach ($arrAlu as $i => $value) {
 		for ($l=0;$l<count($arrIdGruMat); ++$l){
 			$mat = $f->getQuerys(56,"idgrualu=".$arrAlu[$i]."&numval=8&idgrumat=".$arrIdGruMat[$l],0,0,0,array(),' order by orden_historial asc ');
 			if ( count($mat)>0 ){
-				$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,3);
+				$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,1);
 				$oS->setCellValueByColumnAndRow($fl,$k, $cal);
 				++$fl;
 			}else{
@@ -239,7 +247,7 @@ foreach ($arrAlu as $i => $value) {
  
 		$fl=3;
 		$mat = $f->getQuerys(57,"idgrualu=".$arrAlu[$i]."&numval=10",0,0,0,array(),'  ');
-		$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,3);
+		$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,1);
 		$oS->setCellValueByColumnAndRow($fl,$k, $cal);
 		// echo count($cal)."-gpo";
 
@@ -247,7 +255,7 @@ foreach ($arrAlu as $i => $value) {
 		for ($l=0;$l<count($arrIdGruMat); ++$l){
 			$mat = $f->getQuerys(56,"idgrualu=".$arrAlu[$i]."&numval=10&idgrumat=".$arrIdGruMat[$l],0,0,0,array(),' order by orden_historial asc ');
 			if ( count($mat)>0 ){
-				$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,3);
+				$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,1);
 				$oS->setCellValueByColumnAndRow($fl,$k, $cal);
 				++$fl;
 			}else{
@@ -260,6 +268,8 @@ foreach ($arrAlu as $i => $value) {
 
 		++$k;
 
+		
+
 
 	} // Fin de Enf IF
 
@@ -269,6 +279,8 @@ foreach ($arrAlu as $i => $value) {
 
 $ti=$clave."-".$idciclo;//  time();
 $fileout= "reporte-calif-prepa-arji-".$ti.".xlsx";
+$objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel); //objeto de PHPExcel, para escribir en el excel
+$objWriter->setIncludeCharts(FALSE);
 $objWriter->save($fileout);//guardamos el archivo excel  
 
 echo "Archivo generado con &eacute;xito, para abrir haga click <a href='https://platsource.mx/php/01/docs/".$fileout."'>aqu&iacute;</a>"  

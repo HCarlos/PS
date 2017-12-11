@@ -176,7 +176,7 @@ class PDF extends FPDF
     	$pdf->Cell(35,4,"",0,0,'R');
 	$pdf->Cell(100,4,"______________________________________",0,0,'C');
 			
-	$pdf->SetFont('Arial','B',8);
+	$pdf->SetFont('Arial','',8);
 	$pdf->Cell(30,4,"IVA: ",0,0,'R');
     	$pdf->Cell(30,4,"$".number_format($iva, 2, '.', ','),0,1,'R');
 	
@@ -196,14 +196,13 @@ class PDF extends FPDF
 	$pdf->Cell(30,4,"Total: ",0,0,'R');
     $pdf->Cell(30,4,$total,0,1,'R');
 
-
     //Pinto Total con Letras
 	$pdf->Ln(2);$pdf->SetFont('Arial','B',8);
 	$pdf->Cell(42,3,"",0,0,'C');
 	$pdf->Cell(0,3,"Importe en letra: ".$letras,0,'L');
 	$pdf->Ln(3);	
 
-	$pdf->SetFont('Arial','B',6);
+	$pdf->SetFont('Arial','',6);
 	$pdf->Cell(42,3,"",0,0,'C');
 	$pdf->MultiCell(0,3,utf8_decode("Cadena Original"),0,'L');
 	$pdf->SetFont('Arial','',6);

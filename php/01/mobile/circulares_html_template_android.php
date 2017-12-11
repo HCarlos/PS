@@ -1,6 +1,6 @@
 <?php
 
-include("../includes/metas.php");
+// include("../includes/metas.php");
 
 require_once("../oFunctions.php");
 $F = oFunctions::getInstance();
@@ -21,7 +21,6 @@ if ( count($rs) <= 0 ){
     $rs[0]->fecha = "";
     $rs[0]->mensaje = "";
 }
-
 ?>
 <!DOCTYPE html>
 <!--[if lt IE 7]> <html lang="en" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
@@ -146,7 +145,7 @@ html {
             <div class="widget-header widget-header-flat">
                 <h4 class="smaller lighter blue">
                     <i class="icon-flag"></i>
-                    <span id="tituloPanel"><?= utf8_decode($rs[0]->titulo_mensaje); ?></span>
+                    <span id="tituloPanel"><?= $rs[0]->titulo_mensaje; ?></span>
                 </h4>                       
             </div>
 
@@ -168,7 +167,7 @@ html {
                             <i class="icon-bullhorn"></i>
                             Mensaje
                         </h4>                
-                        <div id="tarea"><?= nl2br(utf8_decode($rs[0]->mensaje)); ?></div>
+                        <div id="tarea"><?= nl2br($rs[0]->mensaje); ?></div>
                     </div> <br/>
 
                     <div class="hr hr2 hr-double"></div>

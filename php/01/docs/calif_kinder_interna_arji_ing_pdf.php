@@ -170,7 +170,9 @@ class PDF_Diag extends PDF_Sector {
 				$calx = '';
 			}
 		}
+		
 		return $calx;
+		// return $cal;
 
 
 	}
@@ -290,20 +292,20 @@ foreach ($arrAlu as $i => $value) {
 		$pdf->Cell(16,4,utf8_decode('FINAL'),'',1,'C');
 
 
-		$arrCal = $f->getQuerys(55,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=37 and 39",0,0,0,array(),' order by orden_impresion asc ',1);
+		$arrCal = $f->getQuerys(55,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=37 and 40",0,0,0,array(),' order by orden_impresion asc ',1);
 
 		//PRIMER BLOQUE
 
 		$pdf->setX(5);
 		$y = $pdf->GetY();
 		$pdf->SetFillColor(255);
-		$pdf->RoundedRect(5, $y, $a0, 19.33332, 2, '4', 'FD');
-		$pdf->RoundedRect($a0+5, $y, $a1, 19.33332, 2, '', 'FD');
-		$pdf->RoundedRect($a0+$a1+5, $y, $a2, 19.33332, 2, '3', 'FD');
+		$pdf->RoundedRect(5, $y, $a0, 25.33332, 2, '4', 'FD');
+		$pdf->RoundedRect($a0+5, $y, $a1, 25.33332, 2, '', 'FD');
+		$pdf->RoundedRect($a0+$a1+5, $y, $a2, 25.33332, 2, '3', 'FD');
 
 		$pdf->SetFont('Arial','',7);
 		
-		for ($i=0; $i<3; ++$i) {
+		for ($i=0; $i<4; ++$i) {
 
 			$pdf->setX(5);
 			$pdf->Cell($a0,6.44444,utf8_decode(''),'',0,'L');
@@ -311,12 +313,12 @@ foreach ($arrAlu as $i => $value) {
 			if (isset($arrCal[$i]->materia)){
 				$pdf->Cell($a1,6.44444,utf8_decode($arrCal[$i]->materia),'',0,'L');
 				$pdf->Cell(16,6.44444,$pdf->FormatCal($arrCal[$i]->cal0,$d),'',0,'C');
-				$pdf->Cell(16,6.44444,$pdf->FormatCal($arrCal[$i]->cal1,$d),'LR',0,'C');
+				$pdf->Cell(16,6.0,$pdf->FormatCal($arrCal[$i]->cal1,$d),'LR',0,'C');
 				$pdf->Cell(16,6.44444,$pdf->FormatCal($arrCal[$i]->cal2,$d),'',1,'C');
 			}else{
 				$pdf->Cell($a1,6.44444,'','',0,'L');
 				$pdf->Cell(16,6.44444,'','',0,'C');
-				$pdf->Cell(16,6.44444,'','LR',0,'C');
+				$pdf->Cell(16,6.0,'','LR',0,'C');
 				$pdf->Cell(16,6.44444,'','',1,'C');
 			}
 
@@ -327,7 +329,7 @@ foreach ($arrAlu as $i => $value) {
 		
 		//SEGUNDO BLOQUE
 
-		$arrCal = $f->getQuerys(55,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=41 and 46",0,0,0,array(),' order by orden_impresion asc ',1);
+		$arrCal = $f->getQuerys(55,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=42 and 47",0,0,0,array(),' order by orden_impresion asc ',1);
 
 		$pdf->setX(5);
 		$y = $pdf->GetY();
@@ -362,7 +364,7 @@ foreach ($arrAlu as $i => $value) {
 		
 		//TERCER BLOQUE
 
-		$arrCal = $f->getQuerys(55,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=48 and 51",0,0,0,array(),' order by orden_impresion asc ',1);
+		$arrCal = $f->getQuerys(55,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=49 and 52",0,0,0,array(),' order by orden_impresion asc ',1);
 
 		$pdf->setX(5);
 		$y = $pdf->GetY();
@@ -397,7 +399,7 @@ foreach ($arrAlu as $i => $value) {
 
 		// CUARTO BLOQUE
 
-		$arrCal = $f->getQuerys(55,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=53 and 55",0,0,0,array(),' order by orden_impresion asc ',1);
+		$arrCal = $f->getQuerys(55,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=54 and 56",0,0,0,array(),' order by orden_impresion asc ',1);
 
 		$pdf->setX(5);
 		$y = $pdf->GetY();
@@ -454,7 +456,7 @@ foreach ($arrAlu as $i => $value) {
 		
 		// QUINTO BLOQUE
 
-		$arrCal = $f->getQuerys(55,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=57 and 61",0,0,0,array(),' order by orden_impresion asc ',1);
+		$arrCal = $f->getQuerys(55,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=58 and 62",0,0,0,array(),' order by orden_impresion asc ',1);
 
 		$pdf->setX(5);
 		$y = $pdf->GetY();
@@ -508,7 +510,7 @@ foreach ($arrAlu as $i => $value) {
 
 		// SEXTO BLOQUE
 
-		$arrCal = $f->getQuerys(55,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=62 and 64",0,0,0,array(),' order by orden_impresion asc ',1);
+		$arrCal = $f->getQuerys(55,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=63 and 65",0,0,0,array(),' order by orden_impresion asc ',1);
 
 		$pdf->setX(5);
 		$y = $pdf->GetY();
@@ -542,7 +544,7 @@ foreach ($arrAlu as $i => $value) {
 
 		// SEPTIMO BLOQUE
 
-		$arrCal = $f->getQuerys(52,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=60 and 65",0,0,0,array(),' order by orden_impresion asc ',1);
+		$arrCal = $f->getQuerys(52,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=61 and 66",0,0,0,array(),' order by orden_impresion asc ',1);
 
 		$pdf->setX(5);
 		$y = $pdf->GetY();
@@ -573,7 +575,7 @@ foreach ($arrAlu as $i => $value) {
 
 
 		// BLOQUE FINAL
-		$vP = array(51,81,112,140,171,194);
+		$vP = array(52,88,118.2,147,176.5,200);
 		$vPArr = $f->getQuerys(54,"idgrualu=".$result[0]->idgrualu."&idioma=".$d,0,0,0,array(),' order by orden_impresion asc ',1);
 		foreach ($vPArr as $k => $value) {
 			if ($k <= 5){
@@ -586,7 +588,7 @@ foreach ($arrAlu as $i => $value) {
 
 
 		$pdf->setX(5);
-		$pdf->setY(220);
+		$pdf->setY(226.5);
 
 		// PERFIL IBO
 

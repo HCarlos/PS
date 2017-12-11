@@ -7,9 +7,7 @@
                 <i class="icon-refresh icon-spin white bigger-150" id="preloaderPrincipal"></i>
             </a>
 
-            <ul class=" pull-right ace-nav transparent " id="menuOptsMain">
-
-            </ul>
+            <ul class=" pull-right ace-nav transparent " id="menuOptsMain"></ul>
 
         </div>
 

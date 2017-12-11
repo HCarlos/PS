@@ -1,12 +1,14 @@
 <?php 
-/*
+
+
 ini_set('display_errors', '0');
 error_reporting(E_ALL | E_STRICT);
 
 error_reporting(E_ALL);
 ini_set('display_errors', TRUE);
 ini_set('display_startup_errors', TRUE);
-*/
+// ini_set('display_errors', 1);
+
 
 date_default_timezone_set('America/Mexico_City');
 
@@ -1260,11 +1262,13 @@ class oCenturaPDO {
 				$idciclo = $this->getCicloFromIdEmp($idemp);
 				$fv0 = explode("-",$fvencimiento);
 				$fv = $fv0[2].'-'.$fv0[1].'-'.$fv0[0];
+
+								// AND idciclo = $idciclo 
+								// AND clave_nivel = $clave_nivel 
+
 				$query = "	SELECT *
 							FROM _viEdoCtaFamilia 
 							WHERE idemp = $idemp 
-								AND idciclo = $idciclo 
-								AND clave_nivel = $clave_nivel 
 								AND idconcepto = $vconcepto 
 								AND idfamilia = $idfamilia 
 								AND is_vencimiento = 1 
@@ -4167,7 +4171,7 @@ class oCenturaPDO {
 					"totalNoLeidasCirculares" => $totalNoLeidasCirculares,
 					"totalNoLeidasMensajes"   => $totalNoLeidasMensajes,
 					"totalNoLeidasBadge"      => $totalNoLeidasBadge,
-					"currentVersion"		  => "1.1.33"
+					"currentVersion"		  => "1.1.35"
 					);
 
 	}

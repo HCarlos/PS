@@ -1,12 +1,13 @@
 <?php
-/*
-ini_set('display_errors', '0');     
+
+
 error_reporting(E_ALL | E_STRICT);  
 
 error_reporting(E_ALL);
 ini_set('display_errors', TRUE);
 ini_set('display_startup_errors', TRUE);
-*/
+// ini_set('display_errors', 1);
+
 
 date_default_timezone_set('America/Mexico_City');
 
@@ -5802,11 +5803,11 @@ class oCentura {
 		        if ( $numval == 9 ){
 					$query = "SELECT ".$ncal." AS cal, ".$ncon." AS con, ".$nina." AS ina, idmatclas, padre
 									FROM _viBoletas
-								WHERE idgrualu = $idgrualu AND idgrumat = $idgrumat $otros ";
+								WHERE idgrualu = $idgrualu AND idgrumat = $idgrumat $otros";
 		        }elseif ( $numval == 10 ){
 					$query = "SELECT ".$ncal." AS cal, ".$ncon." AS con, ".$nina." AS ina, idmatclas, padre
-									FROM _viBoletas
-								WHERE idgrualu = $idgrualu AND idgrumat = $idgrumat $otros ";
+									FROM boletas
+								WHERE idgrualu = $idgrualu AND idgrumat = $idgrumat  ";
 				}else{
 					
 					// $qrytemp = "SELECT ".$ncal." AS cal, ".$ncon." AS con, ".$nina." AS ina, ".$nobs." AS obs, bol.idmatclas, bol.padre
@@ -5814,8 +5815,8 @@ class oCentura {
 					// 			WHERE bol.idgrumat = $idgrumat AND bol.idgrualu = $idgrualu $otros";
 
 					$query = "SELECT ".$ncal." AS cal, ".$ncon." AS con, ".$nina." AS ina, ".$nobs." AS obs, idmatclas, padre
-									FROM _viBoletas
-								WHERE idgrumat = $idgrumat AND idgrualu = $idgrualu $otros";
+									FROM boletas
+								WHERE idgrumat = $idgrumat AND idgrualu = $idgrualu ";
 				}
 
 				break;
@@ -6159,9 +6160,11 @@ class oCentura {
 			case 99:
 				parse_str($cad);
 		        $idemp = $this->getIdEmpFromAlias($u);
+				$idciclo = $this->getCicloFromIdEmp($idemp);
+
 				$query = "SELECT materia, idgrumat
 								FROM _viGrupo_Materias
-							WHERE idgrupo = $idgrupo AND isoficial = 1 AND idemp = $idemp ORDER BY orden_oficial ASC";
+							WHERE idgrupo = $idgrupo AND isoficial = 1 AND idemp = $idemp AND idciclo = $idciclo ORDER BY orden_oficial ASC";
 				break;
 
 			case 100: // ARJI
@@ -6829,6 +6832,7 @@ class oCentura {
 
 			case 20001:
 				parse_str($cad);
+				//				FROM _viTareas
 				$query = " SELECT * 
 								FROM _viTareas
 							WHERE idtarea = $idtarea ";
@@ -6970,9 +6974,31 @@ class oCentura {
 						break;
 				}
 		        
-				$query = " SELECT idtareadestinatario, idtarea, materia, grupo, profesor, titulo_tarea, fecha_fin, isleida
+				$query = "SELECT td.idtareadestinatario, td.idtarea, t.titulo_tarea,t.fecha_fin,b.grupo,b.materia, b.profesor, td.isleida
+						  FROM tareas_dest td 
+						  LEFT JOIN tareas t 
+						  	ON td.idtarea = t.idtarea AND td.idemp = t.idemp 
+						  LEFT JOIN _viBoletas b 
+							ON td.idboleta = b.idboleta AND td.idemp = b.idemp
+						  WHERE td.idemp = $idemp AND iddestinatario = $iduseralu ".$loSts." 
+						  ORDER BY idtareadestinatario DESC";			
+
+				break;
+
+			case 20014:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+/*		        
+				$query = " SELECT idtareadestinatario, idtarea, titulo_tarea
 								FROM _viTareasDestinatarios
-							WHERE idemp = $idemp AND iduseralu = $iduseralu ".$loSts." ORDER BY idtareadestinatario DESC ";
+							WHERE iduseralu = $iduseralu ORDER BY idtareadestinatario DESC ";
+*/
+				$query = " SELECT td.idtareadestinatario, td.idtarea, t.titulo_tarea
+						   FROM tareas_dest td 
+						   LEFT JOIN tareas t 
+						   		ON td.idtarea = t.idtarea AND td.idemp = t.idemp 
+						   WHERE  td.iddestinatario = $iduseralu";
+
 				break;
 
 			case 30001:
@@ -7103,10 +7129,11 @@ class oCentura {
 				parse_str($cad);
 		        $idemp = $this->getIdEmpFromAlias($u);
 		        $idciclo = $this->getCicloFromIdEmp($idemp);		
-		        $iddestinatario = $this->getIdUserFromAlias($u);				
+		        $iddestinatario = $this->getIdUserFromAlias($u);
+		        // AND idciclo = $idciclo				
 				$query = " SELECT *
 								FROM _viComMensajes
-							WHERE idemp = $idemp AND idciclo = $idciclo AND idcommensaje = $idcommensaje ORDER BY idcommensaje DESC ";
+							WHERE idemp = $idemp AND idcommensaje = $idcommensaje ORDER BY idcommensaje DESC ";
 				break;
 
 			case 31012:
@@ -7117,6 +7144,25 @@ class oCentura {
 								FROM _viEdosCta
 							WHERE idedocta = $idedocta AND idciclo = $idciclo AND idemp = $idemp AND is_pagos_diversos = 1 AND status_movto IN (0,1) ";
 				break;
+
+			case 31013:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+		        $iddestinatario = $this->getIdUserFromAlias($u);				
+		        /*
+				$query = " SELECT idcommensajedestinatario, idcommensaje, grupo, titulo_mensaje, fecha, isleida, isrespuesta, nombre_remitente, lecturas, respuestas, iteracciones, archivos
+								FROM _viComMensajeDestinatarios
+							WHERE idemp = $idemp AND iddestinatario = $iddestinatario ".$loSts." ORDER BY idcommensajedestinatario DESC ";
+				*/
+
+				$query = "SELECT gd.idcommensajedestinatario, gd.idcommensaje, msj.titulo_mensaje
+							FROM com_mensaje_dest gd 
+							LEFT JOIN com_mensajes msj
+								ON gd.idcommensaje = msj.idcommensaje AND gd.idemp = msj.idemp
+							WHERE iddestinatario = $iddestinatario";			
+
+				break; 
+
 
 							
 			}

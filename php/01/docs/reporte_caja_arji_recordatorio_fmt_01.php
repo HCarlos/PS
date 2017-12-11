@@ -5,7 +5,7 @@ $cads = $_POST['cads'];
 $familias = $_POST['familias'];
 
 if (!isset($data)){
-	header('Location: http://platsource.mx/');
+	header('Location: https://platsource.mx/');
 }
 
 require('../diag/sector.php');
@@ -155,7 +155,7 @@ if ( count($rs) > 0 ){
 			$hY = $pdf->GetY();
 			$hX = $pdf->GetX();
 			//$pdf->Cell(50,$hFont,utf8_decode("TAMBIÉN PUEDE PAGAR EN :,"),'',1,'L');
-			$text=stripslashes("<a href='http://platsource.mx/' target='_blank' sytle='color:green'>http://platsource.mx</a>");
+			$text=stripslashes("<a href='https://platsource.mx/' target='_blank' sytle='color:green'>https://platsource.mx</a>");
 			$pdf->setY($hY);
 			$pdf->SetX($hX-9);
 			$pdf->WriteHTML($text);

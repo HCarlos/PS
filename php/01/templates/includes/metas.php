@@ -4,7 +4,9 @@
 // ini_set('display_startup_errors', TRUE);
 date_default_timezone_set('America/Mexico_City');
 
-header("html/text; charset=utf-8");  
+// header("Content-type:application/json; charset=utf-8");  
+
+header("Content-type:html/text; charset=utf-8");  
 header("Cache-Control: no-cache");
 
 ?>

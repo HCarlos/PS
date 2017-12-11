@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html lang="en" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]> <html lang="en" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]> <html lang="en" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <title>PlatSource</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="PlatSource - Plataforma de Gestión en Educación" name="description">
+    <meta name="keywords" content="PlatSource,Educación,Plataforma,Gestión,Educamos,Colegios,Escuelas,Universidades,Profesores,Alumnos,Directores,Primaria,Secundaria,Preparatoria">
+    <meta content="tecnointel.mx" name="author">
+
+    <link href="/images/web/favicon.png" rel="shortcut icon">
+    <link href="/images/web/favicon.png" rel="apple-touch-icon">
+    <link href="/images/web/favicon-72-72.png" rel="apple-touch-icon" sizes="72x72">
+    <link href="/images/web/favicon-114-114.png" rel="apple-touch-icon" sizes="114x114">
+
+    <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/bootstrap/css/responsive.css" rel="stylesheet">
+
+    <link href="/css/style-t1.css" rel="stylesheet">
+
+	<link rel="stylesheet" href="/assets/css/ace-fonts.css" />
+
+    <!--ace styles-->
+
+    <link rel="stylesheet" href="/assets/css/ace.css" />
+    <link rel="stylesheet" href="/assets/css/ace-responsive.css" />
+
+<style type="text/css">
+
+body{background: transparent url("/img/blueprint.png") top left; margin: 1em !important; padding: 1em !important; }
+
+</style>
+
+
+</head>
+<body>
+
+  <script type="text/javascript">
+
+      try {
+
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+            ga('create', 'UA-69719226-1', 'auto');
+            ga('send', 'pageview');
+
+            var trackOutboundLink = function(url,titulo) {
+               ga('send', 'event', titulo, 'click', url, {'hitCallback':
+                 function () {}
+               });
+            }
+
+      } catch(err) { alert(err.message); }
+
+  </script>
+<div>
+  <h1 class="text-center">Apuntes</h1>
+
+<p>Como abrir una DB de Postgres</p>
+<code>
+	 <b>$ sudo -u postgres psql basededatos</b>
+</code>
+<hr>
+<p>Cómo ejecutar un SEEDER ya existente</p>
+<code>
+	 <b>$ php artisan db:seed --class=TasasTableSeeder</b>
+</code>
+<hr>
+<p>Instalar Laravel Collective</p>
+<code>
+  // En directorio raiz del proyecto:</br>
+  <b>$ composer require laravelcollective/html</b>
+</code>
+<hr>
+  <p>Permisos y Roles más Usados:</p>
+  <code>
+    <ul>
+        <li><b>givePermissionTo()</b>: nos permite dar seguimiento a un usuario o rol</li>
+        <li><b>revokePermissionTo()</b>: Revocar el permiso de un usuario o rol</li>
+        <li><b>hasPermissionTo()</b>: comprueba si un usuario o rol tiene un permiso determinado</li>
+        <li><b>assignRole()</b>: Asigna rol a un usuario</li>
+        <li><b>removeRole()</b>: elimina el rol de un usuario</li>
+        <li><b>hasRole()</b>: comprueba si un usuario tiene un rol</li>
+        <li><b>hasAnyRole (Role :: all ())</b>: comprueba si un usuario tiene alguna de una lista de roles dada</li>
+        <li><b>hasAllRoles (Role :: all ())</b>: comprueba si un usuario tiene toda una lista de roles determinada</li>
+    </ul>
+  </code>
+<hr>
+
+
+</div>
+
+</body>
+</html>

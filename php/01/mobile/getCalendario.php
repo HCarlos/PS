@@ -1,6 +1,6 @@
 <?php
 
-header("application/json; charset=utf-8");  
+header("Content-type:application/json; charset=utf-8");  
 header("Cache-Control: no-cache");
 
 require_once("../oCenturaPDO.php");

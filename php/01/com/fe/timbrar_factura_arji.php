@@ -1,14 +1,14 @@
 <?php 
 ob_end_clean();
-
+/*
 ini_set('display_errors', '0');     # don't show any errors...
 error_reporting(E_ALL | E_STRICT);  # ...but do log them
 
 error_reporting(E_ALL);
 ini_set('display_errors', TRUE);
 ini_set('display_startup_errors', TRUE);
-
-header("html/text; charset=utf-8");  
+*/
+header("html/text; charset=utf-8"); 
 header("Cache-Control: no-cache");
 
 // require_once('../../vo/voConn.php');
@@ -291,6 +291,7 @@ fclose($new_xml);
 
 // https://www.factorumweb.com/FactorumWSV32/FactorumCFDiService.asmx 
 $servicio = "https://www.factorumweb.com/FactorumWSv32/FactorumCFDiService.asmx?wsdl";
+//			 http://factorumweb.com/FactorumWSv32/FactorumCFDiService.asmx
 $parametros=array();
 $data = file_get_contents($myXML);
 $parametros['usuario']  = $file_user;
@@ -429,6 +430,7 @@ foreach ($xml->xpath('//t:TimbreFiscalDigital') as $tfd) {
 			$pdf = $fpdf;
 			$xml = $fxml;
 			$emailto = $email1;
+			$CFDi_ver = "3.2";
 
 			include("send_Mail_Arji.php");
 

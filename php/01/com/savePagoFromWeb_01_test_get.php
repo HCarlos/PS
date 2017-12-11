@@ -9,7 +9,7 @@
 // http://platsource.mx/php/01/com/savePagoFromWeb_01_test_get.php?s_transm=2768&t_importe=80&val_10=&n_autoriz=01&IdUser=1
 
 
-header("application/json; charset=utf-8");  
+header("Content-type:html/text; charset=utf-8");  
 header("Cache-Control: no-cache");
 
 

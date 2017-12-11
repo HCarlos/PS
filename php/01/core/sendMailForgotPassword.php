@@ -5,7 +5,7 @@ ini_set('display_errors', TRUE);
 ini_set('display_startup_errors', TRUE);
 date_default_timezone_set('America/Mexico_City');
 
-header("application/json; charset=utf-8");  
+header("Content-type:application/json; charset=utf-8");  
 header("Cache-Control: no-cache");
 
 $data =$_POST['data'];

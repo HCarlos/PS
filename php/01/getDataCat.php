@@ -1,11 +1,12 @@
 <?php
 
-ini_set('display_errors', '0');     
+
 error_reporting(E_ALL | E_STRICT);  
 
 error_reporting(E_ALL);
 ini_set('display_errors', TRUE);
 ini_set('display_startup_errors', TRUE);
+// ini_set('display_errors', 1);
 
 require_once("oCentura.php");
 $f = oCentura::getInstance();

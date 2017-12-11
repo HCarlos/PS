@@ -4,7 +4,8 @@
 ini_set('display_errors', TRUE);
 ini_set('display_startup_errors', TRUE);
 */
-include("../includes/metas.php");
+
+// include("../includes/metas.php");
 
 require_once("../oCenturaPDO.php");
 $F = oCenturaPDO::getInstance();

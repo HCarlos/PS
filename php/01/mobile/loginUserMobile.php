@@ -1,13 +1,13 @@
 <?php
-
+/*
 ini_set('display_errors', '0');     
 error_reporting(E_ALL | E_STRICT);  
 
 error_reporting(E_ALL);
 ini_set('display_errors', TRUE);
 ini_set('display_startup_errors', TRUE);
-
-header("application/json; charset=utf-8");  
+*/
+header("Content-type:application/json; charset=utf-8");  
 header("Cache-Control: no-cache");
 
 require_once("../oCenturaPDO.php");
@@ -46,11 +46,11 @@ if (count($res)>0){
 		
 		if ( intval($tD) == 1 ){
 			$respuesta[0]->msg = $F->saveDataPDO(56,$arg,0,0,0);
+			$respuesta[0]->estadisticas = $F->getEstadisticasNoLeidas($clave,$idusernivelacceso,$us,$iduser);
 		}else{
 			$respuesta[0]->msg = $F->saveDataPDO(56,$arg,0,0,4);
 			$respuesta[0]->arg = $arg;
 		}
-		$respuesta[0]->estadisticas = $F->getEstadisticasNoLeidas($clave,$idusernivelacceso,$us,$iduser);
 		
 	} catch (Exception $e) {
 

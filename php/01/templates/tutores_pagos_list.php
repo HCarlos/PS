@@ -146,9 +146,9 @@ jQuery(function($) {
 							var idconcepto = parseInt(item.idconcepto,0);
 							var pagosDiv = parseInt(item.is_pagos_diversos,0); 
 							if (item.is_pagos_diversos=="1" ){
-									concp0 =  item.concepto+' '+item.mes;
+								concp0 =  item.concepto+' '+item.mes;
 							}else{
-									concp0 =  item.concepto;
+								concp0 =  item.concepto;
 							}
 
 						tB +=' 			<tr class="odd">';
@@ -166,10 +166,11 @@ jQuery(function($) {
 
 						if ( parseInt( item.status_movto,0 )  == 0 ) {
 							if ( arrPag.indexOf(idconcepto) == -1 || pagosDiv == 0 ) {
-								tB +='						<a class="btn btn-minier  btn-success modTutorPagoPro0" href="#" id="idpago-'+id+'-'+id+'-'+item.concepto2+'-'+item.total+'-'+Tutor+'" data-rel="tooltip" data-placement="top" title="Realizar Pago">Pagar</a>';
+								// tB +='						<a class="btn btn-minier  btn-success modTutorPagoPro0" href="#" id="idpago-'+id+'-'+id+'-'+item.concepto2+'-'+item.total+'-'+Tutor+'" data-rel="tooltip" data-placement="top" title="Realizar Pago">Pagar</a>';
+								tB +='						<a class="btn btn-minier  btn-info modTutorPagoPro1" href="#" id="idpago-'+id+'-'+id+'-'+item.concepto2+'-'+item.total+'-'+Tutor+'" data-rel="tooltip" data-placement="top" title="Realizar Pago">Pagar</a>';
 								arrPag.push(idconcepto);
 								if ( id == 55914){
-									tB +='						<a class="btn btn-minier  btn-info modTutorPagoPro1" href="#" id="idpago-'+id+'-'+id+'-'+item.concepto2+'-'+item.total+'-'+Tutor+'" data-rel="tooltip" data-placement="top" title="Realizar Pago">Pagar</a>';
+									// tB +='						<a class="btn btn-minier  btn-info modTutorPagoPro1" href="#" id="idpago-'+id+'-'+id+'-'+item.concepto2+'-'+item.total+'-'+Tutor+'" data-rel="tooltip" data-placement="top" title="Realizar Pago">Pagar</a>';
 								}
 							}else{
 								tB +='';
@@ -287,7 +288,6 @@ jQuery(function($) {
 
 		var oIdUser = localStorage.IdUser;
         var urlRetorno = "https://platsource.mx/savePagoFromWeb2MPE/";
-
 
         var PARAMS = {
         				importe:Importe,

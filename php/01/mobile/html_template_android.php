@@ -1,6 +1,6 @@
 <?php
 
-include("../templates/includes/metas.php");
+// include("../templates/includes/metas.php");
 
 require_once("../oFunctions.php");
 $F = oFunctions::getInstance();
@@ -176,7 +176,7 @@ html {
                             <i class="icon-bullhorn"></i>
                             Tarea
                         </h4>                
-                        <div id="tarea"><?= nl2br(utf8_decode($rs[0]->tarea)); ?></div>
+                        <div id="tarea"><?= nl2br($rs[0]->tarea); ?></div>
                     </div> <br/>
 
                     <div class="hr hr2 hr-double"></div>
@@ -220,7 +220,7 @@ html {
 
                     <br/><br/>
 
-                    <div><strong>Profesor(a):</strong> <?= utf8_decode($rprof[0]->profesor); ?></div>
+                    <div><strong>Profesor(a):</strong> <?= $rprof[0]->profesor; ?></div>
 
                 </div><!--/widget-main-->
             </div><!--/widget-body-->
@@ -230,17 +230,5 @@ html {
     </div>
 
 </div>
-<!--
-<script src="<?= "https://".$_SERVER['SERVER_NAME'];?>/js/jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.js"></script>
-<script type="text/javascript">
-    $(document).ready(function(){
-        $('a[rel="external"]').click(function() {
-            alert("Hola Mundo")
-            window.open($(this).attr('href'));
-            return false;
-        });
-    });    
-</script>
--->
 </body>
 </html>

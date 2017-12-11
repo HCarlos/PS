@@ -114,11 +114,14 @@ jQuery(function($) {
 
 						if ( IdEmp == 1 ){
 
-							tB +=' ';
-							tB +='						<a class="red detailBolCalAluFromTutores1" href="#" id="l2|'+item.data+'|'+item.clave_nivel+'|'+item.grupo+'|'+item.label+'"  data-rel="tooltip" data-placement="top" title="Ver Detalle de Calificaciones" >';
-							tB +='							<i class="icon-list bigger-130"></i>'
-							tB +='						</a>';
+							if (CveNiv != 1){
 
+								tB +=' ';
+								tB +='						<a class="red detailBolCalAluFromTutores1" href="#" id="l2|'+item.data+'|'+item.clave_nivel+'|'+item.grupo+'|'+item.label+'"  data-rel="tooltip" data-placement="top" title="Ver Detalle de Calificaciones" >';
+								tB +='							<i class="icon-list bigger-130"></i>'
+								tB +='						</a>';
+
+							}
 						}
 
 						if ( IdEmp == 1 && ispai_grupo == 1 && grado_pai > 0){

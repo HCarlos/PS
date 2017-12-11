@@ -117,14 +117,17 @@ foreach ($arrAlu as $i => $value) {
 			};
 			
 			if ( count($mimat) > 0 ){
-				$mat = $f->getQuerys(56,"idgrualu=".$arrAlu[$i]."&numval=".$w."&idgrumat=".$mimat[0]->padre,0,0,0,array(),'  ');
+				$mat = $f->getQuerys(56,"idgrualu=".$arrAlu[$i]."&numval=".$w."&idgrumat=".$mimat[0]->padre,0,0,0,array(),' and padre <= 0  ');
 				// echo count($mat);
 				if ( count($mat) ){
-					$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,2);
-					//echo $cal;
-					$oS->setCellValueByColumnAndRow($fl,$k, $cal);
+					if ( intval($mat[0]->con) > 0 ){
+						$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,2);
+						//echo $cal;
+						$oS->setCellValueByColumnAndRow($fl,$k, $cal);
+					}
 				}
 			}
+
 			// Obtenemos las Calificaciones por Num Eval
 			$fl=$miCal; 
 			for ($l=0;$l<count($arrIdGruMat); ++$l){
@@ -139,11 +142,7 @@ foreach ($arrAlu as $i => $value) {
 					++$fl;
 				}
 			}
-
-
-
 			++$k;
-
 		}
 
 		// Obtenemos el Promedio del alumno
@@ -159,7 +158,6 @@ foreach ($arrAlu as $i => $value) {
 				$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,2);
 				$oS->setCellValueByColumnAndRow($fl,$k, $cal);
 			}
-
 		}
 
 		$fl=$miCal;

@@ -1,37 +1,30 @@
 <?php
 
-// error_reporting(E_ALL);
-// ini_set('display_errors', TRUE);
-// ini_set('display_startup_errors', TRUE);
-
-// date_default_timezone_set('America/Mexico_City');
+date_default_timezone_set('America/Mexico_City');
 
 
-header("application/json; charset=utf-8");  
-header("Cache-Control: no-cache");
-
-
-if (isset($_POST["s_transm"])){
-	$codigo = $_POST["codigo"];
-	$mensaje = $_POST["mensaje"];
-	$n_autoriz = $_POST["autorizacion"];
-	$referencia = $_POST["referencia"];
-	$importe   = $_POST["t_importe"];
-	$mediopago = $_POST["mediopago"];
-	$financiado = $_POST["financiado"];
-	$plazos = $_POST["plazos"];
-	$id        = $_POST["s_transm"];
-	$hash = $_POST["hash"];
+if ( isset($_POST["s_transm"]) ){
+	$codigo     	 = $_POST["codigo"];
+	$mensaje    	 = $_POST["mensaje"];
+	$n_autoriz  	 = $_POST["autorizacion"];
+	$referencia 	 = $_POST["referencia"];
+	$importe    	 = $_POST["importe"];
+	$mediopago  	 = $_POST["mediopago"];
+	$financiado 	 = $_POST["financiado"];
+	$plazos     	 = $_POST["plazos"];
+	$id         	 = $_POST["referencia"];
+	$hash       	 = $_POST["hash"];
+	$s_transm        = $_POST["s_transm"];
 	$tarjetahabiente = $_POST["tarjetahabiente"];
-	$cveTipoPago = $_POST["cveTipoPago"];
+	$cveTipoPago     = $_POST["cveTipoPago"];
 
-
-	$fecha     = NOW(); // $_POST["val_10"];
-	$IdUser     = isset($_POST["IdUser"]) ? $_POST["IdUser"] : 0;
+	$fecha      	 = date('Y-m-d h:i:s'); 
+	$IdUser     	 = 1; 
 
 	require_once("../oCenturaPDO.php");
 	$f = oCenturaPDO::getInstance();
 	$f->setPagos($id,$importe,$n_autoriz,$IdUser);
+
 }else{
 	echo "Ocurrió un error al entregar el Control...";
 	return false;
@@ -75,10 +68,9 @@ $cuerpo .= "Concepto: ";
 $cuerpo .= "<strong>".$dt[0]->concepto . '  ' .$dt[0]->mes. "</strong></br>";
 $cuerpo .= "</p>";
 
-
 mail("caja@arji.edu.mx",$titulo,$cuerpo,$cabeceras);
 
-echo utf8_decode("Su pago se ha efectuado con éxito...");
+echo "Su pago se ha efectuado con éxito...";
 
 ?>
 

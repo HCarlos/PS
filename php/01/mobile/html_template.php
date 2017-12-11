@@ -1,6 +1,6 @@
 <?php
 
-include("../templates/includes/metas.php");
+// include("../templates/includes/metas.php");
 
 require_once("../oFunctions.php");
 $F = oFunctions::getInstance();

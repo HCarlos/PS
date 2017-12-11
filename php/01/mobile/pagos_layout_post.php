@@ -1,6 +1,6 @@
 <?php
 
-include("../includes/metas.php");
+// include("../includes/metas.php");
 
 require_once("../oFunctions.php");
 $F = oFunctions::getInstance();
@@ -20,6 +20,8 @@ if ( isset( $_POST['idconcepto'] ) ){
 }
 
 $rs = $f->getQuerys(31012,"user=$user&idedocta=$idedocta");
+
+$urlRetorno = "https://platsource.mx/savePagoFromWeb2MPE/";
 
 ?>
 <!DOCTYPE html>
@@ -152,7 +154,8 @@ html {
             <div class="widget-body">
                 <div class="widget-main">
                     
-                    <form action="https://www.adquiramexico.com.mx/clb/endpoint/colegioarji/" method="POST" target="_blank">
+                    <!-- <form action="https://www.adquiramexico.com.mx/clb/endpoint/colegioarji/" method="POST" target="_blank"> -->
+                    <form action="https://www.adquiramexico.com.mx:443/mExpress/pago/avanzado" method="POST" target="_blank">
                         <table class="table">
                             <tr>
                                 <td>ID</td>
@@ -187,6 +190,17 @@ html {
                                 <td><?= intval($rs[0]->status_movto) == 0 ? "<b style='color:red'>ACTIVO<b>" : "<b style='color:green'>PAGADO<b>" ; ?></td>
                             </tr>
                         </table>
+
+                        <input type="hidden" name="importe" value="<?= $rs[0]->total; ?>"/>
+                        <input type="hidden" name="referencia" value="<?= $rs[0]->idedocta; ?>" />
+                        <input type="hidden" name="urlretorno" value="<?= $urlRetorno ?>"/>
+                        <input type="hidden" name="idexpress" value="928" />
+                        <input type="hidden" name="financiamiento" value="0" />
+                        <input type="hidden" name="plazos" value="" />
+                        <input type="hidden" name="mediospago" value="111000" />
+
+
+<!--                         
                         <input type="hidden" name="s_transm" value="<?= $rs[0]->idedocta; ?>" id="s_transm"/>
                         <input type="hidden" name="c_referencia" value="<?= $rs[0]->idedocta; ?>" id="c_referencia"/>
                         <input type="hidden" name="val_1" value="000" id="val_1"/>
@@ -198,7 +212,8 @@ html {
                         <input type="hidden" name="val_5" value="1" id="val_5"/>
                         <input type="hidden" name="val_6" value="1" id="val_6"/>
                         <input type="hidden" name="IdUser" value="<?= $iduser; ?>" id="IdUser"/>
-                        
+ -->                        
+
                         <?php
                             if ( intval($rs[0]->status_movto) == 0 && $idconcepto > 0){
                         ?>

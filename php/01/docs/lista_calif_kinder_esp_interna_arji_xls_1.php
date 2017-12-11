@@ -66,7 +66,7 @@ $clave = $rst[0]->clave_grupo;
 
 $fl=4;
 $arrIdGruMat = array();
-//echo "idgrupo=".$idgrupo."&idciclo=".$idciclo;
+// echo "idgrupo=".$idgrupo."&idciclo=".$idciclo;
 $mats = $f->getCombo(1,"idgrupo=".$idgrupo."&idciclo=".$idciclo,0,0,24,' and idioma = 0 and padre > 0 order by orden_historial asc '); 
 foreach ($mats as $i => $value) {
 	$oS->setCellValueByColumnAndRow($fl,$k, $mats[$i]->label);
@@ -91,8 +91,6 @@ foreach ($arrAlu as $i => $value) {
 		$oS->setCellValue("A".$k, $result[0]->num_lista);
 		$oS->setCellValue("B".$k, $result[0]->alumno.' '.$result[0]->idgrualu);
 		$E->cellColor($objPHPExcel, "A".$k.':'."B".$k, 'CCF4CC');
-
-		// $E->cellColor($objPHPExcel, "A".$k.':'."Z".$k, '99FF66');
 
 		// echo "Test ".$arrAlu[$i]." ".$t.", ";
 

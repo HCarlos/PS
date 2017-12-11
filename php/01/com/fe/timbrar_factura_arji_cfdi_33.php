@@ -9,7 +9,7 @@ ini_set('display_errors', TRUE);
 ini_set('display_startup_errors', TRUE);
 
 
-header("html/text; charset=utf-8");  
+header("Content-type:application/json; charset=utf-8");  
 header("Cache-Control: no-cache");
 
 require_once('../../oCentura.php');
@@ -214,7 +214,17 @@ $new_xml = fopen ($myXML, "w");
 fwrite($new_xml,$cadena_xml);
 fclose($new_xml);
 
-$servicio = "http://qav33.factorumweb.com/factorumwsv32/FactorumCFDiService.asmx?wsdl";
+// Pruebas
+/*
+http://desarrollo.factorumweb.com/FactorumWSv32/FactorumCFDiService.asmx
+Usuario: prueba1@factorum.com.mx
+RFC: AAA010101AAA
+Contraseña: prueba2011
+*/
+
+// Produccción
+// $servicio = "http://qav33.factorumweb.com/factorumwsv32/FactorumCFDiService.asmx?wsdl";
+$servicio = "http://factorumweb.com/FactorumWSv32/FactorumCFDiService.asmx?wsdl";
 
 $parametros=array();
 $data = file_get_contents($myXML);
@@ -328,6 +338,7 @@ foreach ($xml->xpath('//t:TimbreFiscalDigital') as $tfd) {
 			$pdf = $fpdf;
 			$xml = $fxml;
 			$emailto = $email1;
+			$CFDi_ver = "3.3";
 
 			include("send_Mail_Arji.php");
 

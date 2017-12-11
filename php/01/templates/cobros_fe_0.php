@@ -184,6 +184,7 @@ $tutor = $_POST['tutor'];
 
 								</div>
 
+<!-- 
 								<button type="submit" id="btnTimFac0" name="btnTimFac0" class="btn btn-primary pull-left" >
 									<i class="icon-print bigger-125 icon-on-left"></i>
 									Timbrar Factura
@@ -191,8 +192,17 @@ $tutor = $_POST['tutor'];
 
 								<button type="default" id="btnTimFac1" name="btnTimFac1" class="btn btn-default pull-right" >
 									<i class="icon-print bigger-125 icon-on-left"></i>
-									Botón de prueba, no tocar
+									Timbrar Factura con CFDi 3.3
 								</button>
+ -->
+
+
+
+								<button type="submit" id="btnTimFac1" name="btnTimFac1" class="btn btn-primary pull-left" >
+									<i class="icon-print bigger-125 icon-on-left"></i>
+									Timbrar Factura con CFDi 3.3
+								</button>
+
 
 								<div class="span7 pull-left"> <!-- Extra Information --> </div>
 							</div>

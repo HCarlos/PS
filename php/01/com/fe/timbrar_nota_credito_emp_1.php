@@ -1,7 +1,7 @@
 <?php 
 ob_end_clean();
 
-header("html/text; charset=utf-8");  
+header("Content-type:application/json; charset=utf-8");  
 header("Cache-Control: no-cache");
 
 // require_once('../../vo/voConn.php');
@@ -273,7 +273,9 @@ fclose($new_xml);
 
 // Ahora Timbramos la Factura
 		// https://www.factorumweb.com/FactorumWSV32/FactorumCFDiService.asmx 
-$servicio = "https://www.factorumweb.com/FactorumWSv32/FactorumCFDiService.asmx?wsdl";
+// $servicio = "https://www.factorumweb.com/FactorumWSv32/FactorumCFDiService.asmx?wsdl";
+$servicio = "http://factorumweb.com/FactorumWSv32/FactorumCFDiService.asmx?wsdl";
+
 $parametros=array();
 $data = file_get_contents($myXML);
 $parametros['usuario']  = $file_user;
@@ -401,6 +403,7 @@ foreach ($xml->xpath('//t:TimbreFiscalDigital') as $tfd) {
 		$pdf = $fpdf;
 		$xml = $fxml;
 		$emailto = $email1;
+		$CFDi_ver = "3.2";
 
 		// mysql_close($mysql);
 

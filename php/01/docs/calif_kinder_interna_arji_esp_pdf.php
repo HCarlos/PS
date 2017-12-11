@@ -175,6 +175,7 @@ class PDF_Diag extends PDF_Sector {
 			}			
 		}
 
+		// return $cal;
 		return $calx;
 
 

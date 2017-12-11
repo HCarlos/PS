@@ -44,8 +44,8 @@ class PDF_Diag extends PDF_Sector {
 		$this->SetTextColor(0,0,0);
 		$this->SetFont('Arial','B',12);
 		$this->Cell(110,$this->nFont,utf8_decode("COLEGIO ARJÍ A.C."),'',0,'L');
-		$this->SetFont('Arial','B',10);
-		$this->Cell(80,6,utf8_decode(" LISTA DE CALIFICACIONES A DETALLE "),'LTRB',1,'C',true);
+		$this->SetFont('Arial','B',9);
+		$this->Cell(70,6,utf8_decode(" LISTA DE CALIFICACIONES A DETALLE "),'LTRB',1,'C',true);
 
 		$this->Ln(3);
 		$this->setX(30);
@@ -100,37 +100,23 @@ $f = oCentura::getInstance();
 require_once("../oCenturaPDO.php");
 $fp = oCenturaPDO::getInstance();
 
-
 $arr = array();
 
 $nc = "u=".$u."&idgrumat=".$idgrumat."&numval=".$eval;
 
 $MC = $f->getQuerys(38,$nc,0,0,0,array()," order by idgrumatcon asc ",1);
 
-if ( count($MC) > 3 ){
+$totalColumnas = count($MC);
+
+if ( $totalColumnas > 3 ){
 	$hHoja = 'L';
-	$param0 = 182;
-	$prm = 10;
+	$param0 = 186;
+	$prm = 7;
 }else{
 	$hHoja = 'P';
-	$param0 = 120;
-	$prm = 10;
+	$param0 = 124;
+	$prm = 7;
 }
-
-$aCol = ($param0 / count($MC) );
-
-foreach ($MC as $i => $value) {
-
-	$nc = "u=".$u."&idgrumatcon=".$MC[$i]->idgrumatcon;
-	
-	$MCP = $f->getQuerys(104,$nc,0,0,0,array()," order by idgrumatconmkb asc ",1);
-	$sepa1 = count($MCP);
-	$sepa2 = ($aCol - $prm) / $sepa1;
-	
-	$arr[$i] = array("idgrumatcon" => $MC[$i]->idgrumatcon,"idgrumatconmkb" => $MCP, "separador" => $sepa2);
-
-}
-
 
 $pdf = new PDF_Diag($hHoja,'mm','Letter');
 $pdf->AliasNbPages();
@@ -152,127 +138,169 @@ $pdf->numregs = 0;
 $pdf->AddPage();
 
 
-// PINTAMOS 1RA LINEA
+$totalColumnas = $totalColumnas;
 
-$pdf->setX(5);
+if ( $totalColumnas > 0 ){
 
-$pdf->SetFont('Arial','B',8);
-
-$pdf->Cell(05,12,'#','LT',0,'C');
-$pdf->Cell(80,12,'N O M B R E   D E L   A L U M N O','LT',0,'C');
-
-$pdf->SetFont('Arial','',8);
-
-foreach ($MC as $i => $value) {
-
-	$saltoI = $i==(count($MC)-1)?1:0;
-
-	$lb = $i==(count($MC)-1)?'LTR':'LT';
-
-	$pdf->Cell($aCol,$pdf->nFont,substr(utf8_decode($MC[$i]->descripcion),0,10).' ( '.intval($MC[$i]->porcentaje).'% )',$lb,$saltoI,'C');
-
-}
-
-// PINTAMOS 2DA LINEA
-
-$pdf->setX(5); 
-$pdf->SetFont('Arial','',8);
-
-$pdf->Cell(05,$pdf->nFont,'','LB',0,'C');
-$pdf->Cell(80,$pdf->nFont,'','LB',0,'C');
-$sepa0 = count($MC);
-foreach ($MC as $i => $value) {
-
-	$sepa2 = $arr[$i]['separador'];
-	$MCP = $arr[$i]['idgrumatconmkb'];//$arr[$i]->idgrumatconmkb;
-
-	foreach ($MCP as $j => $value) {
-
-		$pdf->SetFont('Arial','',6);
-		$pdf->Cell($sepa2,$pdf->nFont,substr(utf8_decode($MCP[$j]->descripcion_breve),0,10),'LBT',0,'C');
-
-	}	
-
-	$saltoI = ( $i==(count($MC)-1) ) ? 1:0;
-	$lx = ( $i==(count($MC)-1) ) ? 'LBTR':'LBT';
-	
-	$pdf->SetFont('Arial','B',6);	
-	$pdf->SetTextColor(0,0,192);
-	$pdf->Cell($prm,$pdf->nFont,'Pts',$lx,$saltoI,'C');
-	$pdf->SetTextColor(0,0,0);
-	$pdf->SetFont('Arial','',7);	
-	
-	$arr[$i] = array("idgrumatcon" => $MC[$i]->idgrumatcon,"idgrumatconmkb" => $MCP, "separador" => $sepa2);
-
-}
-
-
-// PINTAMOS 3RA LINEA
-
-//var_dump($arr[$i]);
-
-$pdf->setX(5);
-$pdf->SetFont('Arial','',7);
-
-$nc = "u=".$u."&idgrumatconmkb=".$MCP[0]->idgrumatconmkb;
-$Alu = $fp->getQueryPDO(0,$nc,0,0,0,array()," order by nume_lista asc ",1);
-
-foreach ($Alu as $k => $value) {
-
-	$saltoI = $k==(count($Alu))?1:0;
-	$lb = $k==(count($Alu))?'LBTR':'LBT';
-
-	$pdf->setX(5);
-	$pdf->Cell(05,$pdf->nFont,$Alu[$k]->num_lista,$lb,$saltoI,'C');
-	$pdf->Cell(80,$pdf->nFont,utf8_decode($Alu[$k]->ap_paterno.' '.$Alu[$k]->ap_materno.' '.$Alu[$k]->nombre), $lb,$saltoI,'L');
+	$aCol = ($param0 / $totalColumnas );
 
 	foreach ($MC as $i => $value) {
+
+		$nc = "u=".$u."&idgrumatcon=".$MC[$i]->idgrumatcon;
 		
-		$sepa2 = $arr[$i]['separador'];
-		$MCP = $arr[$i]['idgrumatconmkb'];//$arr[$i]->idgrumatconmkb;
-		foreach ($MCP as $j => $value) {
-
-			$nc = "u=".$u."&idgrumatcon=".$MC[$i]->idgrumatcon."&idgrumatconmkb=".$MCP[$j]->idgrumatconmkb.'&idgrualu='.$Alu[$k]->idgrualu;
-
-			$Cal = $fp->getQueryPDO(3,$nc,0,0,0,array(),"  ",1);
-
-			$calif = count($Cal) > 0 ? intval($Cal[0]->calificacion) > 0 ? intval($Cal[0]->calificacion) : '' : '';
-			$pdf->SetFont('Arial','',6);	
-			$pdf->Cell($sepa2,$pdf->nFont,$calif,'LBT',0,'R');
-		}
-
-			$saltoI = ( $i==(count($MC)-1) ) ? 1:0;
-			$lx = ( $i==(count($MC)-1) ) ? 'LBTR':'LBT';
-
-		// Promedio de la Parte	
-
-		$pdf->SetFont('Arial','B',6);	
-		$nc = "&idboleta=".$Alu[$k]->idboleta."&idgrumatcon=".$MC[$i]->idgrumatcon;
-		$Cal = $fp->getQueryPDO(8,$nc,0,0,0,array(),"  ",1);
-		if ( count($Cal) > 0 ){
-			$iCal = intval($Cal[0]->calificacion);
-			if ( $iCal >= 60 ){
-				$calif = $Cal[0]->cal_real;
-				$pdf->SetTextColor(0,128,0);
-			}elseif ( $iCal >= 0 && $iCal < 60 ){
-				$calif = $Cal[0]->cal_real;
-				$pdf->SetTextColor(192,0,0);
-			}else{
-				$calif = '';
-			}	
-		}else{
-				$calif = '';
-		}
-		// $calif = count($Cal) > 0 ? intval($Cal[0]->calificacion) > 0 ? intval($Cal[0]->calificacion) : '' : '';
-		$pdf->Cell($prm,$pdf->nFont,$calif,$lx,$saltoI,'R');
-		$pdf->SetFont('Arial','',7);
-		$pdf->SetTextColor(0,0,0);
+		$MCP = $f->getQuerys(104,$nc,0,0,0,array()," order by idgrumatconmkb asc ",1);
+		$sepa1 = count($MCP) == 0 ? 1 : count($MCP);
+		$sepa2 = ($aCol - $prm) / $sepa1;
+		
+		$arr[$i] = array("idgrumatcon" => $MC[$i]->idgrumatcon,"idgrumatconmkb" => $MCP, "separador" => $sepa2);
 
 	}
 
 
-}
 
+
+	// PINTAMOS 1RA LINEA
+
+	$pdf->setX(5);
+
+	$pdf->SetFont('Arial','B',8);
+
+	$pdf->Cell(05,26,'#','LT',0,'C');
+	$pdf->Cell(80,26,'N O M B R E   D E L   A L U M N O','LT',0,'C');
+
+	$pdf->SetFont('Arial','',8);
+
+	foreach ($MC as $i => $value) {
+
+		$saltoI = $i==($totalColumnas-1)?1:0;
+
+		$lb = $i==($totalColumnas-1)?'LTR':'LT';
+
+		$pdf->Cell($aCol,$pdf->nFont,substr(utf8_decode($MC[$i]->descripcion),0,10).' ( '.intval($MC[$i]->porcentaje).'% )',$lb,$saltoI,'C');
+
+	}
+
+	// PINTAMOS 2DA LINEA
+
+	$pdf->setX(5); 
+	$pdf->SetFont('Arial','',8);
+
+	$pdf->nFont = 20;
+
+	$pdf->Cell(05,$pdf->nFont,'','LB',0,'C');
+	$pdf->Cell(80,$pdf->nFont,'','LB',0,'C');
+	$sepa0 = $totalColumnas;
+	foreach ($MC as $i => $value) {
+
+		$sepa2 = $arr[$i]['separador'];
+		$MCP = $arr[$i]['idgrumatconmkb'];//$arr[$i]->idgrumatconmkb;
+
+		foreach ($MCP as $j => $value) {
+
+			$pdf->SetFont('Arial','',6);
+			if ( count($MCP) <= 1 ){
+				$pdf->Cell($sepa2,$pdf->nFont,substr(utf8_decode($MCP[$j]->descripcion_breve),0,20),'LBT',0,'C');
+				// $pdf->Cell($sepa2,$pdf->nFont,utf8_decode($MCP[$j]->descripcion_breve),'LBT',0,'C');
+			}else{
+				$pdf->Cell($sepa2,$pdf->nFont,'','LBT',0,'C');
+				$x = $pdf->getX()-(($sepa2/2)-0.8);
+				$y = $pdf->getY()+18.8;
+				$txt = substr(utf8_decode($MCP[$j]->descripcion_breve),0,18);
+				// $txt = utf8_decode($MCP[$j]->descripcion_breve);
+				$pdf->Rotate( 90, $x, $y);
+				$pdf->Text($x, $y, $txt);
+				$pdf->Rotate(0);
+			}
+		}	
+
+		$saltoI = ( $i==($totalColumnas-1) ) ? 1:0;
+		$lx = ( $i==($totalColumnas-1) ) ? 'LBTR':'LBT';
+		
+		$pdf->SetFont('Arial','B',6);	
+		$pdf->SetTextColor(0,0,192);
+		$pdf->Cell($prm,$pdf->nFont,'Pts',$lx,$saltoI,'C');
+		$pdf->SetTextColor(0,0,0);
+		$pdf->SetFont('Arial','',7);	
+		
+		$arr[$i] = array("idgrumatcon" => $MC[$i]->idgrumatcon,"idgrumatconmkb" => $MCP, "separador" => $sepa2);
+
+	}
+
+	$pdf->nFont = 6;
+
+
+	// PINTAMOS 3RA LINEA
+
+	//var_dump($arr[$i]);
+
+	$pdf->setX(5);
+	$pdf->SetFont('Arial','',7);
+
+	$nc = "u=".$u."&idgrumatconmkb=".$MCP[0]->idgrumatconmkb;
+	$Alu = $fp->getQueryPDO(0,$nc,0,0,0,array()," order by nume_lista asc ",1);
+
+	foreach ($Alu as $k => $value) {
+
+		$saltoI = $k==(count($Alu))?1:0;
+		$lb = $k==(count($Alu))?'LBTR':'LBT';
+
+		$pdf->setX(5);
+		$pdf->Cell(05,$pdf->nFont,$Alu[$k]->num_lista,$lb,$saltoI,'C');
+		$pdf->Cell(80,$pdf->nFont,utf8_decode($Alu[$k]->ap_paterno.' '.$Alu[$k]->ap_materno.' '.$Alu[$k]->nombre), $lb,$saltoI,'L');
+
+		foreach ($MC as $i => $value) {
+			
+			$sepa2 = $arr[$i]['separador'];
+			$MCP = $arr[$i]['idgrumatconmkb'];//$arr[$i]->idgrumatconmkb;
+			foreach ($MCP as $j => $value) {
+
+				$nc = "u=".$u."&idgrumatcon=".$MC[$i]->idgrumatcon."&idgrumatconmkb=".$MCP[$j]->idgrumatconmkb.'&idgrualu='.$Alu[$k]->idgrualu;
+
+				$Cal = $fp->getQueryPDO(3,$nc,0,0,0,array(),"  ",1);
+
+				$calif = count($Cal) > 0 ? intval($Cal[0]->calificacion) > 0 ? intval($Cal[0]->calificacion) : '' : '';
+				$pdf->SetFont('Arial','',6);	
+				$pdf->Cell($sepa2,$pdf->nFont,$calif,'LBT',0,'R');
+			}
+
+				$saltoI = ( $i==($totalColumnas-1) ) ? 1:0;
+				$lx = ( $i==($totalColumnas-1) ) ? 'LBTR':'LBT';
+
+			// Promedio de la Parte	
+
+			$pdf->SetFont('Arial','B',6);	
+			$nc = "&idboleta=".$Alu[$k]->idboleta."&idgrumatcon=".$MC[$i]->idgrumatcon;
+			$Cal = $fp->getQueryPDO(8,$nc,0,0,0,array(),"  ",1);
+			if ( count($Cal) > 0 ){
+				$iCal = intval($Cal[0]->calificacion);
+				if ( $iCal >= 60 ){
+					$calif = $Cal[0]->cal_real;
+					$pdf->SetTextColor(0,128,0);
+				}elseif ( $iCal >= 0 && $iCal < 60 ){
+					$calif = $Cal[0]->cal_real;
+					$pdf->SetTextColor(192,0,0);
+				}else{
+					$calif = '';
+				}	
+			}else{
+					$calif = '';
+			}
+			// $calif = count($Cal) > 0 ? intval($Cal[0]->calificacion) > 0 ? intval($Cal[0]->calificacion) : '' : '';
+			$pdf->Cell($prm,$pdf->nFont,floatval($calif),$lx,$saltoI,'R');
+			$pdf->SetFont('Arial','',7);
+			$pdf->SetTextColor(0,0,0);
+
+		}
+
+
+	}
+
+}else{
+	$pdf->Ln(3);
+	$pdf->SetFont('Arial','B',14);
+	$pdf->Cell(195,12,"Faltan elementos por configurar", 'LTBR',1,'C');
+
+}
 
 
 $pdf->Output();

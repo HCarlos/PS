@@ -176,7 +176,7 @@ class PDF extends FPDF
     	$pdf->Cell(35,4,"",0,0,'R');
 	$pdf->Cell(100,4,"______________________________________",0,0,'C');
 			
-	$pdf->SetFont('Arial','B',8);
+	$pdf->SetFont('Arial','',8);
 	$pdf->Cell(30,4,"IVA: ",0,0,'R');
     	$pdf->Cell(30,4,"$".number_format($iva, 2, '.', ','),0,1,'R');
 	

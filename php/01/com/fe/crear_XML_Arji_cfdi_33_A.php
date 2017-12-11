@@ -11,11 +11,10 @@ $arConc = explode(';',$cadConc);
 
 $tasa = '0.000000'; 
 
+$sumaIva=0;
 foreach($arConc as $i=>$value){
   $Item = explode('|',$arConc[$i]);
-  $sumaIva=0;
   if (intval($Item[0])>0) {
-//       $cadena_xml.='    <cfdi:Concepto ClaveProdServ="'.trim($Item[14]).'" Cantidad="1" ClaveUnidad="'.trim($Item[15]).'" Unidad="'.trim($Item[16]).'" Descripcion="'.trim($Item[1]).'" ValorUnitario="'.trim($Item[11]).'" Importe="'.trim($Item[11]).'" >'."\r\n";
       $cadena_xml.='    <cfdi:Concepto ClaveProdServ="01010101" Cantidad="1" ClaveUnidad="'.trim($Item[15]).'" Unidad="'.trim($Item[16]).'" Descripcion="'.trim($Item[1]).'" ValorUnitario="'.trim($Item[11]).'" Importe="'.trim($Item[11]).'" >'."\r\n";
       $cadena_xml.='      <cfdi:Impuestos>'."\r\n";
       $cadena_xml.='        <cfdi:Traslados>'."\r\n";
