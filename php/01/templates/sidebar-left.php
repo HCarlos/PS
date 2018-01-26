@@ -28,13 +28,21 @@
                 </a>
  -->                
 
+
+                    <!-- <a href="https://platsource.mx/documents/ped_arji_2017_%20public.pdf" class="btn btn-link hide" style="background-color: white !important; font-weight: bold; color: blue;" target='_blank' id="ped2017">Política del Desempeño <br/>Docente y Directivo Arjí</a> -->
+
+
+                    <a href="https://platsource.mx/documents/ped_arji_2017_public.pdf" class="btn btn-link hide" target='_blank' id="ped2017">
+                        <img src="/images/web/politica_de_desempeno.png" width="166" height="51" alt="Política del Desempeño Docente y Directivo Arjí" />
+                    </a>
+
                     <a href="http://turnitin.com/es/login" class="btn btn-link hide" target='_blank' id="turniting">
                         <img src="/images/web/image10.png" width="166" height="51" alt="" />
                     </a>
 
                     <a href="http://search.ebscohost.com/" class="btn btn-link hide" target='_blank' id="ebscohost">
                         <img src="/images/web/ebscohost.jpg" width="166" height="82" alt="" />
-                    </a>
+                    </a>                    
 
                 </div>
             </div>

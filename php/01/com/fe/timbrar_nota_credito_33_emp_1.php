@@ -1,5 +1,5 @@
 <?php 
-// ob_end_clean();
+ob_end_clean();
 
 ini_set('display_errors', '0'); 
 error_reporting(E_ALL | E_STRICT); 
@@ -10,43 +10,44 @@ ini_set('display_startup_errors', TRUE);
 header("Content-type:application/json; charset=utf-8");  
 header("Cache-Control: no-cache");
 
+// require_once('../../vo/voConn.php');
 require_once('../../oCentura.php');
+
 $f = oCentura::getInstance();
 
 $arg   = $_POST["data"];
 parse_str($arg);
 
-$regimen_fiscal = 'Régimen General de Ley Personas Morales';//$_REQUEST['regimen_emisor'];
+$regimen_fiscal_emisor = 'Régimen General de Ley Personas Morales';//$_REQUEST['regimen_emisor'];
 $view = 1;
 
 date_default_timezone_set('America/Mexico_city');
 
-//
-$fecha             = date('Y-m-d')."T".date("H:i:s",time()-(5*60));
+$fecha             = date('Y-m-d')."T".date("H:i:s",time()-(2*60));
 $fechacomp         = date('Y-m-d');
 $lugar_expedicion  = "Villahermosa, Tabasco";
 $aprobacion        = 1;
 $year_aprobacion   = "2012";
 
-$tipo_cfdi         = "ingreso";
-
+$tipo_cfdi         = "egreso";
 $folio             = "";
 $dias_credito      = 0;
 $iva               = 0; // 16;
 $ivaRet            = 0;
 
-$tipo_docto        = "FACTURA";
+$tipo_docto        = "NOTA DE CRÉDITO";
 
 $f0 = date_create();
 $folSer = date_timestamp_get($f0);
 $folio = $folSer;
 
-$efxi = explode('-', $idemisorfiscal);
-$query = "select rfc,razon_social,calle, num_ext, num_int,colonia,localidad,estado,cp,pais,is_iva from _viEmiFis where idemisorfiscal = ".$efxi[0]." and idemp = $idemp and status_emisor_fiscal = 1";
-$ef = $f->getArray($query);
+$efx = explode('-', $idemisorfiscal);
 
-switch ($serie){
-	case "A":
+$query = "SELECT rfc,razon_social,calle, num_ext, num_int,colonia,localidad,estado,cp,pais,is_iva FROM _viEmiFis WHERE idemisorfiscal = $efx[0] AND idemp = $idemp AND status_emisor_fiscal = 1";
+$emifisNC0 = $f->getArray($query);
+
+switch ( intval($idemisorfiscal) ){
+	case 1:
 
 			$num_certificado   = "00001000000403139734";
 			$file_cer          = "00001000000403139734_arji/00001000000403139734.txt";
@@ -59,22 +60,25 @@ switch ($serie){
 			$dir_upload        = "../../../../uw_fe/";
 			$file_logo         = "logo_arji.gif";
 			$file_back         = "back.jpg";
-			$rfc_emisor           	= $ef[0]->rfc;
-			$razon_social_emisor  	= $ef[0]->razon_social;
-			$calle_emisor         	= $ef[0]->calle;
-			$num_exterior_emisor  	= $ef[0]->num_ext;
-			$num_interior_emisor  	= $ef[0]->num_int;
-			$colonia_emisor       	= $ef[0]->colonia;
-			$localidad_emisor     	= $ef[0]->localidad;
-			$estado_emisor        	= $ef[0]->estado;
-			$codigo_postal_emisor 	= $ef[0]->cp;
-			$pais_emisor          	= $ef[0]->pais;
-			$is_iva          	    = intval($ef[0]->is_iva);
-			$regimen_fiscal_emisor 	= "ASOCIACION CIVIL";			
+			$serieBase			   = "ANC";
+			$serie			       = "ANC";
+			$rfc_emisor           	= $emifisNC0[0]->rfc;
+			$razon_social_emisor  	= $emifisNC0[0]->razon_social;
+			$calle_emisor         	= $emifisNC0[0]->calle;
+			$num_exterior_emisor  	= $emifisNC0[0]->num_ext;
+			$num_interior_emisor  	= $emifisNC0[0]->num_int;
+			$colonia_emisor       	= $emifisNC0[0]->colonia;
+			$localidad_emisor     	= $emifisNC0[0]->localidad;
+			$estado_emisor        	= $emifisNC0[0]->estado;
+			$codigo_postal_emisor 	= $emifisNC0[0]->cp;
+			$pais_emisor          	= $emifisNC0[0]->pais;
+			$is_iva          	    = intval($emifisNC0[0]->is_iva);
+
+			$regimen_fiscal_emisor = "ASOCIACION CIVIL";
 			$rgb  = array(64,105,154);
 			
 			break;
-	case "B":
+	case 2:
 			
 			$num_certificado   = "00001000000404757365";
 			$file_cer          = "00001000000404757365_comercializadora_arji/00001000000404757365.txt";
@@ -87,79 +91,83 @@ switch ($serie){
 			$dir_upload        = "../../../../uw_fe/";
 			$file_logo         = "logo_comer_arji.gif";
 			$file_back         = "back.jpg";
-			$rfc_emisor           	= $ef[0]->rfc;
-			$razon_social_emisor  	= $ef[0]->razon_social;
-			$calle_emisor         	= $ef[0]->calle;
-			$num_exterior_emisor  	= $ef[0]->num_ext;
-			$num_interior_emisor  	= $ef[0]->num_int;
-			$colonia_emisor       	= $ef[0]->colonia;
-			$localidad_emisor     	= $ef[0]->localidad;
-			$estado_emisor        	= $ef[0]->estado;
-			$codigo_postal_emisor 	= $ef[0]->cp;
-			$pais_emisor          	= $ef[0]->pais;
-			$is_iva          	    = intval($ef[0]->is_iva);
-			$regimen_fiscal_emisor = "PERSONAS MORALES DEL REGIMEN GENERAL";			
-			$rgb  = array(64,105,154);			
+			$serieBase			 = "BNC";
+			$serie   			 = "BNC";
+			$rfc_emisor          = $emifisNC0[0]->rfc;
+			$razon_social_emisor = $emifisNC0[0]->razon_social;
+			$calle_emisor        = $emifisNC0[0]->calle;
+			$num_exterior_emisor = $emifisNC0[0]->num_ext;
+			$num_interior_emisor = $emifisNC0[0]->num_int;
+			$colonia_emisor      = $emifisNC0[0]->colonia;
+			$localidad_emisor    = $emifisNC0[0]->localidad;
+			$estado_emisor       = $emifisNC0[0]->estado;
+			$codigo_postal_emisor= $emifisNC0[0]->cp;
+			$pais_emisor         = $emifisNC0[0]->pais;
+			$is_iva          	 = intval($emifisNC0[0]->is_iva);
+
+			$regimen_fiscal_emisor = "PERSONAS MORALES DEL REGIMEN GENERAL";
+			
+			$rgb  = array(64,105,154);
+			
 			break;
 }
 
-$query = "SELECT idfamilia, tutor FROM _viEdosCta WHERE idfactura = $idfactura AND idemp = $idemp limit 1";
+$query = "SELECT idcliente, importe, descto, recargo, importe2, iva, total FROM facturas_encabezado WHERE idfactura = $idfactura AND idemp = $idemp LIMIT 1";
 $fe0 = $f->getArray($query);
-$idfamilia = $fe0[0]->idfamilia;
-$tutor     = $fe0[0]->tutor;
+$idfamilia = $fe0[0]->idcliente;
+
 $certificado_texto = "";
 $sello             = "";	
 
-$query = "SELECT rfc,razon_social,calle,num_ext, num_int,colonia, localidad,estado, pais, cp FROM _viRegFis WHERE idregfis = $idregfis AND idemp = $idemp limit 1";
+$query = "SELECT rfc,razon_social,calle,num_ext, num_int,colonia, localidad,estado, pais, cp FROM _viRegFis WHERE idregfis = $idregfis AND idemp = $idemp LIMIT 1";
 $result = $f->getArray($query);
-$rfc           = $result[0]->rfc; // mysql_result($result, 0,"rfc");
+$rfc           = $result[0]->rfc; 
 $rf0           = explode('-',$rfc);  
 $rfc           = $rf0[0];
 $razon_social  = $result[0]->razon_social;
-$calle         = $result[0]->calle;
-$num_exterior  = $result[0]->num_ext;
+$calle         = $result[0]->calle; 
+$num_exterior  = $result[0]->num_ext; 
 $num_interior  = $result[0]->num_int;
-$colonia       = $result[0]->colonia;
+$colonia       = $result[0]->colonia; 
 $localidad     = $result[0]->localidad;
-$estado        = $result[0]->estado;
+$estado        = $result[0]->estado; 
 $pais          = $result[0]->pais;
-$codigo_postal = $result[0]->cp;
-$referencia    = $referenciaFE;
+$codigo_postal = $result[0]->cp; 
 
 
-$tot = $total;	
-$iva    = $iva;
-$ivaRet = $total;
+$tot = $total; //$_GET["total"];	
+$iva    = $iva; //0;
+$ivaRet = $total; //0;
 
 $tasaIVA = 16.00;
 
 $subtt = substr($rfc,0,4);
 if (in_array($subtt, array("XAXX","XEXX") ) ){
-	$tot = floatval($tot);	
+	$tot = floatval($tot); // + floatval($iva);//$_GET["total"];	
 	$iva = 0;
 }
 
-$query = "SELECT importe, descto, recargo, importe2, iva, total FROM facturas_encabezado WHERE idfactura = $idfactura AND idemp = $idemp limit 1";
-$fe1 = $f->getArray($query);
-$subtotal     = $fe1[0]->importe;
-$descuento    = $fe1[0]->descto;
-$recargo      = $fe1[0]->recargo;
-$subtotal2    = $fe1[0]->importe2;
-$iva          = $fe1[0]->iva;
-$total        = $fe1[0]->total;
+$subtotal  = $fe0[0]->importe;
+$descuento = $fe0[0]->descto;
+$recargo   = $fe0[0]->recargo;
+$subtotal2 = $fe0[0]->importe2;
+$iva 	   = $fe0[0]->iva;
+$total     = $fe0[0]->total;
+
+
 $total_cadena = $total;
-$forma_pago   = "Pago en una sola exhibición";
+
+$forma_pago        =  "Pago en una sola exhibición";//trim($_REQUEST['forma_pago']); 
+
+// mysql_close($mysql);
 
 $cadConc = $cadOrd;	
 
-include("crear_XML_Arji_cfdi_33_".$serie.".php");
+// include("crear_XML_Arji.php");
+include("crear_XML_Arji_cfdi_33_".$serieBase.".php");
 
 //Generamos la Cadena Original
-
-$cfdi = $cadena_xml; //simplexml_load_file("facturas/Factura-".$serie."-".$folio.".xml");
-
-// echo $cadena_xml;
-
+$cfdi = $cadena_xml;//simplexml_load_file("facturas/Factura-".$serie."-".$folio.".xml");
 $xml = new DOMDocument();
 $xml->loadXML($cadena_xml) or die("\n\n\nXML no válido..");
 $xslt = new XSLTProcessor();
@@ -194,7 +202,7 @@ $folfis="";
 
 $cadena_xml = "";
 
-include("crear_XML_Arji_cfdi_33_".$serie.".php");
+include("crear_XML_Arji_cfdi_33_".$serieBase.".php"); // include("crear_XML_Arji.php");
 
 $myXML = $dir_upload."Fac-".$folSer.".xml";
 
@@ -209,13 +217,13 @@ $data = file_get_contents($myXML);
 $parametros['usuario']  = $file_user;
 $parametros['rfc']      = $file_rfc;
 $parametros['password'] = $file_pass;
-$parametros['xml']=$data;
+$parametros['xml']=$data; //string, pero se maneja String aqui
 set_time_limit(600);
 ini_set("default_socket_timeout", 600);
 try {
 	$client = new SoapClient($servicio, $parametros);
 	$result = $client->FactorumGenYaSelladoConArchivo($parametros);
-	// $result = $client->FactorumGenYaSelladoConArchivoTest($parametros);
+	// $result = $client->FactorumGenYaSelladoConArchivo($parametros);
 } catch (SoapFault $E) {  
     echo $E->faultstring; 
     return false;
@@ -287,24 +295,32 @@ foreach ($xml->xpath('//t:TimbreFiscalDigital') as $tfd) {
 
 		$query = "
 			UPDATE facturas_encabezado 
-				SET isfe = 1, 
-					idemisorfiscal = ".$efxi[0].", 
-					idregfis = $idregfis,
-					metodo_de_pago = $idmetododepagoFE,
-					referencia = '$referencia',
-					UUID = '$folfis', 
-					xml = '$fxml', 
-					pdf='$fpdf', 
-					serie = '$serie', 
-					folio = $folio, 
-					fecha_timbrado = NOW(), 
-					directorio = '$directorio',
-					email_enviado = '$email1'  
-				WHERE idfactura = $idfactura";
+			SET 
+				isfe = 1, 
+				UUID = '$folfis', 
+				xml = '$fxml', 
+				pdf='$fpdf', 
+				serie = '$serie', 
+				folio = $folio, 
+				fecha_timbrado = NOW(), 
+				directorio = '$directorio',
+				email_enviado = '$email1'  
+			WHERE idfactura = $idfactura";
 		$result = $f->guardarDatos($query);
 
 		unlink($folSer2);
-		
+
+		/*include("crear_PDF_Arji.php");
+
+		$dir_upload = "https://platsource.mx/uw_fe/".$directorio;
+		$pdf = $fpdf;
+		$xml = $fxml;
+		$emailto = $email1;
+		$CFDi_ver = "3.2";
+
+		// mysql_close($mysql);
+		*/
+
 		if ( $result == "OK" ){
 
 			$dir_upload = $f->URL."uw_fe/".$directorio;
@@ -327,8 +343,12 @@ foreach ($xml->xpath('//t:TimbreFiscalDigital') as $tfd) {
 
 		}
 
+
+
 	}
+
 }
+
 
 			
 ?>

@@ -255,7 +255,7 @@ jQuery(function($) {
 
 	function closeWindow(){
         $("#contentProfile").hide(function(){
-            $("#contentProfile").html("");
+            $("#contentProfile").empty();
             $('#breadcrumb').html(getBar('Inicio, Facturas por Familia '));
             $("#contentMain").show();
         });
@@ -269,7 +269,7 @@ jQuery(function($) {
 
     function getMetodoPago(){
        $("#preloaderPrincipal").show();
-       $("#idmetododepago").html("");
+       $("#idmetododepago").empty();
         var nc = "u="+localStorage.nc;
         $.post(obj.getValue(0)+"data/", { o:1, t:31, p:0,c:nc,from:0,cantidad:0, s:"" },
             function(json){
@@ -287,7 +287,7 @@ jQuery(function($) {
 
     function getEmiFisCombo(){
        $("#preloaderPrincipal").show();
-       $("#idemisorfiscal").html("");
+       $("#idemisorfiscal").empty();
         var nc = "u="+localStorage.nc;
         $.post(obj.getValue(0)+"data/", { o:1, t:26, p:0,c:nc,from:0,cantidad:0, s:"" },
             function(json){
@@ -316,12 +316,12 @@ jQuery(function($) {
     }
 
     $("#idregfis").on("change",function(event){
-    	getRegFis();
+    	getRegFis(1);
     });
 
     function getRegFisCombo(){
        $("#preloaderPrincipal").show();
-       $("#idregfis").html("");
+       $("#idregfis").empty();
         var nc = "u="+localStorage.nc+"&idfamilia="+IdFamilia;
         $.post(obj.getValue(0)+"data/", { o:1, t:30, p:0,c:nc,from:0,cantidad:0, s:"" },
             function(json){
@@ -331,13 +331,13 @@ jQuery(function($) {
                 });
             	$("#preloaderPrincipal").hide();
             	if (init){
-                	getRegFis();
+                	getRegFis(0);
             	}
             }, "json"
         );  
     }
 
-    function getRegFis(){
+    function getRegFis(TipoConsulta){
        	$("#preloaderPrincipal").show();
         $.post(obj.getValue(0)+"data/", { o:28, t:28, p:10,c:$("#idregfis").val(),from:0,cantidad:0, s:"" },
             function(json){
@@ -346,14 +346,16 @@ jQuery(function($) {
             	// $("#email1").val(json[0].email1);
 	            $("#email1").val(json[0].email1 + "; " + json[0].email2 );
             	$("#preloaderPrincipal").hide();
-            	getFacDet();
+            	if (TipoConsulta==0){
+	            	getFacDet();
+            	}
             }, "json"
         );  
     }
 
     function getFacDet(){
        $("#preloaderPrincipal").show();
-       $("#tblDelFac > tbody").html("");
+       $("#tblDelFac > tbody").empty();
 
         var nc = "u="+localStorage.nc+"&idfactura="+IdFactura;
         $.post(obj.getValue(0)+"data/", { o:28, t:10014, p:10, c:nc, from:0, cantidad:0, s:"" },
@@ -380,8 +382,26 @@ jQuery(function($) {
 						cad0 += "</td>";
 					cad0 += "</tr>";
 					cad2 += cad2!=""?";":"";
-     				// cad2 +="1"+"|"+json[i].descrip_prod+"|"+json[i].total+"|"+json[i].total+"|"+json[i].nombre_completo_alumno+"|"+json[i].curp+"|"+json[i].clave_registro_nivel+"|"+json[i].nivel_fiscal+"|"+json[i].rfc;
-     				cad2 +="1"+"|"+json[i].descrip_prod+"|"+json[i].importe+"|"+json[i].importe+"|"+json[i].nombre_completo_alumno+"|"+json[i].curp+"|"+json[i].clave_registro_nivel+"|"+json[i].nivel_fiscal+"|"+json[i].rfc;
+ 
+     				// cad2 +="1"+"|"+json[i].descrip_prod+"|"+json[i].importe+"|"+json[i].importe+"|"+json[i].nombre_completo_alumno+"|"+json[i].curp+"|"+json[i].clave_registro_nivel+"|"+json[i].nivel_fiscal+"|"+json[i].rfc;
+               		cad2 +="1"+"|"+
+               				json[i].descrip_prod+"|"+
+               				json[i].importe+"|"+
+               				json[i].importe+"|"+
+               				json[i].nombre_completo_alumno+"|"+
+               				json[i].curp+"|"+
+               				json[i].clave_registro_nivel+"|"+
+               				json[i].nivel_fiscal+"|"+
+               				json[i].rfc+"|"+
+               				json[i].idedocta+"|"+
+               				json[i].iva+"|"+
+               				json[i].importe2+"|"+
+               				json[i].total+"|"+
+               				json[i].subtotal+"|"+
+               				json[i].claveprodserv+"|"+
+               				json[i].claveunidadmedida+"|"+
+               				json[i].claveunidadmedida_descripcion;
+					
 					$("#tblDelFac > tbody").append(cad0);
                 });
 
@@ -478,20 +498,6 @@ jQuery(function($) {
 		    	$("#total_"+i).val( ( (n2 - n1) + n3) );
 
     			var n4 = parseFloat( $("#total_"+i).val() ) ;
-/*		    	
-		    	nImporte += n0;
-		    	nDescto_Becas += db1;		    	
-		    	nSubtotal += n0 - db1;
-
-		    	nDescto += n1;		    	
-		    	nRec += n3;
-
-		    	nImporte2 += ( nSubtotal + n3 );
-
-	    		nIva = 0;
-
-		    	nTotal += nImporte2 + nIva;
-*/
 
 		    	nImporte += n0;
 		    	
@@ -607,7 +613,8 @@ jQuery(function($) {
         var nc = "u="+localStorage.nc+"&idfactura="+IdFactura;
 
     	var mp = $("#idmetododepago option:selected").text();
-    	$("#metodo_pago").val(mp);
+    	var xmp = mp.substring(0,2);
+    	$("#metodo_pago").val(xmp);
 
     	var queryString = $("#formTimFac1").serialize();
 		
@@ -635,7 +642,7 @@ jQuery(function($) {
 
 			        var PARAMS = {data:queryString};  
 			        var IdEmp = localStorage.IdEmp;
-			        var url = obj.getValue(0)+"timbrar-nc-"+IdEmp+"-0/";
+			        var url = obj.getValue(0)+"timbrar-nc-33-"+IdEmp+"-0/";
 
 			        var temp=document.createElement("form");
 			        temp.action=url;

@@ -87,7 +87,6 @@ $k=7;
 
 foreach ($arrAlu as $i => $value) {
 	
-
 	$result = $f->getQuerys($t,"idgrualu=".$arrAlu[$i],0,0,0,array(),$s,1);
 
 
@@ -106,23 +105,21 @@ foreach ($arrAlu as $i => $value) {
 			// Obtenemos el Promedio del Alumno
 			$fl=3;
 			$maxmat = count($arrIdGruMat)-1;
-			//echo $maxmat;
 			for($yy=$maxmat;$yy>=0;--$yy){
-				// echo "idgrualu=".$arrAlu[$i]."&numval=".$w."&idgrumat=".$arrIdGruMat[$yy];
-				$mimat = $f->getQuerys(56,"idgrualu=".$arrAlu[$i]."&numval=".$w."&idgrumat=".$arrIdGruMat[$yy],0,0,0,array(),' and padre > 0 and (idmatclas in (1,2,3,4,5) ) and orden_historial <= 100 order by orden_historial asc ');
-				// echo "--|-> ". count($mimat);
+				$mimat = $f->getQuerys(121,"idgrualu=".$arrAlu[$i]."&numval=".$w."&idgrumat=".$arrIdGruMat[$yy],0,0,0,array(),' and padre > 0 and (idmatclas in (1,2,3,4,5) ) and orden_historial <= 100 order by orden_historial asc ');
 				if (count($mimat)>0){
 					break;
 				};
 			};
 			
 			if ( count($mimat) > 0 ){
-				$mat = $f->getQuerys(56,"idgrualu=".$arrAlu[$i]."&numval=".$w."&idgrumat=".$mimat[0]->padre,0,0,0,array(),' and padre <= 0  ');
+				$mat = $f->getQuerys(56,"idgrualu=".$arrAlu[$i]."&numval=".$w."&idgrumat=".$mimat[0]->padre,0,0,0,array(),' and padre >= 0 ');
+								   // echo "idgrualu=".$arrAlu[$i]."&numval=".$w."&idgrumat=".$mimat[0]->padre.'\n\t';
 				// echo count($mat);
 				if ( count($mat) ){
 					if ( intval($mat[0]->con) > 0 ){
 						$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,2);
-						//echo $cal;
+						// echo $cal;
 						$oS->setCellValueByColumnAndRow($fl,$k, $cal);
 					}
 				}

@@ -3,7 +3,7 @@
 
 error_reporting(E_ALL | E_STRICT);  
 
-error_reporting(E_ALL);
+// error_reporting(E_ALL);
 ini_set('display_errors', TRUE);
 ini_set('display_startup_errors', TRUE);
 // ini_set('display_errors', 1);
@@ -6378,6 +6378,41 @@ class oCentura {
 				$query = "SELECT *
 							FROM _viProfesores
 							WHERE idprofesor = $idprofesor AND  status_profesor = 1 Limit 1";
+				break;
+
+			case 121:  // Get Eval for IdGruAlu
+				parse_str($cad);
+		        if ( $numval == 9 ){
+			        $ncal = "promcal";
+			        $ncon = "promcon";
+			        $nina = "sumina";
+		        }elseif ( $numval == 10 ){
+			        $ncal = "promcalgpo";
+			        $ncon = "promcongpo";
+			        $nina = "suminagpo";
+		        }else{
+			        $numval = intval($numval)-1;
+			        $ncal = "cal".$numval;
+			        $ncon = "con".$numval;
+			        $nina = "ina".$numval;
+			        $nobs = "obs".$numval;
+		        }
+		        
+		        if ( $numval == 9 ){
+					$query = "SELECT ".$ncal." AS cal, ".$ncon." AS con, ".$nina." AS ina, idmatclas, padre
+									FROM _viBoletas
+								WHERE idgrualu = $idgrualu AND idgrumat = $idgrumat $otros";
+		        }elseif ( $numval == 10 ){
+					$query = "SELECT ".$ncal." AS cal, ".$ncon." AS con, ".$nina." AS ina, idmatclas, padre
+									FROM boletas
+								WHERE idgrualu = $idgrualu AND idgrumat = $idgrumat  ";
+				}else{
+					
+					$query = "SELECT ".$ncal." AS cal, ".$ncon." AS con, ".$nina." AS ina, ".$nobs." AS obs, bol.idmatclas, bol.padre
+									FROM _viBoletas bol
+								WHERE bol.idgrumat = $idgrumat AND bol.idgrualu = $idgrualu $otros";
+				}
+
 				break;
 
 

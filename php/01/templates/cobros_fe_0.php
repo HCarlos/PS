@@ -12,9 +12,6 @@ $idmetododepago = $_POST['idmetododepago'];
 $referencia = $_POST['referencia'];
 $tutor = $_POST['tutor'];
 
-// $arr = $f->getQuerys(10009,"idfamilia=".$idfam."&u=".$user,0,0,0,array(),'alumno');
-// if (count($arr)>0){
-
 ?>
 <div class="row-fluid">
 	<div class="span12 ">

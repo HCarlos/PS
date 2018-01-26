@@ -259,7 +259,7 @@ jQuery(function($) {
 
 	function closeWindow(){
         $("#contentProfile").hide(function(){
-            $("#contentProfile").html("");
+            $("#contentProfile").empty();
             $('#breadcrumb').html(getBar('Inicio, Facturas por Familia '));
             $("#contentMain").show();
         });
@@ -273,7 +273,7 @@ jQuery(function($) {
 
     function getMetodoPago(){
        $("#preloaderPrincipal").show();
-       $("#idmetododepago").html("");
+       $("#idmetododepago").empty();
         var nc = "u="+localStorage.nc;
         $.post(obj.getValue(0)+"data/", { o:1, t:31, p:0,c:nc,from:0,cantidad:0, s:"" },
             function(json){
@@ -345,7 +345,7 @@ jQuery(function($) {
 
     function getRegFisCombo(){
        $("#preloaderPrincipal").show();
-       $("#idregfis").html("");
+       $("#idregfis").empty();
         var nc = "u="+localStorage.nc+"&idfamilia="+IdFamilia;
         $.post(obj.getValue(0)+"data/", { o:1, t:30, p:0,c:nc,from:0,cantidad:0, s:"" },
             function(json){
@@ -403,7 +403,7 @@ jQuery(function($) {
 
     function getFacDet(){
        $("#preloaderPrincipal").show();
-       $("#tblDelFac > tbody").html("");
+       $("#tblDelFac > tbody").empty();
 
         var nc = "u="+localStorage.nc+"&idfactura="+IdFactura;
         $.post(obj.getValue(0)+"data/", { o:28, t:10014, p:10, c:nc, from:0, cantidad:0, s:"" },
@@ -437,8 +437,27 @@ jQuery(function($) {
 						cad0 += "</td>";
 					cad0 += "</tr>";
 					cad2 += cad2!=""?";":"";
-     				// cad2 +="1"+"|"+json[i].descrip_prod+"|"+json[i].total+"|"+json[i].total+"|"+json[i].nombre_completo_alumno+"|"+json[i].curp+"|"+json[i].clave_registro_nivel+"|"+json[i].nivel_fiscal+"|"+json[i].rfc;
-     				cad2 +="1"+"|"+json[i].descrip_prod+"|"+json[i].importe+"|"+json[i].importe+"|"+json[i].nombre_completo_alumno+"|"+json[i].curp+"|"+json[i].clave_registro_nivel+"|"+json[i].nivel_fiscal+"|"+json[i].rfc;
+
+     				// cad2 +="1"+"|"+json[i].descrip_prod+"|"+json[i].importe+"|"+json[i].importe+"|"+json[i].nombre_completo_alumno+"|"+json[i].curp+"|"+json[i].clave_registro_nivel+"|"+json[i].nivel_fiscal+"|"+json[i].rfc;
+               		cad2 +="1"+"|"+
+               				json[i].descrip_prod+"|"+
+               				json[i].importe+"|"+
+               				json[i].importe+"|"+
+               				json[i].nombre_completo_alumno+"|"+
+               				json[i].curp+"|"+
+               				json[i].clave_registro_nivel+"|"+
+               				json[i].nivel_fiscal+"|"+
+               				json[i].rfc+"|"+
+               				json[i].idedocta+"|"+
+               				json[i].iva+"|"+
+               				json[i].importe2+"|"+
+               				json[i].total+"|"+
+               				json[i].subtotal+"|"+
+               				json[i].claveprodserv+"|"+
+               				json[i].claveunidadmedida+"|"+
+               				json[i].claveunidadmedida_descripcion;
+               				
+
 					$("#tblDelFac > tbody").append(cad0);
 					init = false;
                 });
@@ -687,7 +706,7 @@ jQuery(function($) {
 
 			        var PARAMS = {data:queryString};  
 			        var IdEmp = localStorage.IdEmp;
-			        var url = obj.getValue(0)+"timbrar-fm-"+IdEmp+"-0/";
+			        var url = obj.getValue(0)+"timbrar-fm-33-"+IdEmp+"-0/";
 
 			        var temp=document.createElement("form");
 			        temp.action=url;
