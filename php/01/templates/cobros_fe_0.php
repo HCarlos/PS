@@ -113,6 +113,16 @@ $tutor = $_POST['tutor'];
 												<input type="text" id="email1" name="email1" class="marginLeft1em altoMoz wd80prc"/>
 											</td>
 										<tr>	
+										<tr>
+											<td class="wd20prc">Uso CFDi </td>
+											<td class="wd80prc">
+												<select id="slUsoCFDi" name="slUsoCFDi" size="1" class='marginLeft1em altoMoz wd80prc'>
+													<option value="G03">G03 - Gastos generales</option>
+													<option value="D10" selected>D10 - Pago de colegiatura</option>
+													<option value="P01">P01 - No definido</option>
+												</select>
+											</td>
+										<tr>	
 									</table>
 									
 									</div>

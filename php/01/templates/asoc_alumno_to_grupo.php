@@ -196,16 +196,18 @@ $("#AddItem").on("click",function(event){
         $(".lstAlumnos option:selected").each(function () {
                 x += $(this).val() + "|";
           });
-
     }
+
     if (isDefined(parseInt(y)) || y <= 0){
         $("#preloaderPrincipal").hide();
         alert("Seleccione un elemento");
         return false;
     }
-    var d = x+'.'+y;
     
-    var nc = "u="+localStorage.nc;
+    var d = x+'.'+y;
+    var idciclo = $("#ciclo1").val();
+    
+    var nc = "u="+localStorage.nc+"&idciclo="+idciclo;
 
     $.post(obj.getValue(0)+"data/", { o:1, c:d, t:10, p:1, s:nc, from:0, cantidad:0 },
         function(json){

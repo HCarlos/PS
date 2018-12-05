@@ -71,6 +71,11 @@ function init() {
                 $("#menuPrincipal").append(html);
             }, "html");
 
+        $.post(obj.getValue(0) + "menu-comunica/", {},
+            function(html) {
+                $("#menuPrincipal").append(html);
+            }, "html");
+
     }
 
     var IDTCve = parseInt(localStorage.ClaveNivelAcceso, 0);    

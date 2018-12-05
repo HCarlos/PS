@@ -116,6 +116,16 @@ $tutor = $_POST['tutor'];
 												<input type="email" id="email1" name="email1" class="marginLeft1em altoMoz wd80prc"/>
 											</td>
 										<tr>	
+										<tr>
+											<td class="wd20prc">Uso CFDi </td>
+											<td class="wd80prc">
+												<select id="slUsoCFDi" name="slUsoCFDi" size="1" class='marginLeft1em altoMoz wd80prc'>
+													<option value="G03">G03 - Gastos generales</option>
+													<option value="D10" selected>D10 - Pago de colegiatura</option>
+													<option value="P01">P01 - No definido</option>
+												</select>
+											</td>
+										<tr>	
 									</table>
 									
 									</div>
@@ -289,22 +299,6 @@ jQuery(function($) {
         );  
     }
 
-    // function getEmiFisCombo(){
-    //    $("#preloaderPrincipal").show();
-    //    $("#idemisorfiscal").empty();
-    //     var nc = "u="+localStorage.nc;
-    //     $.post(obj.getValue(0)+"data/", { o:1, t:26, p:0,c:nc,from:0,cantidad:0, s:"" },
-    //         function(json){
-    //             var nc,it;
-    //            $.each(json, function(i, item) {
-    //            		var it = item.data.split("-");
-    //                 $("#idemisorfiscal").append('<option value="'+it[0]+'"> '+item.label+'</option>');
-    //             });
-    //         	$("#preloaderPrincipal").hide();
-    //            getEmiFis();
-    //         }, "json"
-    //     );  
-    // }
 
     function getEmiFisCombo(){
        $("#preloaderPrincipal").show();
@@ -360,21 +354,6 @@ jQuery(function($) {
             }, "json"
         );  
     }
-
-    // function getRegFis(){
-    //    	$("#preloaderPrincipal").show();
-    //    var it = $("#idemisorfiscal").val().split('-');
-    //    $("#serie").val(it[1]);       	
-    //     $.post(obj.getValue(0)+"data/", { o:28, t:28, p:10,c:it[0],from:0,cantidad:0, s:"" },
-    //         function(json){
-    //         	$("#rf0").html(json[0].calle+" "+json[0].num_ext+' '+json[0].num_int+' '+json[0].colonia);
-    //         	$("#rf1").html(json[0].localidad+" "+json[0].cp+' '+json[0].estado);
-    //         	$("#email1").val(json[0].email1);
-    //         	$("#preloaderPrincipal").hide();
-    //         	getFacDet();
-    //         }, "json"
-    //     );  
-    // }
 
 
     function getRegFis(){
@@ -433,7 +412,6 @@ jQuery(function($) {
 						cad0 +='				<i class="icon-trash bigger-130"></i>';
 						cad0 +='		</a>';
 						cad0 +='	</div>';
-
 						cad0 += "</td>";
 					cad0 += "</tr>";
 					cad2 += cad2!=""?";":"";
@@ -515,7 +493,7 @@ jQuery(function($) {
 
             	$("#idregfis").val( json[0].idregfis );
 
-            	$("#idmetododepago").val( json[0].metodo_de_pago );
+            	$("#idmetododepago").val( json[0].idmetododepago );
             	$("#referencia").val( json[0].referencia );
 
             	$("#spfactura").html(IdFactura);
@@ -617,11 +595,18 @@ jQuery(function($) {
     	event.preventDefault();
     	
     	var mp = $("#idmetododepago option:selected").text();
+/*
     	$("#metodo_pago2").val(mp);
     	
     	var xmp = mp.substring(0,2);
     	$("#metodo_pago").val(xmp);
-    	
+*/
+
+    	$("#metodo_pago2").val(mp);
+    	var xmp = mp.substring(0,2);
+    	$("#metodo_pago").val(xmp);
+
+
         var nc = "u="+localStorage.nc+"&idfactura="+IdFactura;
     	var queryString = $("#formTimFac1").serialize();
 		
@@ -677,8 +662,16 @@ jQuery(function($) {
     	
         var nc = "u="+localStorage.nc+"&idfactura="+IdFactura;
 
+/*
     	var mp = $("#idmetododepago option:selected").text();
     	$("#metodo_pago").val(mp);
+*/
+
+    	var mp = $("#idmetododepago option:selected").text();
+    	var xmp = mp.substring(0,2);
+    	$("#metodo_pago").val(xmp);
+
+
 
     	var queryString = $("#formTimFac1").serialize();
 		

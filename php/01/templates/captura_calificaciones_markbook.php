@@ -34,7 +34,7 @@ $grupo = $_POST['grupo'];
 					<table id="tblMKBCap0" role="table" class="bordered">
 						<thead>
 							<tr>
-								<th>#</th>
+								<th>#-</th>
 								<th>NOMBRE  DEL  ALUMNO</th>
 								<th>CAL</th>
 								<th>COMENTARIOS</th>

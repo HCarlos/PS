@@ -16,11 +16,17 @@ if (isset($_POST["s_transm"])){
 	$importe   = $_POST["t_importe"];
 	$fecha     = $_POST["val_10"];
 	$n_autoriz = $_POST["n_autoriz"];
-	$IdUser     = isset($_POST["IdUser"]) ? $_POST["IdUser"] : 0;
+	$IdUser    = isset($_POST["IdUser"]) ? $_POST["IdUser"] : 0;
 
-	require_once("../oCenturaPDO.php");
-	$f = oCenturaPDO::getInstance();
-	$f->setPagos($id,$importe,$n_autoriz,$IdUser);
+	if ( intval($n_autoriz) > 0 ){
+		require_once("../oCenturaPDO.php");
+		$f = oCenturaPDO::getInstance();
+		$f->setPagos($id,$importe,$n_autoriz,$IdUser);
+	}else{
+		echo "La transacción ha fallado...";
+		return false;
+	}
+	
 }else{
 	echo "Ocurrió un error al entregar el Control...";
 	return false;

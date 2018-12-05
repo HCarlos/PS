@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--><html lang="en"><!--<![endif]-->
+
+<head>
+<meta charset="utf-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="author" content="">
+
+<!-- Bootstrap Stylesheet -->
+<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" media="screen">
+
+<!-- Theme Stylesheet -->
+<link rel="stylesheet" href="assets/css/dandelion.theme-gobtab.css" media="screen">
+<!-- Icon Stylesheet -->
+<link rel="stylesheet" href="assets/css/style-gobtab.css" media="screen">
+<!--  Main Stylesheet -->
+<link rel="stylesheet" href="assets/css/dandelion-gobtab.css" media="screen">
+<!-- Demo Stylesheet -->
+<link rel="stylesheet" href="assets/css/demo-gobtab.css" media="screen">
+
+<title>Plantilla General para sistemas DGTIC</title>
+
+</head>
+
+<body>
+    	<!-- Main Wrapper. Set this to 'fixed' for fixed layout and 'fluid' for fluid layout' -->
+	<div id="dgtic-wrapper">
+    
+        <!-- Header -->
+        <div id="dgtic-header">
+        
+            <div id="dgtic-header-top">
+                
+                <!-- Container -->
+                <div class="dgtic-container clearfix">
+                    
+                   <!-- Logo Container. All images put here will be vertically centere -->
+                    <div id="dgtic-logo-wrap">
+                        <div id="dgtic-logo">
+                            <div id="dgtic-logo-img">
+                                <a href="dashboard.html">
+                                    <img src="http://template.tabasco.gob.mx/logos/gobiernoDelEstado.png" alt="Dandelion Admin">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Header Toolbar Menu -->
+                    <div id="dgtic-header-toolbar" class="clearfix">
+                        <div id="dgtic-user-profile-wrap">
+                            <div id="dgtic-user-profile" data-toggle="dropdown" class="clearfix">
+                                <div id="dgtic-user-avatar">
+                                    <img src="assets/images/pp.jpg" alt="">
+                                </div>
+                                <div id="dgtic-user-info">
+                                    Juan Pérez
+                                    <span class="dgtic-user-title">Director General</span>
+                                </div>
+                            </div>
+                            <ul class="dropdown-menu">
+                                <li><a href="dashboard.html">Panel de Control</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#">Perfil</a></li>
+                                <li><a href="#">Configuraciones</a></li>
+                                <li><a href="#">Cambiar Contraseña</a></li>
+                            </ul>
+                        </div>
+                        <div id="dgtic-header-button-container">
+                            <ul>
+                                <li class="dgtic-header-button-wrap">
+                                    <div class="dgtic-header-button" data-toggle="dropdown">
+                                        <span class="btn-count">32</span>
+                                        <a href="#"><i class="icon-circle-exclamation-mark"></i></a>
+                                    </div>
+                                    <ul class="dropdown-menu pull-right">
+                                        <li>
+                                            <span class="dgtic-dropdown-sub-title">Notificaciones</span>
+                                            <ul class="dgtic-dropdown-sub">
+                                                <li class="unread">
+                                                    <a href="#">
+                                                        <span class="thumbnail"><img src="assets/images/pp.jpg" alt=""></span>
+                                                        <span class="info">
+                                                            <span class="name">John Doe</span>
+                                                            <span class="message">
+                                                                Lorem ipsum dolor sit amet consectetur adipiscing elit, et al commore
+                                                            </span>
+                                                            <span class="time">
+                                                                January 21, 2012
+                                                            </span>
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                                <li class="unread">
+                                                    <a href="#">
+                                                        <span class="thumbnail"><img src="assets/images/pp.jpg" alt=""></span>
+                                                        <span class="info">
+                                                            <span class="name">John Doe</span>
+                                                            <span class="message">
+                                                                Lorem ipsum dolor sit amet consectetur adipiscing elit, et al commore
+                                                            </span>
+                                                            <span class="time">
+                                                                January 21, 2012
+                                                            </span>
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                                <li class="read">
+                                                    <a href="#">
+                                                        <span class="thumbnail"><img src="assets/images/pp.jpg" alt=""></span>
+                                                        <span class="info">
+                                                            <span class="name">John Doe</span>
+                                                            <span class="message">
+                                                                Lorem ipsum dolor sit amet consectetur adipiscing elit, et al commore
+                                                            </span>
+                                                            <span class="time">
+                                                                January 21, 2012
+                                                            </span>
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                                <li class="read">
+                                                    <a href="#">
+                                                        <span class="thumbnail"><img src="assets/images/pp.jpg" alt=""></span>
+                                                        <span class="info">
+                                                            <span class="name">John Doe</span>
+                                                            <span class="message">
+                                                                Lorem ipsum dolor sit amet consectetur adipiscing elit, et al commore
+                                                            </span>
+                                                            <span class="time">
+                                                                January 21, 2012
+                                                            </span>
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                            <a class="dgtic-dropdown-sub-footer" href="#">
+                                                Ver todas las Notificaciones
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="dgtic-header-button-wrap">
+                                    <div class="dgtic-header-button" data-toggle="dropdown">
+                                        <span class="btn-count">5</span>
+                                        <a href="#"><i class="icon-envelope"></i></a>
+                                    </div>
+                                    <ul class="dropdown-menu pull-right">
+                                        <li>
+                                            <span class="dgtic-dropdown-sub-title">Mensajes</span>
+                                            <ul class="dgtic-dropdown-sub">
+                                                <li class="unread">
+                                                    <a href="#">
+                                                        <span class="thumbnail"><img src="assets/images/pp.jpg" alt=""></span>
+                                                        <span class="info">
+                                                            <span class="name">John Doe</span>
+                                                            <span class="message">
+                                                                Lorem ipsum dolor sit amet consectetur adipiscing elit, et al commore
+                                                            </span>
+                                                            <span class="time">
+                                                                January 21, 2012
+                                                            </span>
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                                <li class="unread">
+                                                    <a href="#">
+                                                        <span class="thumbnail"><img src="assets/images/pp.jpg" alt=""></span>
+                                                        <span class="info">
+                                                            <span class="name">John Doe</span>
+                                                            <span class="message">
+                                                                Lorem ipsum dolor sit amet consectetur adipiscing elit, et al commore
+                                                            </span>
+                                                            <span class="time">
+                                                                January 21, 2012
+                                                            </span>
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                                <li class="read">
+                                                    <a href="#">
+                                                        <span class="thumbnail"><img src="assets/images/pp.jpg" alt=""></span>
+                                                        <span class="info">
+                                                            <span class="name">John Doe</span>
+                                                            <span class="message">
+                                                                Lorem ipsum dolor sit amet consectetur adipiscing elit, et al commore
+                                                            </span>
+                                                            <span class="time">
+                                                                January 21, 2012
+                                                            </span>
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                                <li class="read">
+                                                    <a href="#">
+                                                        <span class="thumbnail"><img src="assets/images/pp.jpg" alt=""></span>
+                                                        <span class="info">
+                                                            <span class="name">John Doe</span>
+                                                            <span class="message">
+                                                                Lorem ipsum dolor sit amet consectetur adipiscing elit, et al commore
+                                                            </span>
+                                                            <span class="time">
+                                                                January 21, 2012
+                                                            </span>
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                            <a class="dgtic-dropdown-sub-footer" href="#">
+                                                Ver Todos los Mensajes
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="dgtic-header-button-wrap">
+                                    <div class="dgtic-header-button">
+                                        <a href="index.html"><i class="icon-power"></i></a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                                    
+                </div>
+            </div>
+            
+            <div id="dgtic-header-bottom">
+                <!-- Container -->
+                <div class="dgtic-container clearfix">
+                
+                	<div id="dgtic-search">
+                    	<form>
+                        	<input type="text" class="search-query" placeholder="Buscar...">
+                        </form>
+                    </div>
+                	
+                    <!-- Breadcrumbs -->
+                    <div id="dgtic-breadcrumb">
+                        <ul>
+                            <li><a href="dashboard.html"><i class="icon-home"></i> Panel de Control</a></li>
+                            <li class="active"><span>Estadisticas</span></li>
+                        </ul>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    
+        <!-- Content -->
+        <div id="dgtic-content">
+            
+            <!-- Container -->
+            <div class="dgtic-container clearfix">
+            
+                <!-- Sidebar Separator do not remove -->
+                <div id="dgtic-sidebar-separator"></div>
+                
+                <!-- Sidebar -->
+                <div id="dgtic-sidebar">
+
+                    <!-- Navigation Toggle for < 480px -->
+                    <div id="dgtic-sidebar-toggle"></div>
+                
+                    <!-- Main Navigation -->
+                    <div id="dgtic-main-nav" class="btn-container">
+                        <ul>
+                            <li class="active">
+                                <a href="dashboard.html">
+                                    <!-- Icon Container -->
+                                    <span class="dgtic-nav-icon">
+                                        <i class="icon-home"></i>
+                                    </span>
+                                    Panel de Control
+                                </a>
+                            </li>
+                            <li>
+                                <a href="statistics.html">
+                                    <!-- Nav Notification -->
+                                    <span class="dgtic-nav-count">32</span>
+                                    <!-- Icon Container -->
+                                    <span class="dgtic-nav-icon">
+                                        <i class="icon-stats"></i>
+                                    </span>
+                                    Estadisticas
+                                </a>
+                            </li>
+                            <li>
+                                <a href="calendar.html">
+                                    <!-- Icon Container -->
+                                    <span class="dgtic-nav-icon">
+                                        <i class="icon-calendar"></i>
+                                    </span>
+                                    Calendario
+                                </a>
+                            </li>
+                            <li>
+                                <a href="file.html">
+                                    <!-- Icon Container -->
+                                    <span class="dgtic-nav-icon">
+                                        <i class="icon-folder-open"></i>
+                                    </span>
+                                    Manejo de Archivos
+                                </a>
+                            </li>
+                            <li>
+                                <a href="table.html">
+                                    <!-- Icon Container -->
+                                    <span class="dgtic-nav-icon">
+                                        <i class="icon-table"></i>
+                                    </span>
+                                    Tablas
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <!-- Icon Container -->
+                                    <span class="dgtic-nav-icon">
+                                        <i class="icon-edit"></i>
+                                    </span>
+                                    Formularios
+                                </a>
+                                <ul>
+                                    <li><a href="form-layouts.html">Diseños</a></li>
+                                    <li><a href="form-elements.html">Elementos</a></li>
+                                    <li><a href="form-validation.html">Validación</a></li>
+                                    <li><a href="form-wizard.html">Wizard</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="ui.html">
+                                    <!-- Icon Container -->
+                                    <span class="dgtic-nav-icon">
+                                        <i class="icon-settings"></i>
+                                    </span>
+                                    UI Elementos
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <!-- Icon Container -->
+                                    <span class="dgtic-nav-icon">
+                                        <i class="icon-font"></i>
+                                    </span>
+                                    Diseños y Tipografía
+                                </a>
+                                <ul class="closed">
+                                    <li><a href="grids.html">Grids y Paneles</a></li>
+                                    <li><a href="typography.html">Tipografía </a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="gallery.html">
+                                    <!-- Icon Container -->
+                                    <span class="dgtic-nav-icon">
+                                        <i class="icon-picture"></i>
+                                    </span>
+                                    Galería
+                                </a>
+                            </li>
+                            <li>
+                                <a href="error.html">
+                                    <!-- Icon Container -->
+                                    <span class="dgtic-nav-icon">
+                                        <i class="icon-warning-sign"></i>
+                                    </span>
+                                    Página de Error(404)
+                                </a>
+                            </li>
+                            <li>
+                                <a href="icons.html">
+                                    <!-- Icon Container -->
+                                    <span class="dgtic-nav-icon">
+                                        <i class="icon-crown"></i>
+                                    </span>
+                                    Iconos
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                </div>
+                
+                <!-- Main Content Wrapper -->
+                <div id="dgtic-content-wrap" class="clearfix">
+                
+                	<!-- Content Area -->
+                	<div id="dgtic-content-area">
+                        <div class="row-fluid">
+                            <div class="span12 dgtic-panel">
+                                <div class="dgtic-panel-header">
+                                    <span class="dgtic-panel-title">Graficas Circular de Demostración</span>
+                                </div>
+                                <div class="dgtic-panel-content">
+                                    <ul class="dgtic-stats-container">
+                                        <li id="dc-1" data-provide="circular" data-fill-color="#a6d037" data-initial-value="55" data-max-value="98" data-label="No. 1" style="width: 136px; height: 136px;"></li>
+                                        <li id="dc-2" data-provide="circular" data-fill-color="#ea799b" daa-percent="true" data-initial-value="200" data-max-value="241" data-label="No. 2" style="width: 136px; height: 136px;"></li>
+                                        <li id="dc-3" data-provide="circular" data-fill-color="#fab241" data-initial-value="124" data-max-value="523" data-label="No. 3" style="width: 136px; height: 136px;"></li>
+                                        <li id="dc-4" data-provide="circular" data-fill-color="#61a5e4" data-percent="true" data-initial-value="42" data-max-value="100" data-label="No. 4" style="width: 136px; height: 136px;"></li>
+                                    </ul>
+                                </div>
+                                <div class="dgtic-panel-content dgtic-form-container">
+                                    <form class="dgtic-form dgtic-form-inline">
+                                        <div class="dgtic-form-row">
+                                            <label class="dgtic-form-label">Objetivo</label>
+                                            <div class="dgtic-form-item">
+                                                <select id="dc-target" class="span6">
+                                                    <option value="#dc-1">No. 1</option>
+                                                    <option value="#dc-2">No. 2</option>
+                                                    <option value="#dc-3">No. 3</option>
+                                                    <option value="#dc-4">No. 4</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="dgtic-form-row dgtic-column-row">
+                                            <label class="dgtic-form-label">Animar(valor, enqueue)</label>
+                                            <div class="dgtic-form-item dgtic-form-cols">
+                                                <div class="col-3-8">
+                                                    <label class="dgtic-form-label">Valor</label>
+                                                    <input type="text" id="dc-value">
+                                                </div>
+                                                <div class="col-1-8">
+                                                    <label class="dgtic-form-label">Empuje a la Cola</label>
+                                                    <ul class="dgtic-form-list inline">
+                                                        <li><input checked type="radio" id="dce-yes" name="dc-enqueue"> <label for="dce-yes">Yes</label></li>
+                                                        <li><input type="radio" id="dce-no" name="dc-enqueue"> <label for="dce-no">No</label></li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-2-8">
+                                                    <button id="dc-animate" type="button" class="btn btn-primary">Actualizar</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="dgtic-form-row dgtic-column-row">
+                                            <label class="dgtic-form-label">Opciones</label>
+                                            <div class="dgtic-form-item dgtic-form-cols">
+                                                <div class="col-2-8">
+                                                    <label class="dgtic-form-label">Valor Maximo</label>
+                                                    <input type="text" id="dc-max-value">
+                                                    <span class="form-help">Noticia! Valor máximo no puede ajustarse en el modo por ciento (No. 4)</span>
+                                                </div>
+                                                <div class="col-2-8">
+                                                    <label class="dgtic-form-label">Color de Relleno</label>
+                                                    <input type="text" id="dc-fill">
+                                                </div>
+                                                <div class="col-2-8">
+                                                    <label class="dgtic-form-label">Etiqueta</label>
+                                                    <input type="text" id="dc-label">
+                                                </div>
+                                                <div class="col-2-8">
+                                                    <button id="dc-options" type="button" class="btn btn-primary">Actualizar</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row-fluid">
+                        	<div class="span6">
+                                <div class="dgtic-panel">
+                                    <div class="dgtic-panel-header">
+                                        <span class="dgtic-panel-title"><i class="icol-chart-curve"></i> Grafico de Lineas</span>
+                                    </div>
+                                	<div class="dgtic-panel-content">
+                                        <div id="dgtic-ex-flot-line" style="height:300px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span6">
+                                <div class="dgtic-panel">
+                                    <div class="dgtic-panel-header">
+                                        <span class="dgtic-panel-title"><i class="icol-chart-bar"></i> Gráfico de Barra</span>
+                                    </div>
+                                	<div class="dgtic-panel-content">
+                                        <div id="dgtic-ex-flot-stacked" style="height:300px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row-fluid">
+                        	<div class="span6">
+                                <div class="dgtic-panel">
+                                    <div class="dgtic-panel-header">
+                                        <span class="dgtic-panel-title"><i class="icol-chart-pie"></i> Gráfico de Sectores</span>
+                                    </div>
+                                	<div class="dgtic-panel-content">
+                                        <div id="dgtic-ex-flot-pie" style="height:300px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        	<div class="span6">
+                                <div class="dgtic-panel">
+                                    <div class="dgtic-panel-header">
+                                        <span class="dgtic-panel-title"><i class="icol-chart-pie"></i> Gráfico de Anillos</span>
+                                    </div>
+                                	<div class="dgtic-panel-content">
+                                        <div id="dgtic-ex-flot-donut" style="height:300px;"></div>
+                                    </div>
+                                </div>
+                            </div>  
+                        </div>
+                    </div>
+                    
+                </div>
+                
+            </div>
+            
+        </div>
+        
+         <!-- Footer -->
+         <div id="dgtic-footer">
+            <div class="dgtic-container clearfix">
+             Derechos Reservados © Dirección General de Tecnologías de la Información y la Comunicación.                 
+
+                <a href="#">
+                    <img src="http://template.tabasco.gob.mx/assets/images/dgtic.png" id="logo-size">
+                </a>                  
+
+            </div>
+        </div>
+        
+    </div>
+
+    <!-- JS Libs -->
+    <script src="assets/js/libs/jquery-1.8.3.min.js"></script>
+    <script src="assets/js/libs/jquery.placeholder.min.js"></script>
+    <script src="assets/js/libs/jquery.mousewheel.min.js"></script>
+
+    <!-- JS Bootstrap -->
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    
+    <!-- jQuery-UI JavaScript Files -->
+    <script src="assets/jui/js/jquery-ui-1.9.2.min.js"></script>
+    <script src="assets/jui/jquery.ui.timepicker.min.js"></script>
+    <script src="assets/jui/jquery.ui.touch-punch.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="assets/jui/css/jquery.ui.all.css" media="screen">
+
+    <!-- Plugin Files -->
+
+    <!-- Flot Plugin -->
+    <!--[if lt IE 9]>
+    <script src="assets/js/libs/excanvas.min.js"></script>
+    <![endif]-->
+    <script src="plugins/flot/jquery.flot.js"></script>
+    <script src="plugins/flot/plugins/jquery.flot.tooltip.min.js"></script>
+    <script src="plugins/flot/plugins/jquery.flot.stack.min.js"></script>
+    <script src="plugins/flot/plugins/jquery.flot.pie.min.js"></script>
+    <script src="plugins/flot/plugins/jquery.flot.resize.min.js"></script>
+
+    <!-- Circular Stat Plugin -->
+    <script src="assets/js/plugins/circularstat/dandelion.circularstat.js"></script>
+
+    <!-- Colorpicker Plugin -->
+    <script src="plugins/colorpicker/colorpicker.js"></script>
+    <link rel="stylesheet" href="plugins/colorpicker/colorpicker.css" media="screen">
+
+    <!-- JS Demo -->
+    <script src="assets/js/demo/demo.charts.js"></script>
+
+    <!-- JS Template -->
+    <script src="assets/js/core/dandelion.core.js"></script>
+
+    <!-- JS Customizer -->
+    <script src="assets/js/core/dandelion.customizer.js"></script>
+    
+</body>
+</html>

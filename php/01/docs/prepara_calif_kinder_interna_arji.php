@@ -45,7 +45,7 @@ foreach ($arrAlu as $i => $value) {
 
 		}
 
-		$M->Actualiza_Grupo_Alumno_Promedio_Idioma($user,$result[$j]->idgrualu,0);
+		$M->Actualiza_Grupo_Alumno_Promedio_Idioma_Kinder($user,$result[$j]->idgrualu,0);
 
 		$result = $f->getQuerys(46,"idgrualu=".$arrAlu[$i],0,0,0,array(),$s,1);
 
@@ -53,7 +53,7 @@ foreach ($arrAlu as $i => $value) {
 
 		}
 
-		$M->Actualiza_Grupo_Alumno_Promedio_Idioma($user,$result[$j]->idgrualu,1);
+		$M->Actualiza_Grupo_Alumno_Promedio_Idioma_Kinder($user,$result[$j]->idgrualu,1);
 
 	}
 	

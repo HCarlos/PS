@@ -142,7 +142,7 @@ foreach ($arrAlu as $i => $value) {
 		$fl=3;
 		$mat = $f->getQuerys(58,"idgrualu=".$arrAlu[$i]."&numval=9",0,0,0,array(),' and idioma = 0 ');
 		$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,3);
-		// $cal =  $mat[0]->cal;
+		// $cal = bcdiv($mat[0]->cal,'1',0);
 		$oS->setCellValueByColumnAndRow($fl,$k, $cal);
 
 

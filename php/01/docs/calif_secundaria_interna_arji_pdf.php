@@ -37,6 +37,7 @@ class PDF_Diag extends PDF_Sector {
     var $lastupdate;
     var $obsEsp;
     var $obsIng;
+    var $temas;
 
     function Header(){   
 
@@ -140,15 +141,94 @@ class PDF_Diag extends PDF_Sector {
 		if ($ina>0){
 			$inax = intval($ina);
 		}
+
+		$cx = 0;
+		if ($cal>0){
+			$cx = round(floatval($cal),0);
+		}
+
+		if ($cx >= 95 && $cx <= 100){
+			$nl = "IV";
+		}elseif ($cx >= 75 && $cx <= 94){
+			$nl = "III";
+		}elseif ($cx >= 55 && $cx <= 74){
+			$nl = "II";
+		}elseif ($cx >= 1 && $cx <= 54){
+			$nl = "I";
+		}else{
+			$nl = " ";
+		}
+
 		$nret = "";
 		switch($pivot){
 			case 2:
-				return str_pad($calx, 3, " ", STR_PAD_LEFT).' '.str_pad($conx, 2, " ", STR_PAD_LEFT).'   ';	
+				return str_pad($calx, 5," ", STR_PAD_LEFT).str_pad($conx, 5, " ", STR_PAD_LEFT);	
+				break;
+			case 3:
+				$calx = $cal;
+				return str_pad(floor($calx), 8, " ", STR_PAD_LEFT).' '.str_pad($conx, 8, " ", STR_PAD_LEFT).' '.str_pad($nl, 3, " ", STR_PAD_LEFT).'   ';	
 				break;
 			default:
-				return str_pad($calx, 3, " ", STR_PAD_LEFT).' '.str_pad($conx, 2, " ", STR_PAD_LEFT).' '.str_pad($inax, 2, " ", STR_PAD_LEFT);	
+				return str_pad($calx, 4, " ", STR_PAD_LEFT).str_pad($conx, 5, " ", STR_PAD_LEFT).str_pad($inax, 5, " ", STR_PAD_LEFT).str_pad($nl, 5, " ", STR_PAD_LEFT).'   ';	
 				break;
 		}
+
+	}
+
+	function setTemas($opt=1,$pdf){
+		$pdf->setX(5);
+		$y = $pdf->GetY();
+		$pdf->SetFillColor(192);
+		$pdf->SetFont('Arial','B',8);		
+		$pdf->Cell(70,4,utf8_decode($this->temas[$opt]),'LBT',0,'L',true);
+		$pdf->Cell(155,4,'','BTR',1,'C',true);
+		$pdf->SetFillColor(255);
+		$pdf->SetFont('Arial','',8);		
+		// $this->Ln(1);
+
+	}
+
+	function setHeaderTrim($pdf,$xlarge=92,$squar1=""){
+
+		$pdf->SetFont('Arial','B',8);
+
+		$pdf->setX(5);
+		$y = $pdf->GetY();
+		$pdf->SetFillColor(192);
+		$pdf->RoundedRect(5, $y, 225, 4, 2, '1', 'FD');
+		$pdf->Cell(70,4,'A S I G N A T U R A','R',0,'C');
+		$pdf->Cell(154,4,'T   R   I   M   E   S   T   R   E   S','',1,'C');
+		$pdf->setX(5);
+		$y = $pdf->GetY();
+		$yy = $y;
+		$pdf->SetFillColor(255);
+		$pdf->RoundedRect(5, $y, 225, $xlarge, 2, $squar1, 'FD');
+
+
+		$pdf->SetFont('Arial','',7);
+		$pdf->setX(5);
+		$pdf->Cell(70,8,'','B',0,'L');
+		$pdf->SetFillColor(222);
+		$pdf->Cell(32,4,"1RO",'LBT',0,'C',false);
+		$pdf->Cell(32,4,"2DO",'RBTL',0,'C',true);
+		$pdf->Cell(32,4,"3RO",'BTL',0,'C',false);
+		// $pdf->Cell(24,4,"4TO",'',0,'C',true);
+		// $pdf->Cell(24,4,"5TO",'',0,'C',false);
+		$pdf->Cell(32,8,"FINAL",'LR',0,'C',true);
+		$pdf->Cell(32,8,"GPO",'R',0,'C',false);
+		$pdf->Cell(32,4,"",'R',1,'C',true);
+
+		$pdf->setX(5);
+		$pdf->SetFont('Courier','',6);
+		$pdf->Cell(70,4,'','',0,'L');
+		$pdf->Cell(32,4,"    A     C    I    NL",'LB',0,'L',false);
+		$pdf->Cell(32,4,"    A     C    I    NL",'LBR',0,'L',true);
+		$pdf->Cell(32,4,"    A     C    I    NL",'BR',0,'L',false);
+		// $pdf->Cell(24,4,"A   C   I",'B',0,'C',true);
+		// $pdf->Cell(24,4,"A   C   I",'B',0,'C',false);
+		$pdf->Cell(32,4,"",'B',0,'C',false);
+		$pdf->Cell(32,4,"",'B',1,'C',false);
+
 
 	}
 
@@ -171,10 +251,11 @@ $pdf->nFont = 6;
 $pdf->SetFillColor(192,192,192);
 $pdf->logoEmp = $logoEmp;
 $pdf->logoIBO = $logoIbo;
+$pdf->temas = ['FORMACIÓN ACADÉMICA','DESARROLLO PERSONAL Y SOCIAL','AUTONOMÍA CURRICULAR'];
 
-
+// $i = 0;
 foreach ($arrAlu as $i => $value) {
-	$result = $f->getQuerys(43,"idgrualu=".$arrAlu[$i],0,0,0,array()," order by orden_impresion asc ",1);
+	$result = $f->getQuerys(43,"idgrualu=".$arrAlu[$i],0,0,0,array(),"order by orden_impresion asc ",1);
 	
 	if ( count($result)>0  ){
 
@@ -185,62 +266,35 @@ foreach ($arrAlu as $i => $value) {
 
 		$pdf->AddPage();
 
-		$pdf->SetFont('Arial','B',8);
-
-		$pdf->setX(5);
-		$y = $pdf->GetY();
-		$pdf->SetFillColor(192);
-		$pdf->RoundedRect(5, $y, 225, 4, 2, '1', 'FD');
-		$pdf->Cell(70,4,'A S I G N A T U R A','',0,'C');
-		$pdf->Cell(154,4,'B   I   M   E   S   T   R   E   S','',1,'C');
-		$pdf->setX(5);
-		$y = $pdf->GetY();
-		$yy = $y;
-		$pdf->SetFillColor(255);
-		$pdf->RoundedRect(5, $y, 225, 92, 2, '', 'FD');
-
-
-		$pdf->SetFont('Arial','',7);
-		$pdf->setX(5);
-		$pdf->Cell(70,4,'','',0,'L');
-		$pdf->SetFillColor(222);
-		$pdf->Cell(24,4,"1RO",'T',0,'C',false);
-		$pdf->Cell(24,4,"2DO",'',0,'C',true);
-		$pdf->Cell(24,4,"3RO",'',0,'C',false);
-		$pdf->Cell(24,4,"4TO",'',0,'C',true);
-		$pdf->Cell(24,4,"5TO",'',0,'C',false);
-		$pdf->Cell(15,4,"FINAL",'',0,'C',false);
-		$pdf->Cell(15,4,"GPO",'',1,'C',true);
-
-		$pdf->setX(5);
-		$pdf->SetFont('Courier','',6);
-		$pdf->Cell(70,4,'','',0,'L');
-		$pdf->Cell(24,4,"A   C   I",'B',0,'C',false);
-		$pdf->Cell(24,4,"A   C   I",'B',0,'C',true);
-		$pdf->Cell(24,4,"A   C   I",'B',0,'C',false);
-		$pdf->Cell(24,4,"A   C   I",'B',0,'C',true);
-		$pdf->Cell(24,4,"A   C   I",'B',0,'C',false);
-		$pdf->Cell(15,4,"",'B',0,'C',false);
-		$pdf->Cell(15,4,"",'B',1,'C',true);
+		$pdf->setHeaderTrim($pdf,92,0);
 
 		foreach ($result as $j => $value) {
 
+			if ($result[$j]->orden_impresion == 1){ $pdf->setTemas(0,$pdf); }
+			if ($result[$j]->orden_impresion == 21){ $pdf->setTemas(1,$pdf); }
+			if ($result[$j]->orden_impresion == 41){ $pdf->setTemas(2,$pdf); }
+
+			$pdf->SetFillColor(222);
+
 			$pdf->setX(5);
 			$pdf->SetFont('Arial','',7);
-			$pdf->Cell(70,4,utf8_decode($result[$j]->materia),'',0,'L');
+			// $pdf->Cell(70,4,utf8_decode($result[$j]->materia).' '.$result[$j]->idgrumat,'',0,'L');
+			$pdf->Cell(70,4,utf8_decode($result[$j]->materia),'R',0,'L');
 			$pdf->SetFont('Courier','',7);
-			$pdf->Cell(24,4,$pdf->FormatCal($result[$j]->cal0,$result[$j]->con0,$result[$j]->ina0),'',0,'C',false);
-			$pdf->Cell(24,4,$pdf->FormatCal($result[$j]->cal1,$result[$j]->con1,$result[$j]->ina1),'',0,'C',true);
-			$pdf->Cell(24,4,$pdf->FormatCal($result[$j]->cal2,$result[$j]->con2,$result[$j]->ina2),'',0,'C',false);
-			$pdf->Cell(24,4,$pdf->FormatCal($result[$j]->cal3,$result[$j]->con3,$result[$j]->ina3),'',0,'C',true);
-			$pdf->Cell(24,4,$pdf->FormatCal($result[$j]->cal4,$result[$j]->con4,$result[$j]->ina4),'',0,'C',false);
-			// $pdf->Cell(15,4,$pdf->FormatCal($result[$j]->cal5,$result[$j]->con5,$result[$j]->ina5),'',0,'C',true);
-			// $pdf->Cell(15,4,$pdf->FormatCal($result[$j]->cal6,$result[$j]->con6,$result[$j]->ina6),'',0,'C',false);
-			// $pdf->Cell(15,4,$pdf->FormatCal($result[$j]->cal7,$result[$j]->con7,$result[$j]->ina7),'',0,'C',true);
-			$pdf->Cell(15,4,$pdf->FormatCal($result[$j]->promcal,$result[$j]->promcon,$result[$j]->sumina),'',0,'C',false);
-			$pdf->Cell(15,4,$pdf->FormatCal($result[$j]->promcalgpo,$result[$j]->promcongpo,$result[$j]->suminagpo,2),'',1,'C',true);
+
+				$pdf->Cell(32,4,$pdf->FormatCal($result[$j]->cal0,$result[$j]->con0,$result[$j]->ina0),'',0,'L',false);
+				$pdf->Cell(32,4,$pdf->FormatCal($result[$j]->cal1,$result[$j]->con1,$result[$j]->ina1),'RL',0,'L',true);
+				$pdf->Cell(32,4,$pdf->FormatCal($result[$j]->cal2,$result[$j]->con2,$result[$j]->ina2),'',0,'L',false);
+				// $pdf->Cell(24,4,$pdf->FormatCal($result[$j]->cal3,$result[$j]->con3,$result[$j]->ina3),'',0,'C',true);
+				// $pdf->Cell(24,4,$pdf->FormatCal($result[$j]->cal4,$result[$j]->con4,$result[$j]->ina4),'',0,'C',false);
+
+			$pdf->Cell(32,4,$pdf->FormatCal($result[$j]->promcal ,$result[$j]->promcon,$result[$j]->sumina),'RL',0,'L',true);
+			$pdf->Cell(32,4,$pdf->FormatCal($result[$j]->promcalgpo,$result[$j]->promcongpo,$result[$j]->suminagpo,2),'',1,'L',false);
 
 		}
+		$pdf->setX(5);
+		$pdf->SetFont('Arial','',8);
+		$pdf->Cell(230,4,' ','T',1,'L');
 
 		// Calculamos el promedio del muchacho
 
@@ -252,22 +306,20 @@ foreach ($arrAlu as $i => $value) {
 		$pdf->setY(128);
 
 		$pdf->SetFont('Arial','B',8);
-		$pdf->Cell(70,4,'PROMEDIO','',0,'L');
+		$pdf->Cell(70,4,'PROMEDIO','T',0,'L');
 
 		$pdf->SetFont('Courier','',7);
 		foreach ($prom as $j => $value) {
 			$pdf->lastupdate = $prom[$j]->modi_el;
 
-			$pdf->Cell(24,4,$pdf->FormatCal($prom[$j]->cal0,$prom[$j]->con0,$prom[$j]->ina0),'',0,'C',false);
-			$pdf->Cell(24,4,$pdf->FormatCal($prom[$j]->cal1,$prom[$j]->con1,$prom[$j]->ina1),'',0,'C',true);
-			$pdf->Cell(24,4,$pdf->FormatCal($prom[$j]->cal2,$prom[$j]->con2,$prom[$j]->ina2),'',0,'C',false);
-			$pdf->Cell(24,4,$pdf->FormatCal($prom[$j]->cal3,$prom[$j]->con3,$prom[$j]->ina3),'',0,'C',true);
-			$pdf->Cell(24,4,$pdf->FormatCal($prom[$j]->cal4,$prom[$j]->con4,$prom[$j]->ina4),'',0,'C',false);
-			// $pdf->Cell(15,4,$pdf->FormatCal($prom[$j]->cal5,$prom[$j]->con5,$prom[$j]->ina5),'',0,'C',true);
-			// $pdf->Cell(15,4,$pdf->FormatCal($prom[$j]->cal6,$prom[$j]->con6,$prom[$j]->ina6),'',0,'C',false);
-			// $pdf->Cell(15,4,$pdf->FormatCal($prom[$j]->cal7,$prom[$j]->con7,$prom[$j]->ina7),'',0,'C',true);
-			$pdf->Cell(15,4,$pdf->FormatCal($prom[$j]->promcal,$prom[$j]->promcon,$prom[$j]->sumina),'',0,'C',false);
-			$pdf->Cell(15,4,$pdf->FormatCal($prom[$j]->promcalgpo,$prom[$j]->promcongpo,$prom[$j]->suminagpo,2),'',1,'C',true);
+			$pdf->Cell(32,4,$pdf->FormatCal($prom[$j]->cal0,$prom[$j]->con0,$prom[$j]->ina0),'T',0,'L',false);
+			$pdf->Cell(32,4,$pdf->FormatCal($prom[$j]->cal1,$prom[$j]->con1,$prom[$j]->ina1),'RTL',0,'L',true);
+			$pdf->Cell(32,4,$pdf->FormatCal($prom[$j]->cal2,$prom[$j]->con2,$prom[$j]->ina2),'T',0,'L',false);
+			// $pdf->Cell(24,4,$pdf->FormatCal($prom[$j]->cal3,$prom[$j]->con3,$prom[$j]->ina3),'',0,'C',true);
+			// $pdf->Cell(24,4,$pdf->FormatCal($prom[$j]->cal4,$prom[$j]->con4,$prom[$j]->ina4),'',0,'C',false);
+
+			$pdf->Cell(32,4,$pdf->FormatCal($prom[$j]->promcal,$prom[$j]->promcon,$prom[$j]->sumina),'RTL',0,'L',true);
+			$pdf->Cell(32,4,$pdf->FormatCal($prom[$j]->promcalgpo,$prom[$j]->promcongpo,$prom[$j]->suminagpo,2),'T',1,'L',false);
 
 		}
 
@@ -290,17 +342,13 @@ foreach ($arrAlu as $i => $value) {
 		$pdf->SetFont('Courier','',7);
 		foreach ($gpo as $j => $value) {
 
-			$pdf->Cell(24,4,$pdf->FormatCal($gpo[$j]->cal0,$gpo[$j]->con0,$gpo[$j]->ina0,2),'',0,'C',false);
-			$pdf->Cell(24,4,$pdf->FormatCal($gpo[$j]->cal1,$gpo[$j]->con1,$gpo[$j]->ina1,2),'',0,'C',true);
-			$pdf->Cell(24,4,$pdf->FormatCal($gpo[$j]->cal2,$gpo[$j]->con2,$gpo[$j]->ina2,2),'',0,'C',false);
-			$pdf->Cell(24,4,$pdf->FormatCal($gpo[$j]->cal3,$gpo[$j]->con3,$gpo[$j]->ina3,2),'',0,'C',true);
-			$pdf->Cell(24,4,$pdf->FormatCal($gpo[$j]->cal4,$gpo[$j]->con4,$gpo[$j]->ina4,2),'',0,'C',false);
-			// $pdf->Cell(15,4,$pdf->FormatCal($gpo[$j]->cal5,$gpo[$j]->con5,$gpo[$j]->ina5,2),'',0,'C',true);
-			// $pdf->Cell(15,4,$pdf->FormatCal($gpo[$j]->cal6,$gpo[$j]->con6,$gpo[$j]->ina6,2),'',0,'C',false);
-			// $pdf->Cell(15,4,$pdf->FormatCal($gpo[$j]->cal7,$gpo[$j]->con7,$gpo[$j]->ina7,2),'',0,'C',true);
-			$pdf->Cell(15,4,$pdf->FormatCal($gpo[$j]->promcal,$gpo[$j]->promcon,$gpo[$j]->sumina,2),'',0,'C',false);
-			// $pdf->Cell(15,4,$pdf->FormatCal($gpo[$j]->promcalgpo,$gpo[$j]->promcongpo,$gpo[$j]->suminagpo),'',1,'C',true);
-			$pdf->Cell(15,4,'','',1,'C',true);
+			$pdf->Cell(32,4,$pdf->FormatCal($gpo[$j]->cal0,$gpo[$j]->con0,$gpo[$j]->ina0,2),'T',0,'L',false);
+			$pdf->Cell(32,4,$pdf->FormatCal($gpo[$j]->cal1,$gpo[$j]->con1,$gpo[$j]->ina1,2),'RTL',0,'L',true);
+			$pdf->Cell(32,4,$pdf->FormatCal($gpo[$j]->cal2,$gpo[$j]->con2,$gpo[$j]->ina2,2),'T',0,'L',false);
+			// $pdf->Cell(24,4,$pdf->FormatCal($gpo[$j]->cal3,$gpo[$j]->con3,$gpo[$j]->ina3,2),'',0,'C',true);
+			// $pdf->Cell(24,4,$pdf->FormatCal($gpo[$j]->cal4,$gpo[$j]->con4,$gpo[$j]->ina4,2),'',0,'C',false);
+			$pdf->Cell(32,4,$pdf->FormatCal($gpo[$j]->promcal,$gpo[$j]->promcon,$gpo[$j]->sumina,2),'RTL',0,'L',true);
+			$pdf->Cell(32,4,'','T',1,'L',false);
 
 		}
 
@@ -312,70 +360,34 @@ foreach ($arrAlu as $i => $value) {
 
 		$pdf->Ln(2);
 
-		$pdf->SetFont('Arial','B',8);
-
-		$pdf->setX(5);
-		$y = $pdf->GetY();
-		$pdf->SetFillColor(192);
-		$pdf->RoundedRect(5, $y, 225, 4, 2, '1', 'FD');
-		$pdf->Cell(80,4,'A S I G N A T U R A','',0,'C');
-		$pdf->Cell(154,4,'B   I   M   E   S   T   R   E   S','',1,'C');
-		$pdf->setX(5);
-		$y = $pdf->GetY();
-		$yy = $y;
-		$pdf->SetFillColor(255);
-		$pdf->RoundedRect(5, $y, 225, 40, 2, '4', 'FD');
-
-
-		$pdf->SetFillColor(222);
-		$pdf->SetFont('Arial','',7);
-		$pdf->setX(5);
-		$pdf->Cell(70,4,'','',0,'L');
-		$pdf->Cell(24,4,"1RO",'',0,'C',false);
-		$pdf->Cell(24,4,"2DO",'',0,'C',true);
-		$pdf->Cell(24,4,"3RO",'',0,'C',false);
-		$pdf->Cell(24,4,"4TO",'',0,'C',true);
-		$pdf->Cell(24,4,"5TO",'',0,'C',false);
-		// $pdf->Cell(15,4,"",'',0,'C',true);
-		// $pdf->Cell(15,4,"",'',0,'C',false);
-		// $pdf->Cell(15,4,"",'',0,'C',true);
-		$pdf->Cell(15,4,"FINAL",'',0,'C',false);
-		$pdf->Cell(15,4,"GPO",'',1,'C',true);
-
-		$pdf->setX(5);
-		$pdf->SetFont('Courier','',6);
-		$pdf->Cell(70,4,'','B',0,'L');
-		$pdf->Cell(24,4,"A   C   I",'B',0,'C',false);
-		$pdf->Cell(24,4,"A   C   I",'B',0,'C',true);
-		$pdf->Cell(24,4,"A   C   I",'B',0,'C',false);
-		$pdf->Cell(24,4,"A   C   I",'B',0,'C',true);
-		$pdf->Cell(24,4,"A   C   I",'B',0,'C',false);
-		// $pdf->Cell(15,4,"",'B',0,'C',true);
-		// $pdf->Cell(15,4,"",'B',0,'C',false);
-		// $pdf->Cell(15,4,"",'B',0,'C',true);
-		$pdf->Cell(15,4,"",'B',0,'C',false);
-		$pdf->Cell(15,4,"",'B',1,'C',true);
-
-
+		$pdf->setHeaderTrim($pdf,40,"4");
+		$nPadre = 0;
+		$barr = "";
 		foreach ($result as $j => $value) {
+			$barr = 'RL';
+			if ($nPadre != 0 && $nPadre != $result[$j]->padre){
+				$barr = 'RTL';
+			}
+			$nPadre = $result[$j]->padre;
+
 
 			$pdf->setX(5);
 			$pdf->SetFont('Arial','',8);
-			$pdf->Cell(70,4,utf8_decode($result[$j]->materia),'',0,'L');
+			$pdf->Cell(70,4,utf8_decode($result[$j]->materia),$barr,0,'L');
 			$pdf->SetFont('Courier','',7);
-			$pdf->Cell(24,4,$pdf->FormatCal($result[$j]->cal0,$result[$j]->con0,$result[$j]->ina0),'',0,'C',false);
-			$pdf->Cell(24,4,$pdf->FormatCal($result[$j]->cal1,$result[$j]->con1,$result[$j]->ina1),'',0,'C',true);
-			$pdf->Cell(24,4,$pdf->FormatCal($result[$j]->cal2,$result[$j]->con2,$result[$j]->ina2),'',0,'C',false);
-			$pdf->Cell(24,4,$pdf->FormatCal($result[$j]->cal3,$result[$j]->con3,$result[$j]->ina3),'',0,'C',true);
-			$pdf->Cell(24,4,$pdf->FormatCal($result[$j]->cal4,$result[$j]->con4,$result[$j]->ina4),'',0,'C',false);
-			// $pdf->Cell(15,4,$pdf->FormatCal($result[$j]->cal5,$result[$j]->con5,$result[$j]->ina5),'',0,'C',true);
-			// $pdf->Cell(15,4,$pdf->FormatCal($result[$j]->cal6,$result[$j]->con6,$result[$j]->ina6),'',0,'C',false);
-			// $pdf->Cell(15,4,$pdf->FormatCal($result[$j]->cal7,$result[$j]->con7,$result[$j]->ina7),'',0,'C',true);
-			$pdf->Cell(15,4,$pdf->FormatCal($result[$j]->promcal,$result[$j]->promcon,$result[$j]->sumina),'',0,'C',false);
-			$pdf->Cell(15,4,$pdf->FormatCal($result[$j]->promcalgpo,$result[$j]->promcongpo,$result[$j]->suminagpo,2),'',1,'C',true);
+			$pdf->Cell(32,4,$pdf->FormatCal($result[$j]->cal0,$result[$j]->con0,$result[$j]->ina0),$barr,0,'L',false);
+			$pdf->Cell(32,4,$pdf->FormatCal($result[$j]->cal1,$result[$j]->con1,$result[$j]->ina1),$barr,0,'L',true);
+			$pdf->Cell(32,4,$pdf->FormatCal($result[$j]->cal2,$result[$j]->con2,$result[$j]->ina2),$barr,0,'L',false);
+			// $pdf->Cell(24,4,$pdf->FormatCal($result[$j]->cal3,$result[$j]->con3,$result[$j]->ina3),'',0,'C',true);
+			// $pdf->Cell(24,4,$pdf->FormatCal($result[$j]->cal4,$result[$j]->con4,$result[$j]->ina4),'',0,'C',false);
+			$pdf->Cell(32,4,$pdf->FormatCal( bcdiv($result[$j]->promcal,'1',1),$result[$j]->promcon,$result[$j]->sumina),$barr,0,'L',true);
+			$pdf->Cell(32,4,$pdf->FormatCal($result[$j]->promcalgpo,$result[$j]->promcongpo,$result[$j]->suminagpo,2),$barr,1,'L',false);
 
 
 		}
+		$pdf->setX(5);
+		$pdf->SetFont('Arial','',8);
+		$pdf->Cell(230,4,' ','T',1,'L');
 	 
 
 	// =================================================================================
@@ -478,7 +490,7 @@ foreach ($arrAlu as $i => $value) {
 		$pdf->RoundedRect(100, 187, 97, 16, 2, '', 'FD');
 		$pdf->RoundedRect(197, 187, 95, 16, 2, '3', 'FD');		
 
-	} // IF Compare
+	} 
 	
 }
 

@@ -140,7 +140,7 @@ foreach ($arrAlu as $i => $value) {
 			for ($l=0;$l<count($arrIdGruMat); ++$l){
 				$mat = $f->getQuerys(56,"idgrualu=".$arrAlu[$i]."&numval=".$w."&idgrumat=".$arrIdGruMat[$l],0,0,0,array(),' order by orden_historial asc ');
 				if ( count($mat)>0 ){
-					$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,1);
+					$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,3);
 					$oS->setCellValueByColumnAndRow($fl,$k, $cal);
 					++$fl;
 				}else{
@@ -167,7 +167,7 @@ foreach ($arrAlu as $i => $value) {
 		$fl=3;
 		$mat = $f->getQuerys(57,"idgrualu=".$arrAlu[$i]."&numval=7",0,0,0,array(),'  ');
 
-		$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,1);
+		$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,3);
 		$oS->setCellValueByColumnAndRow($fl,$k, $cal);
 
 
@@ -175,7 +175,7 @@ foreach ($arrAlu as $i => $value) {
 		for ($l=0;$l<count($arrIdGruMat); ++$l){
 			$mat = $f->getQuerys(56,"idgrualu=".$arrAlu[$i]."&numval=7&idgrumat=".$arrIdGruMat[$l],0,0,0,array(),' order by orden_historial asc ');
 			if ( count($mat)>0 ){
-				$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,1);
+				$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,3);
 				$oS->setCellValueByColumnAndRow($fl,$k, $cal);
 				++$fl;
 			}else{
@@ -193,7 +193,7 @@ foreach ($arrAlu as $i => $value) {
  
 		$fl=3;
 		$mat = $f->getQuerys(57,"idgrualu=".$arrAlu[$i]."&numval=4",0,0,0,array(),'  ');
-		$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,1);
+		$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,3);
 		$oS->setCellValueByColumnAndRow($fl,$k, $cal);
 
 
@@ -201,7 +201,7 @@ foreach ($arrAlu as $i => $value) {
 		for ($l=0;$l<count($arrIdGruMat); ++$l){
 			$mat = $f->getQuerys(56,"idgrualu=".$arrAlu[$i]."&numval=4&idgrumat=".$arrIdGruMat[$l],0,0,0,array(),' order by orden_historial asc ');
 			if ( count($mat)>0 ){
-				$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,1);
+				$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,3);
 				$oS->setCellValueByColumnAndRow($fl,$k, $cal);
 				++$fl;
 			}else{
@@ -220,7 +220,7 @@ foreach ($arrAlu as $i => $value) {
  
 		$fl=3;
 		$mat = $f->getQuerys(57,"idgrualu=".$arrAlu[$i]."&numval=8",0,0,0,array(),'  ');
-		$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,1);
+		$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,3);
 		$oS->setCellValueByColumnAndRow($fl,$k, $cal);
 
 
@@ -228,7 +228,7 @@ foreach ($arrAlu as $i => $value) {
 		for ($l=0;$l<count($arrIdGruMat); ++$l){
 			$mat = $f->getQuerys(56,"idgrualu=".$arrAlu[$i]."&numval=8&idgrumat=".$arrIdGruMat[$l],0,0,0,array(),' order by orden_historial asc ');
 			if ( count($mat)>0 ){
-				$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,1);
+				$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,3);
 				$oS->setCellValueByColumnAndRow($fl,$k, $cal);
 				++$fl;
 			}else{
@@ -247,7 +247,7 @@ foreach ($arrAlu as $i => $value) {
  
 		$fl=3;
 		$mat = $f->getQuerys(57,"idgrualu=".$arrAlu[$i]."&numval=10",0,0,0,array(),'  ');
-		$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,1);
+		$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,3);
 		$oS->setCellValueByColumnAndRow($fl,$k, $cal);
 		// echo count($cal)."-gpo";
 
@@ -255,7 +255,7 @@ foreach ($arrAlu as $i => $value) {
 		for ($l=0;$l<count($arrIdGruMat); ++$l){
 			$mat = $f->getQuerys(56,"idgrualu=".$arrAlu[$i]."&numval=10&idgrumat=".$arrIdGruMat[$l],0,0,0,array(),' order by orden_historial asc ');
 			if ( count($mat)>0 ){
-				$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,1);
+				$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,3);
 				$oS->setCellValueByColumnAndRow($fl,$k, $cal);
 				++$fl;
 			}else{

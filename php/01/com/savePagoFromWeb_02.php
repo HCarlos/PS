@@ -21,9 +21,14 @@ if ( isset($_POST["s_transm"]) ){
 	$fecha      	 = date('Y-m-d h:i:s'); 
 	$IdUser     	 = 1; 
 
-	require_once("../oCenturaPDO.php");
-	$f = oCenturaPDO::getInstance();
-	$f->setPagos($id,$importe,$n_autoriz,$IdUser);
+	if ( intval($n_autoriz) > 0 ){
+		require_once("../oCenturaPDO.php");
+		$f = oCenturaPDO::getInstance();
+		$f->setPagos($id,$importe,$n_autoriz,$IdUser);
+	}else{
+		echo "La transacción ha fallado...";
+		return false;
+	}
 
 }else{
 	echo "Ocurrió un error al entregar el Control...";

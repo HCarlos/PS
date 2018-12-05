@@ -59,6 +59,7 @@ $k=6;
 // LISTADO DE CALIFICACIONES
 
 $rst = $f->getQuerys($t,"idgrualu=".$arrAlu[0],0,0,0,array(),$s,1);
+// echo $arrAlu[0];
 $idciclo = $idciclo; //$rst[0]->idciclo;
 $idgrupo = $rst[0]->idgrupo;
 $grupo = $rst[0]->grupo;
@@ -101,8 +102,11 @@ foreach ($arrAlu as $i => $value) {
 			// Obtenemos el Promedio del Alumno
 			$fl=3;
 			$mat = $f->getQuerys(58,"idgrualu=".$arrAlu[$i]."&numval=".$w,0,0,0,array(),' and idioma = 0 ');
+
+			// echo count($mat);
+
 			if (count($mat)>0){
-				$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,3);
+				$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,4);
 				$oS->setCellValueByColumnAndRow($fl,$k, $cal);
 			}
 
@@ -138,7 +142,7 @@ foreach ($arrAlu as $i => $value) {
 		$fl=3;
 		$mat = $f->getQuerys(58,"idgrualu=".$arrAlu[$i]."&numval=9",0,0,0,array(),' and idioma = 0 ');
 		if (count($mat)>0){
-			$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,3);
+			$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,4);
 			$oS->setCellValueByColumnAndRow($fl,$k, $cal);
 		}
 
@@ -148,7 +152,7 @@ foreach ($arrAlu as $i => $value) {
 			$mat = $f->getQuerys(56,"idgrualu=".$arrAlu[$i]."&numval=9&idgrumat=".$arrIdGruMat[$l],0,0,0,array(),' and idioma = 0 and padre > 0 order by orden_historial asc ');
 			if ( count($mat)>0 ){
 				if ( in_array(intval($mat[0]->idmatclas) , $os) ){
-					$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,3);
+					$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,4);
 					$oS->setCellValueByColumnAndRow($fl,$k, $cal);
 				}else{
 					$cal =  '';
@@ -207,7 +211,7 @@ foreach ($arrAlu as $i => $value) {
 }
 
 $ti=$clave."-".$idciclo;//  time();
-$fileout= "reporte-calif-primaria-esp-arji-".$ti.".xlsx";
+$fileout= "reporte-calif-kinder-esp-arji-".$ti.".xlsx";
 $objWriter->save($fileout);//guardamos el archivo excel  
 
 echo "Archivo generado con &eacute;xito, para abrir haga click <a href='https://platsource.mx/php/01/docs/".$fileout."'>aqu&iacute;</a>"  

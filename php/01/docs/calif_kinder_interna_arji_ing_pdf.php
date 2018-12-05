@@ -31,6 +31,7 @@ $f = oCentura::getInstance();
 require('../oMetodos.php');
 $M = oMetodos::getInstance();
 
+
 class PDF_Diag extends PDF_Sector {
 	var $nFont;
 	var $logoEmp;
@@ -133,12 +134,12 @@ class PDF_Diag extends PDF_Sector {
 		$this->SetY(-7);
 		//Arial italic 8
 		$this->SetFont('Arial','I',4);
-		$this->Cell(0,10,utf8_decode('Última Actualización:').$this->lastupdate,0,0,'L');
+		$this->Cell(0,10,utf8_decode('Última Actualización: ').date("d-m-Y H:i:s"),0,0,'L');
 
 		//Page number
 		//$this->Cell(0,10,utf8_decode('PlatSource © '.date('Y'),0,0,'L');
 		//$this->Cell(0,10,utf8_decode('Página ').$this->PageNo().' de {nb}',0,0,'R');
-		$this->Cell(0,10,utf8_decode('PlatSource.mx © ').date('Y'),0,0,'R');
+		$this->Cell(0,10,utf8_decode('http://platsource.mx © ').date('Y'),0,0,'R');
 
 	}
 
@@ -160,10 +161,20 @@ class PDF_Diag extends PDF_Sector {
 			$calx = "";
 		}
 
-		// $calx = $calx .' '.$vc;
+		$caly = round(floatval($cal),0);
 
-		// return str_pad($calx, 3, " ", STR_PAD_LEFT).' '.str_pad($conx, 2, " ", STR_PAD_LEFT).' '.str_pad($inax, 2, " ", STR_PAD_LEFT);
-		// return str_pad($calx, 3, " ", STR_PAD_LEFT);
+		if ($caly >= 95 && $caly <= 100){
+			$cony = "IV";
+		}elseif ($caly >= 75 && $caly <= 94){
+			$cony = "III";
+		}elseif ($caly >= 55 && $caly <= 74){
+			$cony = "II";
+		}elseif ($caly >= 1 && $caly <= 54){
+			$cony = "I";
+		}else{
+			$cony = " ";
+		}
+		
 		if ($ina){
 			$calx = intval($cal);
 			if ($calx<=0){
@@ -171,8 +182,9 @@ class PDF_Diag extends PDF_Sector {
 			}
 		}
 		
-		return $calx;
-		// return $cal;
+		//return $calx;
+		
+		return str_pad($calx, 2, " ", STR_PAD_LEFT).'    '.str_pad($cony, 3, " ", STR_PAD_LEFT);
 
 
 	}
@@ -292,7 +304,7 @@ foreach ($arrAlu as $i => $value) {
 		$pdf->Cell(16,4,utf8_decode('FINAL'),'',1,'C');
 
 
-		$arrCal = $f->getQuerys(55,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=37 and 40",0,0,0,array(),' order by orden_impresion asc ',1);
+		$arrCal = $f->getQuerys(55,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=211 and 213",0,0,0,array(),' order by orden_impresion asc ',1);
 
 		//PRIMER BLOQUE
 
@@ -311,6 +323,7 @@ foreach ($arrAlu as $i => $value) {
 			$pdf->Cell($a0,6.44444,utf8_decode(''),'',0,'L');
 
 			if (isset($arrCal[$i]->materia)){
+				// $pdf->Cell($a1,6.44444,utf8_decode($arrCal[$i]->materia).' '.$arrCal[$i]->idgrumat,'',0,'L');
 				$pdf->Cell($a1,6.44444,utf8_decode($arrCal[$i]->materia),'',0,'L');
 				$pdf->Cell(16,6.44444,$pdf->FormatCal($arrCal[$i]->cal0,$d),'',0,'C');
 				$pdf->Cell(16,6.0,$pdf->FormatCal($arrCal[$i]->cal1,$d),'LR',0,'C');
@@ -329,7 +342,7 @@ foreach ($arrAlu as $i => $value) {
 		
 		//SEGUNDO BLOQUE
 
-		$arrCal = $f->getQuerys(55,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=42 and 47",0,0,0,array(),' order by orden_impresion asc ',1);
+		$arrCal = $f->getQuerys(55,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=221 and 224",0,0,0,array(),' order by orden_impresion asc ',1);
 
 		$pdf->setX(5);
 		$y = $pdf->GetY();
@@ -346,6 +359,7 @@ foreach ($arrAlu as $i => $value) {
 			$pdf->Cell($a0,6.44444,utf8_decode(''),'',0,'L');
 
 			if (isset($arrCal[$i]->materia)){
+				// $pdf->Cell($a1,6.44444,utf8_decode($arrCal[$i]->materia).' '.$arrCal[$i]->idgrumat,'',0,'L');
 				$pdf->Cell($a1,6.44444,utf8_decode($arrCal[$i]->materia),'',0,'L');
 				$pdf->Cell(16,6.44444,$pdf->FormatCal($arrCal[$i]->cal0,$d),'',0,'C');
 				$pdf->Cell(16,6.44444,$pdf->FormatCal($arrCal[$i]->cal1,$d),'LR',0,'C');
@@ -364,7 +378,7 @@ foreach ($arrAlu as $i => $value) {
 		
 		//TERCER BLOQUE
 
-		$arrCal = $f->getQuerys(55,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=49 and 52",0,0,0,array(),' order by orden_impresion asc ',1);
+		$arrCal = $f->getQuerys(55,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=231 and 232",0,0,0,array(),' order by orden_impresion asc ',1);
 
 		$pdf->setX(5);
 		$y = $pdf->GetY();
@@ -381,6 +395,7 @@ foreach ($arrAlu as $i => $value) {
 			$pdf->Cell($a0,6.44444,utf8_decode(''),'',0,'L');
 
 			if (isset($arrCal[$i]->materia)){
+				// $pdf->Cell($a1,6.44444,utf8_decode($arrCal[$i]->materia).' '.$arrCal[$i]->idgrumat,'',0,'L');
 				$pdf->Cell($a1,6.44444,utf8_decode($arrCal[$i]->materia),'',0,'L');
 				$pdf->Cell(16,6.44444,$pdf->FormatCal($arrCal[$i]->cal0,$d),'',0,'C');
 				$pdf->Cell(16,6.44444,$pdf->FormatCal($arrCal[$i]->cal1,$d),'LR',0,'C');
@@ -399,7 +414,7 @@ foreach ($arrAlu as $i => $value) {
 
 		// CUARTO BLOQUE
 
-		$arrCal = $f->getQuerys(55,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=54 and 56",0,0,0,array(),' order by orden_impresion asc ',1);
+		$arrCal = $f->getQuerys(55,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=241 and 243",0,0,0,array(),' order by orden_impresion asc ',1);
 
 		$pdf->setX(5);
 		$y = $pdf->GetY();
@@ -418,23 +433,16 @@ foreach ($arrAlu as $i => $value) {
 			if (isset($arrCal[$i]->materia)){
 				//$pdf->Cell($a1,6.44444,utf8_decode($arrCal[$i]->materia),'',0,'L');
 				if ( strlen($arrCal[$i]->materia) > 65 ){
-					// $nx = $pdf->GetX();
-					// $ny = $pdf->GetY();
 
 					$pdf->SetFont('Arial','',6);
 
-					//$pdf->MultiCell($a1, 2.72, utf8_decode($arrCal[$i]->materia), 0, 'L');
+					// $pdf->Cell($a1,6.44444,utf8_decode($arrCal[$i]->materia).' '.$arrCal[$i]->idgrumat,'',0,'L');
 					$pdf->Cell($a1,6.44444,utf8_decode($arrCal[$i]->materia),'',0,'L');
 					
 					$pdf->SetFont('Arial','',7);
 
-					//$pdf->setX($nx-$a1);
-					//$pdf->setY($ny);
-					
-					//$pdf->Cell($a0,6.44444,utf8_decode(''),'',0,'L');
-					//$pdf->Cell($a1,6.44444,'','',0,'L');
-
 				} else {
+					// $pdf->Cell($a1,6.44444,utf8_decode($arrCal[$i]->materia).' '.$arrCal[$i]->idgrumat,'',0,'L');
 					$pdf->Cell($a1,6.44444,utf8_decode($arrCal[$i]->materia),'',0,'L');
 				}
 
@@ -456,7 +464,7 @@ foreach ($arrAlu as $i => $value) {
 		
 		// QUINTO BLOQUE
 
-		$arrCal = $f->getQuerys(55,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=58 and 62",0,0,0,array(),' order by orden_impresion asc ',1);
+		$arrCal = $f->getQuerys(55,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=251 and 253",0,0,0,array(),' order by orden_impresion asc ',1);
 
 		$pdf->setX(5);
 		$y = $pdf->GetY();
@@ -475,22 +483,16 @@ foreach ($arrAlu as $i => $value) {
 			if (isset($arrCal[$i]->materia)){
 				
 				if ( strlen($arrCal[$i]->materia) > 70 ){
-					//$nx = $pdf->GetX();
-					//$ny = $pdf->GetY();
 
 					$pdf->SetFont('Arial','',6);
 			
-					//$pdf->MultiCell($a1, 2.72, utf8_decode($arrCal[$i]->materia), 0, 'L');
+					// $pdf->Cell($a1,6.44444,utf8_decode($arrCal[$i]->materia).' '.$arrCal[$i]->idgrumat,'',0,'L');
 					$pdf->Cell($a1,6.44444,utf8_decode($arrCal[$i]->materia),'',0,'L');
-					
-					//$pdf->setX($nx-$a1);
-					//$pdf->setY($ny);
-					
+										
 					$pdf->SetFont('Arial','',7);
-					//$pdf->Cell($a0,6.44444,utf8_decode(''),'',0,'L');
-					//$pdf->Cell($a1,6.44444,'','',0,'L');
 
 				} else {
+					// $pdf->Cell($a1,6.44444,utf8_decode($arrCal[$i]->materia).' '.$arrCal[$i]->idgrumat,'',0,'L');
 					$pdf->Cell($a1,6.44444,utf8_decode($arrCal[$i]->materia),'',0,'L');
 				}
 				
@@ -510,7 +512,7 @@ foreach ($arrAlu as $i => $value) {
 
 		// SEXTO BLOQUE
 
-		$arrCal = $f->getQuerys(55,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=63 and 65",0,0,0,array(),' order by orden_impresion asc ',1);
+		$arrCal = $f->getQuerys(55,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=261 and 262",0,0,0,array(),' order by orden_impresion asc ',1);
 
 		$pdf->setX(5);
 		$y = $pdf->GetY();
@@ -527,6 +529,7 @@ foreach ($arrAlu as $i => $value) {
 			$pdf->Cell($a0,6.44444,utf8_decode(''),'',0,'L');
 
 			if (isset($arrCal[$i]->materia)){
+				// $pdf->Cell($a1,6.44444,utf8_decode($arrCal[$i]->materia).' '.$arrCal[$i]->idgrumat,'',0,'L');
 				$pdf->Cell($a1,6.44444,utf8_decode($arrCal[$i]->materia),'',0,'L');
 				$pdf->Cell(16,6.44444,$pdf->FormatCal($arrCal[$i]->cal0,$d),'',0,'C');
 				$pdf->Cell(16,6.44444,$pdf->FormatCal($arrCal[$i]->cal1,$d),'LR',0,'C');
@@ -542,9 +545,9 @@ foreach ($arrAlu as $i => $value) {
 
 		$pdf->Ln(2);
 
-		// SEPTIMO BLOQUE
+		//INASISTENCIAS
 
-		$arrCal = $f->getQuerys(52,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=61 and 66",0,0,0,array(),' order by orden_impresion asc ',1);
+		$arrCal = $f->getQuerys(200,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=280 and 289",0,0,0,array(),' order by orden_impresion asc ',1);
 
 		$pdf->setX(5);
 		$y = $pdf->GetY();
@@ -558,6 +561,7 @@ foreach ($arrAlu as $i => $value) {
 		$pdf->setX(5);
 		$pdf->Cell($a0,6.44444,utf8_decode(''),'',0,'L');
 		if (isset($arrCal[0]->materia)){
+			// $pdf->Cell($a1,6.44444,utf8_decode($arrCal[0]->materia).' '.$arrCal[0]->idgrumat,'',0,'L');
 			$pdf->Cell($a1,6.44444,utf8_decode($arrCal[0]->materia),'',0,'L');
 			$pdf->Cell(16,6.44444,$pdf->FormatCal($arrCal[0]->cal0,$d,true),'',0,'C');
 			$pdf->Cell(16,6.44444,$pdf->FormatCal($arrCal[0]->cal1,$d,true),'LR',0,'C');
@@ -570,10 +574,6 @@ foreach ($arrAlu as $i => $value) {
 		}
 
 
-
-
-
-
 		// BLOQUE FINAL
 		$vP = array(52,88,118.2,147,176.5,200);
 		$vPArr = $f->getQuerys(54,"idgrualu=".$result[0]->idgrualu."&idioma=".$d,0,0,0,array(),' order by orden_impresion asc ',1);
@@ -582,6 +582,7 @@ foreach ($arrAlu as $i => $value) {
 				$pdf->setX(5);
 				$pdf->setY($vP[$k]);
 				$pdf->SetFont('Courier','B',8);
+				// $pdf->MultiCell($a0, 4, utf8_decode($vPArr[$k]->materia).' '.$vPArr[$k]->idgrumat, 0, 'L');
 				$pdf->MultiCell($a0, 4, utf8_decode($vPArr[$k]->materia), 0, 'L');
 			}
 		}

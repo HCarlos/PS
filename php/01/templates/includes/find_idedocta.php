@@ -140,7 +140,7 @@ $user = $_POST["user"];
     		
     		var status_pago = parseInt(json[0].status_movto,0);
 
-    		if ((status_pago == 1 || status_pago == 2) && json[0].pdf == "" ){
+    		if ((status_pago == 0 || status_pago == 1 || status_pago == 2) && json[0].pdf == "" ){
 				$("#msgEsp").hide();
     			$("#reviveIdEdoCta").show();
  		   		$("#reviveIdEdoCta").prop("disabled",false);

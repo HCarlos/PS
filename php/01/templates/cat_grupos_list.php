@@ -341,7 +341,7 @@ jQuery(function($) {
 		var logoEmp   = obj.getConfig(100,0); 
 		var logoIbo   = obj.getConfig(100,1); 
 		var logoFR    = obj.getConfig(101,0); 
-		var proxCiclo = obj.getConfig(102,0); 
+		var proxCiclo = obj.getConfig(102,0);
 
 		var nc = "u="+localStorage.nc+
 				"&idgrupo="+IdGrupo;

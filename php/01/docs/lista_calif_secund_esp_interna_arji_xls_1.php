@@ -69,7 +69,8 @@ $clave = $rst[0]->clave_grupo;
 $fl=$miCal;
 $arrIdGruMat = array();
 //echo "idgrupo=".$idgrupo."&idciclo=".$idciclo;
-$mats = $f->getCombo(1,"idgrupo=".$idgrupo."&idciclo=".$idciclo,0,0,24,' and padre <= 0 and (idmatclas in (1,2,3,4,5) ) order by orden_historial asc '); 
+//$mats = $f->getCombo(1,"idgrupo=".$idgrupo."&idciclo=".$idciclo,0,0,24,' and padre <= 0 and (idmatclas in (1,2,3,4,5) ) order by orden_historial asc '); 
+$mats = $f->getCombo(1,"idgrupo=".$idgrupo."&idciclo=".$idciclo,0,0,24,' and (padre <= 0 or idioma = 0) and (idmatclas in (1,2,3,4,5) ) order by orden_historial asc '); 
 foreach ($mats as $i => $value) {
 	$oS->setCellValueByColumnAndRow($fl,$k, $mats[$i]->label);
 	$arrIdGruMat[$i] = $mats[$i]->data;
@@ -89,7 +90,7 @@ foreach ($arrAlu as $i => $value) {
 	if ( count($result)>0  ){
 
 		$oS->setCellValue("A".$k, $result[0]->num_lista);
-		$oS->setCellValue("B".$k, $result[0]->alumno);
+		$oS->setCellValue("B".$k, $result[0]->alumno.' '.$arrAlu[$i]);
 		$E->cellColor($objPHPExcel, "A".$k.':'."B".$k, 'CCF4CC');
 
 		// $E->cellColor($objPHPExcel, "A".$k.':'."Z".$k, '99FF66');
@@ -101,7 +102,7 @@ foreach ($arrAlu as $i => $value) {
 			// Obtenemos el Promedio del Alumno
 			$fl=3;
 			$mat = $f->getQuerys(57,"idgrualu=".$arrAlu[$i]."&numval=".$w,0,0,0,array(),'  ');
-			$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,2);
+			$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,4);
 			$oS->setCellValueByColumnAndRow($fl,$k, $cal);
 
 			// Obtenemos las Calificaciones por Num Eval
@@ -109,7 +110,11 @@ foreach ($arrAlu as $i => $value) {
 			for ($l=0;$l<count($arrIdGruMat); ++$l){
 				$mat = $f->getQuerys(56,"idgrualu=".$arrAlu[$i]."&numval=".$w."&idgrumat=".$arrIdGruMat[$l],0,0,0,array(),' and padre <= 0 and (idmatclas in (1,2,3,4,5) ) order by orden_historial asc ');
 				if ( count($mat)>0 ){
-					$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina);
+					// if ($mat[0]->isagrupadora == 1){
+					// 	$cal =  $A->FormatCal(bcdiv(floor($mat[0]->cal),'1',1),$mat[0]->con,$mat[0]->ina,4);
+					// }else{
+						$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,4);
+					// }
 					$oS->setCellValueByColumnAndRow($fl,$k, $cal);
 					++$fl;
 				}else{
@@ -131,7 +136,9 @@ foreach ($arrAlu as $i => $value) {
  
 		$fl=3;
 		$mat = $f->getQuerys(57,"idgrualu=".$arrAlu[$i]."&numval=9",0,0,0,array(),'  ');
-		$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,2);
+		// $cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,2);
+		// $cal =  $A->FormatCal( bcdiv(floor($mat[0]->cal),'1',0),$mat[0]->con,$mat[0]->ina,4);
+		$cal =  $A->FormatCal( $mat[0]->cal,$mat[0]->con,$mat[0]->ina,4);
 		$oS->setCellValueByColumnAndRow($fl,$k, $cal);
 
 
@@ -139,7 +146,8 @@ foreach ($arrAlu as $i => $value) {
 		for ($l=0;$l<count($arrIdGruMat); ++$l){
 			$mat = $f->getQuerys(56,"idgrualu=".$arrAlu[$i]."&numval=9&idgrumat=".$arrIdGruMat[$l],0,0,0,array(),' and padre <= 0 and (idmatclas in (1,2,3,4,5) ) order by orden_historial asc ');
 			if ( count($mat)>0 ){
-				$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina);
+				$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,4);
+				// $cal =  $A->FormatCal( bcdiv($mat[0]->cal,'1',1),$mat[0]->con,$mat[0]->ina,4);
 				$oS->setCellValueByColumnAndRow($fl,$k, $cal);
 				++$fl;
 			}else{

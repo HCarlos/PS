@@ -29,12 +29,12 @@ class oCenturaPDO {
 	 public $iva;
 	 
 	private function __construct(){ 
-	 		$this->Nav      = "Ninguno";
-			$this->IdUser    = 0;
-			$this->User     = "";
-			$this->Pass     = "";
-			$this->iva      = 0.16;
-			$this->URL      = "https://platsource.mx/";
+	 		$this->Nav    = "Ninguno";
+			$this->IdUser = 0;
+			$this->User   = "";
+			$this->Pass   = "";
+			$this->iva    = 0.16;
+			$this->URL    = "https://platsource.mx/";
 	}
 
 	public static function getInstance(){
@@ -43,6 +43,47 @@ class oCenturaPDO {
 				}
 				return self::$instancia;
 	}
+
+	private function getNumListaFromTareasDestinatarios($idtareadestinatario){
+
+		$query = "SELECT num_lista 
+					FROM _viTareasDestinatarios 
+					WHERE idtareadestinatario = $idtareadestinatario
+					LIMIT 1";
+
+		$Conn = new voConnPDO();
+		$result = $Conn->queryFetchAllAssocOBJ($query);
+
+		if (!$result) {
+			$ret=0;
+		}else{
+		   	$ret= $result[0]->num_lista;
+		}
+		$Conn = null;
+		return $ret;
+	}
+
+
+
+	private function getNumListaFromTareasDestinatariosRespuesta($idtareadestinatario){
+
+		$query = "SELECT num_lista 
+					FROM _viTareasDest_Resp 
+					WHERE idtareadestinatario = $idtareadestinatario
+					LIMIT 1";
+
+		$Conn = new voConnPDO();
+		$result = $Conn->queryFetchAllAssocOBJ($query);
+
+		if (!$result) {
+			$ret=0;
+		}else{
+		   	$ret= $result[0]->num_lista;
+		}
+		$Conn = null;
+		return $ret;
+	}
+	
 
 	private function getIdUserFromAlias($str){
 
@@ -538,7 +579,10 @@ class oCenturaPDO {
 				parse_str($arg);
 				$idusr = $this->getIdUserFromAlias($u);
 		        $idemp = $this->getIdEmpFromAlias($u);
-				$idciclo = $this->getCicloFromIdEmp($idemp);		        
+				$idciclo = $this->getCicloFromIdEmp($idemp);
+				if ($idciclo != $ciclo_id){
+					$idciclo = $ciclo_id;
+				}		        
 
 				$query = "SELECT *
 						FROM grupo_materia_config_save 
@@ -602,7 +646,6 @@ class oCenturaPDO {
 		$query="";
 		require_once("oCentura.php");
 		$f = oCentura::getInstance();
-
     	switch ($tipo){
 
 			case -6:
@@ -1710,6 +1753,22 @@ class oCenturaPDO {
 						FROM _viAsesorias 
 						WHERE idasesoria = $cad ";
 				break;	
+
+			case 85:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);	
+				$query = "SELECT idusocfdi, usocfdi, descripcion
+							FROM cat_usocfdi
+							WHERE idemp = $idemp ";
+				break;
+
+			case 86:
+
+				$query = "SELECT *
+							FROM cat_usocfdi
+							WHERE idusocfdi = $cad ";
+
+				break;
 
 	  	}
 		$result = $this->getArray($query);
@@ -3445,6 +3504,44 @@ class oCenturaPDO {
 					}
 					break; // 69
 
+			case 70:
+					switch($tipo){
+						case 0:
+							parse_str($arg);
+							$idusr = $this->getIdUserFromAlias($user);
+							$idemp = $this->getIdEmpFromAlias($user);
+							$usocfdi = strtoupper($usocfdi);
+							$descripcion = strtoupper($descripcion);
+							$query = "INSERT INTO cat_usocfdi(usocfdi,descripcion,status_usocfdi,
+																idemp,ip,host,creado_por,creado_el)
+										VALUES('$usocfdi','$descripcion',$status_usocfdi,
+												$idemp,'$ip','$host',$idusr,NOW())";
+							$vRet = $this->guardarDatos($query);
+							break;		
+						case 1:
+							parse_str($arg);
+							$idusr = $this->getIdUserFromAlias($user);
+							$usocfdi = strtoupper($usocfdi);
+							$descripcion = strtoupper($descripcion);
+							$query = "UPDATE cat_usocfdi SET 	
+														  	usocfdi = '$usocfdi',
+														  	descripcion = '$descripcion',
+														  	status_usocfdi = $status_usocfdi,
+															ip = '$ip', 
+															host = '$host',
+															modi_por = $idusr, 
+															modi_el = NOW()
+									WHERE idusocfdi = $idusocfdi";
+							$vRet = $this->guardarDatos($query);
+							break;		
+						case 2:
+							$query = "DELETE FROM cat_usocfdi WHERE idusocfdi = ".$arg;
+							$vRet = $this->guardarDatos($query);
+							break;		
+					} // 70
+					break;
+
+
 
 	  	}
 		return $vRet;
@@ -4042,7 +4139,6 @@ class oCenturaPDO {
 	}
 
 	public function getIdGruposIN($u=""){
-			// Chingonería
 			$idprofesor   = $this->getIdProfesorFromAlias($u);		
 			$idemp   = $this->getIdEmpFromAlias($u);
 			$idciclo = $this->getCicloFromIdEmp($idemp);		        
@@ -4110,6 +4206,55 @@ class oCenturaPDO {
 			return $INStr;
 
 	}
+
+
+	public function Reagrupar_Materias($cad){
+			parse_str($cad);
+			
+			$idprofesor = $this->getIdProfesorFromAlias($u);		
+			$idemp      = $this->getIdEmpFromAlias($u);
+			$idciclo    = $this->getCicloFromIdEmp($idemp);		        
+			require_once("oCentura.php");
+			$f = oCentura::getInstance();
+			$clave_nivel = $f->getClaveNivelFromIdGruAlu($idgrupo,$idemp, 1);
+
+			$query = "SELECT idgrumat
+						FROM grupo_materias 
+						WHERE isagrupadora = 1 AND 
+							clave_nivel = $clave_nivel AND 
+							idemp = $idemp AND 
+							idciclo = $idciclo";
+
+			$rst = $this->getArray($query);
+			foreach ($rst as $i => $value) {
+				$padre = $rst[$i]->idgrumat;
+				$query = "SELECT idgrumat
+							FROM grupo_materias 
+							WHERE padre = ".$padre;
+
+				$INStr = "";
+				$result = $this->getArray($query);
+				foreach ($result as $i => $value) {
+					if ($i == 0){
+						$INStr = $result[$i]->idgrumat.',';
+					}else{
+						if ($i == (count($result)-1) ) {
+							$INStr .= $result[$i]->idgrumat;
+						}else{
+							$INStr .= $result[$i]->idgrumat.',';
+						}
+					}
+				}
+				$query = "UPDATE boletas SET padre = $padre
+						WHERE idgrumat IN (".$INStr.")";
+				$vRet = $this->guardarDatos($query);
+
+			}
+
+			return "OK";
+
+	}
+
 
 
 	public function getEstadisticasNoLeidas($Clave=0,$IdUserNivelAcceso=0,$u="",$iduser=0){

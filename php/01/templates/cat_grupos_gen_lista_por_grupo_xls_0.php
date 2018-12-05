@@ -78,6 +78,11 @@ $idciclo  = $_POST['idciclo'];
 							<li id="printFormGenListaNivel1">
 								<a href="#">Exportar el Listado de este Nivel a MS Excel</a>
 							</li>
+
+							<li id="printFormGenListaBajasNivel1">
+								<a href="#">Exportar el listado de bajas de este Nivel a MS Excel</a>
+							</li>
+
 						</ul>
 					</div><!--/btn-group-->
 
@@ -365,6 +370,46 @@ jQuery(function($) {
  	});
 
 
+
+
+	$("#printFormGenListaBajasNivel1").on("click",function(event){
+		
+		event.preventDefault();
+
+		var cad = "";
+		var nc = "u="+localStorage.nc+"&idgrupo="+idgrupo+"&idciclo="+IdCiclo;
+		$.post(obj.getValue(0) + "data/", {o:1, t:1, c:nc, p:51, from:0, cantidad:0,s:''},
+		function(json){
+			$.each(json, function(i, item) {
+				cad += cad == "" ? item.data : '-' + item.data;
+			});
+
+			// alert(cad);
+
+			var nc = "u="+localStorage.nc+"&idgrupos="+cad+"&grupo="+Grupo+"&idciclo="+IdCiclo;
+	        
+	        var PARAMS = {o:1, t:73, c:nc, p:0, from:0, cantidad:0, s:''};  
+	        var url = obj.getValue(0)+"lista-alumnos-bajas-xls-0/";
+
+	        var temp=document.createElement("form");
+	        temp.action=url;
+	        temp.method="POST";
+	        temp.target="_blank";
+	        temp.style.display="none";
+	        for(var x in PARAMS) {
+	            var opt=document.createElement("textarea");
+	            opt.name=x;
+	            opt.value=PARAMS[x];
+	            temp.appendChild(opt);
+	        }
+	        document.body.appendChild(temp);
+	        temp.submit();
+	        return temp;
+
+		},'json');
+
+
+ 	});
 
 
  	function modGruMatProKRDX01(IdAlumno,IdUserAlu){

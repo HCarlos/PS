@@ -136,12 +136,8 @@ class PDF_Diag extends PDF_Sector {
 		$this->SetY(-7);
 		//Arial italic 8
 		$this->SetFont('Arial','I',4);
-		$this->Cell(0,10,utf8_decode('Última Actualización:').$this->lastupdate,0,0,'L');
-
-		//Page number
-		//$this->Cell(0,10,utf8_decode('PlatSource © '.date('Y'),0,0,'L');
-		//$this->Cell(0,10,utf8_decode('Página ').$this->PageNo().' de {nb}',0,0,'R');
-		$this->Cell(0,10,utf8_decode('PlatSource.mx © ').date('Y'),0,0,'R');
+		$this->Cell(0,10,utf8_decode('Última Actualización: ').date("d-m-Y H:i:s"),0,0,'L');
+		$this->Cell(0,10,utf8_decode('https://platsource.mx © ').date('Y'),0,0,'R');
 
 	}
 
@@ -163,10 +159,19 @@ class PDF_Diag extends PDF_Sector {
 			$calx = "";
 		}
 
-		// $calx = $calx .' '.$vc;
+		$caly = round(floatval($cal),0);
 
-		// return str_pad($calx, 3, " ", STR_PAD_LEFT).' '.str_pad($conx, 2, " ", STR_PAD_LEFT).' '.str_pad($inax, 2, " ", STR_PAD_LEFT);
-		// return str_pad($calx, 3, " ", STR_PAD_LEFT);
+		if ($caly >= 95 && $caly <= 100){
+			$cony = "IV";
+		}elseif ($caly >= 75 && $caly <= 94){
+			$cony = "III";
+		}elseif ($caly >= 55 && $caly <= 74){
+			$cony = "II";
+		}elseif ($caly >= 1 && $caly <= 54){
+			$cony = "I";
+		}else{
+			$cony = " ";
+		}
 
 		if ($ina){
 			$calx = intval($cal);
@@ -176,7 +181,7 @@ class PDF_Diag extends PDF_Sector {
 		}
 
 		// return $cal;
-		return $calx;
+		return str_pad($calx, 2, " ", STR_PAD_LEFT).'    '.str_pad($cony, 3, " ", STR_PAD_LEFT);
 
 
 	}
@@ -198,13 +203,14 @@ $pdf->nFont = 6;
 $pdf->SetFillColor(192,192,192);
 $pdf->logoEmp = $logoEmp;
 $pdf->logoIBO = $logoIbo;
-$pdf->lastupdate = "";//$prom_x[0]->modi_el;
+$pdf->lastupdate = ""; // $prom_x[0]->modi_el;
 $pdf->fechaImpresa = $Q->getWith3LetterMonthD(date('Y-m-d'));
 
 $d=0;
  
 foreach ($arrAlu as $i => $value) {
 
+	// $result = $f->getQuerys(53,"idgrualu=".$arrAlu[$i]."&idioma=".$d,0,0,0,array()," order by orden_impresion asc ",1);
 	$result = $f->getQuerys(53,"idgrualu=".$arrAlu[$i]."&idioma=".$d,0,0,0,array()," order by orden_impresion asc ",1);
 	if ( count($result) > 0 ){
 
@@ -245,10 +251,9 @@ foreach ($arrAlu as $i => $value) {
 	    $pdf->cnum_lista = $d==0?'N° LISTA':'LIST';
 	    $pdf->cmatricula = $d==0?'MATRÍCULA':'REGISTRATION';
 
-
 		$pdf->headTitle = $d==0?'ESPAÑOL':'ENGLISH';
 		$pdf->aspectos = $d==0?'A  S  P  E  C  T  O  S':'A  S  P  E  C  T  S';
-	    $pdf->camposformativos = $d==0?'CAMPOS FORMATIVOS':'FORMATIVE FIELDS';
+	    $pdf->camposformativos = $d==0?'CAMPOS DE FORMACIÓN ACADEMICA':'FORMATIVE FIELDS';
 		$pdf->evaluacion = $d==0?'EVALUACIÓN':'EVALUATION';
 		$pdf->inicial = $d==0?'INICIAL':'INITIAL';
 		$pdf->media = $d==0?'MEDIA':'MIDDLE';
@@ -257,594 +262,346 @@ foreach ($arrAlu as $i => $value) {
 
 		$pdf->SetFont('Arial','B',8);
 
-
 		// Encabezado Cuerpo
 		$pdf->setX(5);
 		$y = $pdf->GetY();
 		$pdf->SetFillColor(192);
-		$pdf->RoundedRect(5, $y, $a0, 4, 2, '1', 'FD');
+		$pdf->RoundedRect(5, $y, $a0, 8, 2, '1', 'FD');
 		$pdf->RoundedRect($a0+5, $y, $a1, 8, 2, '', 'FD');
 		$pdf->RoundedRect($a0+$a1+5, $y, $a2, 4, 2, '2', 'FD');
 
 		$pdf->setX(5);
-		$pdf->Cell($a0,4,utf8_decode($pdf->headTitle),'',0,'C');
+		$pdf->Cell($a0,8,utf8_decode($pdf->headTitle),'',0,'C');
 		$pdf->Cell($a1,8,utf8_decode($pdf->aspectos),'',0,'C');
 		$pdf->Cell($a2,4,utf8_decode($pdf->evaluacion),'',1,'C');
 
 		$pdf->setX(5);
 		$y = $pdf->GetY();
-		$pdf->SetFillColor(255);
-		$pdf->RoundedRect(5, $y, $a0, 4, 2, '', 'FD');
+		$pdf->SetFillColor(192);
+		// $pdf->RoundedRect(5, $y, $a0, 4, 2, '', 'FD');
 		$pdf->RoundedRect($a0+$a1+5, $y, $a2, 4, 2, '', 'FD');
 
 		$pdf->setX(5);
-		$pdf->Cell($a0,4,utf8_decode($pdf->camposformativos),'',0,'C');
+		$pdf->SetFont('Courier','B',7);
+		$pdf->SetFillColor(192);
+		// $pdf->Cell($a0,4,utf8_decode($pdf->camposformativos),'LTRB',0,'C',true);
+		$pdf->Cell($a0,4,'','',0,'C');
+		$pdf->SetFont('Arial','B',8);
+		$pdf->SetFillColor(255);
 		$pdf->Cell($a1,8,utf8_decode(''),'',0,'C');
 		$pdf->Cell(16,4,utf8_decode($pdf->inicial),'',0,'C');
 		$pdf->Cell(16,4,utf8_decode($pdf->media),'LR',0,'C');
 		$pdf->Cell(16,4,utf8_decode('FINAL'),'',1,'C');
 
 
-		// $arrCal = $f->getQuerys(55,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=2 and 4",0,0,0,array(),'  ',1);
-		$arrCal = $f->getQuerys(55,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=2 and 4",0,0,0,array(),' order by orden_impresion asc ',1);
+		$al = 5.41;
+
+		// AREA DE FORMACION
+
+		$pdf->setX(5);
+		$pdf->SetFillColor(220);
+		$pdf->SetFont('Courier','B',7);
+		$pdf->Cell(205,5.44444,utf8_decode('CAMPOS DE FORMACIÓN ACADEMICA'),'LTRB',1,'C',true);
+		$pdf->SetFont('Arial','',8);
+		$pdf->SetFillColor(255);
+
 
 		//PRIMER BLOQUE
-
+		$arrCal = $f->getQuerys(55,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=110 and 119",0,0,0,array(),' order by orden_impresion asc ',1);		
+		$cantRow = (count($arrCal)+1); 
+		$alto = $cantRow * $al;
 		$pdf->setX(5);
 		$y = $pdf->GetY();
 		$pdf->SetFillColor(255);
-		$pdf->RoundedRect(5, $y, $a0, 49, 2, '4', 'FD');
-		$pdf->RoundedRect($a0+5, $y, $a1, 49, 2, '', 'FD');
-		$pdf->RoundedRect($a0+$a1+5, $y, $a2, 49, 2, '3', 'FD');
+		$pdf->RoundedRect(5, $y, $a0, $alto, 2, '', 'FD');
+		$pdf->RoundedRect($a0+5, $y, $a1, $alto, 2, '', 'FD');
+		$pdf->RoundedRect($a0+$a1+5, $y, $a2, $alto, 2, '', 'FD');
 
 		$pdf->SetFont('Arial','',8);
 
-		$pdf->setX(5);
-		$pdf->Cell($a0,5.44444,utf8_decode(''),'',0,'L');
-		if (isset($arrCal[0]->materia)){
-			$pdf->Cell($a1,5.44444,utf8_decode($arrCal[0]->materia),'',0,'L');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[0]->cal0,$d),'',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[0]->cal1,$d),'LR',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[0]->cal2,$d),'',1,'C');
-		}else{
-			$pdf->Cell($a1,5.44444,'','',0,'L');
-			$pdf->Cell(16,5.44444,'','',0,'C');
-			$pdf->Cell(16,5.44444,'','LR',0,'C');
-			$pdf->Cell(16,5.44444,'','',1,'C');
+		for ($i=0; $i<$cantRow;$i++) {
+
+			$pdf->setX(5);
+			$pdf->Cell($a0,5.44444,utf8_decode(''),'',0,'L');
+
+			if (isset($arrCal[$i]->materia)){
+				$pdf->Cell($a1,5.44444,utf8_decode($arrCal[$i]->materia),'',0,'L');
+				$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[$i]->cal0,$d),'',0,'C');
+				$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[$i]->cal1,$d),'LR',0,'C');
+				$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[$i]->cal2,$d),'',1,'C');
+			}else{
+				$pdf->Cell($a1,5.44444,'','',0,'L');
+				$pdf->Cell(16,5.44444,' ','L',0,'C');
+				$pdf->Cell(16,5.44444,' ','LR',0,'C');
+				$pdf->Cell(16,5.44444,' ','',1,'C');
+			}
+
 		}
 
-		$pdf->setX(5);
-		$pdf->Cell($a0,5.44444,utf8_decode(''),'',0,'L');
-		if (isset($arrCal[1]->materia)){
-			$pdf->Cell($a1,5.44444,utf8_decode($arrCal[1]->materia),'',0,'L');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[1]->cal0,$d),'',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[1]->cal1,$d),'LR',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[1]->cal2,$d),'',1,'C');
-		}else{
-			$pdf->Cell($a1,5.44444,'','',0,'L');
-			$pdf->Cell(16,5.44444,'','',0,'C');
-			$pdf->Cell(16,5.44444,'','LR',0,'C');
-			$pdf->Cell(16,5.44444,'','',1,'C');
-		}
-
-		$pdf->setX(5);
-		$pdf->Cell($a0,5.44444,utf8_decode(''),'',0,'L');
-		if (isset($arrCal[2]->materia)){
-			$pdf->Cell($a1,5.44444,utf8_decode($arrCal[2]->materia),'',0,'L');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[2]->cal0,$d),'',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[2]->cal1,$d),'LR',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[2]->cal2,$d),'',1,'C');
-		}else{
-			$pdf->Cell($a1,5.44444,'','',0,'L');
-			$pdf->Cell(16,5.44444,'','',0,'C');
-			$pdf->Cell(16,5.44444,'','LR',0,'C');
-			$pdf->Cell(16,5.44444,'','',1,'C');
-		}
-
-
-		$pdf->setX(5);
-		$pdf->Cell($a0,5.44444,utf8_decode(''),'',0,'L');
-		$pdf->SetFont('Courier','BI',8);
-		$pdf->Cell($a1,5.44444,utf8_decode('IDENTIDAD PERSONAL'),'TB',0,'C');
-		$pdf->Cell($a2,5.44444,utf8_decode(''),'TB',1,'C');
-
-		$pdf->SetFont('Arial','',8);
-
-		// $_IP = $f->getQuerys(55,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=5 and 6",0,0,0,array(),'  ',1);
-		$_IP = $f->getQuerys(55,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=5 and 6",0,0,0,array(),' order by orden_impresion asc ',1);
-
-		$pdf->setX(5);
-		$pdf->Cell($a0,5.44444,utf8_decode(''),'',0,'L');
-		if (isset($_IP[0]->materia)){
-			$pdf->Cell($a1,5.44444,utf8_decode($_IP[0]->materia),'',0,'L');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($_IP[0]->cal0,$d),'',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($_IP[0]->cal1,$d),'LR',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($_IP[0]->cal2,$d),'',1,'C');
-		}else{
-			$pdf->Cell($a1,5.44444,'','',0,'L');
-			$pdf->Cell(16,5.44444,'','',0,'C');
-			$pdf->Cell(16,5.44444,'','LR',0,'C');
-			$pdf->Cell(16,5.44444,'','',1,'C');
-		}
-
-		$pdf->setX(5);
-		$pdf->Cell($a0,5.44444,utf8_decode(''),'',0,'L');
-		if (isset($_IP[1]->materia)){
-			$pdf->Cell($a1,5.44444,utf8_decode($_IP[1]->materia),'',0,'L');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($_IP[1]->cal0,$d),'',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($_IP[1]->cal1,$d),'LR',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($_IP[1]->cal2,$d),'',1,'C');
-		}else{
-			$pdf->Cell($a1,5.44444,'','',0,'L');
-			$pdf->Cell(16,5.44444,'','',0,'C');
-			$pdf->Cell(16,5.44444,'','LR',0,'C');
-			$pdf->Cell(16,5.44444,'','',1,'C');
-		}
-
-		$pdf->setX(5);
-		$pdf->Cell($a0,5.44444,utf8_decode(''),'',0,'L');
-		$pdf->SetFont('Courier','BI',8);
-		$pdf->Cell($a1,5.44444,utf8_decode('RELACIONES INTERPERSONALES'),'TB',0,'C');
-		$pdf->Cell($a2,5.44444,utf8_decode(''),'TB',1,'C');
-
-		$pdf->SetFont('Arial','',8);
-		
-		// $arrCal = $f->getQuerys(55,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=7 and 8",0,0,0,array(),' ',1);
-		$arrCal = $f->getQuerys(55,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=7 and 8",0,0,0,array(),' order by orden_impresion asc ',1);
-
-		$pdf->setX(5);
-		$pdf->Cell($a0,5.44444,utf8_decode(''),'',0,'L');
-		if (isset($arrCal[0]->materia)){
-			$pdf->Cell($a1,5.44444,utf8_decode($arrCal[0]->materia),'',0,'L');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[0]->cal0,$d),'',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[0]->cal1,$d),'LR',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[0]->cal2,$d),'',1,'C');
-		}else{
-			$pdf->Cell($a1,5.44444,'','',0,'L');
-			$pdf->Cell(16,5.44444,'','',0,'C');
-			$pdf->Cell(16,5.44444,'','LR',0,'C');
-			$pdf->Cell(16,5.44444,'','',1,'C');
-		}
-
-		$pdf->setX(5);
-		$pdf->Cell($a0,5.44444,utf8_decode(''),'',0,'L');
-		if (isset($arrCal[1]->materia)){
-			$pdf->Cell($a1,5.44444,utf8_decode($arrCal[1]->materia),'',0,'L');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[1]->cal0,$d),'',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[1]->cal1,$d),'LR',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[1]->cal2,$d),'',1,'C');
-		}else{
-			$pdf->Cell($a1,5.44444,'','',0,'L');
-			$pdf->Cell(16,5.44444,'','',0,'C');
-			$pdf->Cell(16,5.44444,'','LR',0,'C');
-			$pdf->Cell(16,5.44444,'','',1,'C');
-		}
-
-
-		$pdf->Ln(2);
 		
 		//SEGUNDO BLOQUE
 
-		// $arrCal1 = $f->getQuerys(55,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=10 and 13",0,0,0,array(),'  ',1);
-		$arrCal1 = $f->getQuerys(55,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=10 and 13",0,0,0,array(),' order by orden_impresion asc ',1);
+		$arrCal = $f->getQuerys(55,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=120 and 129",0,0,0,array(),' order by orden_impresion asc ',1);
 
+		$cantRow = (count($arrCal)+2); 
+		$alto = $cantRow * $al;
 		$pdf->setX(5);
 		$y = $pdf->GetY();
 		$pdf->SetFillColor(255);
-		$pdf->RoundedRect(5, $y, $a0, 49, 2, '14', 'FD');
-		$pdf->RoundedRect($a0+5, $y, $a1, 49, 2, '', 'FD');
-		$pdf->RoundedRect($a0+$a1+5, $y, $a2, 49, 2, '23', 'FD');
+		$pdf->RoundedRect(5, $y, $a0, $alto, 2, '', 'FD');
+		$pdf->RoundedRect($a0+5, $y, $a1, $alto, 2, '', 'FD');
+		$pdf->RoundedRect($a0+$a1+5, $y, $a2, $alto, 2, '', 'FD');
 
-		$pdf->setX(5);
-		$pdf->Cell($a0,5.44444,utf8_decode(''),'',0,'L');
-		$pdf->SetFont('Courier','BI',8);
-		$pdf->Cell($a1,5.44444,utf8_decode('LENGUAJE ORAL'),'B',0,'C');
-		$pdf->Cell($a2,5.44444,utf8_decode(''),'B',1,'C');
-
-		$pdf->SetFont('Arial','',8);
-
-		$pdf->setX(5);
-		$pdf->Cell($a0,5.44444,utf8_decode(''),'',0,'L');
-		if (isset($arrCal1[0]->materia)){
-			$pdf->Cell($a1,5.44444,utf8_decode($arrCal1[0]->materia),'',0,'L');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal1[0]->cal0,$d),'',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal1[0]->cal1,$d),'LR',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal1[0]->cal2,$d),'',1,'C');
-		}else{
-			$pdf->Cell($a1,5.44444,'','',0,'L');
-			$pdf->Cell(16,5.44444,'','',0,'C');
-			$pdf->Cell(16,5.44444,'','LR',0,'C');
-			$pdf->Cell(16,5.44444,'','',1,'C');
+		for ($i=0; $i<$cantRow;$i++) {
+			$pdf->setX(5);
+			$pdf->Cell($a0,5.44444,utf8_decode(''),'',0,'L');
+			if (isset($arrCal[$i]->materia)){
+				$pdf->Cell($a1,5.44444,utf8_decode($arrCal[$i]->materia),'',0,'L');
+				$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[$i]->cal0,$d),'',0,'C');
+				$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[$i]->cal1,$d),'LR',0,'C');
+				$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[$i]->cal2,$d),'',1,'C');
+			}else{
+				$pdf->Cell($a1,5.44444,'','',0,'L');
+				$pdf->Cell(16,5.44444,'','',0,'C');
+				$pdf->Cell(16,5.44444,'','LR',0,'C');
+				$pdf->Cell(16,5.44444,'','',1,'C');
+			}
 		}
 
-		$pdf->setX(5);
-		$pdf->Cell($a0,5.44444,utf8_decode(''),'',0,'L');
-		if (isset($arrCal1[1]->materia)){
-			$pdf->Cell($a1,5.44444,utf8_decode($arrCal1[1]->materia),'',0,'L');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal1[1]->cal0,$d),'',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal1[1]->cal1,$d),'LR',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal1[1]->cal2,$d),'',1,'C');
-		}else{
-			$pdf->Cell($a1,5.44444,'','',0,'L');
-			$pdf->Cell(16,5.44444,'','',0,'C');
-			$pdf->Cell(16,5.44444,'','LR',0,'C');
-			$pdf->Cell(16,5.44444,'','',1,'C');
-		}
-
-		$pdf->setX(5);
-		$pdf->Cell($a0,5.44444,utf8_decode(''),'',0,'L');
-		if (isset($arrCal1[2]->materia)){
-			$pdf->Cell($a1,5.44444,utf8_decode($arrCal1[2]->materia),'',0,'L');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal1[2]->cal0,$d),'',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal1[2]->cal1,$d),'LR',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal1[2]->cal2,$d),'',1,'C');
-		}else{
-			$pdf->Cell($a1,5.44444,'','',0,'L');
-			$pdf->Cell(16,5.44444,'','',0,'C');
-			$pdf->Cell(16,5.44444,'','LR',0,'C');
-			$pdf->Cell(16,5.44444,'','',1,'C');
-		}
-
-		$pdf->setX(5);
-		$pdf->Cell($a0,5.44444,utf8_decode(''),'',0,'L');
-		if (isset($arrCal1[3]->materia)){
-			$pdf->Cell($a1,5.44444,utf8_decode($arrCal1[3]->materia),'',0,'L');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal1[3]->cal0,$d),'',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal1[3]->cal1,$d),'LR',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal1[3]->cal2,$d),'',1,'C');
-		}else{
-			$pdf->Cell($a1,5.44444,'','',0,'L');
-			$pdf->Cell(16,5.44444,'','',0,'C');
-			$pdf->Cell(16,5.44444,'','LR',0,'C');
-			$pdf->Cell(16,5.44444,'','',1,'C');
-		}
-
-
-		// $arrCal1 = $f->getQuerys(55,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=14 and 16",0,0,0,array(),'  ',1);
-		$arrCal1 = $f->getQuerys(55,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=14 and 16",0,0,0,array(),' order by orden_impresion asc ',1);
-
-		$pdf->setX(5);
-		$pdf->Cell($a0,5.44444,utf8_decode(''),'',0,'L');
-		$pdf->SetFont('Courier','BI',8);
-		$pdf->Cell($a1,5.44444,utf8_decode('LENGUAJE ESCRITO'),'TB',0,'C');
-		$pdf->Cell($a2,5.44444,utf8_decode(''),'TB',1,'C');
-
-		$pdf->SetFont('Arial','',8);
-
-		$pdf->setX(5);
-		$pdf->Cell($a0,5.44444,utf8_decode(''),'',0,'L');
-		if (isset($arrCal1[0]->materia)){
-			$pdf->Cell($a1,5.44444,utf8_decode($arrCal1[0]->materia),'',0,'L');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal1[0]->cal0,$d),'',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal1[0]->cal1,$d),'LR',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal1[0]->cal2,$d),'',1,'C');
-		}else{
-			$pdf->Cell($a1,5.44444,'','',0,'L');
-			$pdf->Cell(16,5.44444,'','',0,'C');
-			$pdf->Cell(16,5.44444,'','LR',0,'C');
-			$pdf->Cell(16,5.44444,'','',1,'C');
-		}
-
-		$pdf->setX(5);
-		$pdf->Cell($a0,5.44444,utf8_decode(''),'',0,'L');
-		if (isset($arrCal1[1]->materia)){
-			$pdf->Cell($a1,5.44444,utf8_decode($arrCal1[1]->materia),'',0,'L');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal1[1]->cal0,$d),'',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal1[1]->cal1,$d),'LR',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal1[1]->cal2,$d),'',1,'C');
-		}else{
-			$pdf->Cell($a1,5.44444,'','',0,'L');
-			$pdf->Cell(16,5.44444,'','',0,'C');
-			$pdf->Cell(16,5.44444,'','LR',0,'C');
-			$pdf->Cell(16,5.44444,'','',1,'C');
-		}
-
-		$pdf->setX(5);
-		$pdf->Cell($a0,5.44444,utf8_decode(''),'',0,'L');
-		if (isset($arrCal1[2]->materia)){
-			$pdf->Cell($a1,5.44444,utf8_decode($arrCal1[2]->materia),'',0,'L');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal1[2]->cal0,$d),'',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal1[2]->cal1,$d),'LR',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal1[2]->cal2,$d),'',1,'C');
-		}else{
-			$pdf->Cell($a1,5.44444,'','',0,'L');
-			$pdf->Cell(16,5.44444,'','',0,'C');
-			$pdf->Cell(16,5.44444,'','LR',0,'C');
-			$pdf->Cell(16,5.44444,'','',1,'C');
-		}	
-
-		$pdf->Ln(2);
 		
 		//TERCER BLOQUE
 
-		// $arrCal = $f->getQuerys(55,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=18 and 34",0,0,0,array(),'  ',1);
-		$arrCal = $f->getQuerys(55,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=18 and 34",0,0,0,array(),' order by orden_impresion asc ',1);
+		$arrCal = $f->getQuerys(55,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=130 and 139",0,0,0,array(),' order by orden_impresion asc ',1);
 
+		$cantRow = (count($arrCal)+2); 
+		$alto = $cantRow * $al;
 		$pdf->setX(5);
 		$y = $pdf->GetY();
 		$pdf->SetFillColor(255);
-		$pdf->RoundedRect(5, $y, $a0, 22, 2, '14', 'FD');
-		$pdf->RoundedRect($a0+5, $y, $a1, 22, 2, '', 'FD');
-		$pdf->RoundedRect($a0+$a1+5, $y, $a2, 22, 2, '23', 'FD');
+		$pdf->RoundedRect(5, $y, $a0, $alto, 2, '', 'FD');
+		$pdf->RoundedRect($a0+5, $y, $a1, $alto, 2, '', 'FD');
+		$pdf->RoundedRect($a0+$a1+5, $y, $a2, $alto, 2, '', 'FD');
 
 		$pdf->SetFont('Arial','',8);
 
-		$pdf->setX(5);
-		$pdf->Cell($a0,5.44444,utf8_decode(''),'',0,'L');
-		if (isset($arrCal[0]->materia)){
-			$pdf->Cell($a1,5.44444,utf8_decode($arrCal[0]->materia),'',0,'L');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[0]->cal0,$d),'',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[0]->cal1,$d),'LR',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[0]->cal2,$d),'',1,'C');
-		}else{
-			$pdf->Cell($a1,5.44444,'','',0,'L');
-			$pdf->Cell(16,5.44444,'','',0,'C');
-			$pdf->Cell(16,5.44444,'','LR',0,'C');
-			$pdf->Cell(16,5.44444,'','',1,'C');
+		for ($i=0; $i<$cantRow;$i++) {
+
+			$pdf->setX(5);
+			$pdf->Cell($a0,5.44444,utf8_decode(''),'',0,'L');
+
+			if (isset($arrCal[$i]->materia)){
+				$pdf->Cell($a1,5.44444,utf8_decode($arrCal[$i]->materia),'',0,'L');
+				$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[$i]->cal0,$d),'',0,'C');
+				$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[$i]->cal1,$d),'LR',0,'C');
+				$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[$i]->cal2,$d),'',1,'C');
+			}else{
+				$pdf->Cell($a1,5.44444,'','',0,'L');
+				$pdf->Cell(16,5.44444,'','',0,'C');
+				$pdf->Cell(16,5.44444,'','LR',0,'C');
+				$pdf->Cell(16,5.44444,'','',1,'C');
+			}
+
 		}
 
-		$pdf->setX(5);
-		$pdf->Cell($a0,5.44444,utf8_decode(''),'',0,'L');
-		if (isset($arrCal[1]->materia)){
-			$pdf->Cell($a1,5.44444,utf8_decode($arrCal[1]->materia),'',0,'L');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[1]->cal0,$d),'',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[1]->cal1,$d),'LR',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[1]->cal2,$d),'',1,'C');
-		}else{
-			$pdf->Cell($a1,5.44444,'','',0,'L');
-			$pdf->Cell(16,5.44444,'','',0,'C');
-			$pdf->Cell(16,5.44444,'','LR',0,'C');
-			$pdf->Cell(16,5.44444,'','',1,'C');
-		}
+
+		// AREA DE FORMACION
 
 		$pdf->setX(5);
-		$pdf->Cell($a0,5.44444,utf8_decode(''),'',0,'L');
-		if (isset($arrCal[2]->materia)){
-			$pdf->Cell($a1,5.44444,utf8_decode($arrCal[2]->materia),'',0,'L');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[2]->cal0,$d),'',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[2]->cal1,$d),'LR',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[2]->cal2,$d),'',1,'C');
-		}else{
-			$pdf->Cell($a1,5.44444,'','',0,'L');
-			$pdf->Cell(16,5.44444,'','',0,'C');
-			$pdf->Cell(16,5.44444,'','LR',0,'C');
-			$pdf->Cell(16,5.44444,'','',1,'C');
-		}
-			
-		$pdf->setX(5);
-		$pdf->Cell($a0,5.44444,utf8_decode(''),'',0,'L');
-		if (isset($arrCal[3]->materia)){
-			$pdf->Cell($a1,5.44444,utf8_decode($arrCal[3]->materia),'',0,'L');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[3]->cal0,$d),'',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[3]->cal1,$d),'LR',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[3]->cal2,$d),'',1,'C');
-		}else{
-			$pdf->Cell($a1,5.44444,'','',0,'L');
-			$pdf->Cell(16,5.44444,'','',0,'C');
-			$pdf->Cell(16,5.44444,'','LR',0,'C');
-			$pdf->Cell(16,5.44444,'','',1,'C');
-		}
+		$pdf->SetFillColor(220);
+		$pdf->SetFont('Courier','B',7);
+		$pdf->Cell(205,5.44444,utf8_decode('ÁREA DE DESARROLLO SOCIAL Y PERSONAL'),'LTRB',1,'C',true);
+		$pdf->SetFont('Arial','',8);
+		$pdf->SetFillColor(255);
 
-		$pdf->Ln(2);
 
-		// CUARTO BLOQUE
-
+		//CUARTO BLOQUE
+		$arrCal = $f->getQuerys(55,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=140 and 149",0,0,0,array(),' order by orden_impresion asc ',1);
+		$cantRow = (count($arrCal)+1); 
+		$alto = $cantRow * $al;
 		$pdf->setX(5);
 		$y = $pdf->GetY();
 		$pdf->SetFillColor(255);
-		$pdf->RoundedRect(5, $y, $a0, 17, 2, '14', 'FD');
-		$pdf->RoundedRect($a0+5, $y, $a1, 17, 2, '', 'FD');
-		$pdf->RoundedRect($a0+$a1+5, $y, $a2, 17, 2, '23', 'FD');
+		$pdf->RoundedRect(5, $y, $a0, $alto, 2, '', 'FD');
+		$pdf->RoundedRect($a0+5, $y, $a1, $alto, 2, '', 'FD');
+		$pdf->RoundedRect($a0+$a1+5, $y, $a2, $alto, 2, '', 'FD');
 
 		$pdf->SetFont('Arial','',8);
 
-		$pdf->setX(5);
-		$pdf->Cell($a0,5.44444,utf8_decode(''),'',0,'L');
-		if (isset($arrCal[4]->materia)){
-			$pdf->Cell($a1,5.44444,utf8_decode($arrCal[4]->materia),'',0,'L');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[4]->cal0,$d),'',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[4]->cal1,$d),'LR',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[4]->cal2,$d),'',1,'C');
-		}else{
-			$pdf->Cell($a1,5.44444,'','',0,'L');
-			$pdf->Cell(16,5.44444,'','',0,'C');
-			$pdf->Cell(16,5.44444,'','LR',0,'C');
-			$pdf->Cell(16,5.44444,'','',1,'C');
+		for ($i=0; $i<$cantRow;$i++) {
+
+			$pdf->setX(5);
+			$pdf->Cell($a0,5.44444,utf8_decode(''),'',0,'L');
+			if (isset($arrCal[$i]->materia)){
+				$pdf->Cell($a1,5.44444,utf8_decode($arrCal[$i]->materia),'',0,'L');
+				$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[$i]->cal0,$d),'',0,'C');
+				$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[$i]->cal1,$d),'LR',0,'C');
+				$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[$i]->cal2,$d),'',1,'C');
+			}else{
+				$pdf->Cell($a1,5.44444,'','',0,'L');
+				$pdf->Cell(16,5.44444,'','',0,'C');
+				$pdf->Cell(16,5.44444,'','LR',0,'C');
+				$pdf->Cell(16,5.44444,'','',1,'C');
+			}
+
 		}
 
-		$pdf->setX(5);
-		$pdf->Cell($a0,5.44444,utf8_decode(''),'',0,'L');
-		if (isset($arrCal[5]->materia)){
-			$pdf->Cell($a1,5.44444,utf8_decode($arrCal[5]->materia),'',0,'L');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[5]->cal0,$d),'',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[5]->cal1,$d),'LR',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[5]->cal2,$d),'',1,'C');
-		}else{
-			$pdf->Cell($a1,5.44444,'','',0,'L');
-			$pdf->Cell(16,5.44444,'','',0,'C');
-			$pdf->Cell(16,5.44444,'','LR',0,'C');
-			$pdf->Cell(16,5.44444,'','',1,'C');
-		}
+		//QUINTO BLOQUE
 
-		$pdf->setX(5);
-		$pdf->Cell($a0,5.44444,utf8_decode(''),'',0,'L');
-		if (isset($arrCal[6]->materia)){
-			$pdf->Cell($a1,5.44444,utf8_decode($arrCal[6]->materia),'',0,'L');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[6]->cal0,$d),'',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[6]->cal1,$d),'LR',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[6]->cal2,$d),'',1,'C');
-		}else{
-			$pdf->Cell($a1,5.44444,'','',0,'L');
-			$pdf->Cell(16,5.44444,'','',0,'C');
-			$pdf->Cell(16,5.44444,'','LR',0,'C');
-			$pdf->Cell(16,5.44444,'','',1,'C');
-		}
-
-		$pdf->Ln(2);
-		
-		// QUINTO BLOQUE
-
+		$arrCal = $f->getQuerys(55,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=150 and 159",0,0,0,array(),' order by orden_impresion asc ',1);
+		$cantRow = (count($arrCal)+2); 
+		$alto = $cantRow * $al;
 		$pdf->setX(5);
 		$y = $pdf->GetY();
 		$pdf->SetFillColor(255);
-		$pdf->RoundedRect(5, $y, $a0, 22, 2, '14', 'FD');
-		$pdf->RoundedRect($a0+5, $y, $a1, 22, 2, '', 'FD');
-		$pdf->RoundedRect($a0+$a1+5, $y, $a2, 22, 2, '23', 'FD');
+		$pdf->RoundedRect(5, $y, $a0, $alto, 2, '', 'FD');
+		$pdf->RoundedRect($a0+5, $y, $a1, $alto, 2, '', 'FD');
+		$pdf->RoundedRect($a0+$a1+5, $y, $a2, $alto, 2, '', 'FD');
 
 		$pdf->SetFont('Arial','',8);
 
-		$pdf->setX(5);
-		$pdf->Cell($a0,5.44444,utf8_decode(''),'',0,'L');
-		if (isset($arrCal[7]->materia)){
-			$pdf->Cell($a1,5.44444,utf8_decode($arrCal[7]->materia),'',0,'L');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[7]->cal0,$d),'',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[7]->cal1,$d),'LR',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[7]->cal2,$d),'',1,'C');
-		}else{
-			$pdf->Cell($a1,5.44444,'','',0,'L');
-			$pdf->Cell(16,5.44444,'','',0,'C');
-			$pdf->Cell(16,5.44444,'','LR',0,'C');
-			$pdf->Cell(16,5.44444,'','',1,'C');
+		for ($i=0; $i<$cantRow;$i++) {
+
+			$pdf->setX(5);
+			$pdf->Cell($a0,5.44444,utf8_decode(''),'',0,'L');
+
+			if (isset($arrCal[$i]->materia)){
+				$pdf->Cell($a1,5.44444,utf8_decode($arrCal[$i]->materia),'',0,'L');
+				$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[$i]->cal0,$d),'',0,'C');
+				$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[$i]->cal1,$d),'LR',0,'C');
+				$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[$i]->cal2,$d),'',1,'C');
+			}else{
+				$pdf->Cell($a1,5.44444,'','',0,'L');
+				$pdf->Cell(16,5.44444,'','',0,'C');
+				$pdf->Cell(16,5.44444,'','LR',0,'C');
+				$pdf->Cell(16,5.44444,'','',1,'C');
+			}
+
 		}
 
-		$pdf->setX(5);
-		$pdf->Cell($a0,5.44444,utf8_decode(''),'',0,'L');
-		if (isset($arrCal[8]->materia)){
-			$pdf->Cell($a1,5.44444,utf8_decode($arrCal[8]->materia),'',0,'L');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[8]->cal0,$d),'',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[8]->cal1,$d),'LR',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[8]->cal2,$d),'',1,'C');
-		}else{
-			$pdf->Cell($a1,5.44444,'','',0,'L');
-			$pdf->Cell(16,5.44444,'','',0,'C');
-			$pdf->Cell(16,5.44444,'','LR',0,'C');
-			$pdf->Cell(16,5.44444,'','',1,'C');
-		}
 
-		$pdf->setX(5);
-		$pdf->Cell($a0,5.44444,utf8_decode(''),'',0,'L');
-		if (isset($arrCal[9]->materia)){
-			$pdf->Cell($a1,5.44444,utf8_decode($arrCal[9]->materia),'',0,'L');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[9]->cal0,$d),'',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[9]->cal1,$d),'LR',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[9]->cal2,$d),'',1,'C');
-		}else{
-			$pdf->Cell($a1,5.44444,'','',0,'L');
-			$pdf->Cell(16,5.44444,'','',0,'C');
-			$pdf->Cell(16,5.44444,'','LR',0,'C');
-			$pdf->Cell(16,5.44444,'','',1,'C');
-		}
-
-		$pdf->setX(5);
-		$pdf->Cell($a0,5.44444,utf8_decode(''),'',0,'L');
-		if (isset($arrCal[10]->materia)){
-			$pdf->Cell($a1,5.44444,utf8_decode($arrCal[10]->materia),'',0,'L');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[10]->cal0,$d),'',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[10]->cal1,$d),'LR',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[10]->cal2,$d),'',1,'C');
-		}else{
-			$pdf->Cell($a1,5.44444,'','',0,'L');
-			$pdf->Cell(16,5.44444,'','',0,'C');
-			$pdf->Cell(16,5.44444,'','LR',0,'C');
-			$pdf->Cell(16,5.44444,'','',1,'C');
-		}
-
-		$pdf->Ln(2);
-
-		// SEXTO BLOQUE
-
+		//SEXTO BLOQUE
+		$arrCal = $f->getQuerys(55,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=160 and 169",0,0,0,array(),' order by orden_impresion asc ',1);
+		$cantRow = (count($arrCal)+1); 
+		$alto = $cantRow * $al;
 		$pdf->setX(5);
 		$y = $pdf->GetY();
 		$pdf->SetFillColor(255);
-		$pdf->RoundedRect(5, $y, $a0, 16, 2, '14', 'FD');
-		$pdf->RoundedRect($a0+5, $y, $a1, 16, 2, '', 'FD');
-		$pdf->RoundedRect($a0+$a1+5, $y, $a2, 16, 2, '23', 'FD');
+		$pdf->RoundedRect(5, $y, $a0, $alto, 2, '', 'FD');
+		$pdf->RoundedRect($a0+5, $y, $a1, $alto, 2, '', 'FD');
+		$pdf->RoundedRect($a0+$a1+5, $y, $a2, $alto, 2, '', 'FD');
 
 		$pdf->SetFont('Arial','',8);
 
-		$pdf->setX(5);
-		$pdf->Cell($a0,5.44444,utf8_decode(''),'',0,'L');
-		if (isset($arrCal[11]->materia)){
-			$pdf->Cell($a1,5.44444,utf8_decode($arrCal[11]->materia),'',0,'L');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[11]->cal0,$d),'',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[11]->cal1,$d),'LR',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[11]->cal2,$d),'',1,'C');
-		}else{
-			$pdf->Cell($a1,5.44444,'','',0,'L');
-			$pdf->Cell(16,5.44444,'','',0,'C');
-			$pdf->Cell(16,5.44444,'','LR',0,'C');
-			$pdf->Cell(16,5.44444,'','',1,'C');
-		}
+		for ($i=0; $i<$cantRow;$i++) {
 
-		$pdf->setX(5);
-		$pdf->Cell($a0,5.44444,utf8_decode(''),'',0,'L');
-		if (isset($arrCal[12]->materia)){
-			$pdf->Cell($a1,5.44444,utf8_decode($arrCal[12]->materia),'',0,'L');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[12]->cal0,$d),'',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[12]->cal1,$d),'LR',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[12]->cal2,$d),'',1,'C');
-		}else{
-			$pdf->Cell($a1,5.44444,'','',0,'L');
-			$pdf->Cell(16,5.44444,'','',0,'C');
-			$pdf->Cell(16,5.44444,'','LR',0,'C');
-			$pdf->Cell(16,5.44444,'','',1,'C');
-		}
+			$pdf->setX(5);
+			$pdf->Cell($a0,5.44444,utf8_decode(''),'',0,'L');
 
-		$pdf->setX(5);
-		$pdf->Cell($a0,5.44444,utf8_decode(''),'',0,'L');
-		if (isset($arrCal[13]->materia)){
-			$pdf->Cell($a1,5.44444,utf8_decode($arrCal[13]->materia),'',0,'L');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[13]->cal0,$d),'',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[13]->cal1,$d),'LR',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[13]->cal2,$d),'',1,'C');
-		}else{
-			$pdf->Cell($a1,5.44444,'','',0,'L');
-			$pdf->Cell(16,5.44444,'','',0,'C');
-			$pdf->Cell(16,5.44444,'','LR',0,'C');
-			$pdf->Cell(16,5.44444,'','',1,'C');
+			if (isset($arrCal[$i]->materia)){
+				$pdf->Cell($a1,5.44444,utf8_decode($arrCal[$i]->materia),'',0,'L');
+				$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[$i]->cal0,$d),'',0,'C');
+				$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[$i]->cal1,$d),'LR',0,'C');
+				$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[$i]->cal2,$d),'',1,'C');
+			}else{
+				$pdf->Cell($a1,5.44444,'','',0,'L');
+				$pdf->Cell(16,5.44444,'','',0,'C');
+				$pdf->Cell(16,5.44444,'','LR',0,'C');
+				$pdf->Cell(16,5.44444,'','',1,'C');
+			}
+
 		}
 
 
-		$pdf->Ln(2);
+		// AREA DE FORMACION
 
-		// SEPTIMO BLOQUE
+		$pdf->setX(5);
+		$pdf->SetFillColor(220);
+		$pdf->SetFont('Courier','B',7);
+		$pdf->Cell(205,5.44444,utf8_decode('ÁMBITOS DE AUTONOMÍA CURRICULAR'),'LTRB',1,'C',true);
+		$pdf->SetFont('Arial','',8);
+		$pdf->SetFillColor(255);
 
-		// $arrCal = $f->getQuerys(51,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=18 and 34",0,0,0,array(),'  ',1);
-		$arrCal = $f->getQuerys(51,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=18 and 34",0,0,0,array(),' order by orden_impresion asc ',1);
 
+		//SEPTIMO BLOQUE
+
+		$arrCal = $f->getQuerys(55,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=170 and 179",0,0,0,array(),' order by orden_impresion asc ',1);
+
+		$cantRow = (count($arrCal)+2); 
+		$alto = $cantRow * $al;
 		$pdf->setX(5);
 		$y = $pdf->GetY();
 		$pdf->SetFillColor(255);
-		$pdf->RoundedRect(5, $y, $a0, 6, 2, '14', 'FD');
-		$pdf->RoundedRect($a0+5, $y, $a1, 6, 2, '', 'FD');
-		$pdf->RoundedRect($a0+$a1+5, $y, $a2, 6, 2, '23', 'FD');
+		$pdf->RoundedRect(5, $y, $a0, $alto, 2, '', 'FD');
+		$pdf->RoundedRect($a0+5, $y, $a1, $alto, 2, '', 'FD');
+		$pdf->RoundedRect($a0+$a1+5, $y, $a2, $alto, 2, '', 'FD');
 
 		$pdf->SetFont('Arial','',8);
 
-		$pdf->setX(5);
-		$pdf->Cell($a0,5.44444,utf8_decode(''),'',0,'L');
-		if (isset($arrCal[0]->materia)){
-			$pdf->Cell($a1,5.44444,utf8_decode($arrCal[0]->materia),'',0,'L');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[0]->cal0,$d,true),'',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[0]->cal1,$d,true),'LR',0,'C');
-			$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[0]->cal2,$d,true),'',1,'C');
-		}else{
-			$pdf->Cell($a1,5.44444,'','',0,'L');
-			$pdf->Cell(16,5.44444,'','',0,'C');
-			$pdf->Cell(16,5.44444,'','LR',0,'C');
-			$pdf->Cell(16,5.44444,'','',1,'C');
+		for ($i=0; $i<$cantRow;$i++) {
+
+			$pdf->setX(5);
+			$pdf->SetFont('Arial','',8);
+			$pdf->Cell($a0,5.44444,utf8_decode(''),'',0,'L');
+
+			if (isset($arrCal[$i]->materia)){
+				$pdf->Cell($a1,5.44444,utf8_decode($arrCal[$i]->materia),'',0,'L');
+				$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[$i]->cal0,$d),'',0,'C');
+				$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[$i]->cal1,$d),'LR',0,'C');
+				$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[$i]->cal2,$d),'',1,'C');
+			}else{
+				$pdf->Cell($a1,5.44444,'','',0,'L');
+				$pdf->Cell(16,5.44444,'','',0,'C');
+				$pdf->Cell(16,5.44444,'','LR',0,'C');
+				$pdf->Cell(16,5.44444,'','',1,'C');
+			}
+
 		}
 
+
+		//INASISTENCIAS
+
+		$arrCal = $f->getQuerys(200,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=180 and 189",0,0,0,array(),' order by orden_impresion asc ',1);
+		// $arrCal = $f->getQuerys(51,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=18 and 34",0,0,0,array(),' order by orden_impresion asc ',1);
+
+		$cantRow = (count($arrCal)); 
+		$alto = $cantRow * $al;
+		$pdf->setX(5);
+		$y = $pdf->GetY();
+		$pdf->SetFillColor(255);
+		$pdf->RoundedRect(5, $y, $a0, $alto, 2, '4', 'FD');
+		$pdf->RoundedRect($a0+5, $y, $a1, $alto, 2, '', 'FD');
+		$pdf->RoundedRect($a0+$a1+5, $y, $a2, $alto, 2, '3', 'FD');
+
+		$pdf->SetFont('Arial','',8);
+
+		for ($i=0; $i<$cantRow;$i++) {
+
+			$pdf->setX(5);
+			$pdf->Cell($a0,5.44444,utf8_decode(''),'',0,'L');
+
+			if (isset($arrCal[$i]->materia)){
+				$pdf->Cell($a1,5.44444,utf8_decode($arrCal[$i]->materia),'',0,'L');
+				$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[$i]->cal0,$d),'',0,'C');
+				$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[$i]->cal1,$d),'LR',0,'C');
+				$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[$i]->cal2,$d),'',1,'C');
+			}else{
+				$pdf->Cell($a1,5.44444,'','',0,'L');
+				$pdf->Cell(16,5.44444,'','',0,'C');
+				$pdf->Cell(16,5.44444,'','LR',0,'C');
+				$pdf->Cell(16,5.44444,'','',1,'C');
+			}
+
+		}
 
 
 
 
 		// BLOQUE FINAL
-		$vP = array(65,120,156,176,196,216);
+		$vP = array(63,95,117,144,170,201,228);
 		// $vPArr = $f->getQuerys(54,"idgrualu=".$result[0]->idgrualu."&idioma=".$d,0,0,0,array(),'  ',1);
 		$vPArr = $f->getQuerys(54,"idgrualu=".$result[0]->idgrualu."&idioma=".$d,0,0,0,array(),' order by orden_impresion asc ',1);
 		foreach ($vPArr as $k => $value) {
-			if ($k <= 5){
+			if ($k <= 6){
 				$pdf->setX(5);
 				$pdf->setY($vP[$k]);
 				$pdf->SetFont('Courier','B',8);
@@ -854,7 +611,7 @@ foreach ($arrAlu as $i => $value) {
 
 
 		$pdf->setX(5);
-		$pdf->setY(239);
+		$pdf->setY(248);
 
 		// PERFIL IBO
 
@@ -879,8 +636,8 @@ foreach ($arrAlu as $i => $value) {
 		$y = $pdf->GetY();
 		$pdf->SetFillColor(255);
 		$pdf->SetFont('Arial','',8);	
-		$pdf->RoundedRect(5, $y, $a0+$a1, 20, 2, '4', 'FD');
-		$pdf->RoundedRect($a0+$a1+5, $y, $a2, 20, 2, '3', 'FD');
+		$pdf->RoundedRect(5, $y, $a0+$a1, 15, 2, '4', 'FD');
+		$pdf->RoundedRect($a0+$a1+5, $y, $a2, 15, 2, '3', 'FD');
 
 		$pdf->setX(5);
 		// $pdf->Cell($a0+$a1,4,utf8_decode($pdf->obsEsp),'',0,'L');
@@ -896,7 +653,7 @@ foreach ($arrAlu as $i => $value) {
 
 		// NOMENCLATURA
 
-		$pdf->Ln(16);
+		$pdf->Ln(10);
 		$pdf->setX(5);
 
 		$pdf->SetFont('Arial','B',8);	

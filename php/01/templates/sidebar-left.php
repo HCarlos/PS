@@ -32,8 +32,19 @@
                     <!-- <a href="https://platsource.mx/documents/ped_arji_2017_%20public.pdf" class="btn btn-link hide" style="background-color: white !important; font-weight: bold; color: blue;" target='_blank' id="ped2017">Política del Desempeño <br/>Docente y Directivo Arjí</a> -->
 
 
-                    <a href="https://platsource.mx/documents/ped_arji_2017_public.pdf" class="btn btn-link hide" target='_blank' id="ped2017">
+
+                     <a href="https://platsource.mx/documents/ped_arji_2017_public.pdf" class="btn btn-link hide" target='_blank' id="ped2017">
                         <img src="/images/web/politica_de_desempeno.png" width="166" height="51" alt="Política del Desempeño Docente y Directivo Arjí" />
+                    </a>
+ 
+
+                     <a href="https://platsource.mx/documents/pol_eval_arji_2018.pdf" class="btn btn-link hide" target='_blank' id="calped2018">
+                        <img src="/images/web/ped_cal_1819.png" alt="Calendario de la Política del Desempeño Docente y Directivo Arjí 2018 - 2019" />
+                    </a>
+
+                    <a href="https://platsource.mx/documents/manual_docentes-bach_2018-2019.pdf" class="btn btn-link hide" target='_blank' id="mandocbach2018">
+                         <img src="/images/web/manual-docentes-18-19.png" alt="Manual de Docentes de Bachillerato de 2018 - 2019" />                    
+                            <!-- Manual de Docentes de </br>Bachillerato de 2018 - 2019 -->
                     </a>
 
                     <a href="http://turnitin.com/es/login" class="btn btn-link hide" target='_blank' id="turniting">

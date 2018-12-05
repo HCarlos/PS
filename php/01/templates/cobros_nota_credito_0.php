@@ -113,6 +113,16 @@ $tutor = $_POST['tutor'];
 												<input type="email" id="email1" name="email1" class="marginLeft1em altoMoz wd80prc"/>
 											</td>
 										<tr>	
+										<tr>
+											<td class="wd20prc">Uso CFDi </td>
+											<td class="wd80prc">
+												<select id="slUsoCFDi" name="slUsoCFDi" size="1" class='marginLeft1em altoMoz wd80prc'>
+													<option value="G03">G03 - Gastos generales</option>
+													<option value="D10" selected>D10 - Pago de colegiatura</option>
+													<option value="P01">P01 - No definido</option>
+												</select>
+											</td>
+										<tr>	
 									</table>
 									
 									</div>
@@ -133,6 +143,7 @@ $tutor = $_POST['tutor'];
 											<th class="td1 textRight">Descuento</th>
 											<th class="td1 textRight">Recargo</th>
 											<th class="td1 textRight">Total</th>
+											<th class="center"></th>
 										</tr>
 									</thead>
 
@@ -380,10 +391,18 @@ jQuery(function($) {
 						cad0 += "<input type='hidden' id='idproducto_"+i+"' name='idproducto_"+i+"' value='"+json[i].idproducto+"' />";
 						cad0 += "<input type='hidden' id='producto_"+i+"' name='producto_"+i+"' value='"+json[i].descrip_prod+"' />";
 						cad0 += "</td>";
+						cad0 += "<td class='td1'>";
+						cad0 +='	<div class="hidden-phone visible-desktop action-buttons">';
+						cad0 +='		<a class="red delIdFacDet1" href="#"  id="delIdFacDet1-'+item.idfacdet+'" >';
+						cad0 +='				<i class="icon-trash bigger-130"></i>';
+						cad0 +='		</a>';
+						cad0 +='	</div>';
+						cad0 += "</td>";
 					cad0 += "</tr>";
 					cad2 += cad2!=""?";":"";
  
      				// cad2 +="1"+"|"+json[i].descrip_prod+"|"+json[i].importe+"|"+json[i].importe+"|"+json[i].nombre_completo_alumno+"|"+json[i].curp+"|"+json[i].clave_registro_nivel+"|"+json[i].nivel_fiscal+"|"+json[i].rfc;
+/*
                		cad2 +="1"+"|"+
                				json[i].descrip_prod+"|"+
                				json[i].importe+"|"+
@@ -401,7 +420,25 @@ jQuery(function($) {
                				json[i].claveprodserv+"|"+
                				json[i].claveunidadmedida+"|"+
                				json[i].claveunidadmedida_descripcion;
-					
+*/
+               		cad2 +="1"+"|"+
+               				json[i].descrip_prod+"|"+
+               				json[i].importe+"|"+
+               				json[i].importe+"|"+
+               				json[i].nombre_completo_alumno+"|"+
+               				json[i].curp+"|"+
+               				json[i].clave_registro_nivel+"|"+
+               				json[i].nivel_fiscal+"|"+
+               				json[i].rfc+"|"+
+               				json[i].idedocta+"|"+
+               				json[i].iva+"|"+
+               				json[i].importe2+"|"+
+               				json[i].total+"|"+
+               				json[i].subtotal+"|"+
+               				json[i].claveprodserv+"|"+
+               				json[i].claveunidadmedida+"|"+
+               				json[i].claveunidadmedida_descripcion;
+
 					$("#tblDelFac > tbody").append(cad0);
                 });
 
@@ -411,6 +448,33 @@ jQuery(function($) {
 			    	event.preventDefault();
 			    	calcularTotales();
 			    });
+
+			    $(".delIdFacDet1").on("click",function(event){
+			    	event.preventDefault();
+			    	var ar = event.currentTarget.id.split('-');
+					var resp =  confirm("Desea eliminar este registro "+ar[1]+"?");
+					if (resp){
+			    		$(this).parent().parent().parent().remove();
+				        var nc = "u="+localStorage.nc+"&idfacdet="+ar[1];
+				        $.post(obj.getValue(0) + "data/", {o:28, t:15, c:nc, p:12, from:0, cantidad:0, s:''},
+				            function(json){
+
+				            	if (json[0].msg=="OK"){
+
+							    		alert("Registro Eliminado");
+								    	calcularTotales();
+
+				            	}else{
+
+				            		alert("No fue posible eliminar el registro:\n\n"+json[0].msg);
+
+				            	}
+								
+				            }, "json"
+				        );  
+			    	}
+			    });
+
 
             	$("#preloaderPrincipal").hide();
             	
@@ -445,7 +509,7 @@ jQuery(function($) {
 
             	$("#idregfis").val( json[0].idregfis );
 
-            	$("#idmetododepago").val( json[0].metodo_de_pago );
+            	$("#idmetododepago").val( json[0].idmetododepago );
             	$("#referencia").val( json[0].referencia );
 
             	$("#spfactura").html(IdFactura);
@@ -484,7 +548,7 @@ jQuery(function($) {
     		if (  parseInt( $("#idfacdet_"+i).val() ,0) > 0 ) {
 
 				// alert("0");
-
+/*
     			var n0 = parseFloat( $("#subtotal_"+i).val() );
     			var db1 = parseFloat( $("#descto_becas_"+i).val() );
     			var n1 = parseFloat( $("#descto_"+i).val() );
@@ -516,6 +580,31 @@ jQuery(function($) {
 		    	nTotal += n4;
 				
 				// alert("1");
+
+*/
+
+    			var subtotal = parseFloat( $("#subtotal_"+i).val() );
+    			var descto_becas = parseFloat( $("#descto_becas_"+i).val() );
+    			var descto = parseFloat( $("#descto_"+i).val() );
+    			var recargo = parseFloat( $("#recargo_"+i).val() );
+
+    			var xImporte =  subtotal - descto_becas;
+		    	$("#importe_"+i).val( xImporte );
+
+		    	var xTotal = ( (xImporte - descto) + recargo);
+		    	$("#total_"+i).val( xTotal );
+
+		    	nImporte += subtotal;
+		    	nDescto_Becas += descto_becas;
+		    	nSubtotal += xImporte;
+
+		    	nDescto +=  descto;
+		    	nRec += recargo;
+		    	nImporte2 += xTotal;
+		    	nIva = 0;
+		    	nTotal += xTotal;
+
+
 				
             	$("#importefactura").html( accounting.formatMoney(nImporte) );
             	$("#desctobecasfactura").html( accounting.formatMoney(nDescto_Becas) );
@@ -629,6 +718,7 @@ jQuery(function($) {
 		}
 
 		// alert(queryString);
+		// return false;
 
         $.post(obj.getValue(0)+"data/", { o:28, t:10013, p:10, c:nc, from:0, cantidad:0, s:"" },
             function(json){

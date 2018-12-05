@@ -2,6 +2,8 @@
 // ob_end_clean();
 
 ini_set('display_errors', '0'); 
+// ini_set('default_socket_timeout', 6000);
+
 error_reporting(E_ALL | E_STRICT); 
 
 ini_set('display_errors', TRUE);
@@ -21,15 +23,12 @@ $view = 1;
 
 date_default_timezone_set('America/Mexico_city');
 
-//
 $fecha             = date('Y-m-d')."T".date("H:i:s",time()-(5*60));
 $fechacomp         = date('Y-m-d');
 $lugar_expedicion  = "Villahermosa, Tabasco";
 $aprobacion        = 1;
 $year_aprobacion   = "2012";
-
 $tipo_cfdi         = "ingreso";
-
 $folio             = "";
 $dias_credito      = 0;
 $iva               = 0; // 16;
@@ -44,6 +43,7 @@ $folio = $folSer;
 $efxi = explode('-', $idemisorfiscal);
 $query = "select rfc,razon_social,calle, num_ext, num_int,colonia,localidad,estado,cp,pais,is_iva from _viEmiFis where idemisorfiscal = ".$efxi[0]." and idemp = $idemp and status_emisor_fiscal = 1";
 $ef = $f->getArray($query);
+
 
 switch ($serie){
 	case "A":
@@ -71,6 +71,7 @@ switch ($serie){
 			$pais_emisor          	= $ef[0]->pais;
 			$is_iva          	    = intval($ef[0]->is_iva);
 			$regimen_fiscal_emisor 	= "ASOCIACION CIVIL";			
+			$usoCFDi33              = $slUsoCFDi;			
 			$rgb  = array(64,105,154);
 			
 			break;
@@ -98,10 +99,15 @@ switch ($serie){
 			$codigo_postal_emisor 	= $ef[0]->cp;
 			$pais_emisor          	= $ef[0]->pais;
 			$is_iva          	    = intval($ef[0]->is_iva);
-			$regimen_fiscal_emisor = "PERSONAS MORALES DEL REGIMEN GENERAL";			
+			$regimen_fiscal_emisor  = "PERSONAS MORALES DEL REGIMEN GENERAL";			
+			$usoCFDi33              = $slUsoCFDi;			
 			$rgb  = array(64,105,154);			
 			break;
 }
+
+require_once('../../oFunctions.php');
+$oF = oFunctions::getInstance();
+$lUsoCFDi33 = $oF->getTextUsoCFDi($usoCFDi33);
 
 $query = "SELECT idfamilia, tutor FROM _viEdosCta WHERE idfactura = $idfactura AND idemp = $idemp limit 1";
 $fe0 = $f->getArray($query);
@@ -150,7 +156,7 @@ $total        = $fe1[0]->total;
 $total_cadena = $total;
 $forma_pago   = "Pago en una sola exhibición";
 
-$cadConc = $cadOrd;	
+$cadConc = $cadOrd;
 
 include("crear_XML_Arji_cfdi_33_".$serie.".php");
 
@@ -160,14 +166,16 @@ $cfdi = $cadena_xml; //simplexml_load_file("facturas/Factura-".$serie."-".$folio
 
 // echo $cadena_xml;
 
+error_reporting(0); # Se deshabilitan los errores pues el xssl de la cadena esta en version 2 y eso genera algunos warnings
+// error_reporting(E_ALL  | E_STRICT); # Se habilitan de nuevo los errores (se asume que originalmente estaban habilitados)
 $xml = new DOMDocument();
 $xml->loadXML($cadena_xml) or die("\n\n\nXML no válido..");
 $xslt = new XSLTProcessor();
 $XSL = new DOMDocument();
 $XSL->load($cadena_original, LIBXML_NOCDATA);
-error_reporting(0); # Se deshabilitan los errores pues el xssl de la cadena esta en version 2 y eso genera algunos warnings
+// error_reporting(0); # Se deshabilitan los errores pues el xssl de la cadena esta en version 2 y eso genera algunos warnings
 $xslt->importStylesheet( $XSL );
-error_reporting(E_ALL); # Se habilitan de nuevo los errores (se asume que originalmente estaban habilitados)
+error_reporting(E_ALL  | E_STRICT); # Se habilitan de nuevo los errores (se asume que originalmente estaban habilitados)
 $c = $xml->getElementsByTagNameNS('http://www.sat.gob.mx/cfd/3', 'Comprobante')->item(0);
 $cadena = $xslt->transformToXML( $c );
 unset($xslt, $XSL);
@@ -292,6 +300,7 @@ foreach ($xml->xpath('//t:TimbreFiscalDigital') as $tfd) {
 					idregfis = $idregfis,
 					metodo_de_pago = $idmetododepagoFE,
 					referencia = '$referencia',
+					usocfdi = '$slUsoCFDi',
 					UUID = '$folfis', 
 					xml = '$fxml', 
 					pdf='$fpdf', 
@@ -323,7 +332,6 @@ foreach ($xml->xpath('//t:TimbreFiscalDigital') as $tfd) {
 		} else{
 
 			include("crear_PDF_Arji_cfdi_33.php");
-			// print "ERROR: ".$result;
 
 		}
 

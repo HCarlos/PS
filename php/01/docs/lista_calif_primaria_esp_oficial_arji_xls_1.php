@@ -94,10 +94,9 @@ foreach ($arrAlu as $i => $value) {
 	if ( count($result)>0 ){
 
 		$oS->setCellValue("A".$k, $result[0]->num_lista);
-		$oS->setCellValue("B".$k, $result[0]->alumno);
+		$oS->setCellValue("B".$k, $result[0]->alumno .' '.$arrAlu[$i].' '.$result[0]->idgrumat);
+		// $oS->setCellValue("B".$k, $result[0]->alumno);
 		$E->cellColor($objPHPExcel, "A".$k.':'."B".$k, 'CCF4CC');
-
-		// $E->cellColor($objPHPExcel, "A".$k.':'."Z".$k, '99FF66');
 
 		for ($w=1; $w<6; ++$w){
 
@@ -144,8 +143,8 @@ foreach ($arrAlu as $i => $value) {
 		$fl=3;
 		// $mat = $f->getQuerys(93,"idgrualu=".$arrAlu[$i]."&numval=6",0,0,0,array(),' and idioma = 0 ');
 		$mat = $f->getQuerys(71,"idgrualu=".$arrAlu[$i],0,0,0,array(),' ');
-		$cal =  $A->FormatCal($mat[0]->promcalof,$mat[0]->promconof,$mat[0]->suminaof,3,1);
-		// $oS->setCellValueByColumnAndRow($fl,$k, $cal);
+		// $cal =  bcdiv($mat[0]->promcalof,'1',1);
+		$cal =  $mat[0]->promcalof;
 		$oS->setCellValue("D".$k, $cal);
 
 		$fl=$miCal;
@@ -153,8 +152,9 @@ foreach ($arrAlu as $i => $value) {
 			$mat = $f->getQuerys(93,"idgrualu=".$arrAlu[$i]."&numval=6&idgrumat=".$arrIdGruMat[$l],0,0,0,array(),' and idioma = 0 order by orden_historial asc ');
 			if ( count($mat)>0 ){
 				if ( in_array(intval($mat[0]->idmatclas) , $os) ){
-					// $cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,3,1);
-					$cal =  $A->FormatCal($mat[0]->cal,0,0,3,1);
+					// $cal = $A->FormatCal($mat[0]->cal,0,0,4,1);
+					$cal =  $mat[0]->cal;
+					// $cal =  bcdiv($mat[0]->cal,'1',1);
 					$oS->setCellValueByColumnAndRow($fl,$k, $cal);
 				}else{
 					$cal =  '';

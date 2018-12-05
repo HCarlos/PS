@@ -18,6 +18,7 @@ class oArji {
 		$calx = "";
 		$conx = "";
 		$inax = "";
+		$round = 0;
 		if ($cal>0){
 			$calx = round(floatval($cal),$round);
 //			$calx = $cal;
@@ -51,7 +52,12 @@ class oArji {
 		}
 
 		switch($pivot){
+			case 4:
+				$calx = $cal;
+				return $calx;
+				break;
 			case 3:
+
 				if (trim($calx)!=''){
 					$loC0 = explode('.',$calx);
 					if ( count($loC0) > 1 ) {

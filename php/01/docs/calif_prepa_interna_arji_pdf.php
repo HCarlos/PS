@@ -186,7 +186,7 @@ foreach ($arrAlu as $i => $value) {
 	
 	if ( count($result)>0  ){
 
-		$pdf->alumno = $result[0]->alumno; // .' '.$arrAlu[$i];
+		$pdf->alumno = $result[0]->alumno;//.' '.$arrAlu[$i];
 		$pdf->num_lista = $result[0]->num_lista;
 		$pdf->grupo = $result[0]->grupo;
 		$pdf->ciclo = $result[0]->ciclo;
@@ -239,10 +239,11 @@ foreach ($arrAlu as $i => $value) {
 			$pdf->setX(5);
 			$pdf->SetFont('Arial','',6);
 			$limitStrDescMat = 48;
+			//.' '.$result[$j]->idgrumat
 			if ( strlen($result[$j]->materia) < $limitStrDescMat ){
-				$pdf->Cell(64,4, utf8_decode($result[$j]->materia),'',0,'L'); //." ".$result[$j]->idgrumat
+				$pdf->Cell(64,4, utf8_decode($result[$j]->materia),'',0,'L'); //." ".$result[$j]->idgrumat;
 			}else{
-				$pdf->Cell(64,4, substr(utf8_decode($result[$j]->materia),0,$limitStrDescMat)."..." ,'',0,'L'); //." ".$result[$j]->idgrumat
+				$pdf->Cell(64,4, substr(utf8_decode($result[$j]->materia),0,$limitStrDescMat)."..." ,'',0,'L'); //." ".$result[$j]->idgrumat;
 			}
 			$pdf->SetFont('Courier','',6);
 			$pdf->Cell(12.5,4,$pdf->FormatCal(floatval($result[$j]->cal0),floatval($result[$j]->con0),floatval($result[$j]->ina0)),'',0,'C', false);

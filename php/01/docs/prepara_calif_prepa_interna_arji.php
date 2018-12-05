@@ -45,7 +45,7 @@ foreach ($arrAlu as $i => $value) {
 
 		}
 
-		$yy = $M->Actualiza_Grupo_Alumno_Promedio($user,$result[$j]->idgrualu);
+		$yy = $M->Actualiza_Grupo_Alumno_Promedio_Prepa($user,$result[$j]->idgrualu);
 	
 	}
 

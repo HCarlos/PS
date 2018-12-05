@@ -971,6 +971,26 @@ class oFunctions {
 	    return( date("md") < '9'.'1' ? date("Y")-$Y-1 : date("Y")-$Y );		
 
 	}
+
+
+	public function getTextUsoCFDi($usoCFDi33){
+		switch (trim($usoCFDi33)) {
+			case 'G03':
+				$lUsoCFDi33 = "Gastos Generales";
+				break;
+			case 'D10':
+				$lUsoCFDi33 = "Pago de Colegiatura";
+				break;
+			case 'P01':
+				$lUsoCFDi33 = "No Definido";
+				break;	
+			default:
+				$lUsoCFDi33 = "";
+				break;
+		}
+		return $lUsoCFDi33;
+
+	}
 	
 	
 }

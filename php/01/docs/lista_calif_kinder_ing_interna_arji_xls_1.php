@@ -12,7 +12,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', TRUE);
 ini_set('display_startup_errors', TRUE);
-ini_set('default_socket_timeout', 6000);
+ini_set('default_socket_timeout', 60000);
 date_default_timezone_set('America/Mexico_City');
 
 $o = $_POST['o'];
@@ -28,7 +28,7 @@ if (!isset($c)){
 
 /* MS Excel */
 set_include_path(get_include_path() . PATH_SEPARATOR . '../PHPExcel/Classes/');
-set_time_limit(600);
+set_time_limit(60000);
 require_once("../PHPExcel/Classes/PHPExcel.php");
 require_once("../PHPExcel/Classes/PHPExcel/Reader/Excel2007.php");
 $objReader = PHPExcel_IOFactory::createReader('Excel2007');
@@ -100,7 +100,7 @@ foreach ($arrAlu as $i => $value) {
 			$fl=3;
 			$mat = $f->getQuerys(58,"idgrualu=".$arrAlu[$i]."&numval=".$w,0,0,0,array(),' and idioma = 1 ');
 			if (count($mat)>0){
-				$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,3);
+				$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,4);
 				$oS->setCellValueByColumnAndRow($fl,$k, $cal);
 			}
 
@@ -134,7 +134,7 @@ foreach ($arrAlu as $i => $value) {
 		$fl=3;
 		$mat = $f->getQuerys(58,"idgrualu=".$arrAlu[$i]."&numval=9",0,0,0,array(),' and idioma = 1 ');
 		if (count($mat)>0){
-			$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,3);
+			$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,4);
 			$oS->setCellValueByColumnAndRow($fl,$k, $cal);
 		}
 
@@ -146,7 +146,7 @@ foreach ($arrAlu as $i => $value) {
 				//$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina);
 				//$oS->setCellValueByColumnAndRow($fl,$k, $cal);
 				if ( in_array(intval($mat[0]->idmatclas) , $os) ){
-					$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,3);
+					$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,4);
 					$oS->setCellValueByColumnAndRow($fl,$k, $cal);
 				}else{
 					$cal =  '';
@@ -206,10 +206,10 @@ foreach ($arrAlu as $i => $value) {
 }
 
 $ti=$clave."-".$idciclo;//  time();
-$fileout= "reporte-calif-primaria-ing-arji-".$ti.".xlsx";
+$fileout= "reporte-calif-kinder-ing-arji-".$ti.".xlsx";
 $objWriter->save($fileout);//guardamos el archivo excel  
 
-echo "Archivo generado con &eacute;xito, para abrir haga click <a href='http://platsource.mx/php/01/docs/".$fileout."'>aqu&iacute;</a>"  
+echo "Archivo generado con &eacute;xito, para abrir haga click <a href='https://platsource.mx/php/01/docs/".$fileout."'>aqu&iacute;</a>"  
 
 ?>
 

@@ -38,6 +38,14 @@ if ( isset($_POST['idmatconsave']) ){
 			
 
 				<div class="form-group ">
+			    	<label for="ciclo_id" class="col-lg-2 control-label">Ciclo</label>
+			    	<div class="col-lg-10">
+			            <select class=" altoMoz" name="ciclo_id" id="ciclo_id" size="1" disabled>
+			            </select>
+		      		</div>
+			    </div>
+
+				<div class="form-group ">
 			    	<label for="titulo" class="col-lg-2 control-label">Replicar</label>
 			    	<div class="col-lg-10">
 			            <select class=" altoMoz" name="selMatConSave" id="selMatConSave" size="1">
@@ -218,6 +226,7 @@ jQuery(function($) {
 
 	});	
 
+
 	function buttonDisabled(){
 		$("#preloaderPrincipal").hide();	
 		$("#preloaderLocal").hide();
@@ -227,7 +236,9 @@ jQuery(function($) {
 	}
 
     function getMatConSave(){
-        var nc = "u="+localStorage.nc+"&idgrumat="+IdGruMat+"&num_eval="+Num_Eval;
+    	var ciclo_id = $("#ciclo_id").val();
+        var nc = "u="+localStorage.nc+"&idgrumat="+IdGruMat+"&num_eval="+Num_Eval+"&ciclo_id="+ciclo_id;
+        $("#selMatConSave").empty();
         $("#selMatConSave").append("<option value='0-0'>Seleccione un Elemento</option>");
         $.post(obj.getValue(0)+"data/", { o:55, t:55, p:51, c:nc, from:0, cantidad:0, s:"" },
             function(json){
@@ -260,7 +271,34 @@ jQuery(function($) {
 
 	});
 
-	getMatConSave();
+	getCicloMatConSave();
+
+
+    function getCicloMatConSave(){
+        var nc = "u="+localStorage.nc+"&idgrumat="+IdGruMat+"&num_eval="+Num_Eval;
+	    $.post(obj.getValue(0)+"data/", { o:1, t:2, p:0,c:nc,from:0,cantidad:0, s:"" },
+	        function(json){
+	            var pred = "";
+	            var ant  = 0;
+	           $.each(json.reverse(), function(i, item) {
+	           	   if (item.predeterminado == 1){
+		                $("#ciclo_id").append('<option value="'+item.data+'" selected> '+item.label+'</option>');
+		                ant  = item.anterior;
+		            }
+	           	   if (item.data == ant){
+		                $("#ciclo_id").append('<option value="'+item.data+'"> '+item.label+'</option>');
+		            }
+	            });
+				getMatConSave();
+	        }, "json"
+	    );  
+    }
+
+	$("#ciclo_id").on("change",function(event){
+		event.preventDefault();
+		buttonDisabled()
+		getMatConSave();
+	});	
 
 
 	$("#titulo").focus();

@@ -43,6 +43,7 @@ $de       = $_POST['user'];
 						<tr role="row">
 							<th aria-label="idmateria: activate to sort column ascending" style="width: 80px;" colspan="1" rowspan="1" aria-controls="sample-table-2" tabindex="0" role="columnheader" class="sorting" >ID</th>
 							<th aria-label="nombre_materia: activate to sort column ascending" style="width: 200px;" colspan="1" rowspan="1" aria-controls="sample-table-2" tabindex="1" role="columnheader" class="sorting">Materia</th>
+							<th aria-label="clasmat: activate to sort column ascending" style="width: 200px;" colspan="1" rowspan="1" aria-controls="sample-table-2" tabindex="1" role="columnheader" class="sorting">Clasificación</th>
 							<th aria-label="usuario: activate to sort column ascending" style="width: 60px;" colspan="1" rowspan="1" aria-controls="sample-table-2" tabindex="1" role="columnheader" class="sorting">Abrev.</th>
 							<th aria-label="" style="width: 200px;" colspan="1" rowspan="1" role="columnheader" class="sorting_disabled"></th>
 						</tr>
@@ -85,7 +86,7 @@ jQuery(function($) {
 	            			"sInfoFiltered": "(De _MAX_ registros)"                                        
 	        			},	
 	        "aaSorting": [[ 0, "desc" ]],			
-			"aoColumns": [ null, null, null,  { "bSortable": false }],
+			"aoColumns": [ null, null, null, null, { "bSortable": false }],
 			"aLengthMenu": [[10, 25, 50, -1], [10, 25, 50, "Todos"]],
 			"bRetrieve": true,
 			"bDestroy": false
@@ -109,6 +110,7 @@ jQuery(function($) {
 						tB +='					<a href="#" class="modMateriaPro" id="idmat-'+item.idmateria+'" >'+padl(item.idmateria,4)+'</a>';
 						tB +='				</td>';
 						tB +='				<td class=" " >'+item.materia+'</td>';
+						tB +='				<td class=" " >'+item.clasificacion+'</td>';
 						tB +='				<td class=" " >'+item.abreviatura+'</td>';
 						tB +='				<td class=" ">';
 						tB +='					<div class="hidden-phone visible-desktop action-buttons">';

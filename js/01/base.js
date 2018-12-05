@@ -552,7 +552,26 @@ function ValidateName(name) {
     return false;
 }
 
-
+(function($) {
+	$.fn.dateToSpanish = function(Fecha,Hora,Type) {
+		var retorno;
+		switch(Type){
+			case 0:
+					var f0    = Fecha.split('-');
+					var fecha = f0[2]+'-'+f0[1]+'-'+f0[0];
+					retorno   = $(this[0]).html(fecha+' '+Hora);
+					break;
+			case 1:
+					var f0    = Fecha.split(' ');
+					var f1    = f0[0].split('-');
+					var f2    = f0[1];
+					var fecha = f1[2]+'-'+f1[1]+'-'+f1[0];
+					retorno   = $(this[0]).val(fecha+' '+f2);
+					break;
+		}
+		return retorno;
+	};
+})(jQuery);
 
 (function($) {
 	$.fn.formatCurrencyON = function(val) {

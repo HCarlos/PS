@@ -1,20 +1,21 @@
 <?php 
-ob_end_clean();
+// ob_end_clean();
 
-ini_set('display_errors', '0');     # don't show any errors...
-error_reporting(E_ALL | E_STRICT);  # ...but do log them
+ini_set('display_errors', '0'); 
+error_reporting(E_ALL | E_STRICT); 
+
 ini_set('display_errors', TRUE);
 ini_set('display_startup_errors', TRUE);
 
 header("Content-type:application/json; charset=utf-8");  
 header("Cache-Control: no-cache");
 
-// require_once('../../vo/voConn.php');
 require_once('../../oCentura.php');
 $f = oCentura::getInstance();
 
 $arg   = $_POST["data"];
 parse_str($arg);
+
 $regimen_fiscal = 'Régimen General de Ley Personas Morales';//$_REQUEST['regimen_emisor'];
 $view = 1;
 
@@ -72,7 +73,7 @@ switch ($serie){
 			$is_iva          	    = intval($ef[0]->is_iva);
 
 			$regimen_fiscal_emisor 	= "ASOCIACION CIVIL";
-			
+			$usoCFDi33              = $slUsoCFDi;						
 			$rgb  = array(64,105,154);
 			//$logo = 'imgs/logo_arji.gif';
 			
@@ -105,9 +106,15 @@ switch ($serie){
 			$regimen_fiscal_emisor = "PERSONAS MORALES DEL REGIMEN GENERAL";
 			
 			$rgb  = array(64,105,154);
+			$usoCFDi33              = $slUsoCFDi;			
 			
 			break;
 }
+
+
+require_once('../../oFunctions.php');
+$oF = oFunctions::getInstance();
+$lUsoCFDi33 = $oF->getTextUsoCFDi($usoCFDi33);
 
 
 $query = "SELECT idcliente, importe, descto, recargo, importe2, iva, total FROM facturas_encabezado WHERE idfactura = $idfactura AND idemp = $idemp LIMIT 1";
@@ -157,7 +164,7 @@ $total_cadena = $total;
 
 $forma_pago        =  "Pago en una sola exhibición";//trim($_REQUEST['forma_pago']); 
 
-// mysql_close($mysql);
+$cadConc = $cadOrd;	
 
 include("crear_XML_Arji_cfdi_33_".$serie.".php");
 
@@ -293,6 +300,7 @@ foreach ($xml->xpath('//t:TimbreFiscalDigital') as $tfd) {
 					idregfis = $idregfis,
 					metodo_de_pago = $idmetododepago,
 					referencia = '$referencia',
+					usocfdi = '$slUsoCFDi',
 					UUID = '$folfis', 
 					xml = '$fxml', 
 					pdf='$fpdf', 
@@ -305,20 +313,6 @@ foreach ($xml->xpath('//t:TimbreFiscalDigital') as $tfd) {
 		$result = $f->guardarDatos($query);
 
 		unlink($folSer2);
-/*
-		include("crear_PDF_Arji.php");
-
-		$dir_upload = "https://platsource.mx/uw_fe/".$directorio;
-		$pdf = $fpdf;
-		$xml = $fxml;
-		$emailto = $email1;
-		$CFDi_ver = "3.2";
-
-		include("send_Mail_Arji.php");
-
-		// mysql_close($mysql);
-*/
-
 
 		if ( $result == "OK" ){
 
@@ -340,9 +334,7 @@ foreach ($xml->xpath('//t:TimbreFiscalDigital') as $tfd) {
 			include("crear_PDF_Arji_cfdi_33.php");
 			// print "ERROR: ".$result;
 
-		}
-
-		
+		}		
 
 	}
 

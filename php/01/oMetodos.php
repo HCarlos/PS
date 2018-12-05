@@ -190,6 +190,26 @@ class oMetodos {
 
 	}
 
+	public function  Actualiza_Grupo_Alumno_Promedio_Prepa($user='',$idgrualu=0, $flag=0) {
+
+		$ip=$_SERVER['REMOTE_ADDR']; 
+		$host=gethostbyaddr($_SERVER['REMOTE_ADDR']);//$_SERVER["REMOTE_HOST"]; 
+		$idemp = $this->getIdEmpFromAlias($user);
+		$idusr = $this->getIdUserFromAlias($user);
+
+		$query = "SET @X =  Actualiza_Grupo_Alumno_Promedio_Prepa(".$idgrualu.", ".$idusr.", ".$idemp.", '".$ip."', '".$host."'); ";
+	    if ( $flag == 0){
+			$ret = $this->execQuery($query);
+	    }else{
+	    	$ret = $query;
+	    }
+
+	    
+	    return $ret;
+
+
+	}
+
 
 	public function Actualiza_Promedios_Grupales_por_Materia($user='',$idgrualu=0) {
 		/*
@@ -295,6 +315,19 @@ class oMetodos {
 
 	}
 
+
+	public function Actualiza_Grupo_Alumno_Promedio_Idioma_Kinder($user='',$idgrualu=0,$pIdioma=0) {
+		$ip=$_SERVER['REMOTE_ADDR']; 
+		$host=gethostbyaddr($_SERVER['REMOTE_ADDR']);//$_SERVER["REMOTE_HOST"]; 
+		$idemp = $this->getIdEmpFromAlias($user);
+		$idusr = $this->getIdUserFromAlias($user);
+
+		$query = "Set @X = Actualiza_Grupo_Alumno_Promedio_Idioma_Kinder(".$idgrualu.", ".$pIdioma.", ".$idusr.", ".$idemp.", '".$ip."', '".$host."')";
+		$ret = $this->execQuery($query);
+
+	    return $ret;
+
+	}
 
 	public function Llamar_Actualiza_Promedios_Boletas_por_Grupo($idgrualu=0) {
 			

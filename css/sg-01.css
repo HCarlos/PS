@@ -226,7 +226,9 @@ input[type="file"]#fileElem {
 .colorexcelente{background-color:#9CE89C;}
 
 .colorpagado{background-color:#F9DFDF;}
-.colorisdeudaanterior{background-color:#801919; color: white;}
+.colorisdeudaanterior{background-color:#801919; color: #F9DFDF !important;}
+.colorcancelado{background-color:#2059D4 !important; color: #F9DFDF !important;}
+
 
 /* Footer
 ================================================== */

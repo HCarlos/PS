@@ -99,7 +99,7 @@ foreach ($arrAlu as $g => $value) {
 			
 			$oS->setCellValue("N".$k, $rst[$i]->familia);
 			$oS->setCellValue("O".$k, $rst[$i]->idfamilia);
-			$oS->setCellValue("P".$k, $rst[$i]->nombre_tutor);
+			$oS->setCellValue("P".$k, $rst[$i]->ap_paterno_tutor.', '.$rst[$i]->ap_materno_tutor.', '.$rst[$i]->nombre__tutor);
 			$oS->setCellValue("Q".$k, $rst[$i]->idtutor);
 			$oS->setCellValue("R".$k, $rst[$i]->username_tutor);
 			$oS->setCellValue("S".$k, $rst[$i]->email_tutor1);
@@ -111,7 +111,7 @@ foreach ($arrAlu as $g => $value) {
 			$oS->setCellValue("Y".$k, $rst[$i]->cel2_tutor);
 
 			$tut = $f->getQuerys(20,$rst[$i]->idtutor);
-			if ( count($tut) > 0 ){
+			if ( isset($tut[0]) ){
 				$oS->setCellValue("Z".$k, $tut[0]->domicilio_generico);
 				$oS->setCellValue("AA".$k, $tut[0]->ocupacion);
 				$oS->setCellValue("AB".$k, $tut[0]->lugar_trabajo);
@@ -123,7 +123,10 @@ foreach ($arrAlu as $g => $value) {
 				$oS->setCellValue("AC".$k, '');
 			}
 
+
 			$arr = array('AD','AE','AF','AG','AH','AI','AJ','AK','AL','AM','AN','AO','AP','AQ','AR','AS','AT','AU','AV','AW','AX','AY','AZ','BA','BB','BC','BD','BE','BF','BG','BH','BI','BJ','BK','BL','BM','BN','BO','BP','BQ','BR','BS','BT','BU','BV','BW','BX','BY','BZ');
+			
+			// $arr = array('AH','AI','AJ','AK','AL','AM','AN','AO','AP','AQ','AR','AS','AT','AU','AV','AW','AX','AY','AZ','BA','BB','BC','BD','BE','BF','BG','BH','BI','BJ','BK','BL','BM','BN','BO','BP','BQ','BR','BS','BT','BU','BV','BW','BX','BY','BZ');
 
 			$emer = $f->getQuerys(115,"u=".$u."&idalumno=".$rst[$i]->idalumno);
 
@@ -152,7 +155,8 @@ foreach ($arrAlu as $g => $value) {
 					$oS->setCellValue($arr[$j].$k, $r[$ll]->parentezco);
 					$oS->setCellValue($arr[$j+1].$k, $r[$ll]->data);
 					$oS->setCellValue($arr[$j+2].$k, $r[$ll]->username_persona);		
-					$oS->setCellValue($arr[$j+3].$k, $r[$ll]->label);		
+					$oS->setCellValue($arr[$j+3].$k, $r[$ll]->ap_paterno.', '.$r[$ll]->ap_materno.', '.$r[$ll]->nombre);		
+					// $oS->setCellValue($arr[$j+3].$k, $r[$ll]->label);		
 					$oS->setCellValue($arr[$j+4].$k, $r[$ll]->email1);			
 					$oS->setCellValue($arr[$j+5].$k, $r[$ll]->email2);
 					$oS->setCellValue($arr[$j+6].$k, $r[$ll]->tel1);			
@@ -161,7 +165,7 @@ foreach ($arrAlu as $g => $value) {
 					$oS->setCellValue($arr[$j+9].$k, $r[$ll]->cel2);
 					$oS->setCellValue($arr[$j+10].$k, $r[$ll]->cfecha_nacimiento);
 
-					$tut = $f->getQuerys(20,$rst[$i]->idtutor);
+					$tut = $f->getQuerys(20,$r[$ll]->data);
 
 					if ( count($tut) > 0 ){
 						$oS->setCellValue($arr[$j+11].$k, $tut[0]->domicilio_generico);
@@ -178,6 +182,8 @@ foreach ($arrAlu as $g => $value) {
 				}
 			
 			}
+
+			// $m = $ll;
 
 			++$k;
 

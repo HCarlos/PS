@@ -98,14 +98,14 @@ foreach ($arrAlu as $i => $value) {
 		// Obtenemos el Promedio del Alumno en Español
 		$fl=3;
 		$mat = $f->getQuerys(58,"idgrualu=".$arrAlu[$i]."&numval=".$w,0,0,0,array(),' and idioma = 0 ');
-		$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,3);
+		$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,4);
 		$p0 = floatval($mat[0]->cal);
 		$oS->setCellValueByColumnAndRow($fl, $k, $cal);
 
 		// Obtenemos el Promedio del Alumno en Inglés
 		$fl=4;
 		$mat = $f->getQuerys(58,"idgrualu=".$arrAlu[$i]."&numval=".$w,0,0,0,array(),' and idioma = 1 ');
-		$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,3);
+		$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,4);
 		$p1 = floatval($mat[0]->cal);		
 		$oS->setCellValueByColumnAndRow($fl, $k, $cal);
 

@@ -96,8 +96,10 @@ foreach ($arrAlu as $i => $value) {
 		// Obtenemos el Promedio del Alumno
 		$fl=3;
 		$mat = $f->getQuerys(58,"idgrualu=".$arrAlu[$i]."&numval=".$w,0,0,0,array(),' and idioma = 0 ');
+		// $cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,3);
+		//$mat[0]->cal;
 		$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,3);
-		
+
 		$oS->setCellValueByColumnAndRow($fl,$k, $cal);
 
 		// Obtenemos las Calificaciones por Num Eval

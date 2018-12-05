@@ -1,5 +1,5 @@
 <?php 
-ob_end_clean();
+// ob_end_clean();
 
 ini_set('display_errors', '0'); 
 error_reporting(E_ALL | E_STRICT); 
@@ -10,15 +10,13 @@ ini_set('display_startup_errors', TRUE);
 header("Content-type:application/json; charset=utf-8");  
 header("Cache-Control: no-cache");
 
-// require_once('../../vo/voConn.php');
 require_once('../../oCentura.php');
-
 $f = oCentura::getInstance();
 
 $arg   = $_POST["data"];
 parse_str($arg);
 
-$regimen_fiscal_emisor = 'Régimen General de Ley Personas Morales';//$_REQUEST['regimen_emisor'];
+$regimen_fiscal = 'Régimen General de Ley Personas Morales';//$_REQUEST['regimen_emisor'];
 $view = 1;
 
 date_default_timezone_set('America/Mexico_city');
@@ -28,7 +26,6 @@ $fechacomp         = date('Y-m-d');
 $lugar_expedicion  = "Villahermosa, Tabasco";
 $aprobacion        = 1;
 $year_aprobacion   = "2012";
-
 $tipo_cfdi         = "egreso";
 $folio             = "";
 $dias_credito      = 0;
@@ -73,7 +70,7 @@ switch ( intval($idemisorfiscal) ){
 			$codigo_postal_emisor 	= $emifisNC0[0]->cp;
 			$pais_emisor          	= $emifisNC0[0]->pais;
 			$is_iva          	    = intval($emifisNC0[0]->is_iva);
-
+			$usoCFDi33              = $slUsoCFDi;			
 			$regimen_fiscal_emisor = "ASOCIACION CIVIL";
 			$rgb  = array(64,105,154);
 			
@@ -106,11 +103,15 @@ switch ( intval($idemisorfiscal) ){
 			$is_iva          	 = intval($emifisNC0[0]->is_iva);
 
 			$regimen_fiscal_emisor = "PERSONAS MORALES DEL REGIMEN GENERAL";
-			
+			$usoCFDi33              = $slUsoCFDi;						
 			$rgb  = array(64,105,154);
 			
 			break;
 }
+
+require_once('../../oFunctions.php');
+$oF = oFunctions::getInstance();
+$lUsoCFDi33 = $oF->getTextUsoCFDi($usoCFDi33);
 
 $query = "SELECT idcliente, importe, descto, recargo, importe2, iva, total FROM facturas_encabezado WHERE idfactura = $idfactura AND idemp = $idemp LIMIT 1";
 $fe0 = $f->getArray($query);
@@ -154,16 +155,12 @@ $subtotal2 = $fe0[0]->importe2;
 $iva 	   = $fe0[0]->iva;
 $total     = $fe0[0]->total;
 
-
 $total_cadena = $total;
 
 $forma_pago        =  "Pago en una sola exhibición";//trim($_REQUEST['forma_pago']); 
 
-// mysql_close($mysql);
-
 $cadConc = $cadOrd;	
 
-// include("crear_XML_Arji.php");
 include("crear_XML_Arji_cfdi_33_".$serieBase.".php");
 
 //Generamos la Cadena Original
@@ -298,6 +295,7 @@ foreach ($xml->xpath('//t:TimbreFiscalDigital') as $tfd) {
 			SET 
 				isfe = 1, 
 				UUID = '$folfis', 
+				usocfdi = '$slUsoCFDi',
 				xml = '$fxml', 
 				pdf='$fpdf', 
 				serie = '$serie', 
@@ -309,17 +307,6 @@ foreach ($xml->xpath('//t:TimbreFiscalDigital') as $tfd) {
 		$result = $f->guardarDatos($query);
 
 		unlink($folSer2);
-
-		/*include("crear_PDF_Arji.php");
-
-		$dir_upload = "https://platsource.mx/uw_fe/".$directorio;
-		$pdf = $fpdf;
-		$xml = $fxml;
-		$emailto = $email1;
-		$CFDi_ver = "3.2";
-
-		// mysql_close($mysql);
-		*/
 
 		if ( $result == "OK" ){
 
@@ -339,7 +326,6 @@ foreach ($xml->xpath('//t:TimbreFiscalDigital') as $tfd) {
 		} else{
 
 			include("crear_PDF_Arji_cfdi_33.php");
-			// print "ERROR: ".$result;
 
 		}
 

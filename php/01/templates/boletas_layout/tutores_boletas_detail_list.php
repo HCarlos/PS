@@ -37,11 +37,13 @@ $screenDestino = $_POST['screenDestino'];
 
 			<div class="widget-toolbar black">
 				<select id="cmbBimDetBolCal00" size="1" class=" lbl00">
-					<option value="0">Bimestre 1</option>
-					<option value="1">Bimestre 2</option>
-					<option value="2">Bimestre 3</option>
+					<option value="0">Trimestre 1</option>
+					<option value="1">Trimestre 2</option>
+					<option value="2">Trimestre 3</option>
+<!-- 
 					<option value="3">Bimestre 4</option>
 					<option value="4">Bimestre 5</option>
+ -->				
 				</select>
 			</div>
  

@@ -76,6 +76,11 @@ body{background: transparent url("/img/blueprint.png") top left; margin: 1em !im
 	 <b>$ php artisan db:seed --class=TasasTableSeeder</b>
 </code>
 <hr>
+<p>Cómo ejecutar un REFRESH y SEED en una sola línea</p>
+<code>
+   <b>$ php artisan migrate:refresh --seed</b>
+</code>
+<hr>
 <p>Instalar Laravel Collective</p>
 <code>
   // En directorio raiz del proyecto:</br>
@@ -96,6 +101,35 @@ body{background: transparent url("/img/blueprint.png") top left; margin: 1em !im
     </ul>
   </code>
 <hr>
+Eventos <br/>
+<code>
+$ php artisan make:listener LogLastLogin --event="Illuminate\Auth\Events\Login"
+$ php artisan event:generate
+
+</code>
+
+<hr>
+<p><a name="creating-migrations"></a></p>
+<h2><a href="#creating-migrations">Creating Migrations</a></h2>
+<p>To create a migration, you may use the <code class=" language-php">migrate<span class="token punctuation">:</span>make</code> command on the Artisan CLI:</p>
+<pre class=" language-php"><code class=" language-php">php artisan migrate<span class="token punctuation">:</span>make create_users_table</code></pre>
+<p>The migration will be placed in your <code class=" language-php">app<span class="token operator">/</span>database<span class="token operator">/</span>migrations</code> folder, and will contain a timestamp which allows the framework to determine the order of the migrations.</p>
+<p>You may also specify a <code class=" language-php"><span class="token operator">--</span>path</code> option when creating the migration. The path should be relative to the root directory of your installation:</p>
+<pre class=" language-php"><code class=" language-php">php artisan migrate<span class="token punctuation">:</span>make foo <span class="token operator">--</span>path<span class="token operator">=</span>app<span class="token operator">/</span>migrations</code></pre>
+<p>The <code class=" language-php"><span class="token operator">--</span>table</code> and <code class=" language-php"><span class="token operator">--</span>create</code> options may also be used to indicate the name of the table, and whether the migration will be creating a new table:</p>
+<pre class=" language-php"><code class=" language-php">php artisan migrate<span class="token punctuation">:</span>make add_votes_to_user_table <span class="token operator">--</span>table<span class="token operator">=</span>users
+
+php artisan migrate<span class="token punctuation">:</span>make create_users_table <span class="token operator">--</span>create<span class="token operator">=</span>users</code></pre>
+<p><a name="running-migrations"></a></p>
+<h2><a href="#running-migrations">Running Migrations</a></h2>
+<h4>Running All Outstanding Migrations</h4>
+<pre class=" language-php"><code class=" language-php">php artisan migrate</code></pre>
+<h4>Running All Outstanding Migrations For A Path</h4>
+<pre class=" language-php"><code class=" language-php">php artisan migrate <span class="token operator">--</span>path<span class="token operator">=</span>app<span class="token operator">/</span>foo<span class="token operator">/</span>migrations</code></pre>
+<h4>Running All Outstanding Migrations For A Package</h4>
+<pre class=" language-php"><code class=" language-php">php artisan migrate <span class="token operator">--</span>package<span class="token operator">=</span>vendor<span class="token operator">/</span>package</code></pre>
+<blockquote>
+
 
 
 </div>

@@ -19,7 +19,7 @@ foreach ($ex as $i => $value) {
         $body = "<html>
         <body style='font-size: 10pt; font-family: Verdana,Geneva,sans-serif'
           bgcolor='#FFFFFF' text='#000000'>
-           <p><img src='https://platsource.mx/images/web/logo-arji-horiz-2.png' alt=''></p>
+           <p><img src='https://platsource.mx/images/web/logo-arji-horiz-3.png' alt=''></p>
           <p>Estimad@ ".utf8_decode($tutor).", le enviamos la siguiente factura:</p>
           <p class='ecxmsonormal'>
             <ul style='list-style: circle'>

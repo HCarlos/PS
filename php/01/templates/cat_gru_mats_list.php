@@ -173,14 +173,14 @@ jQuery(function($) {
 					$.each(json, function(i, item) {
 						var oo = parseInt(item.orden_oficial,0)==999?999:item.orden_oficial;
 						var bloqueado = parseInt(item.materia_bloqueada,0)==1?'<i class="fa fa-lock"></i>':'';
-
+						// +item.padre+' '+item.idioma+' '+item.idgrumat	
 						tB +=' 			<tr class="odd">';
 						tB +='';
 						tB +='				<td class=" ">';
 						tB +='					<a href="#" >'+padl(item.idgrumat,4)+'</a>';
 						tB +='				</td>';
 						tB +='				<td class=" " >'+item.grupo+'</td>';
-						tB +='				<td class=" " >'+item.materia+' ('+item.abreviatura+')</td>';
+						tB +='				<td class=" " >'+item.materia+' ('+item.abreviatura+') '+'</td>';
 						tB +='				<td class=" " >'+item.profesor+'</td>';
 						tB +='				<td class=" " >'+item.orden_impresion+'</td>';
 						tB +='				<td class=" " >'+item.orden_historial+'</td>';

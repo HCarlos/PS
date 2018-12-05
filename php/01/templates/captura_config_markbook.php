@@ -151,10 +151,12 @@ $grupo = $_POST["grupo"];
 						</div>
 						
 						<div class="col-lg-2">
-							<span id="totalMKB002" class="orange"></span>	
+							<small id="totalMKB002" class="orange"></small>
+							<a href="#" class="btn btn-minier btn-yellow marginLeft1em " id="btnCapHoriz"><i class="icon icon-coffee"></i></a>
 						</div>
 
-						<div class="col-lg-2 ">
+						<div class="col-lg-1 ">
+							
 						</div>
 
 					</div>
@@ -175,7 +177,7 @@ $grupo = $_POST["grupo"];
 						</div>
 						
 						<div class="col-lg-2">
-							<span id="totalMKB0023" class="orange"></span>	
+							<small id="totalMKB0023" class="orange"></small>	
 						</div>
 
 						<div class="col-lg-2 ">
@@ -227,7 +229,10 @@ jQuery(function($) {
 
 	$("#divIdGruMatCon").hide();
 	$(".isModMat01").hide();
+	$("#btnCapHoriz").hide();
+	// $("#btnCapHoriz").css('Display', 'none');
 	$("#cmdGoToCapCalMKB023").attr('Disabled', true);
+
 
 	$("#cmdGoToCapCalMKB023").on("click",function(event){
 		event.preventDefault();
@@ -346,6 +351,7 @@ jQuery(function($) {
 	    	$("#divIdGruMatCon").hide();
 			$("#totalMKB0023").empty();
 			$("#totalMKB002").empty();
+			$("#btnCapHoriz").hide();
 	    	$(".isModMat01").hide();			
 			getMateriasMKB(IdGrupo);
 	});
@@ -358,6 +364,7 @@ jQuery(function($) {
     	$("#divIdGruMatCon").hide();
 		$("#totalMKB0023").empty();
 		$("#totalMKB002").empty();
+		$("#btnCapHoriz").hide();
     	$(".isModMat01").hide();
     	var IdGruMat = $(this).val();
 		var val0 =  obj.searchInArray( arrMat, $('#cmbMaterias100').val(), "idgrumat" );
@@ -436,6 +443,7 @@ jQuery(function($) {
     	$("#divIdGruMatCon").hide();
 		$("#totalMKB0023").empty();
 		$("#totalMKB002").empty();
+		$("#btnCapHoriz").hide();
 
 		var ar = $(this).val().split("-");
 
@@ -444,12 +452,15 @@ jQuery(function($) {
 	        function(json){
 	            if (parseInt(json[0].msg)>0){
 	            	$("#totalMKB002").html(json[0].msg+" alumnos");
+	            	$("#btnCapHoriz").show();
+
 	            	$("#divIdGruMatCon").show();
 					getItemMKB200( ar[1] );
 					IdGruMatCon = ar[1];
 	            }else{
 	            	$("#divIdGruMatCon").hide();
 	            	$("#totalMKB002").empty();
+					$("#btnCapHoriz").hide();
 					IdGruMatCon = 0;
 	            }
 	        }, "json"
@@ -660,6 +671,7 @@ jQuery(function($) {
 	        	}else{
 
             		$("#totalMKB0023").empty();
+					$("#btnCapHoriz").hide();
 	            	IdGruMatConMKB = IdGruMatConMKB;
 
 	        	}
@@ -678,14 +690,17 @@ jQuery(function($) {
 	        function(json){
 	            if (parseInt(json[0].msg)>0){
 	            	$("#totalMKB0023").html(json[0].msg+" alumnos");
+					$("#btnCapHoriz").show();
             		$("#cmdGoToCapCalMKB023").attr('Disabled', false);
 	            }else{
 	            	if ( parseInt(ar[1]) > 0 ){
 	            		$("#totalMKB0023").empty();
+						$("#btnCapHoriz").hide();
 	            		$("#cmdGoToCapCalMKB023").attr('Disabled', false);
 		            	IdGruMatConMKB = ar[1];
 	            	}else{
 	            		$("#totalMKB0023").empty();
+						$("#btnCapHoriz").hide();
 	            		$("#cmdGoToCapCalMKB023").attr('Disabled', true);
 		            	IdGruMatConMKB = 0;
 	            	}
@@ -744,6 +759,13 @@ jQuery(function($) {
 
 	*/
 
+
+	$("#btnCapHoriz").on('click',function(event){
+		event.preventDefault();
+		alert("Módulo en Construcción");
+		return false;
+
+	});
 
 });
 

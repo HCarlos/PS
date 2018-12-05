@@ -239,6 +239,13 @@
                                 </a>
                             </li>
 
+                            <li>
+                                <a href="#" id="cat_usocfdi_list">
+                                    <i class="icon-edit"></i>
+                                    <span class="menu-text">UsoCFDi</span>
+                                </a>
+                            </li>
+
 
                         </ul>
                     </li>
@@ -827,6 +834,21 @@ jQuery(function($) {
         });
     }
 
+    if ($("#cat_usocfdi_list").length) {
+        $("#cat_usocfdi_list").on("click", function(event) {
+            event.preventDefault();
+            cfgBase0();
+            var nc = localStorage.nc.split("@");
+            $.post(obj.getValue(0) + "cat-usocfdi-list/", {
+                    user: nc[0]
+                },
+                function(html) {
+                    $("#contentMain").html(html);
+                    $('#breadcrumb').html(getBar('Inicio,Catálogo de UsoCFDi'));
+                }, "html");
+            return false;
+        });
+    }
 
 
     $("#preloaderPrincipal").hide();

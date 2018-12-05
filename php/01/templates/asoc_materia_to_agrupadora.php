@@ -34,7 +34,9 @@ $idciclo =  $_POST['idciclo'];
                         <button id="AddItem" name="btnAsig" class="btnAsig btn btn-primary btn-lg" >
                             Asignar <span class="glyphicon glyphicon-chevron-right"></span></button><br/><br/>
                         <button id="DeleteItem" name="DeleteItem" class="btnDel btn btn-primary btn-lg" >
-                            <span class="glyphicon glyphicon-chevron-left"></span>Quitar</button>
+                            <span class="glyphicon glyphicon-chevron-left"></span>Quitar</button><br/><br/>
+                        <button id="ReagruparMaterias" name="ReagruparMaterias" class="btnRegagrupar btn btn-primary btn-lg" >
+                            <span class="icon icon-cog"></span>Reagrupar</button>
                 </div>
             </div>
              <div class="div1em"></div>
@@ -73,7 +75,7 @@ $idciclo =  $_POST['idciclo'];
         event.preventDefault();
         $("#preloaderPrincipal").hide();
         $("#contentLevel3").hide(function(){
-            $("#contentLevel3").html("");
+            $("#contentLevel3").empty();
             $("#contentProfile").show();
         });
         resizeScreen();
@@ -86,7 +88,7 @@ function getAgrupadoras(){
     $.post(obj.getValue(0)+"data/", { o:1, t:18, p:0,c:nc,from:0,cantidad:0, s:''},
         function(json){
            $.each(json, function(i, item) {
-                $("#selAgrupadoras").append('<option value="'+item.data+'"> '+item.label+'</option>');
+                $("#selAgrupadoras").append('<option value="'+item.data+'"> '+item.data+' '+item.label+'</option>');
             });
             //getMaterias();    
         }, "json"
@@ -111,14 +113,14 @@ function getMaterias(){
 }
 
 function getAgruMat(){
-    $("#lstAgrumat").html("");
+    $("#lstAgrumat").empty();
     var y = $('select[name="selAgrupadoras"] option:selected').val(); 
-    $("#lstAgrumat").html("");
+    $("#lstAgrumat").empty();
     var nc = "u="+localStorage.nc+"&idgrumat="+y+"&idgrupo="+IdGrupo+"&idciclo="+IdCiclo;
     $.post(obj.getValue(0)+"data/", {o:1, t:20, p:0,c:nc,from:0,cantidad:0, s:'' },
         function(json){
            $.each(json, function(i, item) {
-                $("#lstAgrumat").append('<option value="'+item.data+'"> '+item.label+'</option>');
+                $("#lstAgrumat").append('<option value="'+item.data+'"> '+item.data+' '+item.label+'</option>');
             });
             $("#lbl01").html(commaSeparateNumber(json.length)+" materias")
 
@@ -173,9 +175,11 @@ $("#AddItem").on("click",function(event){
 
     var d = x+'.'+y;
     
-    //alert(d);
+    // alert(d);
 
     var nc = "u="+localStorage.nc+"&idgrumat="+IdGruMat+"&idgrupo="+IdGrupo+"&idciclo="+IdCiclo;
+
+    // alert(nc);
 
     $.post(obj.getValue(0)+"data/", { o:16, c:d, t:3, p:12, s:nc, from:0, cantidad:0 },
         function(json){
@@ -215,6 +219,27 @@ $("#DeleteItem").on("click",function(event){
                 $("#preloaderPrincipal").hide();
     }, "json");
 });
+
+$("#ReagruparMaterias").on("click",function(event){
+    $("#preloaderPrincipal").show();
+
+    var nc = "u="+localStorage.nc+"&idgrupo="+IdGrupo;
+
+    // alert(nc);
+
+    $.post(obj.getValue(0)+"data/", { o:100, c:nc, t:0, p:62, s:'', from:0, cantidad:0 },
+        function(json){
+            if (json.length<=0 && json[0].msg=="Error") { 
+                return false;
+            }else{
+                alert("Proceso realizado con éxito");                
+                $("#preloaderPrincipal").hide();
+            }
+    }, "json");
+
+});
+
+
 
 getAgrupadoras();
 getMaterias();

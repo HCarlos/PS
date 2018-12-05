@@ -90,9 +90,11 @@ class PDF extends FPDF
 	$pdf->Cell(59,4,"ID Fam.: ".$idfamilia,"LRB",1,'L');
     
 	$pdf->Ln(5);
-	$pdf->Cell(195,4,utf8_decode('Régimen Fiscal: '.$regimen_fiscal_emisor),'TLR',1,'L',false);
-	$pdf->Cell(195,4,utf8_decode('Forma de  pago: '.$forma_pago),'LR',1,'L',false);
-	$pdf->Cell(195,4,utf8_decode('Método de pago: '.trim($metodo_pago2).' '.trim($referencia)),'RLB',1,'L',false);
+	
+	$pdf->Cell(105,4,utf8_decode('Régimen Fiscal: '.$regimen_fiscal_emisor),'LT',0,'L',false);
+	$pdf->Cell(90,4,utf8_decode('Uso CFDi: '.$usoCFDi33.' '.$lUsoCFDi33),'TR',1,'L',false);
+	$pdf->Cell(195,4,utf8_decode('Forma de  pago: '.trim($metodo_pago2).' '.trim($referencia)),'LR',1,'L',false);
+	$pdf->Cell(195,4,utf8_decode('Método de pago: '.$forma_pago),'RLB',1,'L',false);
 			
 	
 	//detalle de conceptos

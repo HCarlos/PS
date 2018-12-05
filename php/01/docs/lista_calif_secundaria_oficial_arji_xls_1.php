@@ -75,7 +75,7 @@ $oS->setCellValue("B2", '                  SECUNDARIA');
 
 // echo "idgrupo=".$idgrupo."&idciclo=".$idciclo;
 
-$mats = $f->getCombo(1,"idgrupo=".$idgrupo."&idciclo=".$idciclo,0,0,24,' and idioma = 0 and isoficial = 1 order by orden_historial asc '); 
+$mats = $f->getCombo(1,"idgrupo=".$idgrupo."&idciclo=".$idciclo,0,0,24,' and isoficial = 1 order by orden_historial asc '); 
 foreach ($mats as $i => $value) {
 	$oS->setCellValueByColumnAndRow($fl,$k, $mats[$i]->label);
 	$arrIdGruMat[$i] = $mats[$i]->data;
@@ -99,23 +99,21 @@ foreach ($arrAlu as $i => $value) {
 		$oS->setCellValue("B".$k, $result[0]->alumno);
 		$E->cellColor($objPHPExcel, "A".$k.':'."B".$k, 'CCF4CC');
 
-		// $E->cellColor($objPHPExcel, "A".$k.':'."Z".$k, '99FF66');
-
-		for ($w=1; $w<6; ++$w){
+		for ($w=1; $w<4; ++$w){
 
 			$oS->setCellValue("C".$k, $w);
 
 			// Obtenemos el Promedio del Alumno
 			$fl=3;
-			//echo "&numval=".$w;
 			$mat = $f->getQuerys(92,"idgrualu=".$arrAlu[$i]."&numval=".$w,0,0,0,array(),'  ');
 			//$mat = $f->getQuerys(93,"idgrualu=".$arrAlu[$i]."&numval=6&idgrumat=".$arrIdGruMat[$l],0,0,0,array(),'  and idioma = 0 and isoficial = 1  order by orden_historial asc ');
 	
 			//if (count($mat) > 0){
 
 				//$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,3,1);
-				$cal =  $A->FormatCal($mat[0]->cal,0,0,3,1);
-				
+				// $cal =  $A->FormatCal(bcdiv($mat[0]->cal,'1',1),0,0,4,1);
+				$cal =  $A->FormatCal($mat[0]->cal,0,0,4,1);
+
 				$oS->setCellValueByColumnAndRow($fl,$k, $cal);
 
 				// Obtenemos las Calificaciones por Num Eval
@@ -123,9 +121,10 @@ foreach ($arrAlu as $i => $value) {
 
 				for ($l=0;$l<count($arrIdGruMat); ++$l){
 
-					$mat = $f->getQuerys(93,"idgrualu=".$arrAlu[$i]."&numval=".$w."&idgrumat=".$arrIdGruMat[$l],0,0,0,array(),'  and idioma = 0 and isoficial = 1  order by orden_historial asc ');
+					$mat = $f->getQuerys(93,"idgrualu=".$arrAlu[$i]."&numval=".$w."&idgrumat=".$arrIdGruMat[$l],0,0,0,array(),'  and isoficial = 1  order by orden_historial asc ');
 					if ( count($mat)>0 ){
-						$cal =  $A->FormatCal($mat[0]->cal,0,0,3,1);
+						// $cal =  $A->FormatCal(bcdiv($mat[0]->cal,'1',1),0,0,4,1);
+						$cal =  $A->FormatCal($mat[0]->cal,0,0,4,1);
 						$oS->setCellValueByColumnAndRow($fl,$k, $cal);
 						++$fl;
 					}else{
@@ -142,26 +141,31 @@ foreach ($arrAlu as $i => $value) {
 
 		// Obtenemos el Promedio del alumno
 
-		$os = array(1,2,3,4,5);
+//		$os = array(1,2,3,4,5);
+		$os = array(1,2,3);
 
 		$oS->setCellValue("C".$k, "PROM");
  
 		$fl=3;
 		// $mat = $f->getQuerys(93,"idgrualu=".$arrAlu[$i]."&numval=6",0,0,0,array(),' and idioma = 0 ');
 		$mat = $f->getQuerys(71,"idgrualu=".$arrAlu[$i],0,0,0,array(),' ');
-		//$cal =  $A->FormatCal($mat[0]->promcalof,0,0,3,1);
-		$cal =  $A->FormatCal($mat[0]->promcalof,$mat[0]->promconof,$mat[0]->suminaof,3,1);
+		// $cal =  $A->FormatCal($mat[0]->promcalof,$mat[0]->promconof,$mat[0]->suminaof,3,1);
+		// $cal =  $A->FormatCal($mat[0]->promcalof,0,0,4,1);
+		// $cal =  bcdiv($mat[0]->promcalof,'1',1);
+		$cal =  $mat[0]->promcalof;
 
 		// $oS->setCellValueByColumnAndRow($fl,$k, $cal);
 		$oS->setCellValue("D".$k, $cal);
 
 		$fl=$miCal;
 		for ($l=0;$l<count($arrIdGruMat); ++$l){
-			$mat = $f->getQuerys(93,"idgrualu=".$arrAlu[$i]."&numval=6&idgrumat=".$arrIdGruMat[$l],0,0,0,array(),' and idioma = 0 order by orden_historial asc ');
+			$mat = $f->getQuerys(93,"idgrualu=".$arrAlu[$i]."&numval=4&idgrumat=".$arrIdGruMat[$l],0,0,0,array(),' order by orden_historial asc ');
 			if ( count($mat)>0 ){
 				if ( in_array(intval($mat[0]->idmatclas) , $os) ){
-					$cal =  $A->FormatCal($mat[0]->cal,0,0,3,1);
 					//$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,3,1);
+					// $cal =  $A->FormatCal($mat[0]->cal,0,0,4,1);
+					// $cal =  bcdiv($mat[0]->cal,'1',1);
+					$cal =  $mat[0]->cal;
 					$oS->setCellValueByColumnAndRow($fl,$k, $cal);
 				}else{
 					$cal =  '';

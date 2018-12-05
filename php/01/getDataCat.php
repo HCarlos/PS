@@ -116,6 +116,8 @@ switch($index){
 	case 67: // Catálogo de Exalumno imágenes
 	case 68: // Catálogo de Exalumno firmas de email
 	case 69: // Catálogo de Asesorías
+	case 70: // Catálogo de UsoCFDi
+	case 100: // Special
 		
 		switch($proc){
 			case 0:
@@ -294,6 +296,11 @@ switch($index){
 
 			case 61:
 				$res = $fp->IsAutorized($cad);
+				$ret[0] = array("msg" => $res);
+				break;
+
+			case 62:
+				$res = $fp->Reagrupar_Materias($cad);
 				$ret[0] = array("msg" => $res);
 				break;
 				

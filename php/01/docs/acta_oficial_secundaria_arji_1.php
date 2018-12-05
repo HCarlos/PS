@@ -282,7 +282,8 @@ foreach ($arrAlu as $i => $value) {
 
 	if ( count($prom)>0  ){
 
-		$pr = explode('.', ROUND( $prom[0]->promcalof,1 ) ) ;
+		// $pr = explode('.', ROUND( $prom[0]->promcalof,1 ) ) ;
+		$pr = explode('.', bcdiv( $prom[0]->promcalof,'1',1 ) ) ;
 		
 		$dig = $F->Letras(floatval($pr[0]));
 		if (count($pr) > 1){ 
@@ -295,7 +296,8 @@ foreach ($arrAlu as $i => $value) {
 		$pdf->Cell(10,6,utf8_decode($arrAlu[$i]->num_lista),'LB',0,'C');
 		$pdf->Cell(40,6,utf8_decode($arrAlu[$i]->curp),'LB',0,'C');
 		$pdf->Cell(90,6,utf8_decode($arrAlu[$i]->alumno),'LB',0,'L');
-		$pdf->Cell(15,6,number_format($prom[0]->promcalof, 1, '.', ' '),'LTB',0,'R');
+		// $pdf->Cell(15,6,number_format($prom[0]->promcalof, 1, '.', ' '),'LTB',0,'R');
+		$pdf->Cell(15,6,number_format( bcdiv($prom[0]->promcalof,'1',1) , 1, '.', ' '),'LTB',0,'R');
 		$pdf->Cell(5,6,'','TB',0,'R');
 		$pdf->Cell(46,6,utf8_decode($dig." PUNTO ".$dec),'LTBR',1,'C');
 

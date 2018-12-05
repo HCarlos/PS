@@ -92,7 +92,6 @@ $pdf->logoIBO = $logoIbo;
 $pdf->logoFR = $logoFR;
 $pdf->proximoCiclo = $proximociclo;
 
-
 $arrAlu = explode('|',$idalumnos);
 
 foreach ($arrAlu as $i => $value) {
@@ -102,7 +101,6 @@ foreach ($arrAlu as $i => $value) {
 
 		$pdf->AddPage();
 		
-
 		$pdf->SetFont('TIMES','',10);
 		$pdf->setX(0);
 		$pdf->SetFillColor(64);

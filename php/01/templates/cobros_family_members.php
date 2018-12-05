@@ -10,8 +10,11 @@ $idfam = $_POST['idfamilia'];
 $tutor = $_POST['tutor'];
 
 $arr0 = $f->getQuerys(10009,"idfamilia=".$idfam."&u=".$user,0,0,0,array(),'alumno');
+// echo $arr0;
 $arr = new StdClass();
 $arr = $arr0;	
+
+
 foreach ($arr as $i => $value) {
 
 	$arrAlu = $f->getQuerys(10023,"idfamilia=".$idfam."&u=".$user."&idciclo=".$arr[$i]->idciclo."&idalumno=".$arr[$i]->idalumno,0,0,0,array(),'alumno');
@@ -156,8 +159,13 @@ if (count($arr)>0){
 							}
 
 							if ( intval($arrAlu[$j]->status_movto) != 0){
-								$defcolorep = 'colorpagado';
+								if ( intval($arrAlu[$j]->status_movto) == 1){
+									$defcolorep = 'colorpagado';
+								}else{
+									$defcolorep = 'colorcancelado';
+								}
 							}
+
 
 					?>
 					<tr class="<?php echo $defcolorep; ?>" id="<?php echo $tr0; ?>">

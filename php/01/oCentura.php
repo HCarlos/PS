@@ -144,7 +144,7 @@ class oCentura {
 	    	return $ret;
 	}
 
-	private function getClaveNivelFromIdGruAlu($Valor,$IdEmp, $type = 0){
+	public function getClaveNivelFromIdGruAlu($Valor,$IdEmp, $type = 0){
 			switch ($type) {
 				case 1:
 			    	$query = "SELECT clave_nivel as valor FROM _viNivel_Grupos WHERE idgrupo = $Valor AND idemp = $IdEmp LIMIT 1";
@@ -417,7 +417,7 @@ class oCentura {
 							case 2:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
-								$query = "SELECT CASE WHEN predeterminado = 1 THEN CONCAT(ciclo,' (default)') else ciclo end AS label, idciclo AS data, predeterminado 
+								$query = "SELECT CASE WHEN predeterminado = 1 THEN CONCAT(ciclo,' (default)') else ciclo end AS label, idciclo AS data, predeterminado, anterior 
 											FROM cat_ciclos 
 											WHERE idemp = $idemp AND status_ciclo = 1 ORDER BY data ASC  ";
 								break;		
@@ -476,7 +476,8 @@ class oCentura {
 								$idemp = $this->getIdEmpFromAlias($u);
 								$query = "SELECT nombre_persona AS label, idpersona AS data, parentezco, email1, email2, 
 												 fecha_nacimiento, cfecha_nacimiento, lugar_nacimiento_persona, 
-												username_persona, idfamper, tel1, tel2, cel1, cel2 
+												username_persona, idfamper, tel1, tel2, cel1, cel2, 
+												ap_paterno, ap_materno, nombre  
 										FROM _viFamPer WHERE idfamilia = $idfamilia AND idemp = $idemp AND status_famper = 1
 										ORDER BY parentezco ASC ";
 								break;		
@@ -547,7 +548,8 @@ class oCentura {
 								parse_str($arg);
 						        $idemp = $this->getIdEmpFromAlias($u);
 								$query = "SELECT materia AS label, idgrumat AS data 
-										FROM _viGrupo_Materias WHERE  idciclo = $idciclo AND idgrupo = $idgrupo AND isagrupadora = 0 AND idemp = $idemp $otros ";
+										FROM _viGrupo_Materias WHERE  idciclo = $idciclo AND idgrupo = $idgrupo AND idemp = $idemp $otros ";
+										// FROM _viGrupo_Materias WHERE  idciclo = $idciclo AND idgrupo = $idgrupo AND isagrupadora = 0 AND idemp = $idemp $otros ";
 								break;	
 
 							case 20:
@@ -555,7 +557,9 @@ class oCentura {
 						        $idemp = $this->getIdEmpFromAlias($u);
 								$query = "SELECT materia AS label, idgrumat AS data 
 										FROM _viGrupo_Materias WHERE idciclo = $idciclo AND idgrupo = $idgrupo AND padre = $idgrumat AND idemp = $idemp $otros ";
-								break;	
+										// FROM _viGrupo_Materias WHERE idciclo = $idciclo AND idgrupo = $idgrupo AND padre = $idgrumat AND idemp = $idemp $otros ";
+								break;
+
 							case 21:
 								parse_str($arg);
 								$idemp = $this->getIdEmpFromAlias($u);
@@ -565,7 +569,8 @@ class oCentura {
 												familia, email_tutor1, email_tutor2, email_fiscal, 
 												username_tutor, idtutor, ap_paterno, ap_materno, nombre, 
 												tel1_tutor, tel2_tutor, cel1_tutor, cel2_tutor, grupo,
-												fn_tutor, cfn_tutor, idemp, curp, iduseralu
+												fn_tutor, cfn_tutor, idemp, curp, iduseralu, ap_paterno_tutor, 
+												ap_materno_tutor, nombre__tutor
 										FROM _viGrupo_Alumnos WHERE idemp = $idemp AND idciclo = $idciclo AND idgrupo = $idgrupo AND status_grualu = 1 ORDER BY num_lista ";
 								break;		
 							case 22:
@@ -1034,6 +1039,30 @@ class oCentura {
 										FROM _viNivel_Grupos WHERE idemp = $idemp AND idciclo = $idciclo AND status_grupo = 1  AND grupo_visible = 1
 										ORDER BY data ASC ";
 								break;	
+
+							case 73:
+								parse_str($arg);
+								$idemp = $this->getIdEmpFromAlias($u);
+								//$idciclo = $this->getCicloFromIdEmp($idemp);
+								$query = "SELECT alumno AS label, idgrualu AS data, num_lista, clave_nivel, 
+												genero, idalumno, usernamealumno, nombre_tutor, idfamilia, 
+												familia, email_tutor1, email_tutor2, email_fiscal, 
+												username_tutor, idtutor, ap_paterno, ap_materno, nombre, 
+												tel1_tutor, tel2_tutor, cel1_tutor, cel2_tutor, grupo,
+												fn_tutor, cfn_tutor, idemp, curp, iduseralu, fecha_baja, is_baja,
+												cfecha_baja, tipo_baja, ctipo_baja, motivo_baja
+										FROM _viGrupo_Alumnos 
+										WHERE idemp = $idemp AND 
+											idciclo = $idciclo AND 
+											idgrupo = $idgrupo AND 
+											is_baja = 1 AND 
+											idalumotivobaja > 0 
+											ORDER BY num_lista ";
+								break;		
+
+
+
+
 						}
 						break;
 					case 2:  // Asociaciones
@@ -1218,7 +1247,7 @@ class oCentura {
 							parse_str($otros);
 							$iduser = $this->getIdUserFromAlias($u);
 							$idemp = $this->getIdEmpFromAlias($u);
-							$idciclo = $this->getCicloFromIdEmp($idemp);
+							//$idciclo = $this->getCicloFromIdEmp($idemp);
 
 		          			$ar = explode(".",$arg);
 		          			$item = explode("|",$ar[0]);
@@ -1741,7 +1770,7 @@ class oCentura {
 																$ispai_grupo,
 																$grado_pai,
 																$status_grupo,
-																	$idemp,'$ip','$host',$idusr,NOW())";
+																$idemp,'$ip','$host',$idusr,NOW())";
 								$vRet = $this->guardarDatos($query);
 								break;		
 							case 1:
@@ -1830,6 +1859,7 @@ class oCentura {
 																beca_arji,
 																beca_sp,
 																beca_bach,
+																observaciones,
 																activo_en_ciclo,
 																valid_for_admin,
 																idemp,ip,host,creado_por,creado_el)
@@ -1858,6 +1888,7 @@ class oCentura {
 																$beca_arji,
 																$beca_sp,
 																$beca_bach,
+																'$observaciones',
 																$activo_en_ciclo,
 																$valid_for_admin,
 													$idemp,'$ip','$host',$idusr,NOW())";
@@ -1906,6 +1937,7 @@ class oCentura {
 																beca_arji = $beca_arji,
 																beca_sp = $beca_sp,
 																beca_bach = $beca_bach,
+																observaciones = '$observaciones',
 																activo_en_ciclo = $activo_en_ciclo,
 																valid_for_admin = $valid_for_admin,
 																ip = '$ip', 
@@ -1928,6 +1960,7 @@ class oCentura {
 																beca_arji = $beca_arji,
 																beca_sp = $beca_sp,
 																beca_bach = $beca_bach,
+																observaciones = '$observaciones',
 																ip = '$ip', 
 																host = '$host',
 																modi_por = $idusr, 
@@ -2721,6 +2754,8 @@ class oCentura {
 																		modi_el = NOW()
 												WHERE idgrumat = ".$item[$i];
 										$vRet = $this->guardarDatos($query);
+										$query = "UPDATE boletas SET padre = ".$ar[1]." WHERE idgrumat = ".$item[$i];
+										$vRet = $this->guardarDatos($query);
 									}
 								}
 								break;
@@ -2742,6 +2777,8 @@ class oCentura {
 																		modi_por = $idusr, 
 																		modi_el = NOW()
 												WHERE idgrumat = ".$item[$i];
+										$vRet = $this->guardarDatos($query);
+										$query = "UPDATE boletas SET padre = 0 WHERE idgrumat = ".$item[$i];
 										$vRet = $this->guardarDatos($query);
 									}
 								}
@@ -2862,14 +2899,6 @@ class oCentura {
 								$num_eval--; 
 
 								for ($i=0; $i < count($arrBolCon); $i++) {
-									/*
-									$idemp       = $this->getIdEmpFromAlias($user);
-									$idciclo     = $this->getCicloFromIdEmp($idemp);
-									$clave_nivel = $this->getClaveNivelFromIdGruAlu($idgrualu,$idemp,0);
-									$idioma      = $this->getClaveNivelFromIdGruAlu($idgrumat,$idemp,2);
-									$padre       = $this->getClaveNivelFromIdGruAlu($idgrumat,$idemp,3);
-									$idmatclas   = $this->getClaveNivelFromIdGruAlu($idgrumat,$idemp,4);
-									*/
 									$con = "con".$num_eval;		 
 									$query = "UPDATE boletas SET 	
 																	".$con." = ".$arrBolConCal[$i].",
@@ -3444,8 +3473,10 @@ class oCentura {
 								$idusr = $this->getIdUserFromAlias($u);
 								$idemp = $this->getIdEmpFromAlias($u);
 								$idciclo = $this->getCicloFromIdEmp($idemp);
-							    $facEnc = "INSERT INTO facturas_encabezado(idcliente,idemisorfiscal,idregfis,forma_de_pago,metodo_de_pago,referencia,fecha,subtotal,descto_becas,importe,descto,recargo,importe2,iva,total,padre,tipo_documento,idemp,ip,host,creado_por,creado_el)
-							    					VALUES($idcliente,$idemisorfiscal,$idregfis,0,$idmetododepago,'$referencia',NOW(),$subtotal,$descto_becas,$importe,$descto,$recargo,$importe2,$iva,$total,$padre,1,$idemp,'$ip','$host',$idusr,NOW())";
+							    // $facEnc = "INSERT INTO facturas_encabezado(idcliente,idemisorfiscal,idregfis,forma_de_pago,metodo_de_pago,referencia,fecha,subtotal,descto_becas,importe,descto,recargo,importe2,iva,total,padre,tipo_documento,idemp,ip,host,creado_por,creado_el)
+							    // 					VALUES($idcliente,$idemisorfiscal,$idregfis,0,$idmetododepago,'$referencia',NOW(),$subtotal,$descto_becas,$importe,$descto,$recargo,$importe2,$iva,$total,$padre,1,$idemp,'$ip','$host',$idusr,NOW())";
+							    $facEnc = "INSERT INTO facturas_encabezado(idcliente,idemisorfiscal,idregfis,idmetododepago,referencia,fecha,subtotal,descto_becas,importe,descto,recargo,importe2,iva,total,padre,tipo_documento,idemp,ip,host,creado_por,creado_el)
+							    					VALUES($idcliente,$idemisorfiscal,$idregfis,$idmetododepago,'$referencia',NOW(),$subtotal,$descto_becas,$importe,$descto,$recargo,$importe2,$iva,$total,$padre,1,$idemp,'$ip','$host',$idusr,NOW())";
 								$vRet = $this->guardarDatos($facEnc);
 							    $query = "SELECT MAX(idfactura) AS IDs FROM facturas_encabezado";
 							    $result = $this->getArray($query);
@@ -3510,12 +3541,14 @@ class oCentura {
 
 								parse_str($arg);
 								$idusr = $this->getIdUserFromAlias($u);
+							    		// idmetododeidpago = $idmetododepagoNC,
+							    		// referencia = '$referenciaNC',
 							    $query = "UPDATE facturas_encabezado 
 							    	SET idcliente = $idcliente,
 							    		idemisorfiscal = $idemisorfiscal,
 							    		idregfis = $idregfis,
-							    		idmetododeidpago = $idmetododepagoNC,
-							    		referencia = '$referenciaNC',
+							    		idmetododepago = $idmetododepago,
+							    		referencia = '$referencia',
 							    		fecha = NOW(),
 							    		subtotal = $subtotal,
 							    		descto_becas = $descto_becas,
@@ -3581,8 +3614,8 @@ class oCentura {
 								$idemp = $this->getIdEmpFromAlias($u);
 								$idciclo = $this->getCicloFromIdEmp($idemp);
 								$ief = explode('-',$idemisorfiscal);
-							    $query = "INSERT INTO facturas_encabezado(idcliente,idemisorfiscal,idregfis,forma_de_pago,metodo_de_pago,referencia,fecha,subtotal,descto_becas,importe,descto,recargo,importe2,iva,total,padre,tipo_documento,idemp,ip,host,creado_por,creado_el)
-							    					VALUES($idcliente,$ief[0],$idregfis,0,$idmetododepago,'$referencia',NOW(),$subtotal,$descto_becas,$importe,$descto,$recargo,$importe2,$iva,$total,$padre,2,$idemp,'$ip','$host',$idusr,NOW())";								
+							    $query = "INSERT INTO facturas_encabezado(idcliente,idemisorfiscal,idregfis,idmetododepago,referencia,fecha,subtotal,descto_becas,importe,descto,recargo,importe2,iva,total,padre,tipo_documento,idemp,ip,host,creado_por,creado_el)
+							    					VALUES($idcliente,$ief[0],$idregfis,$idmetododepago,'$referencia',NOW(),$subtotal,$descto_becas,$importe,$descto,$recargo,$importe2,$iva,$total,$padre,2,$idemp,'$ip','$host',$idusr,NOW())";								
 								$vRet = $this->guardarDatos($query);
 							    $query = "SELECT MAX(idfactura) AS IDs FROM facturas_encabezado";
 							    $result = $this->getArray($query);
@@ -3709,6 +3742,11 @@ class oCentura {
 									}									
 								}					
 								break; // 14
+							case 15:
+								parse_str($arg);
+								$query = "DELETE FROM facturas_detalle WHERE idfacdet = $idfacdet";
+								$vRet = $this->guardarDatos($query);
+								break;		
 						}
 						break; // 28
 					case 29:
@@ -4318,11 +4356,13 @@ class oCentura {
 								$fecha_fin = $f1[2].'-'.$f1[1].'-'.$f1[0].' '.$hora1.':'.$min1.':'.$seg1;
 
 								$idtareaexistente = $idtarea;
+															// fecha_inicio = '".$fecha_inicio."',
+															// fecha_fin = '".$fecha_fin."',
 
 								$query = "UPDATE tareas SET titulo_tarea = '$titulo',
 															tarea = '$tarea',
-															fecha_inicio = '".$fecha_inicio."',
-															fecha_fin = '".$fecha_fin."',
+															fecha_inicio = '$fecha_inicio',
+															fecha_fin = '$fecha_fin',
 															ip = '$ip',
 															host = '$host',
 															modi_por = $idusr,
@@ -4559,13 +4599,13 @@ class oCentura {
 								$idusr = $this->getIdUserFromAlias($user);
 								$idemp = $this->getIdEmpFromAlias($user);
 
-								$f0 = explode('-',$fecha);
-								$fecha = $f0[2].'-'.$f0[1].'-'.$f0[0].' '.$hora0.':'.$min0.':'.$seg0;
+								// $f0 = explode('-',$fecha);
+								// $fecha = $f0[2].'-'.$f0[1].'-'.$f0[0].' '.$hora0.':'.$min0.':'.$seg0;
+															// fecha = '".$fecha."',
 
 								$query = "UPDATE com_mensajes 
 														SET titulo_mensaje = '$titulo',
 															mensaje = '$mensaje',
-															fecha = '".$fecha."',
 															ip = '$ip',
 															host = '$host',
 															modi_por = $idusr,
@@ -5646,7 +5686,8 @@ class oCentura {
 									profesor, idalumno, idnivel, clave_nivel, grado, alumno, cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, 
 									cal2, con2, ina2, obs2, cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, 
 									cal5, con5, ina5, obs5, cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
-									promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo
+									promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo, isagrupadora_grumat,
+									orden_impresion
 								FROM _viBoletas
 							WHERE idgrualu = $idgrualu AND padre <= 0 AND (idmatclas in (1,2,3,4,5) ) $otros ";
 				break;
@@ -5657,7 +5698,8 @@ class oCentura {
 									profesor, alumno, cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, 
 									cal2, con2, ina2, obs2, cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, 
 									cal5, con5, ina5, obs5, cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
-									promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo
+									promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo, 
+									orden_impresion, padre
 								FROM _viBoletas
 							WHERE idgrualu = $idgrualu AND padre > 0 AND (idmatclas in (1,2,3,4,5) ) AND orden_impresion <= 100 $otros ";
 				break;
@@ -5668,9 +5710,10 @@ class oCentura {
 									cal2, con2, ina2, obs2, cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, 
 									cal5, con5, ina5, obs5, cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
 									promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo,
-									promcalof
+									promcalof, orden_impresion
 								FROM _viBoletas
-							WHERE (idgrualu = $idgrualu) AND (padre <= 0) AND (idioma = 0) AND (idmatclas <= 5) $otros ";
+							   WHERE (idgrualu = $idgrualu) AND (padre <= 0) AND (idioma = 0) AND (idmatclas <= 5) $otros ";
+							// WHERE (idgrualu = $idgrualu) AND (padre <= 0) AND (idmatclas <= 5) $otros ";
 				break;
 			case 46: // ARJI - MATERIAS HIJAS ESPAÑOL
 				parse_str($cad);
@@ -5679,7 +5722,7 @@ class oCentura {
 									cal2, con2, ina2, obs2, cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, 
 									cal5, con5, ina5, obs5, cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
 									promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo,
-									promcalof
+									promcalof, orden_impresion
 								FROM _viBoletas
 							WHERE (idgrualu = $idgrualu) AND (padre > 0) AND (idioma = 0) AND ( idmatclas in (1,2,3,4,5) ) $otros ";
 				break;
@@ -5689,9 +5732,10 @@ class oCentura {
 									profesor, alumno, cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, 
 									cal2, con2, ina2, obs2, cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, 
 									cal5, con5, ina5, obs5, cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
-									promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo
+									promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo, orden_impresion
 								FROM _viBoletas 
-							WHERE (idgrualu = $idgrualu) AND (padre <= 0) AND (idioma = 1) AND (idmatclas <= 5) $otros ";
+								WHERE (idgrualu = $idgrualu) AND (idioma = 1) AND (idmatclas <= 5) $otros ";
+							// WHERE (idgrualu = $idgrualu) AND (padre <= 0) AND (idioma = 1) AND (idmatclas <= 5) $otros ";
 				break;
 			case 48: // ARJI - MATERIAS HIJAS INGLES
 				parse_str($cad);
@@ -5699,7 +5743,7 @@ class oCentura {
 									profesor, alumno, cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, 
 									cal2, con2, ina2, obs2, cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, 
 									cal5, con5, ina5, obs5, cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
-									promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo
+									promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo, orden_impresion
 								FROM _viBoletas
 							WHERE (idgrualu = $idgrualu) AND (padre > 0) AND (idioma = 1) AND ( idmatclas in (1,2,3,4,5) ) $otros ";
 				break;
@@ -5734,7 +5778,7 @@ class oCentura {
 									cal5, con5, ina5, obs5, cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
 									promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo
 								FROM _viBoletas
-							WHERE (idgrualu = $idgrualu) AND (idioma = 0) AND ( idmatclas in (7) ) $otros ";
+							WHERE (idgrualu = $idgrualu) AND (idioma = 0) AND ( idmatclas in (5) ) $otros ";
 				break;
 			case 52: // ARJI - MATERIAS INASISTENCIAS INGLES
 				parse_str($cad);
@@ -5745,7 +5789,7 @@ class oCentura {
 									cal5, con5, ina5, obs5, cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
 									promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo
 								FROM _viBoletas
-							WHERE (idgrualu = $idgrualu) AND (idioma = 1) AND ( idmatclas in (7) ) $otros ";
+							WHERE (idgrualu = $idgrualu) AND (idioma = 1) AND ( idmatclas in (5) ) $otros ";
 				break;
 			
 			case 53: // ARJI
@@ -5814,8 +5858,8 @@ class oCentura {
 					// 				FROM _viBoletas bol
 					// 			WHERE bol.idgrumat = $idgrumat AND bol.idgrualu = $idgrualu $otros";
 
-					$query = "SELECT ".$ncal." AS cal, ".$ncon." AS con, ".$nina." AS ina, ".$nobs." AS obs, idmatclas, padre
-									FROM boletas
+					$query = "SELECT ".$ncal." AS cal, ".$ncon." AS con, ".$nina." AS ina, ".$nobs." AS obs, idmatclas, padre, isagrupadora
+									FROM _viXUpdate_Boletas
 								WHERE idgrumat = $idgrumat AND idgrualu = $idgrualu ";
 				}
 
@@ -5922,7 +5966,7 @@ class oCentura {
 									cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
 									promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo,
 									bim0,bim1,bim2,bim3,bim4,promcalof, 
-									materia, abreviatura 
+									materia, abreviatura, isagrupadora_grumat
 								FROM _viBoletas
 							WHERE idgrualu = $idgrualu AND isoficial = 1 $otros ";
 				break;
@@ -6117,9 +6161,9 @@ class oCentura {
 		        }
 		        
 					$query = "SELECT ".$ncal." AS cal, idmatclas, padre
-									FROM _viBolOf
+									FROM _viXUpdate_Boletas
 								WHERE idgrualu = $idgrualu AND idgrumat = $idgrumat $otros ";
-				break;
+				break; //   _viBolOf   _viXUpdate_Boletas
 
 			case 94:
 				parse_str($cad);
@@ -6415,6 +6459,18 @@ class oCentura {
 
 				break;
 
+			case 200: // ARJI - MATERIAS INASISTENCIAS ESPAÑOL e INGLES
+				parse_str($cad);
+				$query = "SELECT idboleta, idgrualu, idgrumat, idciclo, ciclo, num_lista, materia, 
+									abreviatura, idgrupo, grupo, idmatclas, 
+									profesor, alumno, cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, 
+									cal2, con2, ina2, obs2, cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, 
+									cal5, con5, ina5, obs5, cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
+									promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo
+								FROM _viBoletas
+							WHERE (idgrualu = $idgrualu) AND (idioma = $idioma) AND idmatclas = 5 AND ( orden_impresion between $rango ) $otros  ";
+				break;
+			
 
 			case 500:
 				parse_str($cad);
@@ -6628,7 +6684,8 @@ class oCentura {
 				$idciclo = $this->getCicloFromIdEmp($idemp);
 				$query = "SELECT DISTINCT idalumno, alumno, genero, idciclo
 								FROM _viEdosCta
-							WHERE idfamilia = $idfamilia AND idciclo = $idciclo AND idemp = $idemp  AND status_movto IN (0,1) ORDER BY $otros ASC";
+							WHERE idfamilia = $idfamilia AND idciclo = $idciclo AND idemp = $idemp  AND status_movto IN (0,1,2) ORDER BY $otros ASC";
+							// WHERE idfamilia = $idfamilia AND idemp = $idemp  AND status_movto IN (0,1,2) ORDER BY $otros ASC";
 				break;
 
 			case 10010:
@@ -6638,7 +6695,8 @@ class oCentura {
 		        $idciclo = $this->getCicloFromIdEmp($idemp);		
 				$query = "SELECT *
 								FROM _viEdosCta
-							WHERE idfamilia = $idfamilia AND idalumno = $idalumno AND idciclo = $idciclo AND idemp = $idemp AND status_movto IN (0,1)  $otros ";
+							WHERE idfamilia = $idfamilia AND idalumno = $idalumno AND idemp = $idemp AND status_movto IN (0,1,2)  $otros ";
+							// WHERE idfamilia = $idfamilia AND idalumno = $idalumno AND idciclo = $idciclo AND idemp = $idemp AND status_movto IN (0,1,2)  $otros ";
 				break;
 
 			case 10011:

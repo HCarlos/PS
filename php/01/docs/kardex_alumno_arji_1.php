@@ -550,13 +550,13 @@ if ( count($alu) > 0 ){
 
 
 	if ( count($emer) > 1 ) {
-		$nom0  = $emer[0]->nombre == "EMPTY1" ? "" : $emer[0]->nombre;
+		$nom0  = $emer[0]->nombre == "EMPTY1" ? "" : utf8_decode(mb_strtoupper($emer[0]->nombre,'UTF-8'));
 		$tel01 = $emer[0]->tel1 == "EMPTY1" ? "" : $emer[0]->tel1;
-		$par0  = $emer[0]->parentezco == "EMPTY1" ? "" : $emer[0]->parentezco;
+		$par0  = $emer[0]->parentezco == "EMPTY1" ? "" : utf8_decode(mb_strtoupper($emer[0]->parentezco,'UTF-8'));
 
-		$nom1  = $emer[1]->nombre == "EMPTY" || is_null($emer[1]->nombre) ? "" : $emer[1]->nombre;
+		$nom1  = $emer[1]->nombre == "EMPTY" || is_null($emer[1]->nombre) ? "" : utf8_decode(mb_strtoupper($emer[1]->nombre,'UTF-8'));
 		$tel11 = $emer[1]->tel1 == "EMPTY" || is_null($emer[1]->tel1) ? "" : $emer[1]->tel1;
-		$par1  = $emer[1]->parentezco == "EMPTY" || is_null($emer[1]->parentezco) ? "" : $emer[1]->tel1;
+		$par1  = $emer[1]->parentezco == "EMPTY" || is_null($emer[1]->parentezco) ? "" : utf8_decode(mb_strtoupper($emer[1]->parentezco,'UTF-8'));
 
 	}else{
 

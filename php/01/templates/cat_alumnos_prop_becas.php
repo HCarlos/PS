@@ -64,6 +64,13 @@ $idalumno  = $_POST['idalumno'];
 		      		</div>
 			    </div>
 
+				<div class="form-group ">
+			    	<label for="observaciones" class="col-lg-2 control-label">Observaciones de Becas</label>
+			    	<div class="col-lg-10">
+				    	<input type="text" class="form-control altoMoz" id="observaciones" name="observaciones"  >
+		      		</div>
+			    </div>
+
 			</div>
 
 		</div>
@@ -108,6 +115,7 @@ jQuery(function($) {
 					$("#beca_arji").val(json[0].beca_arji);
 					$("#beca_sp").val(json[0].beca_sp);
 					$("#beca_bach").val(json[0].beca_bach);
+					$("#observaciones").val(json[0].observaciones);
 
 					$("#beca_sep").focus();
 				}
