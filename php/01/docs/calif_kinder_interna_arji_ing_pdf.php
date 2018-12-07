@@ -62,6 +62,7 @@ class PDF_Diag extends PDF_Sector {
     var $camposformativos;
     var $inicial;
     var $media;
+    var $final;
 
     var $leg0;
     var $leg1;
@@ -147,6 +148,7 @@ class PDF_Diag extends PDF_Sector {
 		$calx = "";
 		$vc = intval($cal);
 
+/*
 		if ($vc == 100){
 			$calx = $d==0?"D":"O";
 		}else if ($vc >= 90 && $vc <= 99){
@@ -162,7 +164,6 @@ class PDF_Diag extends PDF_Sector {
 		}
 
 		$caly = round(floatval($cal),0);
-
 		if ($caly >= 95 && $caly <= 100){
 			$cony = "IV";
 		}elseif ($caly >= 75 && $caly <= 94){
@@ -174,7 +175,35 @@ class PDF_Diag extends PDF_Sector {
 		}else{
 			$cony = " ";
 		}
-		
+*/
+
+		if ($vc == 100){
+			$calx = $d==0?"D":"O";
+		}else if ($vc >= 90 && $vc <= 99){
+			$calx = $d==0?"L":"P";
+		}else if ($vc >= 80 && $vc <= 89){
+			$calx = $d==0?"EP":"IP";
+		}else if ($vc >= 70 && $vc <= 79){
+			$calx = $d==0?"I":"BP";
+		}else if ($vc >= 60 && $vc <= 69){
+			$calx = "NR";
+		}else {
+			$calx = "";
+		}
+
+		$caly = round(floatval($cal),0);
+		if ($caly >= 95 && $caly <= 100){
+			$cony = "IV";
+		}elseif ($caly >= 75 && $caly <= 94){
+			$cony = "III";
+		}elseif ($caly >= 55 && $caly <= 74){
+			$cony = "II";
+		}elseif ($caly >= 1 && $caly <= 54){
+			$cony = "I";
+		}else{
+			$cony = " ";
+		}
+
 		if ($ina){
 			$calx = intval($cal);
 			if ($calx<=0){
@@ -210,8 +239,8 @@ $pdf->lastupdate = "";//$prom_x[0]->modi_el;
 
 $d=1;
 
- 
-foreach ($arrAlu as $i => $value) {
+ $i = 0;
+//foreach ($arrAlu as $i => $value) {
 	// $M->Llamar_Actualizar_Promedios_Padres_from_IdGruAlu($user,$arrAlu[$i]);
 	$result = $f->getQuerys(53,"idgrualu=".$arrAlu[$i]."&idioma=".$d,0,0,0,array()," order by orden_impresion asc ",1);
 	if ( count($result) > 0 ){
@@ -258,8 +287,9 @@ foreach ($arrAlu as $i => $value) {
 		$pdf->aspectos = $d==0?'A  S  P  E  C  T  O  S':'A  S  P  E  C  T  S';
 	    $pdf->camposformativos = $d==0?'CAMPOS FORMATIVOS':'FORMATIVE FIELDS';
 		$pdf->evaluacion = $d==0?'EVALUACIÓN':'EVALUATION';
-		$pdf->inicial = $d==0?'INICIAL':'INITIAL';
-		$pdf->media = $d==0?'MEDIA':'MIDDLE';
+		$pdf->inicial = $d==0?'I     N':'I     N';
+		$pdf->media = $d==0?'M     N':'M     N';
+		$pdf->final = $d==0?'F     N':'F     N';
 
 		$pdf->profile = $d==0?'PERFIL IB':'PROFILE IB';
 		$pdf->teacher = $d==0?'TITUTLAR':'TEACHER';
@@ -301,7 +331,7 @@ foreach ($arrAlu as $i => $value) {
 		$pdf->Cell($a1,8,utf8_decode(''),'',0,'C');
 		$pdf->Cell(16,4,utf8_decode($pdf->inicial),'',0,'C');
 		$pdf->Cell(16,4,utf8_decode($pdf->media),'LR',0,'C');
-		$pdf->Cell(16,4,utf8_decode('FINAL'),'',1,'C');
+		$pdf->Cell(16,4,utf8_decode($pdf->final),'',1,'C');
 
 
 		$arrCal = $f->getQuerys(55,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=211 and 213",0,0,0,array(),' order by orden_impresion asc ',1);
@@ -614,8 +644,8 @@ foreach ($arrAlu as $i => $value) {
 		$y = $pdf->GetY();
 		$pdf->SetFillColor(255);
 		$pdf->SetFont('Arial','',8);	
-		$pdf->RoundedRect(5, $y, $a0+$a1, 30, 2, '4', 'FD');
-		$pdf->RoundedRect($a0+$a1+5, $y, $a2, 30, 2, '3', 'FD');
+		$pdf->RoundedRect(5, $y, $a0+$a1, 25, 2, '4', 'FD');
+		$pdf->RoundedRect($a0+$a1+5, $y, $a2, 25, 2, '3', 'FD');
 
 		$pdf->setX(5);
 		//$pdf->Cell($a0+$a1,4,utf8_decode($pdf->obsEsp),'',0,'L');
@@ -634,36 +664,35 @@ foreach ($arrAlu as $i => $value) {
 		$pdf->Ln(26);
 		$pdf->setX(5);
 
-	
-		$pdf->SetFont('Arial','B',8);	
-		$pdf->Cell(3,6,utf8_decode('O'),'',0,'L');
-		$pdf->SetFont('Arial','',8);	
-		$pdf->Cell(37,6,utf8_decode('=  ').$pdf->leg0,'',0,'L');
+			$pdf->SetFont('Arial','B',7);	
+		$pdf->Cell(12.5,6,utf8_decode('O - (N: IV)'),'',0,'L');
+		$pdf->SetFont('Arial','',7);	
+		$pdf->Cell(24,6,utf8_decode('= OUSTANDING'),'',0,'L');
 
-		$pdf->SetFont('Arial','B',8);	
-		$pdf->Cell(3,6,utf8_decode('P'),'',0,'L');
-		$pdf->SetFont('Arial','',8);	
-		$pdf->Cell(37,6,utf8_decode('=  ').$pdf->leg1,'',0,'L');
+		$pdf->SetFont('Arial','B',7);	
+		$pdf->Cell(12,6,utf8_decode('P - (N: III)'),'',0,'L');
+		$pdf->SetFont('Arial','',7);	
+		$pdf->Cell(24,6,utf8_decode('= PROFICIENT'),'',0,'L');
 
-		$pdf->SetFont('Arial','B',8);	
-		$pdf->Cell(5,6,utf8_decode('IP'),'',0,'L');
-		$pdf->SetFont('Arial','',8);	
-		$pdf->Cell(37,6,utf8_decode('=  ').$pdf->leg2,'',0,'L');
+		$pdf->SetFont('Arial','B',7);	
+		$pdf->Cell(12,6,utf8_decode('IP - (N: II)'),'',0,'L');
+		$pdf->SetFont('Arial','',7);	
+		$pdf->Cell(24,6,utf8_decode('= IN PROCESS'),'',0,'L');
 
-		$pdf->SetFont('Arial','B',8);	
-		$pdf->Cell(3,6,utf8_decode('BP'),'',0,'L');
-		$pdf->SetFont('Arial','',8);	
-		$pdf->Cell(37,6,utf8_decode('=  ').$pdf->leg3,'',0,'L');
+		$pdf->SetFont('Arial','B',7);	
+		$pdf->Cell(12.5,6,utf8_decode('BP - (N: I)'),'',0,'L');
+		$pdf->SetFont('Arial','',7);	
+		$pdf->Cell(34,6,utf8_decode('= BEGINNING PROCESS'),'',0,'L');
 
-		$pdf->SetFont('Arial','B',8);	
+		$pdf->SetFont('Arial','B',7);	
 		$pdf->Cell(5,6,utf8_decode('NR'),'',0,'L');
-		$pdf->SetFont('Arial','',8);	
-		$pdf->Cell(30,6,utf8_decode('=  ').$pdf->leg4,'',1,'L');
+		$pdf->SetFont('Arial','',7);	
+		$pdf->Cell(30,6,utf8_decode('= NEEDS TO REINFORCE'),'',1,'L');
 
 
 	} // Fin Si
 
-}
+//}
 
 
 

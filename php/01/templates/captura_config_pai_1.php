@@ -143,6 +143,7 @@ jQuery(function($) {
 	    $("#preloaderPrincipal").show();
 		$("#cmdCapCalPAI01").attr('Disabled', true);
 	    var nc = "u="+localStorage.nc+"&idgrupo="+IdGrupo;
+
 	    $("#cmbMatPAI200").html("<option value='0' selected>Seleccione una Materia</option>");
 	    $.post(obj.getValue(0)+"data/", { o:1, t:17, p:0, c:nc, from:0, cantidad:0, s:"" },
 	        function(json){
@@ -152,7 +153,7 @@ jQuery(function($) {
 	                $.each(json, function(i, item) {
 	               	var vad = parseInt(item.idpaiareadisciplinaria, 0); 
 	               	if (vad > 0){
-	                    $("#cmbMatPAI200").append('<option value="'+item.data+'-'+i+'"> '+item.label+'</option>');
+	                    $("#cmbMatPAI200").append('<option value="'+item.data+'-'+j+'"> '+item.label+'</option>');
 	                    arrMPAI01[j] = {
                     				idgrumat: 				item.data, 
                     				eval_default: 			item.eval_default, 

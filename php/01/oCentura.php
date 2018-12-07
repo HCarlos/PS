@@ -257,6 +257,21 @@ class oCentura {
 	    	return $ret;
 	}
 
+	private function getIdProfFromIdUser($str){
+	    	$query = "SELECT idprofesor FROM _viProfesores WHERE idusuario = $str AND status_usuario = 1";
+
+			$Conn = new voConnPDO();
+			$result = $Conn->queryFetchAllAssocOBJ($query);
+
+			if (!$result) {
+    				$ret=0;
+			}else{
+				   	$ret= intval($result[0]->idprofesor);
+			}
+			$Conn = null;
+	    	return $ret;
+	}
+
 	public function isExistUserFromEmp($user=""){
 		  	$idemp = $this->getPubIdEmp($user);
 			
@@ -1060,6 +1075,22 @@ class oCentura {
 											ORDER BY num_lista ";
 								break;		
 
+							case 74:
+								parse_str($arg);
+								$idprofesor = $this->getIdProfFromIdUser($idprofesor);
+								$idciclo = $this->getCicloFromIdEmp($idemp);
+								$query = "SELECT DISTINCT grupo AS label, idgrupo AS data, ispai_grupo 
+										FROM _viGrupo_Materias WHERE idciclo = $idciclo AND idprofesor = $idprofesor AND isagrupadora = 0 AND grupo_visible = 1 
+										$otros ";
+								break;		
+
+							case 75:
+								parse_str($arg);
+								$idprofesor = $this->getIdProfFromIdUser($idprofesor);
+								$idciclo = $this->getCicloFromIdEmp($idemp);
+								$query = "SELECT materia AS label, idgrumat AS data, eval_default, eval_mod, materia_bloqueada, idpaiareadisciplinaria    
+										FROM _viGrupo_Materias WHERE idciclo = $idciclo AND idprofesor = $idprofesor AND idgrupo = $idgrupo AND isagrupadora = 0 $otros ";
+								break;	
 
 
 
@@ -6456,7 +6487,16 @@ class oCentura {
 									FROM _viBoletas bol
 								WHERE bol.idgrumat = $idgrumat AND bol.idgrualu = $idgrualu $otros";
 				}
+				break;
 
+			case 122:
+				parse_str($cad);
+		        $idemp = $this->getIdEmpFromAlias($u);
+
+				$query = "SELECT idboleta, num_lista, alumno, idgrualu, idalumno,  
+								grupo, grado, clave_nivel, iduseralu, genero				
+						FROM _viBolDir
+						WHERE idemp = $idemp AND idgrumat = $idgrumat ORDER BY num_lista ASC";
 				break;
 
 			case 200: // ARJI - MATERIAS INASISTENCIAS ESPAÑOL e INGLES

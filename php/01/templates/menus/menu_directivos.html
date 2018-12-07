@@ -16,6 +16,13 @@
         </li>
 
         <li>
+            <a href="#" id="directores-calificaciones-profesores-list-01-01">
+                <i class="icon-page"></i>
+                <span class="menu-text">Calificaciones Profesores</span>
+            </a>
+        </li>
+
+        <li>
             <a href="#" id="dir-rep-materiales-0">
                 <i class="icon-edit"></i>
                 <span class="menu-text">Reporte de Materiales</span>
@@ -48,6 +55,26 @@ jQuery(function($) {
             return false;
         });
     }
+
+
+
+    if ($("#directores-calificaciones-profesores-list-01-01").length) {
+        $("#directores-calificaciones-profesores-list-01-01").on("click", function(event) {
+            event.preventDefault();
+            cfgBase0();
+            var nc = localStorage.nc.split("@");
+            $.post(obj.getValue(0) + "directores-calificaciones-profesores-list-01-01/", {
+                    user: nc[0]
+                },
+                function(html) {
+                    $("#contentMain").empty();
+                    $("#contentMain").html(html);
+                    $("#breadcrumb").html(getBar('Inicio,Lista de Calificaciones por Profesores'));
+                }, "html");
+            return false;
+        });
+    }
+
 
     if ($("#dir-rep-materiales-0").length) {
         $("#dir-rep-materiales-0").on("click", function(event) {
