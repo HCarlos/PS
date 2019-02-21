@@ -2665,18 +2665,22 @@ class oCentura {
 						switch($tipo){
 							case 0:
 								parse_str($arg);
-								$idusr       = $this->getIdUserFromAlias($user);
-								$idemp       = $this->getIdEmpFromAlias($user);
-								$clave_nivel = $this->getClaveNivelFromIdGruAlu($idgrupo,$idemp,1);
+								$idusr       	  = $this->getIdUserFromAlias($user);
+								$idemp       	  = $this->getIdEmpFromAlias($user);
+								$clave_nivel 	  = $this->getClaveNivelFromIdGruAlu($idgrupo,$idemp,1);
 								
-								$status_grumat = !isset($status_grumat)?0:1;	
-								$isoficial = !isset($isoficial)?0:1;	
-								$bloqueado = !isset($bloqueado)?0:1;	
-								$ispai = !isset($ispai)?0:1;
+								$status_grumat 	  = !isset($status_grumat)?0:1;	
+								$isoficial 		  = !isset($isoficial)?0:1;	
+								$bloqueado 		  = !isset($bloqueado)?0:1;	
+								$ispai 			  = !isset($ispai)?0:1;
 								
-								$orden_impresion = intval($orden_impresion); 
-								$orden_historial = intval($orden_historial); 
-								$ispai_materia = !isset($ispai_materia)?0:1;
+								$orden_impresion  = intval($orden_impresion); 
+								$orden_historial  = intval($orden_historial); 
+								$ispai_materia 	  = !isset($ispai_materia)?0:1;
+
+								$promedia_oficial = !isset($promedia_oficial)?0:1;
+								$promedia_interno = !isset($promedia_interno)?0:1;
+								$is_inasistencia  = !isset($is_inasistencia)?0:1;
 
 								$query = "INSERT INTO grupo_materias(
 																	idciclo,
@@ -2698,6 +2702,12 @@ class oCentura {
 																	eval_default,
 																	eval_mod,
 																	clave_nivel,
+																	promedia_oficial,
+																	promedia_interno,
+																	is_inasistencia,
+																	tap0,
+																	tap1,
+																	tap2,
 																	status_grumat,
 																	idemp,ip,host,creado_por,creado_el)
 											VALUES(
@@ -2720,20 +2730,29 @@ class oCentura {
 																	$eval_default,
 																	$eval_mod,
 																	$clave_nivel,
+																	$promedia_oficial,
+																	$promedia_interno,
+																	$is_inasistencia,
+																	$tap0,
+																	$tap1,
+																	$tap2,
 																	$status_grumat,
 																	$idemp,'$ip','$host',$idusr,NOW())";
 								$vRet = $this->guardarDatos($query);
 								break;		
 							case 1:
 								parse_str($arg);
-								$idusr = $this->getIdUserFromAlias($user);
-								$status_grumat = !isset($status_grumat)?0:1;	
-								$idemp = $this->getIdEmpFromAlias($user);
-								$isoficial = !isset($isoficial)?0:1;	
-								$orden_impresion = intval($orden_impresion); 
-								$orden_historial = intval($orden_historial); 
-								$bloqueado = !isset($bloqueado)?0:1;	
-								$ispai_materia = !isset($ispai_materia)?0:1;
+								$idusr 			  = $this->getIdUserFromAlias($user);
+								$status_grumat 	  = !isset($status_grumat)?0:1;	
+								$idemp 			  = $this->getIdEmpFromAlias($user);
+								$isoficial 		  = !isset($isoficial)?0:1;	
+								$orden_impresion  = intval($orden_impresion); 
+								$orden_historial  = intval($orden_historial); 
+								$bloqueado 		  = !isset($bloqueado)?0:1;	
+								$ispai_materia    = !isset($ispai_materia)?0:1;
+								$promedia_oficial = !isset($promedia_oficial)?0:1;
+								$promedia_interno = !isset($promedia_interno)?0:1;
+								$is_inasistencia  = !isset($is_inasistencia)?0:1;
 
 								$query = "UPDATE grupo_materias SET 	
 																idciclo = $idciclo,
@@ -2755,6 +2774,12 @@ class oCentura {
 																bloqueado = $bloqueado,
 																eval_default = $eval_default,
 																eval_mod = $eval_mod,
+																promedia_oficial = $promedia_oficial,
+																promedia_interno = $promedia_interno,
+																is_inasistencia = $is_inasistencia,
+																tap0 = $tap0,
+																tap1 = $tap1,
+																tap2 = $tap2,
 																ip = '$ip', 
 																host = '$host',
 																modi_por = $idusr, 
@@ -6176,7 +6201,7 @@ class oCentura {
 				$query = "SELECT cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, cal2, con2, ina2, obs2, 
 								cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, cal5, con5, ina5, obs5, 
 								cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
-								promcalof, promconof, suminaof,bim0,bim1,bim2,bim3,bim4,
+								promcalof, promconof, suminaof,bim0,bim1,bim2,bim3,bim4, 
 								modi_el,".$ncal." AS cal
 								FROM grupo_alumno_promedio
 							WHERE idgrualu = $idgrualu $otros ";
@@ -6498,6 +6523,21 @@ class oCentura {
 						FROM _viBolDir
 						WHERE idemp = $idemp AND idgrumat = $idgrumat ORDER BY num_lista ASC";
 				break;
+
+			case 123: // ARJI
+				parse_str($cad);
+		        if ( $numval == 6 ){
+			        $ncal = "suminaof";
+		        }else{
+			        $numval = intval($numval)-1;
+			        $ncal = "ina".$numval;
+			        // $ncal = "suminaof";
+		        }
+				$query = "SELECT $ncal AS cal
+							FROM grupo_alumno_promedio
+							WHERE idgrualu = $idgrualu ";
+				break;
+
 
 			case 200: // ARJI - MATERIAS INASISTENCIAS ESPAÑOL e INGLES
 				parse_str($cad);

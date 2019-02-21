@@ -4,6 +4,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', TRUE);
 ini_set('display_startup_errors', TRUE);
 date_default_timezone_set('America/Mexico_City');
+set_time_limit(60000);
 
 
 header("Content-type:application/json; charset=utf-8");  
@@ -25,18 +26,18 @@ $M = oMetodos::getInstance();
 $ret = array();
 
 $arrAlu = explode(",",$strgrualu);
-$M->Llamar_Actualiza_Promedios_Boletas_por_Grupo($arrAlu[0]);
-//$M->Llamar_Actualizar_Promedios_Padres_from_IdGruAlu($user,$arrAlu[0]);
-$M->Actualizar_Promedios_Grupales(0,0,$user,$arrAlu[0]);
+$O1 = $M->Llamar_Actualiza_Promedios_Boletas_por_Grupo($arrAlu[0]);
+$O2 = $M->Actualizar_Promedios_Grupales(0,0,$user,$arrAlu[0]);
 $dato = "";
 foreach ($arrAlu as $i => $value) {
 
-	$M->Llamar_Actualizar_Promedios_Padres_from_IdGruAlu($user,$arrAlu[$i]);
+	$O3 = $M->Llamar_Actualizar_Promedios_Padres_from_IdGruAlu($user,$arrAlu[$i]);
 
-	$M->Actualiza_Promedios_Grupales_por_Materia($user,$arrAlu[$i]);
+	$O4 = $M->Actualiza_Promedios_Grupales_por_Materia($user,$arrAlu[$i]);
+
 
 	$result = $f->getQuerys(43,"idgrualu=".$arrAlu[$i],0,0,0,array()," order by orden_impresion asc ",1);
-	
+
 	if ( count($result)>0  ){
 
 		foreach ($result as $j => $value) {  }
@@ -51,12 +52,15 @@ foreach ($arrAlu as $i => $value) {
 			
 		} catch (Exception $e) {
 		   $dato =  $e->getMessage();
+		   //echo $dato;
 		}
 
 	}
 
+
 }
 
+//$ret[0] = array("msg" => $dato. " O1 => ".$O1. " O2 => ".$O2. " O3 => ".$O3. " O4 => ".$O4. " result => ".$result. " srs => ".$srs. " prm => ".$prm);
 $ret[0] = array("msg" => $dato);
 $m = json_encode($ret);
 echo $m;

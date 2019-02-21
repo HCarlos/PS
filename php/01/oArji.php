@@ -52,6 +52,10 @@ class oArji {
 		}
 
 		switch($pivot){
+			case 5:
+				$calx = $cal == 0 ? '' : $cal;
+				return $calx;
+				break;
 			case 4:
 				$calx = $cal;
 				return $calx;

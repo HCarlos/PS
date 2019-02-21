@@ -146,15 +146,13 @@ class PDF_Diag extends PDF_Sector {
 		$calx = "";
 		$vc = intval($cal);
 
-		if ($vc == 100){
+		if ($vc >= 95 && $vc <= 100){
 			$calx = $d==0?"D":"O";
-		}else if ($vc >= 90 && $vc <= 99){
+		}else if ($vc >= 75 && $vc <= 94){
 			$calx = $d==0?"L":"P";
-		}else if ($vc >= 80 && $vc <= 89){
+		}else if ($vc >= 55 && $vc <= 74){
 			$calx = $d==0?"EP":"IP";
-		}else if ($vc >= 70 && $vc <= 79){
-			$calx = $d==0?"I":"BP";
-		}else if ($vc >= 60 && $vc <= 69){
+		}else if ($vc >= 1 && $vc <= 54){
 			$calx = "NR";
 		}else {
 			$calx = "";
@@ -208,7 +206,7 @@ $pdf->lastupdate = ""; // $prom_x[0]->modi_el;
 $pdf->fechaImpresa = $Q->getWith3LetterMonthD(date('Y-m-d'));
 
 $d=0;
- $i = 0;
+$i = 0;
 foreach ($arrAlu as $i => $value) {
 
 	// $result = $f->getQuerys(53,"idgrualu=".$arrAlu[$i]."&idioma=".$d,0,0,0,array()," order by orden_impresion asc ",1);
@@ -582,9 +580,18 @@ foreach ($arrAlu as $i => $value) {
 
 			if (isset($arrCal[$i]->materia)){
 				$pdf->Cell($a1,5.44444,utf8_decode($arrCal[$i]->materia),'',0,'L');
-				$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[$i]->cal0,$d),'',0,'C');
-				$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[$i]->cal1,$d),'LR',0,'C');
-				$pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[$i]->cal2,$d),'',1,'C');
+
+				// $pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[$i]->cal0,$d),'',0,'C');
+				// $pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[$i]->cal1,$d),'LR',0,'C');
+				// $pdf->Cell(16,5.44444,$pdf->FormatCal($arrCal[$i]->cal2,$d),'',1,'C');
+
+				$ina0 = $arrCal[$i]->cal0 > 0 ? number_format($arrCal[$i]->cal0,0) : '';
+				$ina1 = $arrCal[$i]->cal1 > 0 ? number_format($arrCal[$i]->cal1,0) : '';
+				$ina2 = $arrCal[$i]->cal2 > 0 ? number_format($arrCal[$i]->cal2,0) : '';
+				
+				$pdf->Cell(16,5.44444,$ina0,'',0,'C');
+				$pdf->Cell(16,5.44444,$ina1,'LR',0,'C');
+				$pdf->Cell(16,5.44444,$ina2,'',1,'C');
 			}else{
 				$pdf->Cell($a1,5.44444,'','',0,'L');
 				$pdf->Cell(16,5.44444,'','',0,'C');
@@ -672,10 +679,10 @@ foreach ($arrAlu as $i => $value) {
 		$pdf->SetFont('Arial','',7);	
 		$pdf->Cell(24,6,utf8_decode('=  EN PROCESO'),'',0,'L');
 
-		$pdf->SetFont('Arial','B',7);	
-		$pdf->Cell(10,6,utf8_decode('I - (N: I)'),'',0,'L');
-		$pdf->SetFont('Arial','',7);	
-		$pdf->Cell(24,6,utf8_decode('=  INICIADO'),'',0,'L');
+		// $pdf->SetFont('Arial','B',7);	
+		// $pdf->Cell(10,6,utf8_decode('I - (N: I)'),'',0,'L');
+		// $pdf->SetFont('Arial','',7);	
+		// $pdf->Cell(24,6,utf8_decode('=  INICIADO'),'',0,'L');
 
 		$pdf->SetFont('Arial','B',7);	
 		$pdf->Cell(5,6,utf8_decode('NR'),'',0,'L');

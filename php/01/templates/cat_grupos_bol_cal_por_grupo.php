@@ -149,6 +149,11 @@ $idciclo = $_POST['idciclo'];
 								Listado Calificaciones Oficiales<br/>
 							</a><br/>
 
+			 				<a href="#" class="link link-info"  id="lista-ina-secu-of-arji-xls-1">
+								<i class="icon-print  bigger-125 icon-on-left"></i>
+								Listado Inasistencias Oficiales<br/>
+							</a><br/>
+
 							<div class="control-group">
 								<label class="control-label" for="form-field-1"><i class="icon-print grey bigger-125 icon-on-left"></i>Promedios por Materia</label>
 								<div class="controls">
@@ -360,7 +365,7 @@ jQuery(function($) {
 		$("#spnwork0").show();
 		$("#prepareCal").hide();
 		var nc = "user="+localStorage.nc+"&strgrualu="+strGruAlu+"&grado="+Gradox+"&idciclo="+IdCiclo;
-		
+		//alert(nc);
         var PARAMS = {o:0, t:40, c:nc, p:10, from:0, cantidad:0, s:' order by orden_impresion asc '};
         if (parseInt(arrItem[0].clave_nivel,0)==5){
         	url = obj.getValue(0)+"prepara-calif-prepa-interna-arji/";
@@ -584,6 +589,16 @@ jQuery(function($) {
 		var fmt = event.currentTarget.id;
 		if (numeval != 0){
 			fmt = "lista-calif-secundaria-oficial-arji-xls-2";
+		}
+		printListados(fmt, numeval);
+ 	});
+
+	$("#lista-ina-secu-of-arji-xls-1").on("click",function(event){
+		event.preventDefault();
+		var numeval = parseInt( $("#numeval0").val(), 0   );
+		var fmt = event.currentTarget.id;
+		if (numeval != 0){
+			fmt = "lista-ina-secu-of-arji-xls-1";
 		}
 		printListados(fmt, numeval);
  	});

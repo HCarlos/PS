@@ -42,9 +42,7 @@ $body = "<html>
 
 $retorno = mail($para,$titulo,$body,$cabeceras);
 
-$ret = array();
-$ret[0]->msg =  "OK";
-$ret[0]->retorno =  $retorno;
+$ret =  array( array("msg"=>"OK","retorno"=>$retorno));
 
 if ( $retorno ){
 

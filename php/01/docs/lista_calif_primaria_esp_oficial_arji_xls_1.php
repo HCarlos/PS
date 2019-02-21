@@ -70,7 +70,6 @@ $fl=$miCal;
 $arrIdGruMat = array();
 
 // echo $arrAlu[0];
-
 // echo "idgrupo=".$idgrupo."&idciclo=".$idciclo;
 
 $mats = $f->getCombo(1,"idgrupo=".$idgrupo."&idciclo=".$idciclo,0,0,24,' and idioma = 0 and isoficial = 1 order by orden_historial asc '); 
@@ -87,7 +86,6 @@ $oS->setCellValue("S3", $grupo);
 
 $k=7;
 
-
 foreach ($arrAlu as $i => $value) {
 	$result = $f->getQuerys($t,"idgrualu=".$arrAlu[$i],0,0,0,array(),$s,1);
 
@@ -98,7 +96,7 @@ foreach ($arrAlu as $i => $value) {
 		// $oS->setCellValue("B".$k, $result[0]->alumno);
 		$E->cellColor($objPHPExcel, "A".$k.':'."B".$k, 'CCF4CC');
 
-		for ($w=1; $w<6; ++$w){
+		for ($w=1; $w<4; ++$w){
 
 			$oS->setCellValue("C".$k, $w);
 
@@ -127,8 +125,6 @@ foreach ($arrAlu as $i => $value) {
 					++$fl;
 				}
 			}
-
-
 
 			++$k;
 

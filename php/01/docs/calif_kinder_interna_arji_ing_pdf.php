@@ -148,44 +148,27 @@ class PDF_Diag extends PDF_Sector {
 		$calx = "";
 		$vc = intval($cal);
 
-/*
-		if ($vc == 100){
-			$calx = $d==0?"D":"O";
-		}else if ($vc >= 90 && $vc <= 99){
-			$calx = $d==0?"L":"P";
-		}else if ($vc >= 80 && $vc <= 89){
-			$calx = $d==0?"EP":"IP";
-		}else if ($vc >= 70 && $vc <= 79){
-			$calx = $d==0?"I":"BP";
-		}else if ($vc >= 60 && $vc <= 69){
-			$calx = "NR";
-		}else {
-			$calx = "";
-		}
+		// if ($vc == 100){
+		// 	$calx = $d==0?"D":"O";
+		// }else if ($vc >= 90 && $vc <= 99){
+		// 	$calx = $d==0?"L":"P";
+		// }else if ($vc >= 80 && $vc <= 89){
+		// 	$calx = $d==0?"EP":"IP";
+		// }else if ($vc >= 70 && $vc <= 79){
+		// 	$calx = $d==0?"I":"BP";
+		// }else if ($vc >= 60 && $vc <= 69){
+		// 	$calx = "NR";
+		// }else {
+		// 	$calx = "";
+		// }
 
-		$caly = round(floatval($cal),0);
-		if ($caly >= 95 && $caly <= 100){
-			$cony = "IV";
-		}elseif ($caly >= 75 && $caly <= 94){
-			$cony = "III";
-		}elseif ($caly >= 55 && $caly <= 74){
-			$cony = "II";
-		}elseif ($caly >= 1 && $caly <= 54){
-			$cony = "I";
-		}else{
-			$cony = " ";
-		}
-*/
-
-		if ($vc == 100){
+		if ($vc >= 95 && $vc <= 100){
 			$calx = $d==0?"D":"O";
-		}else if ($vc >= 90 && $vc <= 99){
+		}else if ($vc >= 75 && $vc <= 94){
 			$calx = $d==0?"L":"P";
-		}else if ($vc >= 80 && $vc <= 89){
+		}else if ($vc >= 55 && $vc <= 74){
 			$calx = $d==0?"EP":"IP";
-		}else if ($vc >= 70 && $vc <= 79){
-			$calx = $d==0?"I":"BP";
-		}else if ($vc >= 60 && $vc <= 69){
+		}else if ($vc >= 1 && $vc <= 54){
 			$calx = "NR";
 		}else {
 			$calx = "";
@@ -239,8 +222,8 @@ $pdf->lastupdate = "";//$prom_x[0]->modi_el;
 
 $d=1;
 
- $i = 0;
-//foreach ($arrAlu as $i => $value) {
+// $i = 0;
+foreach ($arrAlu as $i => $value) {
 	// $M->Llamar_Actualizar_Promedios_Padres_from_IdGruAlu($user,$arrAlu[$i]);
 	$result = $f->getQuerys(53,"idgrualu=".$arrAlu[$i]."&idioma=".$d,0,0,0,array()," order by orden_impresion asc ",1);
 	if ( count($result) > 0 ){
@@ -593,11 +576,18 @@ $d=1;
 		if (isset($arrCal[0]->materia)){
 			// $pdf->Cell($a1,6.44444,utf8_decode($arrCal[0]->materia).' '.$arrCal[0]->idgrumat,'',0,'L');
 			$pdf->Cell($a1,6.44444,utf8_decode($arrCal[0]->materia),'',0,'L');
-			$pdf->Cell(16,6.44444,$pdf->FormatCal($arrCal[0]->cal0,$d,true),'',0,'C');
-			$pdf->Cell(16,6.44444,$pdf->FormatCal($arrCal[0]->cal1,$d,true),'LR',0,'C');
-			$pdf->Cell(16,6.44444,$pdf->FormatCal($arrCal[0]->cal2,$d,true),'',1,'C');
+			// $pdf->Cell(16,6.44444,$pdf->FormatCal($arrCal[0]->cal0,$d,true),'',0,'C');
+			// $pdf->Cell(16,6.44444,$pdf->FormatCal($arrCal[0]->cal1,$d,true),'LR',0,'C');
+			// $pdf->Cell(16,6.44444,$pdf->FormatCal($arrCal[0]->cal2,$d,true),'',1,'C');
+				$ina0 = $arrCal[0]->cal0 > 0 ? number_format($arrCal[0]->cal0,0) : '';
+				$ina1 = $arrCal[0]->cal1 > 0 ? number_format($arrCal[0]->cal1,0) : '';
+				$ina2 = $arrCal[0]->cal2 > 0 ? number_format($arrCal[0]->cal2,0) : '';
+				
+				$pdf->Cell(16,6.44444,$ina0,'',0,'C');
+				$pdf->Cell(16,6.44444,$ina1,'LR',0,'C');
+				$pdf->Cell(16,6.44444,$ina2,'',1,'C');
 		}else{
-			$pdf->Cell($a1,6.44444,'','',0,'L');
+			$pdf->Cell(16,6.44444,'','',0,'L');
 			$pdf->Cell(16,6.44444,'','',0,'C');
 			$pdf->Cell(16,6.44444,'','LR',0,'C');
 			$pdf->Cell(16,6.44444,'','',1,'C');
@@ -679,10 +669,10 @@ $d=1;
 		$pdf->SetFont('Arial','',7);	
 		$pdf->Cell(24,6,utf8_decode('= IN PROCESS'),'',0,'L');
 
-		$pdf->SetFont('Arial','B',7);	
-		$pdf->Cell(12.5,6,utf8_decode('BP - (N: I)'),'',0,'L');
-		$pdf->SetFont('Arial','',7);	
-		$pdf->Cell(34,6,utf8_decode('= BEGINNING PROCESS'),'',0,'L');
+		// $pdf->SetFont('Arial','B',7);	
+		// $pdf->Cell(12.5,6,utf8_decode('BP - (N: I)'),'',0,'L');
+		// $pdf->SetFont('Arial','',7);	
+		// $pdf->Cell(34,6,utf8_decode('= BEGINNING PROCESS'),'',0,'L');
 
 		$pdf->SetFont('Arial','B',7);	
 		$pdf->Cell(5,6,utf8_decode('NR'),'',0,'L');
@@ -692,7 +682,7 @@ $d=1;
 
 	} // Fin Si
 
-//}
+}
 
 
 

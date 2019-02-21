@@ -89,6 +89,8 @@ foreach ($arrAlu as $i => $value) {
 
 		$IdAlumno = $result[0]->idalumno;
 
+
+
 		$arPos = explode(';',$Pos[0]->initcal_x);
 		
 		$pdf->SetFont('Arial','',9);
@@ -100,6 +102,8 @@ foreach ($arrAlu as $i => $value) {
 		$bim2 = 0;
 		$bim3 = 0;
 		$bim4 = 0;
+
+		$pdf->Cell(100,4,$result[0]->alumno);
 
 		foreach ($result as $j => $value) {
 			
@@ -186,14 +190,6 @@ foreach ($arrAlu as $i => $value) {
 		$pdf->setLineCal(ROUND($caro[0]->evalrep31,1),$anchoCol,$Pos[0]->er31,1);
 		$pdf->setLineCal(ROUND($caro[0]->evalrep32,1),$anchoCol,$Pos[0]->er32,1);
 		$pdf->setLineCal(ROUND($caro[0]->evalrep33,1),$anchoCol,$Pos[0]->er33,1);
-/*
-		$nCol = 96;
-		$pdf->setLineCal($caro[0]->asigrep4,120,$nCol,$anchoCol,0);
-		$pdf->setLineCal(ROUND($caro[0]->evalrep40,1),$l0,$nCol,$anchoCol,1);
-		$pdf->setLineCal(ROUND($caro[0]->evalrep41,1),$l1,$nCol,$anchoCol,1);
-		$pdf->setLineCal(ROUND($caro[0]->evalrep42,1),$l2,$nCol,$anchoCol,1);
-		$pdf->setLineCal(ROUND($caro[0]->evalrep43,1),$l3,$nCol,$anchoCol,1);
-*/
 
 		// Obtenemos el Promedio del Grado
 		$prom = $f->getQuerys(71,"idgrualu=".$result[0]->idgrualu,0,0,0,array(),'',1);
@@ -221,25 +217,6 @@ foreach ($arrAlu as $i => $value) {
 		$pdf->Cell($anchoCol,$pdf->nFont,$pr[0].".".$zero,'',0,'R');
 
 		// Obtenemos el Promedio del Nivel
-/*
-		$ar = explode(';',$Pos[0]->promedio_nivel);
- 		$nCol = floatval($ar[1]);
-
-		$pdf->setX(0);
-		$pdf->setY($nCol);
-		$pdf->setX( floatval($ar[0]) );
-
-		$pr = explode('.', ROUND( $caro[0]->promedio_general,1 ) ) ;
-
-		$pdf->SetFont('Arial','B',10);
-
-		$pdf->Cell($anchoCol,$pdf->nFont,$pr[0],'',0,'R');
-		if ( count($pr)>1 ){
-			$pdf->Cell($anchoCol+8,$pdf->nFont,$pr[1],'',1,'R');
-		}else{
-			$pdf->Cell($anchoCol+8,$pdf->nFont,'0','',1,'R');
-		}
-*/
 
 		$pdf->SetFont('Arial','',8);
 		$ar = explode(';',$Pos[0]->clave_tecnologia_pos);

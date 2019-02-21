@@ -63,8 +63,6 @@ class oCenturaPDO {
 		return $ret;
 	}
 
-
-
 	private function getNumListaFromTareasDestinatariosRespuesta($idtareadestinatario){
 
 		$query = "SELECT num_lista 
@@ -83,7 +81,7 @@ class oCenturaPDO {
 		$Conn = null;
 		return $ret;
 	}
-	
+
 
 	private function getIdUserFromAlias($str){
 
