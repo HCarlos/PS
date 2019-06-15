@@ -46,7 +46,7 @@ echo json_encode($arr);
 
 function saveFileTarea($file,$descripcion="",$arr=array(),$objeto,$code){
 	if( isset($file) ){
-		if(!preg_match('/\.(jpe?g|gif|png|pdf|doc|docx|xls|xlsx|ppt|pptx|txt|pages|key|numbers)$/' , $file['name'])
+		if(!preg_match('/\.(jpe?g|gif|png|pdf|doc|docx|xls|xlsx|ppt|pptx|txt|pages|key|numbers|svg)$/' , $file['name'])
 			
 		) {
 		

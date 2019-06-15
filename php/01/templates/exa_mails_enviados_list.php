@@ -138,6 +138,7 @@ jQuery(function($) {
 						event.preventDefault();
 						var arr = event.currentTarget.id.split('-');
 						obj.setIsTimeLine(false);
+						alert(arr[1]);
 						getPropExa(arr[1]);
 					});
 
@@ -220,10 +221,11 @@ jQuery(function($) {
 				objOrigen: nodo.objOrigen,
 				objDestino: nodo.objDestino,
 				titulo: nodo.titulo,
-				mensaje: nodo.mensaje,
+				mensaje: 'nodo.mensaje',
 				idexaemailenviado: nodo.idexaemailenviado
 	            },
-	            function(html) {	                
+	            function(html) {	          
+	            //alert("Hi")      
 	                $("#contentProfile").html(html).show('slow',function(){
 		                $('#breadcrumb').html(getBar('Inicio, Propiedades de un nuevo Exexalumno '));
 	                });

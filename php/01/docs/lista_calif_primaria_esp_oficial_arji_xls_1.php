@@ -115,8 +115,8 @@ foreach ($arrAlu as $i => $value) {
 
 				$mat = $f->getQuerys(93,"idgrualu=".$arrAlu[$i]."&numval=".$w."&idgrumat=".$arrIdGruMat[$l],0,0,0,array(),'  and idioma = 0 and isoficial = 1  order by orden_historial asc ');
 				if ( count($mat)>0 ){
+					// $cal =  $mat[0]->cal;
 					$cal =  $A->FormatCal($mat[0]->cal,0,0,3,1);
-					// $cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,3,1);
 					$oS->setCellValueByColumnAndRow($fl,$k, $cal);
 					++$fl;
 				}else{

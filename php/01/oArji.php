@@ -101,6 +101,56 @@ class oArji {
 	}
 	
 
+	function FormatCalK($cal=0,$d=0,$ina=false,$tipo=0){
+		$calx = "";
+		$vc = intval($cal);
+
+		if ($vc >= 95 && $vc <= 100){
+			$calx = $d==0?"D":"O";
+		}else if ($vc >= 75 && $vc <= 94){
+			$calx = $d==0?"L":"P";
+		}else if ($vc >= 55 && $vc <= 74){
+			$calx = $d==0?"EP":"IP";
+		}else if ($vc >= 1 && $vc <= 54){
+			$calx = "NR";
+		}else {
+			$calx = "";
+		}
+
+		$caly = round(floatval($cal),0);
+		if ($caly >= 95 && $caly <= 100){
+			$cony = "IV";
+		}elseif ($caly >= 75 && $caly <= 94){
+			$cony = "III";
+		}elseif ($caly >= 55 && $caly <= 74){
+			$cony = "II";
+		}elseif ($caly >= 1 && $caly <= 54){
+			$cony = "I";
+		}else{
+			$cony = " ";
+		}
+
+
+		if ($ina){
+			$calx = intval($cal);
+			if ($calx<=0){
+				$calx = '';
+			}			
+		}
+
+		switch ($tipo) {
+			case 1:
+				return str_pad($vc, 3, " ", STR_PAD_LEFT).' '.str_pad($cony, 3, " ", STR_PAD_LEFT);
+				break;
+			default:
+				return str_pad($calx, 2, " ", STR_PAD_LEFT).'    '.str_pad($cony, 3, " ", STR_PAD_LEFT);
+				break;
+		}
+
+
+
+	}
+
 
 	function ref_SCOTIA($pcCic, $pcNivel, $pcFam, $pcAlu, $pcPag, $pcNPag, $pMonto, $pfFecha, $pParam=0, $loConst = "2"){
 		

@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Reporte de Calificaciones en Español - primaria Arjí</title>
+<title>Reporte de Calificaciones en Español - Kinder Arjí</title>
 <link rel="stylesheet" type="text/css" href="../../../css/01/class_gen.css"/>
 </head>
 

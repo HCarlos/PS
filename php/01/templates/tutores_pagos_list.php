@@ -133,8 +133,9 @@ jQuery(function($) {
 
 
 		var nc = "u="+localStorage.nc+ "&idfamilia="+IdFamilia+"&idalumno="+idalu;
-		
-		$.post(obj.getValue(0) + "data/", {o:40, t:10010, c:nc, p:11, from:0, cantidad:0,s:' and is_mostrable = 1 order by orden_prioridad asc, status_movto asc, idpago asc '},
+		// var otros = ' AND is_mostrable = 1 ORDER BY orden_prioridad ASC, status_movto ASC, idpago ASC ';
+		var otros = ' AND is_mostrable = 1 ORDER BY idedocta ASC ';
+		$.post(obj.getValue(0) + "data/", {o:40, t:10010, c:nc, p:11, from:0, cantidad:0,s:otros},
 			function(json){
 				if (json.length){
 					var lec,arc,res,des;
@@ -142,6 +143,7 @@ jQuery(function($) {
 					$.each(json, function(i, item) {
 
 							var id = parseInt(item.idedocta,0);
+							// alert(id)
 							var idpago = item.idpago;
 							var idconcepto = parseInt(item.idconcepto,0);
 							var pagosDiv = parseInt(item.is_pagos_diversos,0); 
@@ -172,8 +174,10 @@ jQuery(function($) {
 								if ( id == 55914){
 									// tB +='						<a class="btn btn-minier  btn-info modTutorPagoPro1" href="#" id="idpago-'+id+'-'+id+'-'+item.concepto2+'-'+item.total+'-'+Tutor+'" data-rel="tooltip" data-placement="top" title="Realizar Pago">Pagar</a>';
 								}
+								// alert(id);
 							}else{
-								tB +='';
+								// tB +=arrPag.indexOf(idconcepto)+' '+pagosDiv;
+								tB +=' ';
 							}
 						}else {
 							// ( parseInt( item.status_movto,0 )  != 0 && i > 0 ){	

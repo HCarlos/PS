@@ -234,17 +234,26 @@ jQuery(function($) {
 		var totalElementos;
         var cont = 0;
         var cad = "";
-        console.log( "Hola Mundo" );
+        // console.log( "Hola Mundo" );
         $(".chkRec002").each(function(i,item){
         	var arrids = item.id.split('|');
 			if ( $(this).is(':checked') ){
 				var cad = $("#lstEmails"+arrids[1]).text().trim();
 				if ( (cad != '') && !(arrEmails.indexOf(cad) != -1) ){
 					cad = cad.trim().replace(' ','');
-					if ( obj.isEmail(cad) ) {
-						arrEmails[cont] = cad;
-						arrIDExa[cont] = arrids[1];
-						cont++;
+
+					strCad = cad.split(',');
+					
+					
+					if (strCad.length >= 0){
+						$.each(strCad, function( i, value ) {
+							  // alert( i + ": " + value );
+							if ( obj.isEmail(strCad[i]) ) {
+								arrEmails[cont] = strCad[i];
+								arrIDExa[cont] = arrids[1];
+								cont++;
+							}
+						});					
 					}
 				}
 			}

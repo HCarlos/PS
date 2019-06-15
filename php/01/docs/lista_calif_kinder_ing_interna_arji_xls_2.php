@@ -98,7 +98,7 @@ foreach ($arrAlu as $i => $value) {
 		// Obtenemos el Promedio del Alumno
 		$fl=3;
 		$mat = $f->getQuerys(58,"idgrualu=".$arrAlu[$i]."&numval=".$w,0,0,0,array(),' and idioma = 1 ');
-		$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,3);
+		$cal =  $A->FormatCalK($mat[0]->cal,0,false,1);
 		// $cal = $mat[0]->cal;
 		$oS->setCellValueByColumnAndRow($fl,$k, $cal);
 
@@ -108,7 +108,8 @@ foreach ($arrAlu as $i => $value) {
 		for ($l=0;$l<count($arrIdGruMat); ++$l){
 			$mat = $f->getQuerys(56,"idgrualu=".$arrAlu[$i]."&numval=".$w."&idgrumat=".$arrIdGruMat[$l],0,0,0,array(),' and idioma = 1 and orden_historial <= 100 order by orden_historial asc ');
 			if ( count($mat)>0 ){
-				$cal =  $A->FormatCal($mat[0]->cal,$mat[0]->con,$mat[0]->ina,3);
+				// $cal =  $A->FormatCalK($mat[0]->cal,$mat[0]->con,$mat[0]->ina,3);
+				$cal =  $A->FormatCalK($mat[0]->cal,0,false,1);
 				$oS->setCellValueByColumnAndRow($fl,$k, $cal);
 				++$fl;
 			}else{

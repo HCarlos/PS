@@ -25,6 +25,8 @@ $ret = array();
 
 $arrAlu = explode(",",$strgrualu);
 
+$M->Llamar_Actualiza_Boleta_Datos_Secundarios($arrAlu[0]);
+
 $M->Llamar_Actualiza_Promedios_Boletas_por_Grupo($arrAlu[0]);
 
 $M->Actualiza_Promedios_Grupales_por_Materia($user,$arrAlu[0]);

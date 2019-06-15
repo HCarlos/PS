@@ -37,7 +37,7 @@ if ($res2['status'] != "OK"){
 function saveFileIFE($file,$descripcion="",$result=array(),$iduser ){
 	//$result = array();
 	if(isset($file)){
-		if(!preg_match('/\.(jpe?g|gif|png|JPE?G|GIF|PNG)$/' , $file['name'])
+		if(!preg_match('/\.(jpe?g|gif|png|JPE?G|GIF|PNG|svg)$/' , $file['name'])
 			
 		) {
 			// || getimagesize($file['tmp_name']) === FALSE

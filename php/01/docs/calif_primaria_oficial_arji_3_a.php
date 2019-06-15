@@ -82,8 +82,8 @@ foreach ($arrAlu as $i => $value) {
 			$pdf->Cell($anchoCol,$pdf->nFont,number_format(ROUND($result[$j]->bim0,1),1),'',0,'C');
 			$pdf->Cell($anchoCol,$pdf->nFont,number_format(ROUND($result[$j]->bim1,1),1),'',0,'C');
 			$pdf->Cell($anchoCol,$pdf->nFont,number_format(ROUND($result[$j]->bim2,1),1),'',0,'C');
-			$pdf->Cell($anchoCol,$pdf->nFont,number_format(ROUND($result[$j]->bim3,1),1),'',0,'C');
-			$pdf->Cell($anchoCol,$pdf->nFont,number_format(ROUND($result[$j]->bim4,1),1),'',0,'C');
+			// $pdf->Cell($anchoCol,$pdf->nFont,number_format(ROUND($result[$j]->bim3,1),1),'',0,'C');
+			// $pdf->Cell($anchoCol,$pdf->nFont,number_format(ROUND($result[$j]->bim4,1),1),'',0,'C');
 			$pdf->Cell($anchoCol,$pdf->nFont,number_format(ROUND($result[$j]->promcalof,1),1),'',1,'C');
 
 		}
@@ -92,8 +92,8 @@ foreach ($arrAlu as $i => $value) {
 			$bim0 += intval($rst[$j]->inabim0);		
 			$bim1 += intval($rst[$j]->inabim1);		
 			$bim2 += intval($rst[$j]->inabim2);		
-			$bim3 += intval($rst[$j]->inabim3);		
-			$bim4 += intval($rst[$j]->inabim4);		
+			// $bim3 += intval($rst[$j]->inabim3);		
+			// $bim4 += intval($rst[$j]->inabim4);		
 		}	
 		$totalFaltas = $bim0 + $bim1 + $bim2 + $bim3 + $bim4;
 		$pdf->setX(floatval($arPos[0]));
@@ -102,8 +102,8 @@ foreach ($arrAlu as $i => $value) {
 		$pdf->Cell($anchoCol,$pdf->nFont,$bim0>0?$bim0:'','',0,'C');
 		$pdf->Cell($anchoCol,$pdf->nFont,$bim1>0?$bim1:'','',0,'C');
 		$pdf->Cell($anchoCol,$pdf->nFont,$bim2>0?$bim2:'','',0,'C');
-		$pdf->Cell($anchoCol,$pdf->nFont,$bim3>0?$bim3:'','',0,'C');
-		$pdf->Cell($anchoCol,$pdf->nFont,$bim4>0?$bim4:'','',0,'C');
+		// $pdf->Cell($anchoCol,$pdf->nFont,$bim3>0?$bim3:'','',0,'C');
+		// $pdf->Cell($anchoCol,$pdf->nFont,$bim4>0?$bim4:'','',0,'C');
 		$pdf->Cell($anchoCol,$pdf->nFont,$totalFaltas>0?$totalFaltas:'','',1,'C');
 
 
@@ -231,20 +231,20 @@ foreach ($arrAlu as $i => $value) {
 				$pdf->setX( floatval($ar[0]) );
 				$pdf->Cell($anchoCol+8,$pdf->nFont,'X','',1,'R');
 				break;
-			case 4:
-				$pdf->setX(0);
-				$ar = explode(';',$Pos[0]->esc3);
-				$pdf->setY( floatval($ar[1]) );
-				$pdf->setX( floatval($ar[0]) );
-				$pdf->Cell($anchoCol+8,$pdf->nFont,'X','',1,'R');
-				break;
-			case 5:
-				$pdf->setX(0);
-				$ar = explode(';',$Pos[0]->esc4);
-				$pdf->setY( floatval($ar[1]) );
-				$pdf->setX( floatval($ar[0]) );
-				$pdf->Cell($anchoCol+8,$pdf->nFont,'X','',1,'R');
-				break;
+			// case 4:
+			// 	$pdf->setX(0);
+			// 	$ar = explode(';',$Pos[0]->esc3);
+			// 	$pdf->setY( floatval($ar[1]) );
+			// 	$pdf->setX( floatval($ar[0]) );
+			// 	$pdf->Cell($anchoCol+8,$pdf->nFont,'X','',1,'R');
+			// 	break;
+			// case 5:
+			// 	$pdf->setX(0);
+			// 	$ar = explode(';',$Pos[0]->esc4);
+			// 	$pdf->setY( floatval($ar[1]) );
+			// 	$pdf->setX( floatval($ar[0]) );
+			// 	$pdf->Cell($anchoCol+8,$pdf->nFont,'X','',1,'R');
+			// 	break;
 			default:
 				# code...
 				break;
@@ -284,20 +284,20 @@ foreach ($arrAlu as $i => $value) {
 				$pdf->setX( floatval($ar[0]) );
 				$pdf->Cell($anchoCol+8,$pdf->nFont,'X','',1,'R');
 				break;
-			case 4:
-				$pdf->setX(0);
-				$ar = explode(';',$Pos[0]->lec3);
-				$pdf->setY( floatval($ar[1]) );
-				$pdf->setX( floatval($ar[0]) );
-				$pdf->Cell($anchoCol+8,$pdf->nFont,'X','',1,'R');
-				break;
-			case 5:
-				$pdf->setX(0);
-				$ar = explode(';',$Pos[0]->lec4);
-				$pdf->setY( floatval($ar[1]) );
-				$pdf->setX( floatval($ar[0]) );
-				$pdf->Cell($anchoCol+8,$pdf->nFont,'X','',1,'R');
-				break;
+			// case 4:
+			// 	$pdf->setX(0);
+			// 	$ar = explode(';',$Pos[0]->lec3);
+			// 	$pdf->setY( floatval($ar[1]) );
+			// 	$pdf->setX( floatval($ar[0]) );
+			// 	$pdf->Cell($anchoCol+8,$pdf->nFont,'X','',1,'R');
+			// 	break;
+			// case 5:
+			// 	$pdf->setX(0);
+			// 	$ar = explode(';',$Pos[0]->lec4);
+			// 	$pdf->setY( floatval($ar[1]) );
+			// 	$pdf->setX( floatval($ar[0]) );
+			// 	$pdf->Cell($anchoCol+8,$pdf->nFont,'X','',1,'R');
+			// 	break;
 			default:
 				# code...
 				break;
@@ -337,20 +337,20 @@ foreach ($arrAlu as $i => $value) {
 				$pdf->setX( floatval($ar[0]) );
 				$pdf->Cell($anchoCol+8,$pdf->nFont,'X','',1,'R');
 				break;
-			case 4:
-				$pdf->setX(0);
-				$ar = explode(';',$Pos[0]->mate3);
-				$pdf->setY( floatval($ar[1]) );
-				$pdf->setX( floatval($ar[0]) );
-				$pdf->Cell($anchoCol+8,$pdf->nFont,'X','',1,'R');
-				break;
-			case 5:
-				$pdf->setX(0);
-				$ar = explode(';',$Pos[0]->mate4);
-				$pdf->setY( floatval($ar[1]) );
-				$pdf->setX( floatval($ar[0]) );
-				$pdf->Cell($anchoCol+8,$pdf->nFont, 'X' ,'',1,'R');
-				break;
+			// case 4:
+			// 	$pdf->setX(0);
+			// 	$ar = explode(';',$Pos[0]->mate3);
+			// 	$pdf->setY( floatval($ar[1]) );
+			// 	$pdf->setX( floatval($ar[0]) );
+			// 	$pdf->Cell($anchoCol+8,$pdf->nFont,'X','',1,'R');
+			// 	break;
+			// case 5:
+			// 	$pdf->setX(0);
+			// 	$ar = explode(';',$Pos[0]->mate4);
+			// 	$pdf->setY( floatval($ar[1]) );
+			// 	$pdf->setX( floatval($ar[0]) );
+			// 	$pdf->Cell($anchoCol+8,$pdf->nFont, 'X' ,'',1,'R');
+			// 	break;
 			default:
 				# code...
 				break;

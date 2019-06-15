@@ -40,17 +40,17 @@ class PDF_Diag extends PDF_Sector {
 		$this->Cell(70,6,utf8_decode($this->nombreEmpresa),'',1,'L');
 	    $this->setX(40);
 		$this->SetFont('Arial','B',12);
-		$this->Cell(100,6,utf8_decode("ANÁLISIS DE ".strtoupper($this->tConcepto)),'',1,'L');
+		$this->Cell(100,6,utf8_decode("ANÁLISIS DE ".utf8_decode(strtoupper($this->tConcepto))),'',1,'L');
 	    $this->setX(40);
 		$this->SetFont('Arial','',9);
 		if ($this->IdGrupo == 0){
 			$this->Cell(13,6,"NIVEL: ",'',0,'L');
 			$this->SetFont('Arial','B',9);
-			$this->Cell(55,6,strtoupper($this->cClave_Nivel),'',0,'L');
+			$this->Cell(55,6,utf8_decode(strtoupper($this->cClave_Nivel)),'',0,'L');
 		}else{
 			$this->Cell(15,6,"GRUPO: ",'',0,'L');
 			$this->SetFont('Arial','B',9);
-			$this->Cell(53,6,strtoupper($this->cIdGrupo),'',0,'L');
+			$this->Cell(53,6,utf8_decode(strtoupper($this->cIdGrupo)),'',0,'L');
 		}
 		$this->SetFont('Arial','',6);
 		$this->Cell(100,6,utf8_decode("FECHA DE IMPRESION: ").DATE('d-m-Y h:m:s'),'',1,'R');
@@ -111,8 +111,13 @@ class PDF_Diag extends PDF_Sector {
 		$this->SetFillColor(255,125,125);
 		$this->Cell($this->aC,6,'#','LBTR',0,'C',true);
 		$this->Cell(2,6,'','',0,'L',false);
-		$this->Cell(30,6,'ADEUDO','',1,'L',false);
-
+		$this->Cell(30,6,'TIENE ADEUDO','',0,'L',false);
+	    
+		// Cancelado
+		$this->SetFillColor(128,128,255);
+		$this->Cell($this->aC,6,'#','LBTR',0,'C',true);
+		$this->Cell(2,6,'','',0,'L',false);
+		$this->Cell(30,6,'FUE CANCELADO','',1,'L',false);
 	    
 	    //Position at 1.5 cm from bottom
 	    $this->SetY(-10);
@@ -216,6 +221,14 @@ if ( count($rsAlu) > 0 ){
 						}
 
 						$pdf->Cell($pdf->aC,6,'',$cuadro,$cierre,'C',true);
+					}else if (intval($rsPago[$j-1]->status_movto) == 2){
+						if ($leyenda != 'PAG'){						
+							$leyenda = (($numPagos == $numPago) && ($numPagos > 0)) ? 'PAG' : $rsPago[$j-1]->num_pago;
+						}else{
+							$leyenda = ' ';
+						}
+						$pdf->SetFillColor(128,128,255);
+						$pdf->Cell($pdf->aC,6,$leyenda,$cuadro,$cierre,'C',true);
 					}else{
 						if ($leyenda != 'PAG'){						
 							$leyenda = (($numPagos == $numPago) && ($numPagos > 0)) ? 'PAG' : $rsPago[$j-1]->num_pago;

@@ -1079,8 +1079,9 @@ class oCentura {
 								parse_str($arg);
 								$idprofesor = $this->getIdProfFromIdUser($idprofesor);
 								$idciclo = $this->getCicloFromIdEmp($idemp);
+										// FROM _viGrupo_Materias WHERE idciclo = $idciclo AND idprofesor = $idprofesor AND isagrupadora = 0 AND grupo_visible = 1 
 								$query = "SELECT DISTINCT grupo AS label, idgrupo AS data, ispai_grupo 
-										FROM _viGrupo_Materias WHERE idciclo = $idciclo AND idprofesor = $idprofesor AND isagrupadora = 0 AND grupo_visible = 1 
+										FROM _viGrupo_Materias WHERE idciclo = $idciclo AND idprofesor = $idprofesor AND grupo_visible = 1 
 										$otros ";
 								break;		
 
@@ -2681,6 +2682,7 @@ class oCentura {
 								$promedia_oficial = !isset($promedia_oficial)?0:1;
 								$promedia_interno = !isset($promedia_interno)?0:1;
 								$is_inasistencia  = !isset($is_inasistencia)?0:1;
+								$ver_nivel_logro  = !isset($ver_nivel_logro)?0:1;
 
 								$query = "INSERT INTO grupo_materias(
 																	idciclo,
@@ -2705,6 +2707,7 @@ class oCentura {
 																	promedia_oficial,
 																	promedia_interno,
 																	is_inasistencia,
+																	ver_nivel_logro,
 																	tap0,
 																	tap1,
 																	tap2,
@@ -2733,6 +2736,7 @@ class oCentura {
 																	$promedia_oficial,
 																	$promedia_interno,
 																	$is_inasistencia,
+																	$ver_nivel_logro,
 																	$tap0,
 																	$tap1,
 																	$tap2,
@@ -2753,6 +2757,7 @@ class oCentura {
 								$promedia_oficial = !isset($promedia_oficial)?0:1;
 								$promedia_interno = !isset($promedia_interno)?0:1;
 								$is_inasistencia  = !isset($is_inasistencia)?0:1;
+								$ver_nivel_logro  = !isset($ver_nivel_logro)?0:1;
 
 								$query = "UPDATE grupo_materias SET 	
 																idciclo = $idciclo,
@@ -2777,6 +2782,7 @@ class oCentura {
 																promedia_oficial = $promedia_oficial,
 																promedia_interno = $promedia_interno,
 																is_inasistencia = $is_inasistencia,
+																ver_nivel_logro = $ver_nivel_logro,
 																tap0 = $tap0,
 																tap1 = $tap1,
 																tap2 = $tap2,
@@ -5743,7 +5749,7 @@ class oCentura {
 									cal2, con2, ina2, obs2, cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, 
 									cal5, con5, ina5, obs5, cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
 									promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo, isagrupadora_grumat,
-									orden_impresion
+									orden_impresion, ver_nivel_logro
 								FROM _viBoletas
 							WHERE idgrualu = $idgrualu AND padre <= 0 AND (idmatclas in (1,2,3,4,5) ) $otros ";
 				break;
@@ -5755,7 +5761,7 @@ class oCentura {
 									cal2, con2, ina2, obs2, cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, 
 									cal5, con5, ina5, obs5, cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
 									promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo, 
-									orden_impresion, padre
+									orden_impresion, padre, ver_nivel_logro
 								FROM _viBoletas
 							WHERE idgrualu = $idgrualu AND padre > 0 AND (idmatclas in (1,2,3,4,5) ) AND orden_impresion <= 100 $otros ";
 				break;
@@ -5766,7 +5772,7 @@ class oCentura {
 									cal2, con2, ina2, obs2, cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, 
 									cal5, con5, ina5, obs5, cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
 									promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo,
-									promcalof, orden_impresion
+									promcalof, orden_impresion, ver_nivel_logro
 								FROM _viBoletas
 							   WHERE (idgrualu = $idgrualu) AND (padre <= 0) AND (idioma = 0) AND (idmatclas <= 5) $otros ";
 							// WHERE (idgrualu = $idgrualu) AND (padre <= 0) AND (idmatclas <= 5) $otros ";
@@ -5778,7 +5784,7 @@ class oCentura {
 									cal2, con2, ina2, obs2, cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, 
 									cal5, con5, ina5, obs5, cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
 									promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo,
-									promcalof, orden_impresion
+									promcalof, orden_impresion, ver_nivel_logro
 								FROM _viBoletas
 							WHERE (idgrualu = $idgrualu) AND (padre > 0) AND (idioma = 0) AND ( idmatclas in (1,2,3,4,5) ) $otros ";
 				break;
@@ -5788,7 +5794,8 @@ class oCentura {
 									profesor, alumno, cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, 
 									cal2, con2, ina2, obs2, cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, 
 									cal5, con5, ina5, obs5, cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
-									promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo, orden_impresion
+									promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo, orden_impresion, 
+									ver_nivel_logro
 								FROM _viBoletas 
 								WHERE (idgrualu = $idgrualu) AND (idioma = 1) AND (idmatclas <= 5) $otros ";
 							// WHERE (idgrualu = $idgrualu) AND (padre <= 0) AND (idioma = 1) AND (idmatclas <= 5) $otros ";
@@ -5799,7 +5806,8 @@ class oCentura {
 									profesor, alumno, cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, 
 									cal2, con2, ina2, obs2, cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, 
 									cal5, con5, ina5, obs5, cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
-									promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo, orden_impresion
+									promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo, orden_impresion, 
+									ver_nivel_logro
 								FROM _viBoletas
 							WHERE (idgrualu = $idgrualu) AND (padre > 0) AND (idioma = 1) AND ( idmatclas in (1,2,3,4,5) ) $otros ";
 				break;
@@ -6216,9 +6224,10 @@ class oCentura {
 			        $ncal = "bim".$numval;
 		        }
 		        
-					$query = "SELECT ".$ncal." AS cal, idmatclas, padre
-									FROM _viXUpdate_Boletas
-								WHERE idgrualu = $idgrualu AND idgrumat = $idgrumat $otros ";
+				$query = "SELECT ".$ncal." AS cal, idmatclas, padre
+								FROM _viXUpdate_Boletas
+							WHERE idgrualu = $idgrualu AND idgrumat = $idgrumat $otros ";
+
 				break; //   _viBolOf   _viXUpdate_Boletas
 
 			case 94:

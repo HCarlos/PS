@@ -102,7 +102,7 @@ if ( $v2 !== md5($user.$idcommensaje) ||  $isExistUser <= 0 ){
 
 function saveFileTarea($file,$descripcion="",$arr,$objeto,$idcommensaje,$idemp,$i){
 	if( isset($file) ){
-		if(!preg_match('/\.(jpe?g|gif|png|pdf|doc|docx|xls|xlsx|ppt|pptx|txt|pages|key|numbers)$/' , $file['name'])
+		if(!preg_match('/\.(jpe?g|gif|png|pdf|doc|docx|xls|xlsx|ppt|pptx|txt|pages|key|numbers|svg)$/' , $file['name'])
 			
 		) {
 		

@@ -269,7 +269,6 @@ jQuery(function($) {
         }
     });
 
-
     function getGposProf(IdProfesor){
         var idemp = localStorage.IdEmp;
         var nc = "idprofesor="+IdProfesor+"&idemp="+idemp;
@@ -280,8 +279,7 @@ jQuery(function($) {
                     $("#lstGposProf").append('<option value="'+item.data+'"> '+item.label+'</option>');
                 });
             }, "json"
-        );  
-
+        );
     }
 
     $("#lstGposProf").on("change",function(event){
@@ -304,9 +302,7 @@ jQuery(function($) {
                 });
             }, "json"
         );  
-
     }
-
 
     $("#lstMateria").on("change",function(event){
         event.preventDefault();
@@ -318,7 +314,6 @@ jQuery(function($) {
             $("#btnPrintListaAsistencia01").show();
             onClickFillTable();
         }
-    });
 
 
     $("#lstEval").on("change",function(event){

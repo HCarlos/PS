@@ -79,12 +79,12 @@ class PDF_Diag extends PDF_Sector {
 		$this->SetFont('Arial','B',8);
 		$this->Cell(10,$this->nFont,"#",'',0,'C');
 		$this->Cell(87,$this->nFont,"NOBRE DEL ALUMNO",'L',0,'L');
-		$this->Cell(18,$this->nFont,"B1",'L',0,'C');
-		$this->Cell(18,$this->nFont,"B2",'L',0,'C');
-		$this->Cell(18,$this->nFont,"B3",'L',0,'C');
-		$this->Cell(18,$this->nFont,"B4",'L',0,'C');
-		$this->Cell(18,$this->nFont,"B5",'L',0,'C');
-		$this->Cell(18,$this->nFont,"PROM",'L',1,'C');
+		$this->Cell(27,$this->nFont,"B1",'L',0,'C');
+		$this->Cell(27,$this->nFont,"B2",'L',0,'C');
+		$this->Cell(27,$this->nFont,"B3",'L',0,'C');
+		// $this->Cell(18,$this->nFont,"B4",'L',0,'C');
+		// $this->Cell(18,$this->nFont,"B5",'L',0,'C');
+		$this->Cell(27,$this->nFont,"PROM",'L',1,'C');
 
     }
 	
@@ -222,12 +222,12 @@ if ( count($result)>0  ){
 		}	
 		$pdf->Cell(10,$pdf->nFont,$result[$j]->num_lista,'L',0,'C',$vBool);
 		$pdf->Cell(87,$pdf->nFont,utf8_decode($result[$j]->alumno),'L',0,'L',$vBool);
-		$pdf->Cell(18,$pdf->nFont,$pdf->FormatCal(floatval($result[$j]->cal0),floatval($result[$j]->con0),floatval($result[$j]->ina0)),'L',0,'C',$vBool);
-		$pdf->Cell(18,$pdf->nFont,$pdf->FormatCal(floatval($result[$j]->cal1),floatval($result[$j]->con1),floatval($result[$j]->ina1)),'L',0,'C',$vBool);
-		$pdf->Cell(18,$pdf->nFont,$pdf->FormatCal(floatval($result[$j]->cal2),floatval($result[$j]->con2),floatval($result[$j]->ina2)),'L',0,'C',$vBool);
-		$pdf->Cell(18,$pdf->nFont,$pdf->FormatCal(floatval($result[$j]->cal3),floatval($result[$j]->con3),floatval($result[$j]->ina3)),'L',0,'C',$vBool);
-		$pdf->Cell(18,$pdf->nFont,$pdf->FormatCal(floatval($result[$j]->cal4),floatval($result[$j]->con4),floatval($result[$j]->ina4)),'L',0,'C',$vBool);
-		$pdf->Cell(18,$pdf->nFont,$pdf->FormatCal(floatval($result[$j]->promcal),floatval($result[$j]->promcon),floatval($result[$j]->sumina)),'LR',1,'C',$vBool);
+		$pdf->Cell(27,$pdf->nFont,$pdf->FormatCal(floatval($result[$j]->cal0),floatval($result[$j]->con0),floatval($result[$j]->ina0)),'L',0,'C',$vBool);
+		$pdf->Cell(27,$pdf->nFont,$pdf->FormatCal(floatval($result[$j]->cal1),floatval($result[$j]->con1),floatval($result[$j]->ina1)),'L',0,'C',$vBool);
+		$pdf->Cell(27,$pdf->nFont,$pdf->FormatCal(floatval($result[$j]->cal2),floatval($result[$j]->con2),floatval($result[$j]->ina2)),'L',0,'C',$vBool);
+		// $pdf->Cell(18,$pdf->nFont,$pdf->FormatCal(floatval($result[$j]->cal3),floatval($result[$j]->con3),floatval($result[$j]->ina3)),'L',0,'C',$vBool);
+		// $pdf->Cell(18,$pdf->nFont,$pdf->FormatCal(floatval($result[$j]->cal4),floatval($result[$j]->con4),floatval($result[$j]->ina4)),'L',0,'C',$vBool);
+		$pdf->Cell(27,$pdf->nFont,$pdf->FormatCal(floatval($result[$j]->promcal),floatval($result[$j]->promcon),floatval($result[$j]->sumina)),'LR',1,'C',$vBool);
 
 	}
 

@@ -339,6 +339,14 @@ class oMetodos {
 	}
 
 
+	public function  Llamar_Actualiza_Boleta_Datos_Secundarios($idgrualu=0) {
+			
+		$query = "Set @X =  Llamar_Actualiza_Boleta_Datos_Secundarios(".$idgrualu.")";
+		$ret = $this->execQuery($query);
+
+	    return $ret;
+
+	}
 
 
 	public function Copiar_Promedio_a_Promedios_Oficiales_por_Alumno($idalumno=0,$idnivel=0,$user='',$valor=0,$grado=0) {

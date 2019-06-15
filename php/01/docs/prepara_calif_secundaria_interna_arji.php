@@ -26,6 +26,7 @@ $M = oMetodos::getInstance();
 $ret = array();
 
 $arrAlu = explode(",",$strgrualu);
+$O0 = $M->Llamar_Actualiza_Boleta_Datos_Secundarios($arrAlu[0]);
 $O1 = $M->Llamar_Actualiza_Promedios_Boletas_por_Grupo($arrAlu[0]);
 $O2 = $M->Actualizar_Promedios_Grupales(0,0,$user,$arrAlu[0]);
 $dato = "";

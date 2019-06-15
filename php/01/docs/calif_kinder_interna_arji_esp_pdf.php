@@ -142,6 +142,7 @@ class PDF_Diag extends PDF_Sector {
 
 	}
 
+
 	function FormatCal($cal=0,$d=0,$ina=false){
 		$calx = "";
 		$vc = intval($cal);

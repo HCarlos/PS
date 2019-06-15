@@ -104,7 +104,7 @@ class PDF_Diag extends PDF_Sector {
 
 	}
 
-	function FormatCal($cal=0,$con=0,$ina=0){
+	function FormatCal($cal=0,$con=0,$ina=0,$ver_nivel_logro=1){
 		$calx = "";
 		$conx = "";
 		$inax = "";
@@ -125,6 +125,12 @@ class PDF_Diag extends PDF_Sector {
 		}else{
 			$conx = " ";
 		}
+
+		if (!$ver_nivel_logro){
+			$conx = " ";
+		}
+
+
 
 		if ($cal>0){
 			return str_pad($calx, 3, " ", STR_PAD_LEFT).' '.str_pad($conx, 3, " ", STR_PAD_LEFT);
@@ -198,7 +204,8 @@ foreach ($arrAlu as $i => $value) {
 	if ( count($result)>0  ){
 
 
-		$pdf->alumno = $result[0]->alumno; //." - ".$arrAlu[$i];
+		// $pdf->alumno = $result[0]->alumno." - ".$arrAlu[$i];
+		$pdf->alumno = $result[0]->alumno;
 		$pdf->num_lista = $result[0]->num_lista;
 		$pdf->grupo = $result[0]->grupo;
 		$pdf->ciclo = $result[0]->ciclo;
@@ -241,6 +248,8 @@ foreach ($arrAlu as $i => $value) {
 				$pdf->Cell(4,4,'','',0,'L',true);
 				$pdf->SetFillColor(255);
 				$pdf->Cell(80,4,utf8_decode($result[$j]->materia),'',0,'L');
+				// $pdf->Cell(80,4,utf8_decode($result[$j]->materia).' '.$result[$j]->idgrumat.' '.$result[$j]->idboleta ,'',0,'L');
+				$ver_nivel_logro = $result[$j]->ver_nivel_logro;
 
 				$pdf->SetFont('Courier','',7);
 				if ($j==0){
@@ -279,13 +288,13 @@ foreach ($arrAlu as $i => $value) {
 					}
 
 				}
-				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal0),'',0,'C');
-				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal1),'',0,'C');
-				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal2),'',0,'C');
-				// $pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal3),'',0,'C');
-				// $pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal4),'',0,'C');
-				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->promcal),'',0,'C');
-				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->promcalgpo),'',1,'C');
+				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal0,0,0,$ver_nivel_logro),'',0,'C');
+				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal1,0,0,$ver_nivel_logro),'',0,'C');
+				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal2,0,0,$ver_nivel_logro),'',0,'C');
+				// $pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal3,0,0,$ver_nivel_logro),'',0,'C');
+				// $pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal4,0,0,$ver_nivel_logro),'',0,'C');
+				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->promcal,0,0,$ver_nivel_logro),'',0,'C');
+				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->promcalgpo,0,0,$ver_nivel_logro),'',1,'C');
 
 			}
 		}
@@ -309,13 +318,13 @@ foreach ($arrAlu as $i => $value) {
 
 			$pdf->lastupdate = $prom[$j]->modi_el;
 
-			$pdf->Cell(16,4,$pdf->FormatCal($prom[$j]->cal0),'',0,'C');
-			$pdf->Cell(16,4,$pdf->FormatCal($prom[$j]->cal1),'',0,'C');
-			$pdf->Cell(16,4,$pdf->FormatCal($prom[$j]->cal2),'',0,'C');
+			$pdf->Cell(16,4,$pdf->FormatCal($prom[$j]->cal0,0,0,$ver_nivel_logro),'',0,'C');
+			$pdf->Cell(16,4,$pdf->FormatCal($prom[$j]->cal1,0,0,$ver_nivel_logro),'',0,'C');
+			$pdf->Cell(16,4,$pdf->FormatCal($prom[$j]->cal2,0,0,$ver_nivel_logro),'',0,'C');
 			// $pdf->Cell(16,4,$pdf->FormatCal($prom[$j]->cal3),'',0,'C');
 			// $pdf->Cell(16,4,$pdf->FormatCal($prom[$j]->cal4),'',0,'C');
-			$pdf->Cell(16,4,$pdf->FormatCal($prom[$j]->promcal),'',0,'C');
-			$pdf->Cell(16,4,$pdf->FormatCal($prom[$j]->promcalgpo),'R',1,'C');
+			$pdf->Cell(16,4,$pdf->FormatCal($prom[$j]->promcal,0,0,$ver_nivel_logro),'',0,'C');
+			$pdf->Cell(16,4,$pdf->FormatCal($prom[$j]->promcalgpo,0,0,$ver_nivel_logro),'R',1,'C');
 
 		}
 
@@ -339,12 +348,12 @@ foreach ($arrAlu as $i => $value) {
 		$pdf->SetFont('Courier','',7);
 		foreach ($gpo as $j => $value) {
 
-			$pdf->Cell(16,4,$pdf->FormatCal($gpo[$j]->cal0),'',0,'C');
-			$pdf->Cell(16,4,$pdf->FormatCal($gpo[$j]->cal1),'',0,'C');
-			$pdf->Cell(16,4,$pdf->FormatCal($gpo[$j]->cal2),'',0,'C');
+			$pdf->Cell(16,4,$pdf->FormatCal($gpo[$j]->cal0,0,0,$ver_nivel_logro),'',0,'C');
+			$pdf->Cell(16,4,$pdf->FormatCal($gpo[$j]->cal1,0,0,$ver_nivel_logro),'',0,'C');
+			$pdf->Cell(16,4,$pdf->FormatCal($gpo[$j]->cal2,0,0,$ver_nivel_logro),'',0,'C');
 			// $pdf->Cell(16,4,$pdf->FormatCal($gpo[$j]->cal3),'',0,'C');
 			// $pdf->Cell(16,4,$pdf->FormatCal($gpo[$j]->cal4),'',0,'C');
-			$pdf->Cell(16,4,$pdf->FormatCal($gpo[$j]->promcal),'',0,'C');
+			$pdf->Cell(16,4,$pdf->FormatCal($gpo[$j]->promcal,0,0,$ver_nivel_logro),'',0,'C');
 			$pdf->Cell(16,4,'','',1,'C');
 
 		}
@@ -376,14 +385,15 @@ foreach ($arrAlu as $i => $value) {
 				$pdf->setX(5);
 				$pdf->SetFont('Arial','',7);
 				$pdf->Cell(84,4,utf8_decode($result[$j]->materia),'',0,'L');
+				// $pdf->Cell(84,4,utf8_decode($result[$j]->materia).' '.$result[$j]->idgrumat.' '.$result[$j]->idboleta,'',0,'L');
 				$pdf->SetFont('Courier','',7);
-				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal0,$result[$j]->con0,$result[$j]->ina0),'',0,'C');
-				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal1,$result[$j]->con1,$result[$j]->ina1),'',0,'C');
-				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal2,$result[$j]->con2,$result[$j]->ina2),'',0,'C');
+				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal0,$result[$j]->con0,$result[$j]->ina0,$ver_nivel_logro),'',0,'C');
+				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal1,$result[$j]->con1,$result[$j]->ina1,$ver_nivel_logro),'',0,'C');
+				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal2,$result[$j]->con2,$result[$j]->ina2,$ver_nivel_logro),'',0,'C');
 				// $pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal3,$result[$j]->con3,$result[$j]->ina3),'',0,'C');
 				// $pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal4,$result[$j]->con4,$result[$j]->ina4),'',0,'C');
-				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->promcal,$result[$j]->promcon,$result[$j]->sumina),'',0,'C');
-				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->promcalgpo,$result[$j]->promcongpo,$result[$j]->suminagpo),'',1,'C');
+				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->promcal,$result[$j]->promcon,$result[$j]->sumina,$ver_nivel_logro),'',0,'C');
+				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->promcalgpo,$result[$j]->promcongpo,$result[$j]->suminagpo,$ver_nivel_logro),'',1,'C');
 
 			}
 		}
@@ -477,15 +487,15 @@ foreach ($arrAlu as $i => $value) {
 				}
 
 
-				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal0),'',0,'C');
-				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal1),'',0,'C');
-				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal2),'',0,'C');
+				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal0,0,0,$ver_nivel_logro),'',0,'C');
+				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal1,0,0,$ver_nivel_logro),'',0,'C');
+				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal2,0,0,$ver_nivel_logro),'',0,'C');
 				// $pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal3),'',0,'C');
 				// $pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal4),'',0,'C');
 
-				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->promcal),'',0,'C');
+				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->promcal,0,0,$ver_nivel_logro),'',0,'C');
 				// $pdf->Cell(10,4,bcdiv($result[$j]->promcal,'1',0),'',0,'C');
-				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->promcalgpo),'',1,'C');
+				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->promcalgpo,0,0,$ver_nivel_logro),'',1,'C');
 			}
 		}
 
@@ -504,15 +514,15 @@ foreach ($arrAlu as $i => $value) {
 		$pdf->SetFont('Courier','',7);
 		foreach ($prom as $j => $value) {
 
-			$pdf->Cell(16,4,$pdf->FormatCal($prom[$j]->cal0),'',0,'C');
-			$pdf->Cell(16,4,$pdf->FormatCal($prom[$j]->cal1),'',0,'C');
-			$pdf->Cell(16,4,$pdf->FormatCal($prom[$j]->cal2),'',0,'C');
+			$pdf->Cell(16,4,$pdf->FormatCal($prom[$j]->cal0,0,0,$ver_nivel_logro),'',0,'C');
+			$pdf->Cell(16,4,$pdf->FormatCal($prom[$j]->cal1,0,0,$ver_nivel_logro),'',0,'C');
+			$pdf->Cell(16,4,$pdf->FormatCal($prom[$j]->cal2,0,0,$ver_nivel_logro),'',0,'C');
 			// $pdf->Cell(16,4,$pdf->FormatCal($prom[$j]->cal3),'',0,'C');
 			// $pdf->Cell(16,4,$pdf->FormatCal($prom[$j]->cal4),'',0,'C');
 
-			$pdf->Cell(16,4,$pdf->FormatCal($prom[$j]->promcal),'',0,'C');
+			$pdf->Cell(16,4,$pdf->FormatCal($prom[$j]->promcal,0,0,$ver_nivel_logro),'',0,'C');
 
-			$pdf->Cell(16,4,$pdf->FormatCal($prom[$j]->promcalgpo),'R',1,'C');
+			$pdf->Cell(16,4,$pdf->FormatCal($prom[$j]->promcalgpo,0,0,$ver_nivel_logro),'R',1,'C');
 
 		}
 
@@ -537,12 +547,12 @@ foreach ($arrAlu as $i => $value) {
 		foreach ($gpo as $j => $value) {
 
 //			$pdf->Cell(16,4,$gpo[$j]->cal0,'',0,'C');
-			$pdf->Cell(16,4,$pdf->FormatCal($gpo[$j]->cal0),'',0,'C');
-			$pdf->Cell(16,4,$pdf->FormatCal($gpo[$j]->cal1),'',0,'C');
-			$pdf->Cell(16,4,$pdf->FormatCal($gpo[$j]->cal2),'',0,'C');
+			$pdf->Cell(16,4,$pdf->FormatCal($gpo[$j]->cal0,0,0,$ver_nivel_logro),'',0,'C');
+			$pdf->Cell(16,4,$pdf->FormatCal($gpo[$j]->cal1,0,0,$ver_nivel_logro),'',0,'C');
+			$pdf->Cell(16,4,$pdf->FormatCal($gpo[$j]->cal2,0,0,$ver_nivel_logro),'',0,'C');
 			// $pdf->Cell(16,4,$pdf->FormatCal($gpo[$j]->cal3),'',0,'C');
 			// $pdf->Cell(16,4,$pdf->FormatCal($gpo[$j]->cal4),'',0,'C');
-			$pdf->Cell(16,4,$pdf->FormatCal($gpo[$j]->promcal),'',0,'C');
+			$pdf->Cell(16,4,$pdf->FormatCal($gpo[$j]->promcal,0,0,$ver_nivel_logro),'',0,'C');
 			$pdf->Cell(16,4,'','',1,'C');
 
 		}
@@ -575,13 +585,13 @@ foreach ($arrAlu as $i => $value) {
 				$pdf->SetFont('Arial','',7);
 				$pdf->Cell(84,4,utf8_decode($result[$j]->materia),'',0,'L');
 				$pdf->SetFont('Courier','',7);
-				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal0,$result[$j]->con0,$result[$j]->ina0),'',0,'C');
-				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal1,$result[$j]->con1,$result[$j]->ina1),'',0,'C');
-				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal2,$result[$j]->con2,$result[$j]->ina2),'',0,'C');
+				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal0,$result[$j]->con0,$result[$j]->ina0,$ver_nivel_logro),'',0,'C');
+				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal1,$result[$j]->con1,$result[$j]->ina1,$ver_nivel_logro),'',0,'C');
+				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal2,$result[$j]->con2,$result[$j]->ina2,$ver_nivel_logro),'',0,'C');
 				// $pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal3,$result[$j]->con3,$result[$j]->ina3),'',0,'C');
 				// $pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal4,$result[$j]->con4,$result[$j]->ina4),'',0,'C');
-				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->promcal,$result[$j]->promcon,$result[$j]->sumina),'',0,'C');
-				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->promcalgpo,$result[$j]->promcongpo,$result[$j]->suminagpo),'',1,'C');
+				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->promcal,$result[$j]->promcon,$result[$j]->sumina,$ver_nivel_logro),'',0,'C');
+				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->promcalgpo,$result[$j]->promcongpo,$result[$j]->suminagpo,$ver_nivel_logro),'',1,'C');
 			
 			}
 		

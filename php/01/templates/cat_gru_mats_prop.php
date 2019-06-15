@@ -212,6 +212,16 @@ $idciclo =  $_POST['idciclo'];
 			    </div>
 
 				<div class="form-group ">
+			    	<label for="ver_nivel_logro" class="col-lg-4 control-label">Ver Nivel Logro</label>
+			    	<div class="col-lg-8">
+						<label>
+							<input name="ver_nivel_logro" id="ver_nivel_logro" class="ace ace-switch ace-switch-6" type="checkbox">
+							<span class="lbl"></span>
+						</label>
+		      		</div>
+			    </div>
+
+				<div class="form-group ">
 			    	<label for="tap0" class="col-lg-4 control-label">Total Asist. Per. 1</label>
 			    	<div class="col-lg-8">
 				    	<input type="number" class="form-control altoMoz" id="tap0" name="tap0" value='0' min="0" max="200" step="1" >
@@ -319,6 +329,7 @@ jQuery(function($) {
 					$("#promedia_oficial").prop("checked",json[0].promedia_oficial==1?true:false);	
 					$("#promedia_interno").prop("checked",json[0].promedia_interno==1?true:false);	
 					$("#is_inasistencia").prop("checked",json[0].is_inasistencia==1?true:false);	
+					$("#ver_nivel_logro").prop("checked",json[0].ver_nivel_logro==1?true:false);	
 					$("#tap0").val(json[0].tap0);
 					$("#tap1").val(json[0].tap1);
 					$("#tap2").val(json[0].tap2);
