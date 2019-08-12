@@ -1202,8 +1202,7 @@ class oCentura {
 												idemp = $idemp AND 
 												idciclo = $idciclo AND 
 												iduseralu = $idgrualu AND 
-												status_grualu = 1 AND 
-												grupo_bloqueado = 0 
+												status_grualu = 1  
 										limit 1";
 								break;		
 			
@@ -6004,6 +6003,7 @@ class oCentura {
 									cal2, con2, ina2, obs2, cal3, con3, ina3, obs3, 
 									cal4, con4, ina4, obs4, cal5, con5, ina5, obs5, 
 									cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
+									bim0, bim1, bim2, bim3, bim4, promcalof,
 									promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo
 								FROM _viBoletas
 							WHERE idgrupo = $idgrupo AND idgrumat = $idgrumat $otros ";

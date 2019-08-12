@@ -39,6 +39,14 @@
                         </ul>
                     </li>
 
+                    <li>
+                        <a href="#" id="preinscripciones_list">
+                            <i class="icon-edit"></i>
+                            <span class="menu-text">Preinscripciones</span>
+                        </a>
+                    </li>
+
+
 
 
 <script type="text/javascript">
@@ -70,6 +78,25 @@ jQuery(function($) {
             $(this).addClass("active open");
         }
     });
+
+
+    if ($("#preinscripciones_list").length) {
+        $("#preinscripciones_list").on("click", function(event) {
+            event.preventDefault();
+            cfgBase0();
+            var nc = localStorage.nc;
+            $.post(obj.getValue(0) + "preinscripciones-list/", {
+                    user: nc
+                },
+                function(html) {
+                    $("#contentMain").empty();
+                    $("#contentMain").html(html);
+                    $('#breadcrumb').html(getBar('Inicio,Catálogo Preinscripciones'));
+                }, "html");
+            return false;
+        });
+    }
+
 
     function cfgBase0(){
         resizeScreen();

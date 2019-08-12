@@ -159,7 +159,11 @@ $idciclo = $_POST['idciclo'];
 								<div class="controls">
 									<select id="idmateria" name="idmateria" size="1"></select>
 									<span class="separatorSpan"></span>
-									<a href="#" class="link link-info inline" id="lista-promedios-secundaria-interna-arji-pdf-1">Visualizar</a>
+									<a href="#" class="link link-info inline" id="lista-promedios-secundaria-interna-arji-pdf-1">Visualizar
+									</a>
+									<span class="separatorSpan"></span>
+									<a href="#" class="link link-info inline" id="lista-promedios-secundaria-interna-arji-pdf-2">Visualizar Oficial
+									</a>
 								</div>
 							</div>
 							<br/>
@@ -653,6 +657,13 @@ jQuery(function($) {
 		IdGruMat = $("#idmateria").val();
 		printActaMatWithExcRep0(idgrupo,IdGruMat,IdCiclo,"lista-prom-mat-1/");		
  	})
+
+ 	$("#lista-promedios-secundaria-interna-arji-pdf-2").on("click",function(event){
+		event.preventDefault();
+		IdGruMat = $("#idmateria").val();
+		printActaMatWithExcRep0(idgrupo,IdGruMat,IdCiclo,"lista-prom-mat-2/");		
+ 	})
+
 
 
 	$("#printBolCalGruAlu1, #printBolCalGruAlu3").on("click",function(event){

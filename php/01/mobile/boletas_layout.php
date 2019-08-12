@@ -238,7 +238,7 @@ html {
 
                             }
 
-                    }else{
+                        }else{
                     ?>
                         <b>Boleta NO DISPONIBLE</b>
                     <?php

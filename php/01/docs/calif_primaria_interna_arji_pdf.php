@@ -1,35 +1,58 @@
 <?php
 
-/*
-
-error_reporting(E_ALL);
-ini_set('display_errors', TRUE);
-ini_set('display_startup_errors', TRUE);
-ini_set('default_socket_timeout', 6000);
-
-*/
 
 
-$o = $_POST['o'];
-$c = $_POST['c'];
-$t = $_POST['t'];
-$from = $_POST['from'];
-$cantidad = $_POST['cantidad'];
-$s = $_POST['s'];
+// error_reporting(E_ALL);
+// ini_set('display_errors', TRUE);
+// ini_set('display_startup_errors', TRUE);
+// ini_set('default_socket_timeout', 6000);
+
+
+define('FPDF_FONTPATH','font/');
+require('../diag/sector.php');
+
+require('../oCentura.php');
+$f = oCentura::getInstance();
+
+require('../oCenturaPDO.php');
+$F = oCenturaPDO::getInstance();
+
+require('../oMetodos.php');
+$M = oMetodos::getInstance();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+	$o = $_POST['o'];
+	$c = $_POST['c'];
+	$t = $_POST['t'];
+	$from = $_POST['from'];
+	$cantidad = $_POST['cantidad'];
+	$s = $_POST['s'];
+
+}else{
+	$o = $_GET['o'];
+	$c = $_GET['c'];
+	$t = $_GET['t'];
+	$from = $_GET['from'];
+	$cantidad = $_GET['cantidad'];
+	$s = $_GET['s'];	
+	// $strgrualu = $_GET['strgrualu'];
+	$logoEmp = $F->getLogoEmp(1); 
+	$logoIbo = $F->getLogoIB(1); 
+
+	$nc = explode('|', $c);
+    $u = $nc[0];
+    $strgrualu = $nc[1];
+    $logoEmp = $nc[2];
+    $logoIbo = $nc[3];
+    $grado = $nc[4];
+
+}
 
 if (!isset($c)){
 	header('Location: http://platsource.mx/');
 }
 
 parse_str($c);
-
-define('FPDF_FONTPATH','font/');
-require('../diag/sector.php');
-require('../oCentura.php');
-$f = oCentura::getInstance();
-
-require('../oMetodos.php');
-$M = oMetodos::getInstance();
 
 class PDF_Diag extends PDF_Sector {
 	var $nFont;
@@ -43,11 +66,19 @@ class PDF_Diag extends PDF_Sector {
     var $lastupdate;
     var $obsEsp;
     var $obsIng;
+    var $idgrualu;
+    var $grado;
 
     function Header(){   
 
 		$this->Image('../../../images/web/'.$this->logoEmp,5,5,20,20);
 		//$this->Image('../../../images/web/'.$this->logoIBO,196,5,10,10);
+
+        // $nc = "u=1&strgrualu=".$this->idgrualu."&logoEmp=".$this->logoEmp."&logoIbo=".$this->logoIBO."&grado=".$this->grado;
+
+        $nc = "1|".$this->idgrualu."|".$this->logoEmp."|".$this->logoIBO."|".$this->grado;
+
+        $this->Image('https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl='.urlencode("https://platsource.mx/print-calif-primaria-interna-arji/?o=0&t=40&c=".$nc."&from=0&cantidad=0&s=").'&choe=UTF-8',191,5,20,20,'PNG');
 
 		$this->sety(5);
 		$this->setX(0);
@@ -192,12 +223,14 @@ $pdf->nFont = 6;
 $pdf->SetFillColor(192,192,192);
 $pdf->logoEmp = $logoEmp;
 $pdf->logoIBO = $logoIbo;
+$pdf->idgrualu = 0;
+$pdf->grado = "";
 
 
 
  // $i = 0;
 foreach ($arrAlu as $i => $value) {
-
+	$pdf->idgrualu = $arrAlu[$i];
 	$result = $f->getQuerys(45,"idgrualu=".$arrAlu[$i],0,0,0,array()," order by orden_impresion asc ",1);
 
 	
@@ -209,6 +242,7 @@ foreach ($arrAlu as $i => $value) {
 		$pdf->num_lista = $result[0]->num_lista;
 		$pdf->grupo = $result[0]->grupo;
 		$pdf->ciclo = $result[0]->ciclo;
+		$pdf->grado = $result[0]->grado;
 
 		$pdf->AddPage();
 
