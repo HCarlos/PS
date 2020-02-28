@@ -148,15 +148,13 @@ class PDF_Diag extends PDF_Sector {
 		$calx = "";
 		$vc = intval($cal);
 
-		// if ($vc == 100){
+		// if ($vc >= 95 && $vc <= 100){
 		// 	$calx = $d==0?"D":"O";
-		// }else if ($vc >= 90 && $vc <= 99){
+		// }else if ($vc >= 75 && $vc <= 94){
 		// 	$calx = $d==0?"L":"P";
-		// }else if ($vc >= 80 && $vc <= 89){
+		// }else if ($vc >= 55 && $vc <= 74){
 		// 	$calx = $d==0?"EP":"IP";
-		// }else if ($vc >= 70 && $vc <= 79){
-		// 	$calx = $d==0?"I":"BP";
-		// }else if ($vc >= 60 && $vc <= 69){
+		// }else if ($vc >= 1 && $vc <= 54){
 		// 	$calx = "NR";
 		// }else {
 		// 	$calx = "";
@@ -164,13 +162,13 @@ class PDF_Diag extends PDF_Sector {
 
 		if ($vc >= 95 && $vc <= 100){
 			$calx = $d==0?"D":"O";
-		}else if ($vc >= 75 && $vc <= 94){
+		}else if ($vc >= 85 && $vc <= 94){
 			$calx = $d==0?"L":"P";
-		}else if ($vc >= 55 && $vc <= 74){
+		}else if ($vc >= 65 && $vc <= 84){
 			$calx = $d==0?"EP":"IP";
-		}else if ($vc >= 1 && $vc <= 54){
-			$calx = "NR";
-		}else {
+		}else if ($vc >= 60 && $vc <= 64){
+			$calx = $d==0?"I":"B";
+		}else if ($vc <= 59){
 			$calx = "";
 		}
 
@@ -194,10 +192,9 @@ class PDF_Diag extends PDF_Sector {
 			}
 		}
 		
-		//return $calx;
-		
-		return str_pad($calx, 2, " ", STR_PAD_LEFT).'    '.str_pad($cony, 3, " ", STR_PAD_LEFT);
+		// return str_pad($calx, 2, " ", STR_PAD_LEFT).'    '.str_pad($cony, 3, " ", STR_PAD_LEFT);
 
+		return str_pad($calx, 2, " ", STR_PAD_LEFT);
 
 	}
 
@@ -270,9 +267,12 @@ foreach ($arrAlu as $i => $value) {
 		$pdf->aspectos = $d==0?'A  S  P  E  C  T  O  S':'A  S  P  E  C  T  S';
 	    $pdf->camposformativos = $d==0?'CAMPOS FORMATIVOS':'FORMATIVE FIELDS';
 		$pdf->evaluacion = $d==0?'EVALUACIÓN':'EVALUATION';
-		$pdf->inicial = $d==0?'I     N':'I     N';
-		$pdf->media = $d==0?'M     N':'M     N';
-		$pdf->final = $d==0?'F     N':'F     N';
+		// $pdf->inicial = $d==0?'I     N':'I     N';
+		// $pdf->media = $d==0?'M     N':'M     N';
+		// $pdf->final = $d==0?'F     N':'F     N';
+		$pdf->inicial = $d==0?'INITIAL':'INITIAL';
+		$pdf->media = $d==0?'MIDDLE':'MIDDLE';
+		$pdf->final = $d==0?'FINAL':'FINAL';
 
 		$pdf->profile = $d==0?'PERFIL IB':'PROFILE IB';
 		$pdf->teacher = $d==0?'TITUTLAR':'TEACHER';
@@ -655,17 +655,20 @@ foreach ($arrAlu as $i => $value) {
 		$pdf->setX(5);
 
 			$pdf->SetFont('Arial','B',7);	
-		$pdf->Cell(12.5,6,utf8_decode('O - (N: IV)'),'',0,'L');
+		// $pdf->Cell(12.5,6,utf8_decode('O - (N: IV)'),'',0,'L');
+		$pdf->Cell(4,6,utf8_decode('O'),'',0,'L');
 		$pdf->SetFont('Arial','',7);	
 		$pdf->Cell(24,6,utf8_decode('= OUSTANDING'),'',0,'L');
 
 		$pdf->SetFont('Arial','B',7);	
-		$pdf->Cell(12,6,utf8_decode('P - (N: III)'),'',0,'L');
+		// $pdf->Cell(12,6,utf8_decode('P - (N: III)'),'',0,'L');
+		$pdf->Cell(4,6,utf8_decode('P'),'',0,'L');
 		$pdf->SetFont('Arial','',7);	
 		$pdf->Cell(24,6,utf8_decode('= PROFICIENT'),'',0,'L');
 
 		$pdf->SetFont('Arial','B',7);	
-		$pdf->Cell(12,6,utf8_decode('IP - (N: II)'),'',0,'L');
+		// $pdf->Cell(12,6,utf8_decode('IP - (N: II)'),'',0,'L');
+		$pdf->Cell(5,6,utf8_decode('IP'),'',0,'L');
 		$pdf->SetFont('Arial','',7);	
 		$pdf->Cell(24,6,utf8_decode('= IN PROCESS'),'',0,'L');
 
@@ -675,9 +678,9 @@ foreach ($arrAlu as $i => $value) {
 		// $pdf->Cell(34,6,utf8_decode('= BEGINNING PROCESS'),'',0,'L');
 
 		$pdf->SetFont('Arial','B',7);	
-		$pdf->Cell(5,6,utf8_decode('NR'),'',0,'L');
+		$pdf->Cell(5,6,utf8_decode('B'),'',0,'L');
 		$pdf->SetFont('Arial','',7);	
-		$pdf->Cell(30,6,utf8_decode('= NEEDS TO REINFORCE'),'',1,'L');
+		$pdf->Cell(30,6,utf8_decode('= BEGINNING'),'',1,'L');
 
 
 	} // Fin Si

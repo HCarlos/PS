@@ -83,6 +83,7 @@ $user = $_POST['user'];
                         <th aria-label="alumno: to sort column ascending" style="width: 150px;" aria-controls="tblCalDir01" tabindex="2" role="columnheader" class="sorting">Alumno</th>
                         <th aria-label="boleta: to sort column ascending" style="width: 10px;" aria-controls="tblCalDir01" tabindex="3" role="columnheader" class="sorting center">Boleta Impresa</th>
                         <th aria-label="detalle_boleta: to sort column ascending" style="width: 10px;" aria-controls="tblCalDir01" tabindex="3" role="columnheader" class="sorting center">Detalle Calificaciones</th>
+                        <th aria-label="pai_boleta: to sort column ascending" style="width: 10px;" aria-controls="tblCalDir01" tabindex="3" role="columnheader" class="sorting center">Boleta PAI-</th>
                         <th aria-label="kardex: to sort column ascending" style="width: 10px;" aria-controls="tblCalDir01" tabindex="3" role="columnheader" class="sorting center">Kardex</th>
                     </tr>
                 </thead>
@@ -110,6 +111,7 @@ jQuery(function($) {
     var NumEval    = 0;
     var oTable;
 
+
     function getTable(){
 
         oTable = $('#tblCalDir01').dataTable({
@@ -128,7 +130,7 @@ jQuery(function($) {
                             "sInfoFiltered": "(De _MAX_ registros)"                                        
                         },  
             "aaSorting": [[ 0, "desc" ]],           
-            "aoColumns": [ null, null, null, null, null],
+            "aoColumns": [ null, null, null, null, null, null],
             "aLengthMenu": [[10, 25, 50, -1], [10, 25, 50, "Todos"]],
             "bRetrieve": true,
             "bDestroy": false
@@ -164,6 +166,7 @@ jQuery(function($) {
                         tB +='              <td>'+item.alumno+'</td>';
                         tB +='              <td class="center"><a class="blue printBolCalAluFromTutores1" href="#" id="l1-'+item.idgrualu+'-'+item.clave_nivel+'-0'+'-'+item.grado+'-0"  data-rel="tooltip" data-placement="top" title="Ver Boleta de Calificaciones" ><i class="icon-print bigger-130"></i></a></td>';
                         tB +='              <td class="center"><a class="red detailBolCalAluFromTutores1" href="#" id="l2|'+item.idgrualu+'|'+item.clave_nivel+'|'+item.grupo+'|'+item.alumno+'|'+item.grado+'"  data-rel="tooltip" data-placement="top" title="Ver Detalle de Calificaciones" ><i class="icon-list bigger-130"></i></a></td>';
+                        tB +='              <td class="center"><a class="green PAIBolCalAluFromTutores1" href="#" id="l3|'+item.idgrualu+'|'+item.clave_nivel+'|'+item.grupo+'|'+item.alumno+'|'+item.grado+'|'+item.ispai_grupo+'|'+item.grado_pai+'"  data-rel="tooltip" data-placement="top" title="Ver Boleta PAI" ><i class="icon-list bigger-130"></i></a></td>';
                         tB +='              <td class="center">';
                         if ( parseInt(item.genero,0) == 0 ){
                             tB += '         <a class="pink modGruMatProKRDX02 tooltip-info " href="#" id="idgrualu2two-'+item.idalumno+'-'+item.iduseralu+'" data-rel="tooltip" data-placement="top" data-original-title="Ver Kardex" title="Ver Kardex" >';
@@ -194,6 +197,13 @@ jQuery(function($) {
                         var arr = event.currentTarget.id.split('|');
                         var cveNivel = parseInt(arr[2],0);
                         getDetailCalFromTutores(arr[1],cveNivel,arr[3],arr[4]);
+                    });
+                    
+                    $(".PAIBolCalAluFromTutores1").on("click",function(event){
+                        event.preventDefault();
+                        var arr = event.currentTarget.id.split('|');
+                        var cveNivel = parseInt(arr[2],0);
+                        getPAICalFromTutores(arr[1],cveNivel,arr[3],arr[4],arr[5],arr[6]);
                     });
 
                     $(".modGruMatProKRDX02").on("click",function(event){
@@ -234,7 +244,6 @@ jQuery(function($) {
         );
                             
     }
-
 
     function onClickFillTable(){
         if(oTable != null){
@@ -315,6 +324,7 @@ jQuery(function($) {
             onClickFillTable();
         }
 
+    });
 
     $("#lstEval").on("change",function(event){
         event.preventDefault();
@@ -403,6 +413,44 @@ jQuery(function($) {
     };
 
 
+    function getPAICalFromTutores(IdGruAlu,ClaveNivel,Grupo,Alumno, IsPAI_Grupo, Grado_PAI){
+
+        $("#contentProfile").empty();
+        $("#contentMain").hide(function(){
+            $("#preloaderPrincipal").show();
+            obj.setIsTimeLine(false);
+            var nc = localStorage.nc;
+
+            var url = obj.getValue(0) + "tutores-boletas-pai-list/";
+            var tit = "Tutor-Boleta-Detalle-"+nc+'-'+IdGruAlu;
+
+            trackOutboundLink(url,tit);
+
+            $.post(url, {
+                user: nc,
+                idgrualu: IdGruAlu,
+                clave_nivel: ClaveNivel,
+                grupo: Grupo,
+                alumno: Alumno,
+                ispai_grupo: IsPAI_Grupo,
+                grado_pai: Grado_PAI,
+                screenOrigen: "contentMain",
+                screenDestino: "contentProfile"
+                },
+                function(html) {                    
+                    $("#contentProfile").html(html).show('slow',function(){
+                        $('#breadcrumb').html(getBar('Inicio, Boleta PAI '));
+                    });
+                }, "html");
+        });
+        return false;
+
+
+    };
+
+
+
+
     function modGruMatProKRDX02(IdAlumno,IdUserAlu){
 
         var nc = "u="+localStorage.nc+"&idalumno="+IdAlumno+'&idgrupo=0&iduseralu='+IdUserAlu;        
@@ -464,7 +512,9 @@ jQuery(function($) {
 
     getProfDir();
 
+
     $("#preloaderPrincipal").hide();
+
 
 });
 

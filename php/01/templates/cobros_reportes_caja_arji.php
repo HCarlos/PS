@@ -44,13 +44,18 @@ $ClaveNivelAcceso = intval( $_POST["ClaveNivelAcceso"] );
 													$ClaveNivelAcceso == 10 || 
 													$ClaveNivelAcceso == 11 || 
 													$ClaveNivelAcceso == 12 ||
-													$ClaveNivelAcceso == 19 ||
-													$ClaveNivelAcceso == 24 
+													$ClaveNivelAcceso == 19 
 												) 
 										{ 
 											?>
 											<option value="-1" selected disabled>Seleccione un reporte</option>
 											<option value="6">Análisis por Concepto</option>
+										<?php } elseif ( 
+													$ClaveNivelAcceso == 24 
+												) { ?>
+											<option value="-1" selected disabled>Seleccione un reporte</option>
+											<option value="6">Análisis por Concepto</option>
+											<option value="4">Recordatorios Vencimientos</option>
 										<?php } else { ?>
 											<option value="0" selected>Pagos por Niveles y Conceptos</option>
 											<option value="1">Movimientos diarios en PDF</option>
@@ -59,6 +64,7 @@ $ClaveNivelAcceso = intval( $_POST["ClaveNivelAcceso"] );
 											<option value="4">Recordatorios Vencimientos</option>
 											<option value="5">Recargos por Niveles y Conceptos</option>
 											<option value="6">Análisis por Concepto</option>
+											<option value="7">Pagados en su Totalidad (solo PDF)</option>
 										<?php } ?>
 									</select>							
 								</td>
@@ -257,6 +263,9 @@ jQuery(function($) {
 	        	case 6:
 					nRep = "rep-caja-analisis-conceptos/";
 	        		break;
+	        	case 7:
+					nRep = "rep-caja-analisis-conceptos-pagados-totalmente/";
+	        		break;
 	        }
 
 			url = obj.getValue(0)+nRep;
@@ -339,7 +348,13 @@ jQuery(function($) {
 	        	var xp;
 	           $.each(json, function(i, item) {
 	           		xp = item.data.split("-");
-	                $("#emisor").append('<option value="'+xp[0]+'"> '+item.label+'</option>');
+	           		if (ClaveNivelAcceso == 24){
+	           			if ( xp[0] == 2){
+		                	$("#emisor").append('<option value="'+xp[0]+'"> '+item.label+'</option>');
+	           			}
+	           		}else{
+		                $("#emisor").append('<option value="'+xp[0]+'"> '+item.label+'</option>');
+	           		}
 	            });
 	           	$("#preloaderPrincipal").hide();
 	        }, "json"
@@ -490,7 +505,7 @@ jQuery(function($) {
 			$("#rangoFechas").addClass("borderSelect"); 	
 		}
 
-		if (eval == 6){
+		if (eval == 6 || eval == 7){
 			$(".clsAnalisis").show(); 	
 			$(".clsAnalisis").addClass("borderSelect"); 	
 		}

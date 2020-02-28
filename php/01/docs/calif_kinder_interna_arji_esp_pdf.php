@@ -149,13 +149,13 @@ class PDF_Diag extends PDF_Sector {
 
 		if ($vc >= 95 && $vc <= 100){
 			$calx = $d==0?"D":"O";
-		}else if ($vc >= 75 && $vc <= 94){
+		}else if ($vc >= 85 && $vc <= 94){
 			$calx = $d==0?"L":"P";
-		}else if ($vc >= 55 && $vc <= 74){
+		}else if ($vc >= 65 && $vc <= 84){
 			$calx = $d==0?"EP":"IP";
-		}else if ($vc >= 1 && $vc <= 54){
-			$calx = "NR";
-		}else {
+		}else if ($vc >= 60 && $vc <= 64){
+			$calx = $d==0?"I":"B";
+		}else if ($vc <= 59){
 			$calx = "";
 		}
 
@@ -172,7 +172,6 @@ class PDF_Diag extends PDF_Sector {
 			$cony = " ";
 		}
 
-
 		if ($ina){
 			$calx = intval($cal);
 			if ($calx<=0){
@@ -180,9 +179,9 @@ class PDF_Diag extends PDF_Sector {
 			}			
 		}
 
-		// return $cal;
-		return str_pad($calx, 2, " ", STR_PAD_LEFT).'    '.str_pad($cony, 3, " ", STR_PAD_LEFT);
+		// return str_pad($calx, 2, " ", STR_PAD_LEFT).'    '.str_pad($cony, 3, " ", STR_PAD_LEFT);
 
+		return str_pad($calx, 2, " ", STR_PAD_LEFT);
 
 	}
 
@@ -255,9 +254,12 @@ foreach ($arrAlu as $i => $value) {
 		$pdf->aspectos = $d==0?'A  S  P  E  C  T  O  S':'A  S  P  E  C  T  S';
 	    $pdf->camposformativos = $d==0?'CAMPOS DE FORMACIÓN ACADEMICA':'FORMATIVE FIELDS';
 		$pdf->evaluacion = $d==0?'EVALUACIÓN':'EVALUATION';
-		$pdf->inicial = $d==0?'I     N':'INITIAL';
-		$pdf->media = $d==0?'M     N':'MIDDLE';
-		$pdf->final = $d==0?'F     N':'FINAL';
+		// $pdf->inicial = $d==0?'I     N':'INITIAL';
+		// $pdf->media = $d==0?'M     N':'MIDDLE';
+		// $pdf->final = $d==0?'F     N':'FINAL';
+		$pdf->inicial = $d==0?'INICIAL':'INITIAL';
+		$pdf->media = $d==0?'MEDIA':'MIDDLE';
+		$pdf->final = $d==0?'FINAL':'FINAL';
 		$pdf->AddPage();
 
 		$pdf->SetFont('Arial','B',8);
@@ -481,7 +483,7 @@ foreach ($arrAlu as $i => $value) {
 
 		//SEXTO BLOQUE
 		$arrCal = $f->getQuerys(55,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=160 and 169",0,0,0,array(),' order by orden_impresion asc ',1);
-		$cantRow = (count($arrCal)+1); 
+		$cantRow = (count($arrCal)+1)+5; 
 		$alto = $cantRow * $al;
 		$pdf->setX(5);
 		$y = $pdf->GetY();
@@ -512,6 +514,9 @@ foreach ($arrAlu as $i => $value) {
 		}
 
 
+/*
+
+
 		// AREA DE FORMACION
 
 		$pdf->setX(5);
@@ -523,6 +528,7 @@ foreach ($arrAlu as $i => $value) {
 
 
 		//SEPTIMO BLOQUE
+
 
 		$arrCal = $f->getQuerys(55,"idgrualu=".$result[0]->idgrualu."&idioma=".$d."&rango=170 and 179",0,0,0,array(),' order by orden_impresion asc ',1);
 
@@ -557,6 +563,7 @@ foreach ($arrAlu as $i => $value) {
 
 		}
 
+*/
 
 		//INASISTENCIAS
 
@@ -666,17 +673,20 @@ foreach ($arrAlu as $i => $value) {
 		$pdf->setX(5);
 
 		$pdf->SetFont('Arial','B',7);	
-		$pdf->Cell(12.5,6,utf8_decode('D - (N: IV)'),'',0,'L');
+		// $pdf->Cell(12.5,6,utf8_decode('D - (N: IV)'),'',0,'L');
+		$pdf->Cell(4,6,utf8_decode('D  '),'',0,'L');
 		$pdf->SetFont('Arial','',7);	
 		$pdf->Cell(24,6,utf8_decode('=  DESTACADO'),'',0,'L');
 
 		$pdf->SetFont('Arial','B',7);	
-		$pdf->Cell(12,6,utf8_decode('L - (N: III)'),'',0,'L');
+		// $pdf->Cell(12,6,utf8_decode('L - (N: III)'),'',0,'L');
+		$pdf->Cell(4,6,utf8_decode('L'),'',0,'L');
 		$pdf->SetFont('Arial','',7);	
-		$pdf->Cell(24,6,utf8_decode('=  LOGRADO'),'',0,'L');
+		$pdf->Cell(20,6,utf8_decode('=  LOGRADO'),'',0,'L');
 
 		$pdf->SetFont('Arial','B',7);	
-		$pdf->Cell(13,6,utf8_decode('EP - (N: II)'),'',0,'L');
+		// $pdf->Cell(13,6,utf8_decode('EP - (N: II)'),'',0,'L');
+		$pdf->Cell(5,6,utf8_decode('EP  '),'',0,'L');
 		$pdf->SetFont('Arial','',7);	
 		$pdf->Cell(24,6,utf8_decode('=  EN PROCESO'),'',0,'L');
 
@@ -686,9 +696,9 @@ foreach ($arrAlu as $i => $value) {
 		// $pdf->Cell(24,6,utf8_decode('=  INICIADO'),'',0,'L');
 
 		$pdf->SetFont('Arial','B',7);	
-		$pdf->Cell(5,6,utf8_decode('NR'),'',0,'L');
+		$pdf->Cell(5,6,utf8_decode('I '),'',0,'L');
 		$pdf->SetFont('Arial','',7);	
-		$pdf->Cell(30,6,utf8_decode('=  NECESARIO REFORZAR'),'',1,'L');
+		$pdf->Cell(30,6,utf8_decode('=  INICIANDO'),'',1,'L');
 
 
 	} // Fin Si

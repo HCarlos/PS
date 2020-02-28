@@ -61,6 +61,8 @@ $numeval    = $_POST['numeval'];
 				</div>	
 			</div>	
 		</div>	
+		<div id="sop">
+		</div>
 	</div>	
 </div>	
 
@@ -80,6 +82,9 @@ jQuery(function($) {
 	var IdGruMat = <?= $idgrumat; ?>;
 	var Materia = "<?= $materia; ?>";
 
+	localStorage.SOP = navigator.platform;
+	$("#sop").html(localStorage.SOP);
+
 	getGridCaptura( IdGruMat );
 
 	function getGridCaptura(IdGruMat){
@@ -93,7 +98,7 @@ jQuery(function($) {
 			function(json){
 		        	if (json.length>0){
 							xTR = "<tr>";
-							xTR += "<th>No</th>";  
+							xTR += "<th>No--</th>";  
 							xTR += "<th>Alumno</th>";  
 				               $.each(json, function(i, item) {
 				               		arrHD[i] = {
@@ -258,7 +263,17 @@ jQuery(function($) {
 				event.preventDefault();
 				$(this).keypress(8);
 			}
-			var arrKey = [106, 171, 187];
+			
+			var arrKey = [];
+			if ( 
+				(localStorage.SOP == "iPad" && event.key == "*") || 
+				(localStorage.SOP == "MacIntel" && event.key == "*") 
+				){ 
+				arrKey = [56, 106, 171, 187];
+			}else{
+				arrKey = [106, 171, 187];
+			}
+
 			if ( arrKey.indexOf( parseInt(event.keyCode,0) ) != -1 ){
 				$(this).val(evalAsteriskCapCal(event.currentTarget.id));
 			}

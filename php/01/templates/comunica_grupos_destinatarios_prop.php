@@ -195,8 +195,11 @@ jQuery(function($) {
             //alert("Seleccione un Tipo de Usuario");
             return false;
         }
+        var idTU = parseInt(xl[1],0);
 
-        switch( parseInt(xl[1],0) ){
+        // alert(idTU);
+
+        switch( idTU ){
             case 3:
                 tp = 48; // Directores
                 nc = "u="+localStorage.nc;
@@ -213,6 +216,10 @@ jQuery(function($) {
                 tp = 51; // Tutores
                 nc = "u="+localStorage.nc+"&idgrupo="+$("#grupo0").val();
                 break;
+            case 28:
+                tp = 76; // Familiares
+                nc = "u="+localStorage.nc+"&idgrupo="+$("#grupo0").val()+"&idusernivelacceso="+xl[0];
+                break;
             case 2:
             case 8:
             case 9:
@@ -227,11 +234,10 @@ jQuery(function($) {
             case 25:
             case 26:
             case 27:
-            case 28:
             case 29:
             case 30:
-                tp = 52;
-                nc = "u="+localStorage.nc+"&idusernivelacceso="+xl[0];
+                tp = 76;
+                nc = "u="+localStorage.nc+"&idgrupo="+$("#grupo0").val()+"&idusernivelacceso="+xl[0];
                 break;
         }
 

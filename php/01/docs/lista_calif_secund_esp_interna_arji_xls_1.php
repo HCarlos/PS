@@ -52,6 +52,8 @@ $A = oArji::getInstance();
 require('../oPHPExcel.php');
 $E = oPHPExcel::getInstance();
 
+// echo $strgrualu;
+
 $arrAlu = explode(",",$strgrualu);
 
 $k=6;
@@ -59,8 +61,8 @@ $k=6;
 $miCal = 4;
 
 // LISTADO DE CALIFICACIONES
-
 $rst = $f->getQuerys($t,"idgrualu=".$arrAlu[0],0,0,0,array(),$s,1);
+
 $idciclo = $idciclo; //$rst[0]->idciclo;
 $idgrupo = $rst[0]->idgrupo;
 $grupo = $rst[0]->grupo;

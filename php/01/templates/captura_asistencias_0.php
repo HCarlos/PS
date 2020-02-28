@@ -158,6 +158,7 @@ jQuery(function($) {
 				$.each(json, function(i, item) {
 						var tr =  "<tr class=''>";
 							tr += "<td class='center'>"+item.num_lista+"</td>";
+							// tr += "<td>"+item.idgrualu+' '+item.alumno+"</td>";
 							tr += "<td>"+item.alumno+"</td>";
 							tr += "<td>";
 							tr += "			<div class='controls'>";

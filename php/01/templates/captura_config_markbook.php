@@ -418,7 +418,8 @@ jQuery(function($) {
 	            	$("#cmbConfigMaterias100").empty();
 				    $("#cmbConfigMaterias100").html("<option value='0' selected>Seleccione una Configuración</option>");
 	               $.each(json, function(i, item) {
-	                    $("#cmbConfigMaterias100").append('<option value="modGruMatCon100-'+item.idgrumatcon+'-'+item.idgrumat+'" >'+item.descripcion+' ('+parseFloat(item.porcentaje).toFixed(0)+'%) ' + '</option>');
+	                    // $("#cmbConfigMaterias100").append('<option value="modGruMatCon100-'+item.idgrumatcon+'-'+item.idgrumat+'" >'+item.idgrumatcon+'-'+item.idgrumat+' '+item.descripcion+' ('+parseFloat(item.porcentaje).toFixed(0)+'%) ' + '</option>');
+	                    $("#cmbConfigMaterias100").append('<option value="modGruMatCon100-'+item.idgrumatcon+'-'+item.idgrumat+'" >'+item.idgrumatcon+'-'+item.idgrumat+' '+item.descripcion+' ('+parseFloat(item.porcentaje).toFixed(0)+'%) ' + '</option>');
 	                });
 	               
 	           		$("#cmbConfigMaterias100").attr('Disabled', false);

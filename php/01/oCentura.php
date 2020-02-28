@@ -1093,6 +1093,16 @@ class oCentura {
 										FROM _viGrupo_Materias WHERE idciclo = $idciclo AND idprofesor = $idprofesor AND idgrupo = $idgrupo AND isagrupadora = 0 $otros ";
 								break;	
 
+							case 76:
+								parse_str($arg);
+								$idemp = $this->getIdEmpFromAlias($u);
+								$idciclo = $this->getCicloFromIdEmp($idemp);
+								$query = "SELECT DISTINCT nombre_tutor AS label, idusertutor AS data 
+										FROM _viGrupo_Alumnos 
+										WHERE idemp = $idemp AND idciclo = $idciclo AND idgrupo = $idgrupo AND idusernivelacceso = $idusernivelacceso AND status_grualu = 1 AND nombre_tutor != 'null' 
+										ORDER BY label ASC ";
+								break;	
+
 
 
 						}
@@ -5835,24 +5845,24 @@ class oCentura {
 			case 51: // ARJI - MATERIAS INASISTENCIAS ESPAÑOL
 				parse_str($cad);
 				$query = "SELECT idboleta, idgrualu, idgrumat, idciclo, ciclo, num_lista, materia, 
-									abreviatura, idgrupo, grupo, idmatclas, 
+									abreviatura, idgrupo, grupo, idmatclas, orden_impresion, 
 									profesor, alumno, cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, 
 									cal2, con2, ina2, obs2, cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, 
 									cal5, con5, ina5, obs5, cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
 									promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo
 								FROM _viBoletas
-							WHERE (idgrualu = $idgrualu) AND (idioma = 0) AND ( idmatclas in (5) ) $otros ";
+							WHERE (idgrualu = $idgrualu) AND (idioma = 0) AND ( idmatclas = 5 ) $otros ";
 				break;
 			case 52: // ARJI - MATERIAS INASISTENCIAS INGLES
 				parse_str($cad);
 				$query = "SELECT idboleta, idgrualu, idgrumat, idciclo, ciclo, num_lista, materia, 
-									abreviatura, idgrupo, grupo, idmatclas, 
+									abreviatura, idgrupo, grupo, idmatclas, orden_impresion, 
 									profesor, alumno, cal0, con0, ina0, obs0, cal1, con1, ina1, obs1, 
 									cal2, con2, ina2, obs2, cal3, con3, ina3, obs3, cal4, con4, ina4, obs4, 
 									cal5, con5, ina5, obs5, cal6, con6, ina6, obs6, cal7, con7, ina7, obs7, 
 									promcal, promcon, sumina, promcalgpo, promcongpo, suminagpo
 								FROM _viBoletas
-							WHERE (idgrualu = $idgrualu) AND (idioma = 1) AND ( idmatclas in (5) ) $otros ";
+							WHERE (idgrualu = $idgrualu) AND (idioma = 1) AND ( idmatclas = 5 ) $otros ";
 				break;
 			
 			case 53: // ARJI

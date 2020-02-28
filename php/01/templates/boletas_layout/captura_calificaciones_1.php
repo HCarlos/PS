@@ -256,8 +256,17 @@ jQuery(function($) {
 				event.preventDefault();
 				$(this).keypress(8);
 			}
-			// var arrKey = [56, 106, 171, 187];
-			var arrKey = [106, 171, 187];
+			
+			var arrKey = [];
+			if ( 
+				(localStorage.SOP == "iPad" && event.key == "*") || 
+				(localStorage.SOP == "MacIntel" && event.key == "*") 
+				){ 
+				arrKey = [56, 106, 171, 187];
+			}else{
+				arrKey = [106, 171, 187];
+			}
+
 			if ( arrKey.indexOf( parseInt(event.keyCode,0) ) != -1 ){
 				$(this).val(evalAsteriskCapCal(event.currentTarget.id));
 			}
@@ -279,6 +288,7 @@ jQuery(function($) {
 		$(".calif").on('keyup',function(event) {
 			
 			var ids;
+			// alert(event.keyCode);
 
 			if (event.currentTarget.id.indexOf('cond') != -1) {
 				ids = 1;

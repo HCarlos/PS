@@ -20,6 +20,7 @@ $("#frmForgotPassword").on("submit", function(event) {
 
 $("#frmLogin").on("submit", function(event) {
 	event.preventDefault();
+	localStorage.SOP = navigator.platform;
 	var queryString = $(this).serialize();
 	$.post(obj.getValue(0) + "getLoginUser/", {
 			data: queryString
@@ -49,6 +50,8 @@ $("#frmLogin").on("submit", function(event) {
 					localStorage.Param1 = xim[7] == ''?'0':xim[7]; //param1
 					obj.setIdUser(localStorage.IdUser, localStorage.nc);
 					// stream = null;
+
+					localStorage.SOP = navigator.platform;
 					
 					$.getUserConnect();
 

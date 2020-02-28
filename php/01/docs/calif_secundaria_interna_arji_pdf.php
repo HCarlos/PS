@@ -344,6 +344,7 @@ foreach ($arrAlu as $i => $value) {
 
 		$pdf->SetFont('Arial','B',8);
 		$pdf->Cell(70,4,'PROMEDIO DEL GRUPO','',0,'L');
+		// $pdf->Cell(70,4,$idgrupo.' '.$idciclo,'',0,'L');
 
 		$pdf->SetFont('Courier','',7);
 		foreach ($gpo as $j => $value) {
@@ -364,7 +365,7 @@ foreach ($arrAlu as $i => $value) {
 
 		$result = $f->getQuerys(44,"idgrualu=".$arrAlu[$i],0,0,0,array()," order by orden_impresion asc ",1);
 
-		$pdf->Ln(2);
+		$pdf->Ln(5.8);
 
 		$pdf->setHeaderTrim($pdf,40,"4");
 		$nPadre = 0;

@@ -34,7 +34,7 @@ $grupo = $_POST['grupo'];
 					<table id="tblMKBCap0" role="table" class="bordered">
 						<thead>
 							<tr>
-								<th>#-</th>
+								<th>#</th>
 								<th>NOMBRE  DEL  ALUMNO</th>
 								<th>CAL</th>
 								<th>COMENTARIOS</th>
@@ -67,6 +67,8 @@ $grupo = $_POST['grupo'];
 				</div>
 			</div>
 		</div>	
+		<div id="sop">
+		</div>
 	</div>
 </div>
 <style type="text/css">
@@ -85,6 +87,9 @@ jQuery(function($) {
 	var IdGruMatCon = <?= $idgrumatcon ?>;
 	var IdGruMatConMKB = <?= $idgrumatconmkb ?>;
 	var Num_Eval = <?= $num_eval ?>;
+
+	localStorage.SOP = navigator.platform;
+	$("#sop").html(localStorage.SOP);
 
 	$("#spLoading1").hide();
 	$("#preloaderPrincipal").hide();
@@ -141,7 +146,21 @@ jQuery(function($) {
 						event.preventDefault();
 						$(this).keypress(8);
 					}
-					var arrKey = [106, 171, 187];
+					
+					// alert(event.key+" => "+event.keyCode);
+
+					var arrKey = [];
+					if ( 
+						(localStorage.SOP == "iPad" && event.key == "*") || 
+						(localStorage.SOP == "MacIntel" && event.key == "*") 
+						){ 
+						//alert(event.key);
+						arrKey = [56, 106, 171, 187];
+					}else{
+						arrKey = [106, 171, 187];
+					}
+
+
 					if ( arrKey.indexOf( parseInt(event.keyCode,0) ) != -1 ){
 						$(this).val(evalAsteriskCapCal(event.currentTarget.id));
 					}

@@ -137,7 +137,7 @@ class PDF_Diag extends PDF_Sector {
 
 	function FormatCal($cal=0,$con=0,$ina=0,$ver_nivel_logro=1){
 		$calx = "";
-		$conx = "";
+		$conx = " ";
 		$inax = "";
 		if ($cal>0){
 			$calx = round(floatval($cal),0);
@@ -145,28 +145,30 @@ class PDF_Diag extends PDF_Sector {
 
 		$calx = round(floatval($cal),0);
 
-		if ($calx >= 95 && $calx <= 100){
-			$conx = "IV";
-		}elseif ($calx >= 75 && $calx <= 94){
-			$conx = "III";
-		}elseif ($calx >= 55 && $calx <= 74){
-			$conx = "II";
-		}elseif ($calx >= 1 && $calx <= 54){
-			$conx = "I";
-		}else{
-			$conx = " ";
-		}
+		// if ($calx >= 95 && $calx <= 100){
+		// 	$conx = "IV";
+		// }elseif ($calx >= 75 && $calx <= 94){
+		// 	$conx = "III";
+		// }elseif ($calx >= 55 && $calx <= 74){
+		// 	$conx = "II";
+		// }elseif ($calx >= 1 && $calx <= 54){
+		// 	$conx = "I";
+		// }else{
+		// 	$conx = " ";
+		// }
 
 		if (!$ver_nivel_logro){
-			$conx = " ";
+			$conx = "";
 		}
 
 
 
 		if ($cal>0){
-			return str_pad($calx, 3, " ", STR_PAD_LEFT).' '.str_pad($conx, 3, " ", STR_PAD_LEFT);
+			// return str_pad($calx, 3, " ", STR_PAD_LEFT).' '.str_pad($conx, 3, " ", STR_PAD_LEFT);
+			return str_pad($calx, 3, " ", STR_PAD_LEFT);
 		}else{
-			return str_pad("", 3, " ", STR_PAD_LEFT).' '.str_pad("", 3, " ", STR_PAD_LEFT);
+			// return str_pad("", 3, " ", STR_PAD_LEFT).' '.str_pad("", 3, " ", STR_PAD_LEFT);
+			return str_pad("", 3, " ", STR_PAD_LEFT);
 		}
 
 
@@ -194,14 +196,16 @@ class PDF_Diag extends PDF_Sector {
 		$pdf->setX(5);
 		$pdf->Cell(84,0,'','',0,'L');
 		$pdf->SetFillColor(222);
-		$pdf->Cell(8,4,"CAL",'B',0,'C',true);
-		$pdf->Cell(8,4,"NL",'B',0,'C',true);
-		$pdf->Cell(8,4,"CAL",'B',0,'C',true);
-		$pdf->Cell(8,4,"NL",'B',0,'C',true);
-		$pdf->Cell(8,4,"CAL",'B',0,'C',true);
-		$pdf->Cell(8,4,"NL",'B',0,'C',true);
+		$pdf->Cell(16,4,"CAL",'B',0,'C',true);
+		// $pdf->Cell(8,4,"NL",'B',0,'C',true);
+		$pdf->Cell(16,4,"CAL",'B',0,'C',true);
+		// $pdf->Cell(8,4,"NL",'B',0,'C',true);
+		$pdf->Cell(16,4,"CAL",'B',0,'C',true);
+		// $pdf->Cell(8,4,"NL",'B',0,'C',true);
+
 		// $pdf->Cell(16,4,"4TO",'B',0,'C');
 		// $pdf->Cell(16,4,"5TO",'B',0,'C');
+		
 		$pdf->Cell(16,0,"",'',0,'C');
 		$pdf->Cell(16,0,"",'',1,'C');
 
@@ -271,17 +275,17 @@ foreach ($arrAlu as $i => $value) {
 				$pdf->setX(5);
 				$pdf->SetFont('Arial','',7);
 
-				if ($result[$j]->orden_impresion >= 1 && $result[$j]->orden_impresion <= 10){
-					$pdf->SetFillColor(96);
-				}elseif ($result[$j]->orden_impresion >= 11 && $result[$j]->orden_impresion <= 20){
-					$pdf->SetFillColor(144);
-				}elseif ($result[$j]->orden_impresion >= 21 && $result[$j]->orden_impresion <= 30){
-					$pdf->SetFillColor(192);
-				}
+				// if ($result[$j]->orden_impresion >= 1 && $result[$j]->orden_impresion <= 10){
+				// 	$pdf->SetFillColor(96);
+				// }elseif ($result[$j]->orden_impresion >= 11 && $result[$j]->orden_impresion <= 20){
+				// 	$pdf->SetFillColor(144);
+				// }elseif ($result[$j]->orden_impresion >= 21 && $result[$j]->orden_impresion <= 30){
+				// 	$pdf->SetFillColor(192);
+				// }
 				
-				$pdf->Cell(4,4,'','',0,'L',true);
+				// $pdf->Cell(4,4,'','',0,'L',true);
 				$pdf->SetFillColor(255);
-				$pdf->Cell(80,4,utf8_decode($result[$j]->materia),'',0,'L');
+				$pdf->Cell(84,4,utf8_decode($result[$j]->materia),'',0,'L');
 				// $pdf->Cell(80,4,utf8_decode($result[$j]->materia).' '.$result[$j]->idgrumat.' '.$result[$j]->idboleta ,'',0,'L');
 				$ver_nivel_logro = $result[$j]->ver_nivel_logro;
 
@@ -414,42 +418,34 @@ foreach ($arrAlu as $i => $value) {
 
 
 		foreach ($result as $j => $value) {
-			if ($result[$j]->orden_impresion >= 31 && $result[$j]->orden_impresion <= 39){
+			if ($result[$j]->orden_impresion >= 31 && $result[$j]->orden_impresion <= 34){
 
 				$pdf->setX(5);
 				$pdf->SetFont('Arial','',7);
 				$pdf->Cell(84,4,utf8_decode($result[$j]->materia),'',0,'L');
-				// $pdf->Cell(84,4,utf8_decode($result[$j]->materia).' '.$result[$j]->idgrumat.' '.$result[$j]->idboleta,'',0,'L');
 				$pdf->SetFont('Courier','',7);
 				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal0,$result[$j]->con0,$result[$j]->ina0,$ver_nivel_logro),'',0,'C');
 				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal1,$result[$j]->con1,$result[$j]->ina1,$ver_nivel_logro),'',0,'C');
 				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal2,$result[$j]->con2,$result[$j]->ina2,$ver_nivel_logro),'',0,'C');
-				// $pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal3,$result[$j]->con3,$result[$j]->ina3),'',0,'C');
-				// $pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal4,$result[$j]->con4,$result[$j]->ina4),'',0,'C');
 				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->promcal,$result[$j]->promcon,$result[$j]->sumina,$ver_nivel_logro),'',0,'C');
 				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->promcalgpo,$result[$j]->promcongpo,$result[$j]->suminagpo,$ver_nivel_logro),'',1,'C');
 
 			}
 		}
-		// $result = $f->getQuerys(51,"idgrualu=".$arrAlu[$i],0,0,0,array(),$s,1);
-		// foreach ($result as $j => $value) {
-
-		// 	$pdf->setX(5);
-		// 	$pdf->SetFont('Arial','',7);
-		// 	$pdf->Cell(20,4,utf8_decode($result[$j]->materia),'',0,'L');
-		// 	$pdf->SetFont('Courier','',7);
-		// 	$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal0,$result[$j]->con0,$result[$j]->ina0),'',0,'C');
-		// 	$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal1,$result[$j]->con1,$result[$j]->ina1),'',0,'C');
-		// 	$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal2,$result[$j]->con2,$result[$j]->ina2),'',0,'C');
-		// 	// $pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal3,$result[$j]->con3,$result[$j]->ina3),'',0,'C');
-		// 	// $pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal4,$result[$j]->con4,$result[$j]->ina4),'',0,'C');
-		// 	$os = array(1,2,3,4,5);
-		// 	if ( in_array(intval($result[$j]->idmatclas) , $os) ){
-		// 		$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->promcal,$result[$j]->promcon,$result[$j]->sumina),'',0,'C');
-		// 		$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->promcalgpo,$result[$j]->promcongpo,$result[$j]->suminagpo),'',1,'C');
-		// 	}
-
-		// }
+		$result = $f->getQuerys(51,"idgrualu=".$arrAlu[$i],0,0,0,array(),$s,1);
+		foreach ($result as $j => $value) {
+			if ($result[$j]->orden_impresion >= 35 && $result[$j]->orden_impresion <= 39){
+				$pdf->setX(5);
+				$pdf->SetFont('Arial','',7);
+				$pdf->Cell(84,4,utf8_decode($result[$j]->materia),'',0,'L');
+				$pdf->SetFont('Courier','',7);
+				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal0,$result[$j]->con0,$result[$j]->ina0,$ver_nivel_logro),'',0,'C');
+				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal1,$result[$j]->con1,$result[$j]->ina1,$ver_nivel_logro),'',0,'C');
+				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal2,$result[$j]->con2,$result[$j]->ina2,$ver_nivel_logro),'',0,'C');
+				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->promcal,$result[$j]->promcon,$result[$j]->sumina,$ver_nivel_logro),'',0,'C');
+				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->promcalgpo,$result[$j]->promcongpo,$result[$j]->suminagpo,$ver_nivel_logro),'',1,'C');
+			}
+		}
 
 		// **************************************************************************************************
 		// 
@@ -467,7 +463,7 @@ foreach ($arrAlu as $i => $value) {
 		$pdf->SetFont('Arial','B',8);
 
 		$pdf->setX(5);
-		$pdf->setY(148);
+		$pdf->setY(153);
 		$y = $pdf->GetY();
 		$pdf->SetFillColor(192);
 		$pdf->RoundedRect(5, $y, 164, 4, 2, '1', 'FD');
@@ -524,11 +520,7 @@ foreach ($arrAlu as $i => $value) {
 				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal0,0,0,$ver_nivel_logro),'',0,'C');
 				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal1,0,0,$ver_nivel_logro),'',0,'C');
 				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal2,0,0,$ver_nivel_logro),'',0,'C');
-				// $pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal3),'',0,'C');
-				// $pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal4),'',0,'C');
-
 				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->promcal,0,0,$ver_nivel_logro),'',0,'C');
-				// $pdf->Cell(10,4,bcdiv($result[$j]->promcal,'1',0),'',0,'C');
 				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->promcalgpo,0,0,$ver_nivel_logro),'',1,'C');
 			}
 		}
@@ -551,9 +543,6 @@ foreach ($arrAlu as $i => $value) {
 			$pdf->Cell(16,4,$pdf->FormatCal($prom[$j]->cal0,0,0,$ver_nivel_logro),'',0,'C');
 			$pdf->Cell(16,4,$pdf->FormatCal($prom[$j]->cal1,0,0,$ver_nivel_logro),'',0,'C');
 			$pdf->Cell(16,4,$pdf->FormatCal($prom[$j]->cal2,0,0,$ver_nivel_logro),'',0,'C');
-			// $pdf->Cell(16,4,$pdf->FormatCal($prom[$j]->cal3),'',0,'C');
-			// $pdf->Cell(16,4,$pdf->FormatCal($prom[$j]->cal4),'',0,'C');
-
 			$pdf->Cell(16,4,$pdf->FormatCal($prom[$j]->promcal,0,0,$ver_nivel_logro),'',0,'C');
 
 			$pdf->Cell(16,4,$pdf->FormatCal($prom[$j]->promcalgpo,0,0,$ver_nivel_logro),'R',1,'C');
@@ -580,12 +569,9 @@ foreach ($arrAlu as $i => $value) {
 		$pdf->SetFont('Courier','',7);
 		foreach ($gpo as $j => $value) {
 
-//			$pdf->Cell(16,4,$gpo[$j]->cal0,'',0,'C');
 			$pdf->Cell(16,4,$pdf->FormatCal($gpo[$j]->cal0,0,0,$ver_nivel_logro),'',0,'C');
 			$pdf->Cell(16,4,$pdf->FormatCal($gpo[$j]->cal1,0,0,$ver_nivel_logro),'',0,'C');
 			$pdf->Cell(16,4,$pdf->FormatCal($gpo[$j]->cal2,0,0,$ver_nivel_logro),'',0,'C');
-			// $pdf->Cell(16,4,$pdf->FormatCal($gpo[$j]->cal3),'',0,'C');
-			// $pdf->Cell(16,4,$pdf->FormatCal($gpo[$j]->cal4),'',0,'C');
 			$pdf->Cell(16,4,$pdf->FormatCal($gpo[$j]->promcal,0,0,$ver_nivel_logro),'',0,'C');
 			$pdf->Cell(16,4,'','',1,'C');
 
@@ -613,8 +599,7 @@ foreach ($arrAlu as $i => $value) {
 
 
 		foreach ($result as $j => $value) {
-			if ($result[$j]->orden_impresion >= 51 && $result[$j]->orden_impresion <= 59){
-
+			if ($result[$j]->orden_impresion >= 51 && $result[$j]->orden_impresion <= 54){
 				$pdf->setX(5);
 				$pdf->SetFont('Arial','',7);
 				$pdf->Cell(84,4,utf8_decode($result[$j]->materia),'',0,'L');
@@ -622,34 +607,25 @@ foreach ($arrAlu as $i => $value) {
 				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal0,$result[$j]->con0,$result[$j]->ina0,$ver_nivel_logro),'',0,'C');
 				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal1,$result[$j]->con1,$result[$j]->ina1,$ver_nivel_logro),'',0,'C');
 				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal2,$result[$j]->con2,$result[$j]->ina2,$ver_nivel_logro),'',0,'C');
-				// $pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal3,$result[$j]->con3,$result[$j]->ina3),'',0,'C');
-				// $pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal4,$result[$j]->con4,$result[$j]->ina4),'',0,'C');
 				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->promcal,$result[$j]->promcon,$result[$j]->sumina,$ver_nivel_logro),'',0,'C');
 				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->promcalgpo,$result[$j]->promcongpo,$result[$j]->suminagpo,$ver_nivel_logro),'',1,'C');
-			
 			}
-		
 		}
 		
-		// $result = $f->getQuerys(52,"idgrualu=".$arrAlu[$i],0,0,0,array(),$s,1);
-		// foreach ($result as $j => $value) {
-
-		// 	$pdf->setX(5);
-		// 	$pdf->SetFont('Arial','',7);
-		// 	$pdf->Cell(63.5,4,utf8_decode($result[$j]->materia),'',0,'L');
-		// 	$pdf->SetFont('Courier','',7);
-		// 	$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal0,$result[$j]->con0,$result[$j]->ina0),'',0,'C');
-		// 	$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal1,$result[$j]->con1,$result[$j]->ina1),'',0,'C');
-		// 	$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal2,$result[$j]->con2,$result[$j]->ina2),'',0,'C');
-		// 	// $pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal3,$result[$j]->con3,$result[$j]->ina3),'',0,'C');
-		// 	// $pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal4,$result[$j]->con4,$result[$j]->ina4),'',0,'C');
-		// 	$os = array(1,2,3,4,5);
-		// 	if ( in_array(intval($result[$j]->idmatclas) , $os) ){
-		// 		$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->promcal,$result[$j]->promcon,$result[$j]->sumina),'',0,'C');
-		// 		$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->promcalgpo,$result[$j]->promcongpo,$result[$j]->suminagpo),'',1,'C');
-		// 	}
-
-		// }
+		$result = $f->getQuerys(52,"idgrualu=".$arrAlu[$i],0,0,0,array(),$s,1);
+		foreach ($result as $j => $value) {
+			if ($result[$j]->orden_impresion >= 55 && $result[$j]->orden_impresion <= 59){
+				$pdf->setX(5);
+				$pdf->SetFont('Arial','',7);
+				$pdf->Cell(84,4,utf8_decode($result[$j]->materia),'',0,'L');
+				$pdf->SetFont('Courier','',7);
+				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal0,$result[$j]->con0,$result[$j]->ina0,$ver_nivel_logro),'',0,'C');
+				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal1,$result[$j]->con1,$result[$j]->ina1,$ver_nivel_logro),'',0,'C');
+				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->cal2,$result[$j]->con2,$result[$j]->ina2,$ver_nivel_logro),'',0,'C');
+				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->promcal,$result[$j]->promcon,$result[$j]->sumina,$ver_nivel_logro),'',0,'C');
+				$pdf->Cell(16,4,$pdf->FormatCal($result[$j]->promcalgpo,$result[$j]->promcongpo,$result[$j]->suminagpo,$ver_nivel_logro),'',1,'C');
+			}
+		}
 	 
 
 	// =================================================================================
@@ -718,7 +694,7 @@ foreach ($arrAlu as $i => $value) {
 		$pdf->SetFillColor(192);
 		$pdf->SetFont('Arial','B',8);
 		$miX = 169;
-		$miY = 148;
+		$miY = 153;
 		$pdf->RoundedRect($miX, $miY, 41, 4, 2, '2', 'FD');
 
 		$pdf->setX($miX);
@@ -728,8 +704,8 @@ foreach ($arrAlu as $i => $value) {
 
 		$pdf->SetFillColor(255);
 		$miX = 169;
-		$miY = 152;
-		$pdf->RoundedRect($miX, $miY, 41, 60, 2, '', 'FD');
+		$miY = 153;
+		$pdf->RoundedRect($miX, $miY, 41, 55, 2, '2', 'FD');
 
 		$pdf->setX($miX);
 		$pdf->setY($miY);
@@ -766,7 +742,7 @@ foreach ($arrAlu as $i => $value) {
 		//  PANEL DE DE FIRMAS
 		//  *************************************************************************
 	  
-		$y = $pdf->getY()+19;
+		$y = $pdf->getY()+25;
 		$pdf->SetFillColor(192);
 		$pdf->SetFont('Arial','B',8);
 		$pdf->RoundedRect(5, $y, 103, 4, 2, '1', 'FD');
@@ -778,34 +754,30 @@ foreach ($arrAlu as $i => $value) {
 		$pdf->Cell(103,4,'FIRMA DEL PADRE O TUTOR','',1,'C');
 
 		$pdf->SetFillColor(255);
-		$pdf->RoundedRect(5, $y+4, 103, 16, 2, '4', 'FD');
-		$pdf->RoundedRect(107, $y+4, 103, 16, 2, '3', 'FD');
+		$pdf->RoundedRect(5, $y+4, 103, 24, 2, '4', 'FD');
+		$pdf->RoundedRect(107, $y+4, 103, 24, 2, '3', 'FD');
 
 		$pdf->setX(5);
-		$pdf->ln(18);
+		$pdf->ln(20);
 
-		$pdf->SetFont('Arial','',8);
+		// $pdf->SetFont('Arial','',8);
 
-		$pdf->SetFillColor(96);
-		$pdf->Cell(4,4,'','',0,'L',true);
-		$pdf->SetFillColor(255);
-		$pdf->Cell(63,4,utf8_decode("FORMACIÓN ACADÉMICA"),'',0,'L');
-
-		$pdf->SetFillColor(144);
-		$pdf->Cell(4,4,'','',0,'L',true);
-		$pdf->SetFillColor(255);
-		$pdf->Cell(73,4,utf8_decode("DESARROLLO PERSONAL Y SOCIAL"),'',0,'L');
-
-		$pdf->SetFillColor(192);
-		$pdf->Cell(4,4,'','',0,'L',true);
-		$pdf->SetFillColor(255);
-		$pdf->Cell(53,4,utf8_decode("AUTONOMÍA CURRICULAR"),'',1,'L');
-
-		
+		// $pdf->SetFillColor(96);
 		// $pdf->Cell(4,4,'','',0,'L',true);
 		// $pdf->SetFillColor(255);
-		// $pdf->Cell(80,4,utf8_decode($result[$j]->materia),'',0,'L');
+		// $pdf->Cell(63,4,utf8_decode("FORMACIÓN ACADÉMICA"),'',0,'L');
 
+		// $pdf->SetFillColor(144);
+		// $pdf->Cell(4,4,'','',0,'L',true);
+		// $pdf->SetFillColor(255);
+		// $pdf->Cell(73,4,utf8_decode("DESARROLLO PERSONAL Y SOCIAL"),'',0,'L');
+
+		// $pdf->SetFillColor(192);
+		// $pdf->Cell(4,4,'','',0,'L',true);
+		// $pdf->SetFillColor(255);
+		// $pdf->Cell(53,4,utf8_decode("AUTONOMÍA CURRICULAR"),'',1,'L');
+
+		
 
 	
 	} // End If

@@ -38,12 +38,12 @@
                     </a>
  
 
-                     <a href="https://platsource.mx/documents/pol_eval_arji_2018.pdf" class="btn btn-link hide" target='_blank' id="calped2018">
+<!--                      <a href="https://platsource.mx/documents/pol_eval_arji_2018.pdf" class="btn btn-link hide" target='_blank' id="calped2018">
                         <img src="/images/web/ped_cal_1819.png" alt="Calendario de la Política del Desempeño Docente y Directivo Arjí 2018 - 2019" />
                     </a>
-
-                    <a href="https://platsource.mx/documents/manual_docentes-bach_2018-2019.pdf" class="btn btn-link hide" target='_blank' id="mandocbach2018">
-                         <img src="/images/web/manual-docentes-18-19.png" alt="Manual de Docentes de Bachillerato de 2018 - 2019" />                    
+ -->
+                    <a href="https://platsource.mx/documents/edd_calendarizacion19_20.pdf" class="btn btn-link hide" target='_blank' id="mandocbach2018">
+                         <img src="/images/web/eval_doc_1920.png" alt="Manual de Docentes de Bachillerato de 2018 - 2019" />                    
                             <!-- Manual de Docentes de </br>Bachillerato de 2018 - 2019 -->
                     </a>
 

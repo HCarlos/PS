@@ -376,7 +376,7 @@ jQuery(function($) {
 				event.preventDefault();
 				$(this).keypress(8);
 			}
-			var arrKey = [106, 171, 187];
+			var arrKey = [56, 106, 171, 187];
 			if ( arrKey.indexOf( parseInt(event.keyCode,0) ) != -1 ){
 				$(this).val(evalAsteriskCapCal(event.currentTarget.id));
 			}

@@ -60,7 +60,7 @@ foreach ($result as $i => $value) {
 		$arrAlu = $f->getQuerys(10025,$cad0,0,0,0,array(),"",1);
 
 		$oS->setCellValue("A".$k, $result[$i]->idedocta);
-		$oS->setCellValue("B".$k, $result[$i]->concepto);
+		$oS->setCellValue("B".$k, $result[$i]->concepto.' '.$result[$i]->mes);
 		$oS->setCellValue("C".$k, $result[$i]->idfamilia);
 		$oS->setCellValue("D".$k, $result[$i]->familia);
 
